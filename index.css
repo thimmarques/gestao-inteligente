@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+    --color-primary-950: #172554;
+
+    --animate-spin-slow: spin 3s linear infinite;
+}
+
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+/* Custom styles previously in index.html */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.dark ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Calendar Theme Overrides */
+.dark .rbc-month-view,
+.dark .rbc-time-view,
+.dark .rbc-agenda-view {
+    background-color: #020617 !important;
+    /* slate-950 */
+    border-color: #1e293b !important;
+    /* slate-800 */
+}
+
+.dark .rbc-header {
+    border-bottom-color: #1e293b !important;
+    color: #94a3b8 !important;
+    padding: 12px 0 !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    font-size: 10px !important;
+    letter-spacing: 0.1em !important;
+}
+
+.dark .rbc-day-bg+.rbc-day-bg {
+    border-left-color: #1e293b !important;
+}
+
+.dark .rbc-month-row+.rbc-month-row {
+    border-top-color: #1e293b !important;
+}
+
+.dark .rbc-month-row {
+    border-color: #1e293b !important;
+}
+
+.dark .rbc-off-range-bg {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    /* slate-900 translúcido */
+}
+
+.dark .rbc-off-range {
+    color: #334155 !important;
+    /* slate-700 */
+}
+
+.dark .rbc-today {
+    background-color: rgba(37, 99, 235, 0.05) !important;
+}
+
+.dark .rbc-show-more {
+    color: #3b82f6 !important;
+    font-weight: 800 !important;
+    font-size: 10px !important;
+}

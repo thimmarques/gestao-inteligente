@@ -1,0 +1,31 @@
+components/finance/FinanceDashboard.tsx(91,48): error TS2322: Type '{ size: number; title: string; className: string; }' is not assignable to type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+components/finance/RevenueByClientTypeChart.tsx(14,30): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
+components/finance/RevenueByClientTypeChart.tsx(18,30): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
+components/reports/ReportTypeCard.tsx(23,61): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'size' does not exist in type 'Partial<unknown> & Attributes'.
+components/settings/PasswordStrengthMeter.tsx(43,53): error TS2339: Property 'textColor' does not exist on type '{ score: number; label: string; color: string; textColor: string; } | { score: number; label: string; color: string; }'.
+  Property 'textColor' does not exist on type '{ score: number; label: string; color: string; }'.
+pages/Clients.tsx(109,48): error TS2339: Property 'honorarios_firmados' does not exist on type 'ClientFinancialProfile'.
+pages/Clients.tsx(109,90): error TS2339: Property 'honorarios_firmados' does not exist on type 'ClientFinancialProfile'.
+pages/Clients.tsx(110,31): error TS2339: Property 'tem_entrada' does not exist on type 'ClientFinancialProfile'.
+pages/Clients.tsx(111,32): error TS2339: Property 'valor_entrada' does not exist on type 'ClientFinancialProfile'.
+pages/Clients.tsx(111,68): error TS2339: Property 'valor_entrada' does not exist on type 'ClientFinancialProfile'.
+pages/Clients.tsx(112,38): error TS2339: Property 'num_parcelas_restante' does not exist on type 'ClientFinancialProfile'.
+pages/Finance.tsx(66,33): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
+pages/Finance.tsx(67,30): error TS2339: Property 'type' does not exist on type '{ process_number: string; }'.
+pages/Finance.tsx(95,85): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
+pages/Finance.tsx(96,64): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
+utils/generateAuditReportPDF.ts(83,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
+  Type 'number[]' is not assignable to type '[number, number, number]'.
+    Target requires 3 element(s) but source may have fewer.
+utils/generateDeadlinesReportPDF.ts(76,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
+  Type 'number[]' is not assignable to type '[number, number, number]'.
+    Target requires 3 element(s) but source may have fewer.
+utils/generateFinancialReportPDF.ts(99,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
+  Type 'number[]' is not assignable to type '[number, number, number]'.
+    Target requires 3 element(s) but source may have fewer.
+utils/generateProductivityReportPDF.ts(76,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
+  Type 'number[]' is not assignable to type '[number, number, number]'.
+    Target requires 3 element(s) but source may have fewer.

@@ -1,0 +1,304 @@
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { UserPlus, LayoutGrid, Table2, ChevronRight, Loader2 } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import { Client, ClientType } from '../types.ts';
+import { clientService } from '../services/clientService.ts';
+import { caseService } from '../services/caseService.ts';
+import { financeService } from '../services/financeService.ts';
+import { seedClients } from '../utils/seedClients.ts';
+import { filterClients, ClientFilters } from '../utils/clientFilters.ts';
+import { ClientFiltersBar } from '../../components/clients/ClientFilters.tsx';
+import { ClientTable } from '../../components/clients/ClientTable.tsx';
+import { ClientCard } from '../../components/clients/ClientCard.tsx';
+import { CreateClientModal } from '../../components/clients/CreateClientModal.tsx';
+import { ClientDetailsModal } from '../../components/clients/ClientDetailsModal.tsx';
+import { formatCPF, formatPhone, formatDate, formatCurrency } from '../utils/formatters.ts';
+
+const Clients: React.FC = () => {
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>(() => {
+    return (localStorage.getItem('clients_view') as any) || 'table';
+  });
+  const [selectedTab, setSelectedTab] = useState<'todos' | 'particulares' | 'defensoria'>('todos');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
+
+  const [filters, setFilters] = useState<ClientFilters>({
+    search: '',
+    status: 'todos',
+    type: 'todos',
+    sortBy: 'name',
+    sortDirection: 'asc'
+  });
+
+  const loadClients = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await clientService.getClients();
+      setClients(data);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    seedClients();
+    loadClients();
+  }, [loadClients]);
+
+  const handleFilterChange = (newFilters: Partial<ClientFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
+  const filteredClients = useMemo(() => {
+    let result = filterClients(clients, filters);
+
+    if (selectedTab === 'particulares') {
+      result = result.filter(c => c.type === ClientType.PARTICULAR);
+    } else if (selectedTab === 'defensoria') {
+      result = result.filter(c => c.type === ClientType.DEFENSORIA);
+    }
+
+    return result;
+  }, [clients, filters, selectedTab]);
+
+  const handleExport = async () => {
+    if (filteredClients.length === 0) {
+      alert("Nenhum cliente para exportar nesta visualização.");
+      return;
+    }
+
+    const allFinances = await financeService.getFinances();
+
+    const dataToExport = filteredClients.map(client => {
+      const clientFinances = allFinances.filter(f => f.client_id === client.id);
+      const totalPaid = clientFinances.filter(f => f.status === 'pago').reduce((acc, curr) => acc + curr.amount, 0);
+      const totalPending = clientFinances.filter(f => f.status !== 'pago').reduce((acc, curr) => acc + curr.amount, 0);
+      const isOverdue = clientFinances.some(f => f.status === 'vencido');
+
+      const addr = (client as any).address || {};
+      const fp = client.financial_profile || {};
+      const process = (client as any).process || {};
+
+      return {
+        'Nome Completo': client.name,
+        'Tipo de Contrato': client.type === ClientType.PARTICULAR ? 'Particular' : 'Defensoria',
+        'CPF/CNPJ': formatCPF(client.cpf_cnpj),
+        'RG': (client as any).rg || '-',
+        'Emissor RG': (client as any).rg_issuer || '-',
+        'E-mail': client.email || '-',
+        'Telefone': formatPhone(client.phone),
+        'Nacionalidade': (client as any).nationality || 'Brasileira',
+        'Estado Civil': (client as any).marital_status || '-',
+        'Profissão': (client as any).profession || '-',
+        'Renda Declarada': (client as any).income ? `R$ ${parseFloat((client as any).income).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '-',
+        'Logradouro': addr.street || '-',
+        'Nº': addr.number || '-',
+        'Bairro': addr.neighborhood || '-',
+        'Cidade': addr.city || '-',
+        'Estado': addr.state || '-',
+        'CEP': addr.cep || '-',
+        'Processo Principal': fp.process_number || process.number || '-',
+        'Área Jurídica': process.legal_area || fp.process_type || '-',
+        'Comarca/Foro': fp.comarca || '-',
+        'Data de Nomeação (Defensoria)': fp.appointment_date ? formatDate(fp.appointment_date) : '-',
+        'Método de Pagamento Preferencial': fp.payment_method || '-',
+        'Honorários Firmados (Particular)': fp.honorarios_firmados ? `R$ ${parseFloat(fp.honorarios_firmados).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '-',
+        'Possui Entrada?': fp.tem_entrada ? 'SIM' : 'NÃO',
+        'Valor da Entrada': fp.valor_entrada ? `R$ ${parseFloat(fp.valor_entrada).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '-',
+        'Qtd Parcelas Restantes': fp.num_parcelas_restante || '-',
+        'VALOR TOTAL PAGO': `R$ ${totalPaid.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        'SALDO TOTAL PENDENTE': `R$ ${totalPending.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        'STATUS FINANCEIRO': isOverdue ? 'INADIMPLENTE' : (totalPending > 0 ? 'EM DIA (A RECEBER)' : 'QUITADO'),
+        'Status do Cadastro': client.status.toUpperCase(),
+        'Data de Cadastro no Sistema': formatDate(client.created_at),
+        'Notas do Advogado': client.notes || '-'
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Base de Dados Clientes");
+    const tabName = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1);
+    const fileName = `LegalTech_Relatorio_${tabName}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+  };
+
+  const handleSaveClient = async (data: any) => {
+    try {
+      if (editingClient) {
+        await clientService.updateClient(editingClient.id, data);
+      } else {
+        const newClient = await clientService.createClient(data);
+        let newCaseId = '';
+        if (data.process?.number) {
+          const newCase = await caseService.createCase({
+            client_id: newClient.id,
+            lawyer_id: 'lawyer-1',
+            office_id: 'office-1',
+            process_number: data.process.number,
+            court: data.financial_profile?.comarca || 'Não informada',
+            type: data.process.legal_area || 'cível',
+            status: 'andamento' as any,
+            value: data.financial_profile?.valor_honorarios ? parseFloat(data.financial_profile.valor_honorarios) : 0,
+            started_at: data.financial_profile?.appointment_date || new Date().toISOString(),
+            notes: data.process.description || '',
+            tags: [data.type]
+          });
+          newCaseId = newCase.id;
+        }
+
+        if (data.type === ClientType.DEFENSORIA && data.financial_profile) {
+          const { guia_principal, guia_recurso, tem_recurso } = data.financial_profile;
+          await financeService.createRecord({
+            client_id: newClient.id,
+            case_id: newCaseId,
+            lawyer_id: 'lawyer-1',
+            office_id: 'office-1',
+            type: 'receita',
+            category: 'Honorários (Guia 70%)',
+            amount: parseFloat(guia_principal.valor) || 0,
+            due_date: guia_principal.data ? `${guia_principal.data}-10` : new Date().toISOString(),
+            status: guia_principal.status === 'Pago pelo Estado' ? 'pago' : 'pendente',
+            payment_method: 'TED',
+            notes: `Voucher: ${guia_principal.protocolo}`
+          });
+
+          if (tem_recurso) {
+            await financeService.createRecord({
+              client_id: newClient.id,
+              case_id: newCaseId,
+              lawyer_id: 'lawyer-1',
+              office_id: 'office-1',
+              type: 'receita',
+              category: 'Honorários (Recurso 30%)',
+              amount: parseFloat(guia_recurso.valor) || 0,
+              due_date: guia_recurso.data ? `${guia_recurso.data}-10` : new Date().toISOString(),
+              status: guia_recurso.status === 'Pago pelo Estado' ? 'pago' : 'pendente',
+              payment_method: 'TED',
+              notes: `Voucher Recurso: ${guia_recurso.protocolo}`
+            });
+          }
+        } else if (data.type === ClientType.PARTICULAR && data.financial_profile) {
+          const fp = data.financial_profile;
+          if (fp.tem_entrada && fp.valor_entrada) {
+            await financeService.createRecord({
+              client_id: newClient.id,
+              case_id: newCaseId,
+              lawyer_id: 'lawyer-1',
+              office_id: 'office-1',
+              type: 'receita',
+              category: 'Entrada de Honorários',
+              amount: parseFloat(fp.valor_entrada),
+              due_date: new Date().toISOString().split('T')[0],
+              status: 'pago',
+              payment_method: fp.payment_method,
+              notes: 'Entrada confirmada no cadastro.'
+            });
+          }
+        }
+      }
+      loadClients();
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao salvar dados integrados.");
+    }
+  };
+
+  const selectedClient = clients.find(c => c.id === selectedClientId) || null;
+
+  return (
+    <div className="p-8 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-20">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">
+            <span>Escritório</span>
+            <ChevronRight size={12} />
+            <span className="text-primary-600">Base de Clientes</span>
+          </div>
+          <h1 className="text-3xl font-black dark:text-white tracking-tight">Clientes</h1>
+          <p className="text-slate-500 text-sm font-medium mt-1">Gestão com automação financeira imediata.</p>
+        </div>
+        <button
+          onClick={() => { setEditingClient(null); setIsCreateModalOpen(true); }}
+          className="flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[1.5rem] font-bold shadow-xl transition-all active:scale-95 group"
+        >
+          <UserPlus size={20} className="group-hover:rotate-12 transition-transform" />
+          Novo Cliente
+        </button>
+      </header>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            {['todos', 'particulares', 'defensoria'].map(tab => (
+              <button
+                key={tab}
+                onClick={() => setSelectedTab(tab as any)}
+                className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${selectedTab === tab ? 'bg-primary-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-700'
+                  }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <button
+              onClick={() => { setViewMode('table'); localStorage.setItem('clients_view', 'table'); }}
+              className={`p-2 rounded-xl transition-all ${viewMode === 'table' ? 'bg-slate-100 dark:bg-slate-800 text-primary-600' : 'text-slate-400'}`}
+            >
+              <Table2 size={20} />
+            </button>
+            <button
+              onClick={() => { setViewMode('cards'); localStorage.setItem('clients_view', 'cards'); }}
+              className={`p-2 rounded-xl transition-all ${viewMode === 'cards' ? 'bg-slate-100 dark:bg-slate-800 text-primary-600' : 'text-slate-400'}`}
+            >
+              <LayoutGrid size={20} />
+            </button>
+          </div>
+        </div>
+
+        <ClientFiltersBar onFilterChange={handleFilterChange} onExport={handleExport} />
+      </div>
+
+      <div className="min-h-[400px]">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 animate-pulse">
+            <Loader2 size={40} className="text-primary-500 animate-spin mb-4" />
+            <p className="text-slate-500 font-bold uppercase tracking-widest">Carregando...</p>
+          </div>
+        ) : filteredClients.length > 0 ? (
+          viewMode === 'table' ? (
+            <ClientTable
+              clients={filteredClients}
+              onRowClick={(id) => setSelectedClientId(id)}
+              onEdit={(c) => { setEditingClient(c); setIsCreateModalOpen(true); }}
+              onDelete={async (c) => { if (confirm('Excluir?')) { await clientService.deleteClient(c.id); loadClients(); } }}
+              onToggleStatus={async (c) => { await clientService.updateClient(c.id, { status: c.status === 'ativo' ? 'inativo' : 'ativo' }); loadClients(); }}
+            />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {filteredClients.map((client) => (
+                <ClientCard key={client.id} client={client} onClick={() => setSelectedClientId(client.id)} />
+              ))}
+            </div>
+          )
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800 text-center">
+            <UserPlus size={40} className="text-slate-300 mb-4" />
+            <h3 className="text-xl font-bold dark:text-white">Nenhum cliente</h3>
+          </div>
+        )}
+      </div>
+
+      <CreateClientModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onSave={handleSaveClient} initialData={editingClient} mode={editingClient ? 'edit' : 'create'} />
+      <ClientDetailsModal isOpen={!!selectedClientId && !isCreateModalOpen} onClose={() => setSelectedClientId(null)} client={selectedClient} onEdit={(c) => { setSelectedClientId(null); setEditingClient(c); setIsCreateModalOpen(true); }} />
+    </div>
+  );
+};
+
+export default Clients;
