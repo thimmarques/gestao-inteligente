@@ -1,31 +1,44 @@
-components/finance/FinanceDashboard.tsx(91,48): error TS2322: Type '{ size: number; title: string; className: string; }' is not assignable to type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
-  Property 'title' does not exist on type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
-components/finance/RevenueByClientTypeChart.tsx(14,30): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
-components/finance/RevenueByClientTypeChart.tsx(18,30): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
-components/reports/ReportTypeCard.tsx(23,61): error TS2769: No overload matches this call.
+
+> legaltech-gestao-juridica-inteligente@0.0.0 typecheck
+> tsc --noEmit
+
+node_modules/@supabase/auth-js/src/GoTrueClient.ts(725,7): error TS2322: Type '{ data: { weakPassword: WeakPassword; user: User; session: Session; }; error: AuthError; }' is not assignable to type 'AuthTokenResponsePassword'.
+  Type '{ data: { weakPassword: WeakPassword; user: User; session: Session; }; error: AuthError; }' is not assignable to type '{ data: { user: null; session: null; weakPassword?: null; }; error: AuthError; }'.
+    The types of 'data.user' are incompatible between these types.
+      Type 'User' is not assignable to type 'null'.
+node_modules/@supabase/auth-js/src/lib/helpers.ts(107,37): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+node_modules/@supabase/auth-js/src/lib/helpers.ts(109,29): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+node_modules/@supabase/functions-js/src/helper.ts(5,37): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+node_modules/@supabase/functions-js/src/helper.ts(7,29): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+node_modules/@supabase/realtime-js/src/RealtimeClient.ts(531,39): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+node_modules/@supabase/realtime-js/src/RealtimeClient.ts(533,31): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+vitest.config.ts(5,15): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Object literal may only specify known properties, and 'size' does not exist in type 'Partial<unknown> & Attributes'.
-components/settings/PasswordStrengthMeter.tsx(43,53): error TS2339: Property 'textColor' does not exist on type '{ score: number; label: string; color: string; textColor: string; } | { score: number; label: string; color: string; }'.
-  Property 'textColor' does not exist on type '{ score: number; label: string; color: string; }'.
-pages/Clients.tsx(109,48): error TS2339: Property 'honorarios_firmados' does not exist on type 'ClientFinancialProfile'.
-pages/Clients.tsx(109,90): error TS2339: Property 'honorarios_firmados' does not exist on type 'ClientFinancialProfile'.
-pages/Clients.tsx(110,31): error TS2339: Property 'tem_entrada' does not exist on type 'ClientFinancialProfile'.
-pages/Clients.tsx(111,32): error TS2339: Property 'valor_entrada' does not exist on type 'ClientFinancialProfile'.
-pages/Clients.tsx(111,68): error TS2339: Property 'valor_entrada' does not exist on type 'ClientFinancialProfile'.
-pages/Clients.tsx(112,38): error TS2339: Property 'num_parcelas_restante' does not exist on type 'ClientFinancialProfile'.
-pages/Finance.tsx(66,33): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
-pages/Finance.tsx(67,30): error TS2339: Property 'type' does not exist on type '{ process_number: string; }'.
-pages/Finance.tsx(95,85): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
-pages/Finance.tsx(96,64): error TS2339: Property 'type' does not exist on type '{ name: string; }'.
-utils/generateAuditReportPDF.ts(83,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
-  Type 'number[]' is not assignable to type '[number, number, number]'.
-    Target requires 3 element(s) but source may have fewer.
-utils/generateDeadlinesReportPDF.ts(76,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
-  Type 'number[]' is not assignable to type '[number, number, number]'.
-    Target requires 3 element(s) but source may have fewer.
-utils/generateFinancialReportPDF.ts(99,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
-  Type 'number[]' is not assignable to type '[number, number, number]'.
-    Target requires 3 element(s) but source may have fewer.
-utils/generateProductivityReportPDF.ts(76,19): error TS2322: Type 'number[]' is not assignable to type 'Color'.
-  Type 'number[]' is not assignable to type '[number, number, number]'.
-    Target requires 3 element(s) but source may have fewer.
+    Type 'Plugin<any>[]' is not assignable to type 'PluginOption'.
+      Type 'Plugin<any>[]' is not assignable to type 'PluginOption[]'.
+        Type 'Plugin<any>' is not assignable to type 'PluginOption'.
+          Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").Plugin<any>' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").Plugin<any>'.
+            Types of property 'apply' are incompatible.
+              Type '"build" | "serve" | ((this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").ConfigEnv) => boolean)' is not assignable to type '"build" | "serve" | ((this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").ConfigEnv) => boolean)'.
+                Type '(this: void, config: UserConfig, env: ConfigEnv) => boolean' is not assignable to type '"build" | "serve" | ((this: void, config: UserConfig, env: ConfigEnv) => boolean)'.
+                  Type '(this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").ConfigEnv) => boolean' is not assignable to type '(this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").ConfigEnv) => boolean'.
+                    Types of parameters 'config' and 'config' are incompatible.
+                      Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig'.
+                        Types of property 'plugins' are incompatible.
+                          Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption[]' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption[]'.
+                            Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption'.
+                              Type 'Plugin<any>' is not assignable to type 'PluginOption'.
+                                Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").Plugin<any>' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").Plugin<any>'.
+                                  Types of property 'apply' are incompatible.
+                                    Type '"build" | "serve" | ((this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").ConfigEnv) => boolean)' is not assignable to type '"build" | "serve" | ((this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").ConfigEnv) => boolean)'.
+                                      Type '(this: void, config: UserConfig, env: ConfigEnv) => boolean' is not assignable to type '"build" | "serve" | ((this: void, config: UserConfig, env: ConfigEnv) => boolean)'.
+                                        Type '(this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").ConfigEnv) => boolean' is not assignable to type '(this: void, config: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig, env: import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").ConfigEnv) => boolean'.
+                                          Types of parameters 'config' and 'config' are incompatible.
+                                            Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").UserConfig' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").UserConfig'.
+                                              Types of property 'plugins' are incompatible.
+                                                Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption[]' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption[]'.
+                                                  Type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption' is not assignable to type 'import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption'.
+                                                    Type 'Promise<false | Plugin<any> | PluginOption[]>' is not assignable to type 'PluginOption'.
+                                                      Type 'Promise<false | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").Plugin<any> | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption[]>' is not assignable to type 'Promise<false | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").Plugin<any> | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption[]>'.
+                                                        Type 'false | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").Plugin<any> | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vite/dist/node/index").PluginOption[]' is not assignable to type 'false | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").Plugin<any> | import("D:/projetos/Gestao Inteligente/gestao-inteligente/node_modules/vitest/node_modules/vite/dist/node/index").PluginOption[]'.
+                                                          Type 'Plugin<any>' is not assignable to type 'false | Plugin<any> | PluginOption[]'.
