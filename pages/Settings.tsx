@@ -5,17 +5,17 @@ import {
   Info, ChevronRight, Settings as SettingsIcon,
   HelpCircle, ExternalLink, ArrowLeft, FileSearch, Shield, Users
 } from 'lucide-react';
-import { useApp } from '../contexts/AppContext.tsx';
-import { checkPermission } from '../utils/permissions.ts';
-import { getCriticalLogsCount24h } from '../utils/auditLogger.ts';
+import { useApp } from '../contexts/AppContext';
+import { checkPermission } from '../utils/permissions';
+import { getCriticalLogsCount24h } from '../utils/auditLogger';
 
-import { ProfileTab } from '../../components/settings/ProfileTab.tsx';
-import { OfficeTab } from '../../components/settings/OfficeTab.tsx';
-import { IntegrationsTab } from '../../components/settings/IntegrationsTab.tsx';
-import { PreferencesTab } from '../../components/settings/PreferencesTab.tsx';
-import { SecurityTab } from '../../components/settings/SecurityTab.tsx';
-import { AboutTab } from '../../components/settings/AboutTab.tsx';
-import { LogsTab } from '../../components/settings/LogsTab.tsx';
+import { ProfileTab } from '../components/settings/ProfileTab';
+import { OfficeTab } from '../components/settings/OfficeTab';
+import { IntegrationsTab } from '../components/settings/IntegrationsTab';
+import { PreferencesTab } from '../components/settings/PreferencesTab';
+import { SecurityTab } from '../components/settings/SecurityTab';
+import { AboutTab } from '../components/settings/AboutTab';
+import { LogsTab } from '../components/settings/LogsTab';
 
 type SettingsTab = 'perfil' | 'escritorio' | 'integracoes' | 'logs' | 'preferencias' | 'seguranca' | 'sobre';
 

@@ -10,26 +10,26 @@ import { isWithinInterval, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import confetti from 'canvas-confetti';
 
-import { FinanceRecord, Client, Case, CaseWithRelations, Deadline, ScheduleEvent, Report } from '../types.ts';
-import { formatCurrency, estimateFileSize, formatFileSize } from '../utils/formatters.ts';
-import { ReportTypeCard } from '../../components/reports/ReportTypeCard.tsx';
-import { FinancialReportModal } from '../../components/reports/FinancialReportModal.tsx';
-import { ProductivityReportModal } from '../../components/reports/ProductivityReportModal.tsx';
-import { ClientsReportModal } from '../../components/reports/ClientsReportModal.tsx';
-import { DeadlinesReportModal } from '../../components/reports/DeadlinesReportModal.tsx';
-import { ReportGenerationProgress } from '../../components/reports/ReportGenerationProgress.tsx';
-import { ReportsEmptyState } from '../../components/reports/ReportsEmptyState.tsx';
+import { FinanceRecord, Client, Case, CaseWithRelations, Deadline, ScheduleEvent, Report } from '../types';
+import { formatCurrency, estimateFileSize, formatFileSize } from '../utils/formatters';
+import { ReportTypeCard } from '../components/reports/ReportTypeCard';
+import { FinancialReportModal } from '../components/reports/FinancialReportModal';
+import { ProductivityReportModal } from '../components/reports/ProductivityReportModal';
+import { ClientsReportModal } from '../components/reports/ClientsReportModal';
+import { DeadlinesReportModal } from '../components/reports/DeadlinesReportModal';
+import { ReportGenerationProgress } from '../components/reports/ReportGenerationProgress';
+import { ReportsEmptyState } from '../components/reports/ReportsEmptyState';
 
-import { generateFinancialReportPDF, ReportConfig } from '../utils/generateFinancialReportPDF.ts';
-import { generateFinancialReportExcel } from '../utils/generateFinancialReportExcel.ts';
-import { generateProductivityReportPDF } from '../utils/generateProductivityReportPDF.ts';
-import { generateProductivityReportExcel } from '../utils/generateProductivityReportExcel.ts';
-import { generateClientsReportExcel } from '../utils/generateClientsReportExcel.ts';
-import { generateClientsReportPDF } from '../utils/generateClientsReportPDF.ts';
-import { generateDeadlinesReportPDF } from '../utils/generateDeadlinesReportPDF.ts';
-import { generateDeadlinesReportExcel } from '../utils/generateDeadlinesReportExcel.ts';
-import { saveReportToHistory } from '../utils/saveReportToHistory.ts';
-import { validateReportPeriod } from '../utils/reportValidation.ts';
+import { generateFinancialReportPDF, ReportConfig } from '../utils/generateFinancialReportPDF';
+import { generateFinancialReportExcel } from '../utils/generateFinancialReportExcel';
+import { generateProductivityReportPDF } from '../utils/generateProductivityReportPDF';
+import { generateProductivityReportExcel } from '../utils/generateProductivityReportExcel';
+import { generateClientsReportExcel } from '../utils/generateClientsReportExcel';
+import { generateClientsReportPDF } from '../utils/generateClientsReportPDF';
+import { generateDeadlinesReportPDF } from '../utils/generateDeadlinesReportPDF';
+import { generateDeadlinesReportExcel } from '../utils/generateDeadlinesReportExcel';
+import { saveReportToHistory } from '../utils/saveReportToHistory';
+import { validateReportPeriod } from '../utils/reportValidation';
 
 type ReportType = 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
 
@@ -302,8 +302,8 @@ const Reports: React.FC = () => {
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm ${report.type === 'financeiro' ? 'bg-green-500' :
-                              report.type === 'produtividade' ? 'bg-blue-500' :
-                                report.type === 'clientes' ? 'bg-purple-500' : 'bg-orange-500'
+                            report.type === 'produtividade' ? 'bg-blue-500' :
+                              report.type === 'clientes' ? 'bg-purple-500' : 'bg-orange-500'
                             }`}>
                             <FileText size={18} />
                           </div>

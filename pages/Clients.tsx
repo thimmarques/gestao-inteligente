@@ -2,18 +2,18 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { UserPlus, LayoutGrid, Table2, ChevronRight, Loader2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { Client, ClientType } from '../types.ts';
-import { clientService } from '../services/clientService.ts';
-import { caseService } from '../services/caseService.ts';
-import { financeService } from '../services/financeService.ts';
-import { seedClients } from '../utils/seedClients.ts';
-import { filterClients, ClientFilters } from '../utils/clientFilters.ts';
-import { ClientFiltersBar } from '../../components/clients/ClientFilters.tsx';
-import { ClientTable } from '../../components/clients/ClientTable.tsx';
-import { ClientCard } from '../../components/clients/ClientCard.tsx';
-import { CreateClientModal } from '../../components/clients/CreateClientModal.tsx';
-import { ClientDetailsModal } from '../../components/clients/ClientDetailsModal.tsx';
-import { formatCPF, formatPhone, formatDate, formatCurrency } from '../utils/formatters.ts';
+import { Client, ClientType } from '../types';
+import { clientService } from '../services/clientService';
+import { caseService } from '../services/caseService';
+import { financeService } from '../services/financeService';
+import { seedClients } from '../utils/seedClients';
+import { filterClients, ClientFilters } from '../utils/clientFilters';
+import { ClientFiltersBar } from '../components/clients/ClientFilters';
+import { ClientTable } from '../components/clients/ClientTable';
+import { ClientCard } from '../components/clients/ClientCard';
+import { CreateClientModal } from '../components/clients/CreateClientModal';
+import { ClientDetailsModal } from '../components/clients/ClientDetailsModal';
+import { formatCPF, formatPhone, formatDate, formatCurrency } from '../utils/formatters';
 
 const Clients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);

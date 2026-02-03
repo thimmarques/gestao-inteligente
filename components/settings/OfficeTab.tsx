@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Building2, MapPin, Globe, Phone, Mail, Save, Loader2, Check } from 'lucide-react';
-import { LogoUpload } from './LogoUpload.tsx';
-import { Office } from '../../types.ts';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext.tsx';
-import { updateOffice } from '../../utils/settingsPersistence.ts';
+import { LogoUpload } from './LogoUpload';
+import { Office } from '../../types';
+import { useApp } from '../../contexts/AppContext';
+import { updateOffice } from '../../utils/settingsPersistence';
 
 export const OfficeTab: React.FC = () => {
   const { office, refreshAll } = useApp();

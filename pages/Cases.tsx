@@ -3,17 +3,17 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   FolderPlus, ChevronDown, ChevronUp, Table2, LayoutGrid, Search, Plus
 } from 'lucide-react';
-import { caseService } from '../services/caseService.ts';
-import { Case, CaseWithRelations } from '../types.ts';
-import { KPICard } from '../../components/cases/KPICard.tsx';
-import { SuccessRateCard } from '../../components/cases/SuccessRateCard.tsx';
-import { StatusBarChart } from '../../components/cases/StatusBarChart.tsx';
-import { TypePieChart } from '../../components/cases/TypePieChart.tsx';
-import { CaseTable } from '../../components/cases/CaseTable.tsx';
-import { CaseCard } from '../../components/cases/CaseCard.tsx';
-import { CaseFilters } from '../../components/cases/CaseFilters.tsx';
-import { CreateCaseModal } from '../../components/cases/CreateCaseModal.tsx';
-import { CaseDetailsModal } from '../../components/cases/CaseDetailsModal.tsx';
+import { caseService } from '../services/caseService';
+import { Case, CaseWithRelations } from '../types';
+import { KPICard } from '../components/cases/KPICard';
+import { SuccessRateCard } from '../components/cases/SuccessRateCard';
+import { StatusBarChart } from '../components/cases/StatusBarChart';
+import { TypePieChart } from '../components/cases/TypePieChart';
+import { CaseTable } from '../components/cases/CaseTable';
+import { CaseCard } from '../components/cases/CaseCard';
+import { CaseFilters } from '../components/cases/CaseFilters';
+import { CreateCaseModal } from '../components/cases/CreateCaseModal';
+import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
 
 const Cases: React.FC = () => {
   const [cases, setCases] = useState<CaseWithRelations[]>([]);

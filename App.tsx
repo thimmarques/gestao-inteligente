@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout } from '../components/layout/Layout.tsx';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
 import { seedLawyer } from './utils/seedLawyer.ts';

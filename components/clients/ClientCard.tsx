@@ -4,7 +4,7 @@ import { Mail, Phone, ExternalLink, UserPlus, Shield, FileSignature, HandHeart }
 import { Client, ClientType } from '../../types';
 import { formatCPF, formatPhone } from '../../utils/formatters';
 import { generateProcuracaoPDF, generateDeclaracaoHipossuficienciaPDF } from '../../utils/generateLegalDocuments';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext';
+import { useApp } from '../../contexts/AppContext';
 
 interface ClientCardProps {
   client: Client;
@@ -42,8 +42,8 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
       </h3>
 
       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase inline-flex items-center gap-1 mb-4 ${client.type === ClientType.PARTICULAR
-          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-          : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
         }`}>
         {client.type === ClientType.PARTICULAR ? <UserPlus size={10} /> : <Shield size={10} />}
         {client.type}

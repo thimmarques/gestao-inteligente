@@ -5,9 +5,9 @@ import {
   BarChart2, Users2, Settings, LogOut, Menu, X, Bell, Moon, Sun, Search,
   ChevronDown, User, Target, ShieldAlert, FileSearch, Shield
 } from 'lucide-react';
-import { useAuth } from '../../gestao-inteligente/contexts/AuthContext.tsx';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext.tsx';
-import { getCriticalLogsCount24h } from '../../utils/auditLogger.ts';
+import { useAuth } from '../../contexts/AuthContext';
+import { useApp } from '../../contexts/AppContext';
+import { getCriticalLogsCount24h } from '../../utils/auditLogger';
 
 interface SidebarItemProps {
   to: string;
@@ -22,8 +22,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, badge, badge
   <Link
     to={to}
     className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${active
-        ? 'bg-primary-600 text-white shadow-md'
-        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+      ? 'bg-primary-600 text-white shadow-md'
+      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
       }`}
   >
     <div className="flex items-center gap-3">

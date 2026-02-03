@@ -2,9 +2,9 @@
 import React from 'react';
 import { MoreVertical, Edit, Power, Trash2, UserPlus, Shield, FileSignature, HandHeart } from 'lucide-react';
 import { Client, ClientType } from '../../types';
-import { formatCPF, formatPhone } from '../../utils/formatters';
+import { formatCPF, formatPhone, formatCurrency, formatDate } from '../../utils/formatters';
 import { generateProcuracaoPDF, generateDeclaracaoHipossuficienciaPDF } from '../../utils/generateLegalDocuments';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext';
+import { useApp } from '../../contexts/AppContext';
 
 interface ClientTableProps {
   clients: Client[];
@@ -74,8 +74,8 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                   </td>
                   <td className="px-6 py-4">
                     <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase inline-flex items-center gap-1 ${client.type === ClientType.PARTICULAR
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                       }`}>
                       {client.type === ClientType.PARTICULAR ? <UserPlus size={10} /> : <Shield size={10} />}
                       {client.type}

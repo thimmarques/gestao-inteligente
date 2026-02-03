@@ -5,11 +5,11 @@ import {
   Circle, Loader2, RefreshCw, Check, CheckCheck, User, Briefcase, Trash2, Scale, Gavel,
   X, Save
 } from 'lucide-react';
-import { formatCurrency, formatDate } from '../utils/formatters.ts';
-import { financeService } from '../services/financeService.ts';
-import { seedFinances } from '../utils/seedFinances.ts';
-import { FinanceRecord, CaseType, Client } from '../types.ts';
-import { clientService } from '../services/clientService.ts';
+import { formatCurrency, formatDate } from '../utils/formatters';
+import { financeService } from '../services/financeService';
+import { seedFinances } from '../utils/seedFinances';
+import { FinanceRecord, CaseType, Client } from '../types';
+import { clientService } from '../services/clientService';
 
 interface GroupedFinance {
   clientId: string;

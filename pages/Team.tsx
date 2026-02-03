@@ -1,17 +1,17 @@
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { UserPlus, ChevronRight, RefreshCw, Users } from 'lucide-react';
-import { TeamMember } from '../types/team.ts';
-import { TeamMemberCard } from '../../components/team/TeamMemberCard.tsx';
-import { TeamMemberTable } from '../../components/team/TeamMemberTable.tsx';
-import { TeamViewToggle } from '../../components/team/TeamViewToggle.tsx';
-import { TeamFilters } from '../../components/team/TeamFilters.tsx';
-import { TeamProductivityChart } from '../../components/team/TeamProductivityChart.tsx';
-import { AddTeamMemberModal } from '../../components/team/AddTeamMemberModal.tsx';
-import { TeamMemberDetailsModal } from '../../components/team/TeamMemberDetailsModal.tsx';
-import { useApp } from '../contexts/AppContext.tsx';
-import { checkPermission } from '../utils/permissions.ts';
-import { inviteService, PendingInvite } from '../services/inviteService.ts';
+import { TeamMember } from '../types/team';
+import { TeamMemberCard } from '../components/team/TeamMemberCard';
+import { TeamMemberTable } from '../components/team/TeamMemberTable';
+import { TeamViewToggle } from '../components/team/TeamViewToggle';
+import { TeamFilters } from '../components/team/TeamFilters';
+import { TeamProductivityChart } from '../components/team/TeamProductivityChart';
+import { AddTeamMemberModal } from '../components/team/AddTeamMemberModal';
+import { TeamMemberDetailsModal } from '../components/team/TeamMemberDetailsModal';
+import { useApp } from '../contexts/AppContext';
+import { checkPermission } from '../utils/permissions';
+import { inviteService, PendingInvite } from '../services/inviteService';
 
 const STORAGE_KEY = 'legaltech_team';
 

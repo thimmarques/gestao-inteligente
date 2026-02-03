@@ -5,23 +5,23 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-import { Deadline } from '../types.ts';
-import { deadlineService } from '../services/deadlineService.ts';
-import { seedDeadlines } from '../utils/seedDeadlines.ts';
-import { getDeadlineStatus } from '../utils/deadlineCalculations.ts';
-import { filterDeadlines, sortDeadlines } from '../utils/deadlineFilters.ts';
-import { logAction } from '../utils/auditLogger.ts';
-import { deadlineLogger } from '../utils/deadlineLogger.ts';
-import { useApp } from '../contexts/AppContext.tsx';
+import { Deadline } from '../types';
+import { deadlineService } from '../services/deadlineService';
+import { seedDeadlines } from '../utils/seedDeadlines';
+import { getDeadlineStatus } from '../utils/deadlineCalculations';
+import { filterDeadlines, sortDeadlines } from '../utils/deadlineFilters';
+import { logAction } from '../utils/auditLogger';
+import { deadlineLogger } from '../utils/deadlineLogger';
+import { useApp } from '../contexts/AppContext';
 
-import { DeadlineStatusFilters } from '../../components/deadlines/DeadlineStatusFilters.tsx';
-import { DeadlineFiltersBar } from '../../components/deadlines/DeadlineFilters.tsx';
-import { ViewToggle } from '../../components/deadlines/ViewToggle.tsx';
-import { DeadlineSorter } from '../../components/deadlines/DeadlineSorter.tsx';
-import { DeadlineList } from '../../components/deadlines/DeadlineList.tsx';
-import { DeadlineCard } from '../../components/deadlines/DeadlineCard.tsx';
-import { CreateDeadlineModal } from '../../components/deadlines/CreateDeadlineModal.tsx';
-import { DeadlineDetailsModal } from '../../components/deadlines/DeadlineDetailsModal.tsx';
+import { DeadlineStatusFilters } from '../components/deadlines/DeadlineStatusFilters';
+import { DeadlineFiltersBar } from '../components/deadlines/DeadlineFilters';
+import { ViewToggle } from '../components/deadlines/ViewToggle';
+import { DeadlineSorter } from '../components/deadlines/DeadlineSorter';
+import { DeadlineList } from '../components/deadlines/DeadlineList';
+import { DeadlineCard } from '../components/deadlines/DeadlineCard';
+import { CreateDeadlineModal } from '../components/deadlines/CreateDeadlineModal';
+import { DeadlineDetailsModal } from '../components/deadlines/DeadlineDetailsModal';
 
 const Deadlines: React.FC = () => {
   const { lawyer } = useApp();

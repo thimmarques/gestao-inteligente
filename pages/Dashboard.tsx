@@ -9,14 +9,14 @@ import {
   CartesianGrid, Tooltip,
   ResponsiveContainer, AreaChart, Area
 } from 'recharts';
-import { formatCurrency } from '../utils/formatters.ts';
-import { TeamWidget } from '../../components/dashboard/TeamWidget.tsx';
-import { CriticalLogsWidget } from '../../components/dashboard/CriticalLogsWidget.tsx';
-import { useApp } from '../contexts/AppContext.tsx';
-import { EventDetailsModal } from '../../components/schedule/EventDetailsModal.tsx';
-import { DeadlineDetailsModal } from '../../components/deadlines/DeadlineDetailsModal.tsx';
-import { scheduleService } from '../services/scheduleService.ts';
-import { deadlineService } from '../services/deadlineService.ts';
+import { formatCurrency } from '../utils/formatters';
+import { TeamWidget } from '../components/dashboard/TeamWidget';
+import { CriticalLogsWidget } from '../components/dashboard/CriticalLogsWidget';
+import { useApp } from '../contexts/AppContext';
+import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
+import { DeadlineDetailsModal } from '../components/deadlines/DeadlineDetailsModal';
+import { scheduleService } from '../services/scheduleService';
+import { deadlineService } from '../services/deadlineService';
 
 const KPICard = ({ label, value, trend, isPositive, icon, sub, onClick }: any) => (
   <button

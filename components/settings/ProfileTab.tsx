@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Lock, Mail, Phone, Briefcase, FileText, Check, Loader2 } from 'lucide-react';
 import { PhotoUpload } from './PhotoUpload.tsx';
 import { Lawyer } from '../../types.ts';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext.tsx';
+import { useApp } from '../../contexts/AppContext';
 import { updateLawyer } from '../../utils/settingsPersistence.ts';
 
 export const ProfileTab: React.FC = () => {

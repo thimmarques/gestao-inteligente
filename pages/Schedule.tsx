@@ -18,21 +18,21 @@ import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, addHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-import { CalendarViewTabs, CalendarViewType } from '../../components/schedule/CalendarViewTabs.tsx';
-import { CreateEventModal } from '../../components/schedule/CreateEventModal.tsx';
-import { EventDetailsModal } from '../../components/schedule/EventDetailsModal.tsx';
-import { ImportGoogleModal } from '../../components/schedule/ImportGoogleModal.tsx';
-import { AgendaListView } from '../../components/schedule/AgendaListView.tsx';
-import { GoogleSyncBadge } from '../../components/schedule/GoogleSyncBadge.tsx';
-import { ScheduleFiltersBar } from '../../components/schedule/ScheduleFilters.tsx';
-import { UpcomingEventsBalloon } from '../../components/schedule/UpcomingEventsBalloon.tsx';
+import { CalendarViewTabs, CalendarViewType } from '../components/schedule/CalendarViewTabs';
+import { CreateEventModal } from '../components/schedule/CreateEventModal';
+import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
+import { ImportGoogleModal } from '../components/schedule/ImportGoogleModal';
+import { AgendaListView } from '../components/schedule/AgendaListView';
+import { GoogleSyncBadge } from '../components/schedule/GoogleSyncBadge';
+import { ScheduleFiltersBar } from '../components/schedule/ScheduleFilters';
+import { UpcomingEventsBalloon } from '../components/schedule/UpcomingEventsBalloon';
 
-import { scheduleService } from '../services/scheduleService.ts';
-import { seedSchedules } from '../utils/seedSchedules.ts';
-import { filterSchedules, ScheduleFilters } from '../utils/scheduleFilters.ts';
-import { getEventColor } from '../utils/eventColors.ts';
-import { ScheduleEvent } from '../types.ts';
-import { useApp } from '../contexts/AppContext.tsx';
+import { scheduleService } from '../services/scheduleService';
+import { seedSchedules } from '../utils/seedSchedules';
+import { filterSchedules, ScheduleFilters } from '../utils/scheduleFilters';
+import { getEventColor } from '../utils/eventColors';
+import { ScheduleEvent } from '../types';
+import { useApp } from '../contexts/AppContext';
 
 const locales = { 'pt-BR': ptBR };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });

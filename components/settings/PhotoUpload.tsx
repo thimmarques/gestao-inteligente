@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Trash2, X, Upload, Check, Loader2 } from 'lucide-react';
-import { useApp } from '../../gestao-inteligente/contexts/AppContext';
+import { useApp } from '../../contexts/AppContext';
 import { updateLawyer } from '../../utils/settingsPersistence';
 
 interface PhotoUploadProps {
