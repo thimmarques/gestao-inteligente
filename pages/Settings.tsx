@@ -36,9 +36,21 @@ const Settings: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const criticalLogsCount = useMemo(() => {
-    return getCriticalLogsCount24h();
-  }, [activeTab]);
+  const [criticalLogsCount, setCriticalLogsCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchLogs() {
+      if (currentUser?.office_id) {
+        try {
+          const count = await getCriticalLogsCount24h(currentUser.office_id);
+          setCriticalLogsCount(count);
+        } catch (error) {
+          console.error('Error fetching critical logs count:', error);
+        }
+      }
+    }
+    fetchLogs();
+  }, [activeTab, currentUser]);
 
   const menuItems = useMemo(() => {
     const items: { id: SettingsTab; label: string; icon: any; color: string; alert?: boolean; }[] = [

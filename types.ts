@@ -96,6 +96,8 @@ export interface Client {
   financial_profile?: ClientFinancialProfile;
   created_at: string;
   updated_at: string;
+  // Relationships
+  cases?: Case[];
 }
 
 export interface Case {
@@ -197,6 +199,11 @@ export interface Deadline {
       name: string;
     };
   } | null;
+}
+
+export interface DeadlineWithRelations extends Deadline {
+  client_name?: string;
+  lawyer_name?: string;
 }
 
 export interface Report {

@@ -12,7 +12,7 @@ import { calculateDaysRemaining } from '../utils/deadlineCalculations';
 import { CreateDeadlineModal } from '../components/deadlines/CreateDeadlineModal';
 
 const Deadlines: React.FC = () => {
-  const { data: deadlines = [], isLoading } = useDeadlines();
+  const { data: deadlines = [], isLoading, refetch } = useDeadlines();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'todos' | 'pendente' | 'concluído' | 'vencido'>('pendente');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,8 +151,8 @@ const Deadlines: React.FC = () => {
                     <button
                       onClick={() => handleToggleStatus(deadline)}
                       className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${deadline.status === 'concluído'
-                          ? 'bg-green-100 dark:bg-green-900/20 text-green-600'
-                          : 'bg-primary-50 dark:bg-primary-900/10 text-primary-600 hover:bg-primary-100'
+                        ? 'bg-green-100 dark:bg-green-900/20 text-green-600'
+                        : 'bg-primary-50 dark:bg-primary-900/10 text-primary-600 hover:bg-primary-100'
                         }`}
                     >
                       {deadline.status === 'concluído' ? (
