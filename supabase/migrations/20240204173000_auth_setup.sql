@@ -123,30 +123,39 @@ ALTER TABLE public.schedules ENABLE ROW LEVEL SECURITY;
 
 -- 5. RLS Policies
 -- Profiles
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
 CREATE POLICY "Users can view their own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
 
 -- Offices (Users can see their own office)
+DROP POLICY IF EXISTS "Users can view their office" ON public.offices;
 CREATE POLICY "Users can view their office" ON public.offices 
   FOR SELECT USING (id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid()));
 
 -- Clients
+DROP POLICY IF EXISTS "Manage clients" ON public.clients;
 CREATE POLICY "Manage clients" ON public.clients 
   FOR ALL USING (office_id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid()));
 
 -- Cases
+DROP POLICY IF EXISTS "Manage cases" ON public.cases;
 CREATE POLICY "Manage cases" ON public.cases 
   FOR ALL USING (office_id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid()));
 
 -- Finance
+DROP POLICY IF EXISTS "Manage finance" ON public.finance_records;
 CREATE POLICY "Manage finance" ON public.finance_records 
   FOR ALL USING (office_id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid()));
 
 -- Deadlines
+DROP POLICY IF EXISTS "Manage deadlines" ON public.deadlines;
 CREATE POLICY "Manage deadlines" ON public.deadlines 
   FOR ALL USING (case_id IN (SELECT id FROM public.cases WHERE office_id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid())));
 
 -- Schedules
+DROP POLICY IF EXISTS "Manage schedules" ON public.schedules;
 CREATE POLICY "Manage schedules" ON public.schedules 
   FOR ALL USING (office_id IN (SELECT office_id FROM public.profiles WHERE id = auth.uid()));
 
