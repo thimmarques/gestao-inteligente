@@ -4,6 +4,7 @@ import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,6 +99,7 @@ const App: React.FC = () => {
         <AuthProvider>
           <AppContextProvider>
             <Suspense fallback={<PageLoader />}>
+              <Toaster richColors position="top-right" duration={3000} closeButton />
               <AppRoutes />
             </Suspense>
           </AppContextProvider>

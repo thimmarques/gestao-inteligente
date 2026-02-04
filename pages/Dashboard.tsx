@@ -22,21 +22,35 @@ import { useClients, useCases, useDeadlines, useFinances, useSchedules } from '.
 const KPICard = ({ label, value, trend, isPositive, icon, sub, onClick }: any) => (
   <button
     onClick={onClick}
-    className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-left hover:scale-[1.02] transition-all hover:shadow-md group"
+    className="relative bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm text-left hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
   >
-    <div className="flex items-center justify-between mb-4">
-      <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">{icon}</div>
-      <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${isPositive ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-        }`}>
-        {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-        {trend}
+    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-500">
+      {React.cloneElement(icon, { size: 100, strokeWidth: 1 })}
+    </div>
+
+    <div className="relative z-10">
+      <div className="flex items-center justify-between mb-6">
+        <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors shadow-inner">
+          {icon}
+        </div>
+        <div className={`flex items-center gap-1.5 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest ${isPositive ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400'
+          }`}>
+          {isPositive ? <ArrowUpRight size={12} strokeWidth={3} /> : <ArrowDownRight size={12} strokeWidth={3} />}
+          {trend}
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <h3 className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">{label}</h3>
+        <span className="text-3xl font-black dark:text-white tracking-tight block">{value}</span>
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-800">
+        <p className="text-xs font-medium text-slate-400 flex items-center gap-2 group-hover:text-primary-500 transition-colors">
+          {sub} <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+        </p>
       </div>
     </div>
-    <h3 className="text-slate-500 dark:text-slate-400 text-sm font-medium">{label}</h3>
-    <div className="mt-1 flex items-baseline gap-2">
-      <span className="text-2xl font-bold dark:text-white">{value}</span>
-    </div>
-    <p className="text-xs text-slate-400 mt-2">{sub}</p>
   </button>
 );
 
@@ -106,8 +120,11 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-black text-lg tracking-tight flex items-center gap-2">
-              <TrendingUp size={20} className="text-primary-500" /> Histórico de Receita
+            <h3 className="font-black text-lg tracking-tight flex items-center gap-3">
+              <div className="p-2 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-primary-600">
+                <TrendingUp size={20} />
+              </div>
+              Histórico de Receita
             </h3>
           </div>
           <div className="h-[300px] flex flex-col items-center justify-center text-slate-400">
@@ -139,7 +156,10 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-10">
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-bold text-lg">Agenda Hoje</h3>
+            <h3 className="font-bold text-lg flex items-center gap-2">
+              <Clock className="text-primary-500" size={20} />
+              Agenda Hoje
+            </h3>
             <button onClick={() => navigate('/agenda')} className="text-xs font-bold text-primary-600 uppercase hover:underline">Ver tudo</button>
           </div>
           <div className="space-y-4">

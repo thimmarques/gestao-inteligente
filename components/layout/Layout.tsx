@@ -20,17 +20,22 @@ interface SidebarItemProps {
 const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, badge, badgeColor = "bg-red-500", active }) => (
   <Link
     to={to}
-    className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${active
-      ? 'bg-primary-600 text-white shadow-md'
-      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+    className={`relative flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 group ${active
+      ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold'
+      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
       }`}
   >
-    <div className="flex items-center gap-3">
-      {icon}
-      <span className="font-medium text-sm">{label}</span>
+    {active && (
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary-600 rounded-r-full shadow-[0_0_12px_rgba(37,99,235,0.5)]" />
+    )}
+    <div className="flex items-center gap-3.5 z-10">
+      <div className={`transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}>
+        {icon}
+      </div>
+      <span className="text-sm tracking-wide">{label}</span>
     </div>
     {badge !== undefined && badge > 0 && (
-      <span className={`${badgeColor} text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center`}>
+      <span className={`${badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center shadow-sm`}>
         {badge}
       </span>
     )}
@@ -117,28 +122,29 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0 z-30 shadow-sm">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <header className="absolute top-0 left-0 right-0 h-20 flex items-center justify-between px-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shrink-0 z-30 transition-all duration-300">
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden p-2 text-slate-600 dark:text-slate-400">
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           <div className="flex items-center gap-4 ml-auto">
-            <button className="relative p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
+            <button className="relative p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors active:scale-95">
               <Bell size={20} />
               {unreadNotifications > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
               )}
             </button>
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors active:scale-95">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button onClick={() => signOut()} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl" title="Sair">
+            <div className="w-px h-8 bg-slate-200 dark:bg-slate-800 mx-1" />
+            <button onClick={() => signOut()} className="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors active:scale-95" title="Sair">
               <LogOut size={20} />
             </button>
           </div>
         </header>
-        <div className="flex-1 overflow-y-auto">{children}</div>
+        <div className="flex-1 overflow-y-auto pt-20 custom-scrollbar p-0">{children}</div>
       </main>
     </div>
   );
