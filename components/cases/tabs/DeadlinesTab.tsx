@@ -1,20 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
-import { Clock, Plus, Calendar } from 'lucide-react';
-import { Deadline } from '../../../types.ts';
+import React from 'react';
+import { Clock, Calendar, Loader2 } from 'lucide-react';
 import { formatDate } from '../../../utils/formatters.ts';
+import { useDeadlinesByCase } from '../../../hooks/useQueries';
 
 interface DeadlinesTabProps {
   caseId: string;
 }
 
 export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
-  const [deadlines, setDeadlines] = useState<Deadline[]>([]);
-
-  useEffect(() => {
-    const allDeadlines = JSON.parse(localStorage.getItem('legaltech_deadlines') || '[]');
-    setDeadlines(allDeadlines.filter((d: any) => d.case_id === caseId));
-  }, [caseId]);
+  const { data: deadlines = [], isLoading } = useDeadlinesByCase(caseId);
 
   const getStatusInfo = (date: string, status: string) => {
     if (status === 'concluído') return { color: 'border-green-500', bg: 'bg-green-500', text: 'Concluído', labelColor: 'text-green-600' };
@@ -42,13 +37,18 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {deadlines.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+            <Loader2 size={32} className="animate-spin text-primary-600 mb-2" />
+            <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Carregando prazos...</p>
+          </div>
+        ) : deadlines.length > 0 ? (
           deadlines
             .sort((a, b) => new Date(a.deadline_date).getTime() - new Date(b.deadline_date).getTime())
             .map((deadline) => {
               const info = getStatusInfo(deadline.deadline_date, deadline.status);
               return (
-                <div 
+                <div
                   key={deadline.id}
                   className={`bg-white dark:bg-slate-900 p-5 rounded-2xl border-l-4 ${info.color} border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow`}
                 >
@@ -64,9 +64,8 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
                         <span className={`text-[10px] font-bold uppercase tracking-wider ${info.labelColor}`}>
                           {info.text}
                         </span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
-                          deadline.priority === 'urgente' ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
-                        }`}>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${deadline.priority === 'urgente' ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
+                          }`}>
                           {deadline.priority}
                         </span>
                       </div>

@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
-import { X, Edit, Archive, FileText, Clock, Users, DollarSign, Files, History } from 'lucide-react';
-import { Case, CaseStatus } from '../../types.ts';
+import React, { useState } from 'react';
+import { X, Edit, Archive, FileText, Clock, Users, DollarSign, Files, History, Loader2 } from 'lucide-react';
+import { CaseStatus } from '../../types.ts';
 import { InfoTab } from './tabs/InfoTab.tsx';
 import { DeadlinesTab } from './tabs/DeadlinesTab.tsx';
 import { SchedulesTab } from './tabs/SchedulesTab.tsx';
@@ -10,6 +10,7 @@ import { DocumentsTab } from './tabs/DocumentsTab.tsx';
 import { HistoryTab } from './tabs/HistoryTab.tsx';
 import { caseService } from '../../services/caseService.ts';
 import { CaseFormModal } from './CaseFormModal.tsx';
+import { useCase } from '../../hooks/useQueries';
 
 interface CaseDetailsModalProps {
   caseId: string | null;
@@ -19,29 +20,26 @@ interface CaseDetailsModalProps {
 
 export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({ caseId, isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('Informações');
-  const [caseData, setCaseData] = useState<Case | null>(null);
+  const { data: caseData, isLoading, refetch } = useCase(caseId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const loadCase = async () => {
-    if (caseId) {
-      const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-      const found = cases.find((c: any) => c.id === caseId);
-      setCaseData(found || null);
-    }
-  };
+  if (!isOpen) return null;
 
-  useEffect(() => {
-    if (caseId && isOpen) {
-      loadCase();
-    }
-  }, [caseId, isOpen]);
-
-  if (!isOpen || !caseData) return null;
+  if (isLoading || !caseData) {
+    return (
+      <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+        <div className="bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] flex flex-col items-center gap-4">
+          <Loader2 className="animate-spin text-primary-600" size={40} />
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Carregando detalhes...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleArchive = async () => {
-    if (confirm(`Deseja arquivar o processo ${caseData.process_number}?`)) {
+    if (caseData && confirm(`Deseja arquivar o processo ${caseData.process_number}?`)) {
       await caseService.updateCase(caseData.id, { status: CaseStatus.ARQUIVADO });
-      loadCase();
+      refetch();
     }
   };
 
@@ -76,7 +74,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({ caseId, isOp
   return (
     <div className="fixed inset-0 z-[110] flex items-stretch md:items-center justify-center bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-slate-50 dark:bg-slate-950 w-full max-w-6xl md:h-[90vh] md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
-        
+
         <div className="p-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -85,9 +83,9 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({ caseId, isOp
                 {caseData.status}
               </span>
             </div>
-            <p className="text-slate-500 font-medium">Cliente {caseData.client_id} • {caseData.court}</p>
+            <p className="text-slate-500 font-medium">Cliente {caseData.client?.name || 'ID ' + caseData.client_id} • {caseData.court}</p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <button onClick={() => setIsEditModalOpen(true)} className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
               <Edit size={16} />
@@ -108,11 +106,10 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({ caseId, isOp
             <button
               key={tab.name}
               onClick={() => setActiveTab(tab.name)}
-              className={`flex items-center gap-2 py-5 text-sm font-bold border-b-2 transition-all whitespace-nowrap ${
-                activeTab === tab.name 
-                  ? 'border-primary-600 text-primary-600' 
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
-              }`}
+              className={`flex items-center gap-2 py-5 text-sm font-bold border-b-2 transition-all whitespace-nowrap ${activeTab === tab.name
+                ? 'border-primary-600 text-primary-600'
+                : 'border-transparent text-slate-400 hover:text-slate-600'
+                }`}
             >
               {tab.icon}
               {tab.name}
@@ -127,14 +124,14 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({ caseId, isOp
         </div>
       </div>
 
-      <CaseFormModal 
-        isOpen={isEditModalOpen} 
-        onClose={() => setIsEditModalOpen(false)} 
+      <CaseFormModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
         initialData={caseData}
         onSave={async (data) => {
-          await caseService.updateCase(caseData.id, data);
+          await caseService.updateCase((caseData as any).id, data);
           setIsEditModalOpen(false);
-          loadCase();
+          refetch();
         }}
       />
     </div>

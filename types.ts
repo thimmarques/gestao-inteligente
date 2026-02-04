@@ -150,6 +150,7 @@ export interface FinanceRecord {
   client_id?: string | null;
   case_id?: string | null;
   type: 'receita' | 'despesa';
+  title: string;
   category: string;
   amount: number;
   due_date: string;

@@ -1,22 +1,24 @@
 
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldAlert, ShieldCheck, ChevronRight, Trash2, Shield, Lock, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, ChevronRight, Trash2, Shield, Lock, AlertTriangle, ExternalLink, Loader2 } from 'lucide-react';
 import { AuditLog } from '../../types/audit.ts';
 import { formatDistanceToNow, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAuditLogs } from '../../hooks/useQueries';
+import { useApp } from '../../contexts/AppContext';
 
 export const CriticalLogsWidget: React.FC = () => {
+  const { lawyer } = useApp();
+  const { data: logs = [], isLoading } = useAuditLogs(lawyer?.office_id);
+
   const criticalLogs = useMemo(() => {
-    const raw = localStorage.getItem('legaltech_audit_logs');
-    if (!raw) return [];
-    const logs: AuditLog[] = JSON.parse(raw);
     const sevenDaysAgo = subDays(new Date(), 7);
-    
+
     return logs
-      .filter(l => l.criticality === 'crítico' && new Date(l.timestamp) >= sevenDaysAgo)
+      .filter((l: any) => l.criticality === 'crítico' && new Date(l.created_at || l.timestamp) >= sevenDaysAgo)
       .slice(0, 8);
-  }, []);
+  }, [logs]);
 
   const getActionIcon = (action: string) => {
     if (action === 'delete') return <Trash2 className="text-red-500" size={18} />;
@@ -45,10 +47,15 @@ export const CriticalLogsWidget: React.FC = () => {
       </header>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pb-4">
-        {criticalLogs.length > 0 ? (
+        {isLoading ? (
+          <div className="h-full flex flex-col items-center justify-center">
+            <Loader2 size={24} className="animate-spin text-primary-600 mb-2" />
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verificando logs...</p>
+          </div>
+        ) : criticalLogs.length > 0 ? (
           <div className="space-y-1">
-            {criticalLogs.map((log) => (
-              <Link 
+            {criticalLogs.map((log: any) => (
+              <Link
                 key={log.id}
                 to={`/configuracoes?tab=logs&id=${log.id}`}
                 className="flex items-center justify-between p-3 hover:bg-red-500/5 dark:hover:bg-red-500/10 rounded-2xl transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/item"
@@ -68,7 +75,7 @@ export const CriticalLogsWidget: React.FC = () => {
                 </div>
                 <div className="text-right shrink-0">
                   <p className="text-[9px] font-bold text-slate-400 uppercase">
-                    {formatDistanceToNow(new Date(log.timestamp), { addSuffix: true, locale: ptBR })}
+                    {formatDistanceToNow(new Date(log.created_at || log.timestamp), { addSuffix: true, locale: ptBR })}
                   </p>
                   <ChevronRight size={14} className="ml-auto text-slate-200 group-hover/item:text-red-500 transition-colors" />
                 </div>
@@ -85,7 +92,7 @@ export const CriticalLogsWidget: React.FC = () => {
       </div>
 
       <div className="p-4 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
-        <Link 
+        <Link
           to="/configuracoes?tab=logs"
           className="flex items-center justify-center gap-2 text-[10px] font-black text-primary-600 uppercase tracking-[0.2em] hover:gap-3 transition-all"
         >

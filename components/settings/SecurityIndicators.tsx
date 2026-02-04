@@ -1,20 +1,21 @@
-
 import React, { useMemo } from 'react';
-import { Database, ShieldAlert, Archive, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Database, ShieldAlert, Archive, ShieldCheck, AlertTriangle, Loader2 } from 'lucide-react';
 import { AuditLog } from '../../types/audit';
 import { subHours } from 'date-fns';
+import { useCases, useClients } from '../../hooks/useQueries';
 
 interface SecurityIndicatorsProps {
   logs: AuditLog[];
 }
 
 export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({ logs }) => {
+  const { data: cases = [], isLoading: loadingCases } = useCases();
+  const { data: clients = [], isLoading: loadingClients } = useClients();
+
   const integrityScore = useMemo(() => {
-    const cases = JSON.parse(localStorage.getItem('legalflow_cases') || '[]');
-    const clients = JSON.parse(localStorage.getItem('legalflow_clients') || '[]');
     const orphanCases = cases.filter((c: any) => !clients.find((cl: any) => cl.id === c.client_id)).length;
     return { score: orphanCases === 0 ? 100 : 92, orphanCases };
-  }, []);
+  }, [cases, clients]);
 
   const suspiciousActivity = useMemo(() => {
     const last24h = subHours(new Date(), 24);
@@ -27,17 +28,17 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({ logs }) 
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <IndicatorCard 
+      <IndicatorCard
         title="Integridade"
         icon={<Database />}
-        score={`${integrityScore.score}%`}
+        score={loadingCases || loadingClients ? <Loader2 className="animate-spin" size={16} /> : `${integrityScore.score}%`}
         color="text-green-500"
         items={[
-          { label: 'Processos órfãos', value: integrityScore.orphanCases, ok: integrityScore.orphanCases === 0 },
+          { label: 'Processos órfãos', value: loadingCases || loadingClients ? '...' : integrityScore.orphanCases, ok: integrityScore.orphanCases === 0 },
           { label: 'Prazos órfãos', value: 0, ok: true }
         ]}
       />
-      <IndicatorCard 
+      <IndicatorCard
         title="Atividade Suspeita"
         icon={<ShieldAlert />}
         score={suspiciousActivity.denied > 5 ? 'Alta' : 'Baixa'}
@@ -47,7 +48,7 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({ logs }) 
           { label: 'Exclusões (24h)', value: suspiciousActivity.deletions, ok: suspiciousActivity.deletions < 5 }
         ]}
       />
-      <IndicatorCard 
+      <IndicatorCard
         title="Backup & Logs"
         icon={<Archive />}
         score="ATIVO"

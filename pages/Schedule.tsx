@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -15,24 +15,23 @@ import {
   X
 } from 'lucide-react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay, addHours } from 'date-fns';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { CalendarViewTabs, CalendarViewType } from '../components/schedule/CalendarViewTabs';
 import { CreateEventModal } from '../components/schedule/CreateEventModal';
 import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
 import { ImportGoogleModal } from '../components/schedule/ImportGoogleModal';
-import { AgendaListView } from '../components/schedule/AgendaListView';
 import { GoogleSyncBadge } from '../components/schedule/GoogleSyncBadge';
 import { ScheduleFiltersBar } from '../components/schedule/ScheduleFilters';
 import { UpcomingEventsBalloon } from '../components/schedule/UpcomingEventsBalloon';
 
 import { scheduleService } from '../services/scheduleService';
-import { seedSchedules } from '../utils/seedSchedules';
 import { filterSchedules, ScheduleFilters } from '../utils/scheduleFilters';
 import { getEventColor } from '../utils/eventColors';
 import { ScheduleEvent } from '../types';
 import { useApp } from '../contexts/AppContext';
+import { useSchedules } from '../hooks/useQueries';
 
 const locales = { 'pt-BR': ptBR };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -41,8 +40,7 @@ const Schedule: React.FC = () => {
   const { lawyer } = useApp();
   const [view, setView] = useState<CalendarViewType>('month');
   const [date, setDate] = useState(new Date());
-  const [schedules, setSchedules] = useState<ScheduleEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: schedules = [], isLoading, refetch } = useSchedules();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null);
@@ -60,20 +58,8 @@ const Schedule: React.FC = () => {
     showOnlyMine: false
   });
 
-  const loadData = useCallback(async () => {
-    setIsLoading(true);
-    seedSchedules();
-    const data = await scheduleService.getSchedules();
-    setSchedules(data);
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
   const calendarEvents = useMemo(() => {
-    const currentLawyerId = lawyer?.id || 'lawyer-1';
+    const currentLawyerId = lawyer?.id || '';
     const filtered = filterSchedules(schedules, filters, currentLawyerId);
     const searched = filtered.filter(s =>
       !searchTerm ||
@@ -108,21 +94,21 @@ const Schedule: React.FC = () => {
     setIsDetailsOpen(false);
     setSelectedEvent(null);
     await scheduleService.deleteSchedule(id);
-    loadData();
+    refetch();
   };
 
   const handleStatusUpdate = async (id: string, status: ScheduleEvent['status']) => {
     setIsDetailsOpen(false);
     setSelectedEvent(null);
     await scheduleService.updateSchedule(id, { status });
-    loadData();
+    refetch();
   };
 
   const handleSaveEvent = async (formData: any) => {
     const input = {
       ...formData,
-      lawyer_id: lawyer?.id || 'lawyer-1',
-      office_id: lawyer?.office_id || 'office-1',
+      lawyer_id: lawyer?.id || '',
+      office_id: lawyer?.office_id || '',
       status: formData.status || 'agendado',
       reminder_sent: false,
       start_time: formData.start_time || new Date(`${formData.date}T${formData.startTime}:00`).toISOString(),
@@ -134,7 +120,7 @@ const Schedule: React.FC = () => {
     } else {
       await scheduleService.createSchedule(input);
     }
-    loadData();
+    refetch();
     setIsCreateOpen(false);
     setSelectedEvent(null);
   };
@@ -144,14 +130,18 @@ const Schedule: React.FC = () => {
   };
 
   return (
-    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <h1 className="text-3xl font-black dark:text-white tracking-tight flex items-center gap-3">
-          Agenda {isLoading && <Loader2 className="animate-spin text-primary-50" size={24} />}
+        <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
+          Agenda {isLoading && <Loader2 className="animate-spin text-primary-500" size={24} />}
         </h1>
         <div className="flex gap-3">
-          <button onClick={() => setIsImportOpen(true)} className="flex items-center px-6 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl font-bold text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 active:scale-95"><Globe size={20} className="mr-2 text-blue-500" /> Google Sync</button>
-          <button onClick={() => { setSelectedEvent(null); setIsCreateOpen(true); }} className="flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black shadow-xl transition-all active:scale-95 group"><Plus size={20} className="mr-2 group-hover:rotate-90 transition-transform" /> Novo Evento</button>
+          <button onClick={() => setIsImportOpen(true)} className="flex items-center px-6 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl font-bold text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 active:scale-95">
+            <Globe size={20} className="mr-2 text-blue-500" /> Google Sync
+          </button>
+          <button onClick={() => { setSelectedEvent(null); setIsCreateOpen(true); }} className="flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black shadow-xl transition-all active:scale-95 group">
+            <Plus size={20} className="mr-2 group-hover:rotate-90 transition-transform" /> Novo Evento
+          </button>
         </div>
       </header>
 
@@ -176,7 +166,7 @@ const Schedule: React.FC = () => {
               >
                 <Filter size={20} />
               </button>
-              <button onClick={loadData} className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-primary-600 transition-all" title="Recarregar">
+              <button onClick={() => refetch()} className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-primary-600 transition-all" title="Recarregar">
                 <RefreshCw size={20} className={isLoading ? 'animate-spin' : ''} />
               </button>
             </div>
@@ -230,7 +220,7 @@ const Schedule: React.FC = () => {
         onDelete={handleDeleteEvent}
         onStatusUpdate={handleStatusUpdate}
       />
-      <ImportGoogleModal isOpen={isImportOpen} onClose={() => setIsImportOpen(false)} onImportComplete={loadData} />
+      <ImportGoogleModal isOpen={isImportOpen} onClose={() => setIsImportOpen(false)} onImportComplete={() => refetch()} />
     </div>
   );
 };

@@ -3,6 +3,16 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
 // Pages
 const Dashboard = lazy(() => import('./pages/Dashboard.tsx'));
@@ -14,6 +24,7 @@ const Deadlines = lazy(() => import('./pages/Deadlines.tsx'));
 const Reports = lazy(() => import('./pages/Reports.tsx'));
 const Settings = lazy(() => import('./pages/Settings.tsx'));
 const Team = lazy(() => import('./pages/Team.tsx'));
+const Tasks = lazy(() => import('./pages/Tasks.tsx'));
 const Login = lazy(() => import('./pages/Login.tsx'));
 const Signup = lazy(() => import('./pages/Signup.tsx'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));
@@ -77,15 +88,17 @@ const AppRoutes = () => {
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <AppContextProvider>
-          <Suspense fallback={<PageLoader />}>
-            <AppRoutes />
-          </Suspense>
-        </AppContextProvider>
-      </AuthProvider>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <AuthProvider>
+          <AppContextProvider>
+            <Suspense fallback={<PageLoader />}>
+              <AppRoutes />
+            </Suspense>
+          </AppContextProvider>
+        </AuthProvider>
+      </Router>
+    </QueryClientProvider>
   );
 };
 

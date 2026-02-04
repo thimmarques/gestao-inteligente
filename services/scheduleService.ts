@@ -1,57 +1,100 @@
 
 import { ScheduleEvent } from '../types.ts';
-
-const STORAGE_KEY = 'legaltech_schedules';
+import { supabase } from '../lib/supabase';
+import { logAction } from '../utils/auditLogger.ts';
 
 export const scheduleService = {
   getSchedules: async (): Promise<ScheduleEvent[]> => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    await new Promise(r => setTimeout(r, 300)); // Simula latência
-    return data ? JSON.parse(data) : [];
+    const { data, error } = await supabase
+      .from('schedules')
+      .select('*')
+      .order('start_time', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
   },
 
   getSchedule: async (id: string): Promise<ScheduleEvent | null> => {
-    const schedules = await scheduleService.getSchedules();
-    return schedules.find(s => s.id === id) || null;
+    const { data, error } = await supabase
+      .from('schedules')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
   },
 
   createSchedule: async (data: Omit<ScheduleEvent, 'id' | 'created_at'>): Promise<ScheduleEvent> => {
-    const schedules = await scheduleService.getSchedules();
+    const { data: newSchedule, error } = await supabase
+      .from('schedules')
+      .insert(data)
+      .select()
+      .single();
 
-    const newSchedule: ScheduleEvent = {
-      ...data,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString()
-    };
+    if (error) throw error;
 
-    schedules.push(newSchedule);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedules));
+    await logAction({
+      action: 'create',
+      entity_type: 'schedule',
+      entity_id: newSchedule.id,
+      entity_description: `Novo compromisso agendado: ${newSchedule.title}`,
+      details: { start_time: newSchedule.start_time },
+      criticality: 'normal'
+    });
 
-    await new Promise(r => setTimeout(r, 500));
     return newSchedule;
   },
 
   updateSchedule: async (id: string, data: Partial<ScheduleEvent>): Promise<ScheduleEvent> => {
-    const schedules = await scheduleService.getSchedules();
-    const index = schedules.findIndex(s => s.id === id);
-    if (index === -1) throw new Error('Evento não encontrado');
+    const { data: updatedSchedule, error } = await supabase
+      .from('schedules')
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single();
 
-    schedules[index] = { ...schedules[index], ...data };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedules));
+    if (error) throw error;
 
-    await new Promise(r => setTimeout(r, 500));
-    return schedules[index];
+    await logAction({
+      action: 'update',
+      entity_type: 'schedule',
+      entity_id: id,
+      entity_description: `Compromisso atualizado: ${updatedSchedule.title}`,
+      details: { after: updatedSchedule },
+      criticality: 'normal'
+    });
+
+    return updatedSchedule;
   },
 
   deleteSchedule: async (id: string): Promise<void> => {
-    const schedules = await scheduleService.getSchedules();
-    const filtered = schedules.filter(s => s.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-    await new Promise(r => setTimeout(r, 500));
+    const { data: schedule } = await supabase.from('schedules').select('title').eq('id', id).single();
+
+    const { error } = await supabase
+      .from('schedules')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'delete',
+      entity_type: 'schedule',
+      entity_id: id,
+      entity_description: `Compromisso removido: ${schedule?.title || 'ID ' + id}`,
+      criticality: 'importante'
+    });
   },
 
   getSchedulesByCase: async (caseId: string): Promise<ScheduleEvent[]> => {
-    const schedules = await scheduleService.getSchedules();
-    return schedules.filter(s => s.case_id === caseId);
+    const { data, error } = await supabase
+      .from('schedules')
+      .select('*')
+      .eq('case_id', caseId)
+      .order('start_time', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
   }
 };

@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { 
-  X, Gavel, Users, Clock, Calendar, Check, 
+import {
+  X, Gavel, Users, Clock, Calendar, Check,
   Search, ChevronDown, Save, Loader2, AlertCircle,
   Clock3, Video, MapPin, Paperclip, Mail, Bell,
   Plus, Trash2, Globe, FileText, Briefcase, User
 } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
+import { useCases, useClients } from '../../hooks/useQueries';
 
 interface CreateEventModalProps {
   isOpen: boolean;
@@ -25,13 +25,14 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   isOpen, onClose, defaultDate, defaultCaseId, mode = 'create', eventId, onSave, initialData
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cases, setCases] = useState<any[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
+  const { data: cases = [] } = useCases();
+  const { data: clients = [] } = useClients();
+
   const [searchProcess, setSearchProcess] = useState('');
   const [searchClient, setSearchClient] = useState('');
   const [showProcessList, setShowProcessList] = useState(false);
   const [showClientList, setShowClientList] = useState(false);
-  
+
   const processListRef = useRef<HTMLDivElement>(null);
   const clientListRef = useRef<HTMLDivElement>(null);
 
@@ -69,16 +70,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   }, []);
 
   useEffect(() => {
-    const storedCases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-    const storedClients = JSON.parse(localStorage.getItem('legaltech_clients') || '[]');
-    setCases(storedCases);
-    setClients(storedClients);
-
     if (isOpen) {
-      if (initialData && mode === 'edit') {
-        const start = new Date(initialData.start_time);
-        const end = new Date(initialData.end_time);
-        
+      if (initialData && (mode === 'edit' || initialData.id)) {
+        const start = new Date(initialData.start_time || initialData.start);
+        const end = new Date(initialData.end_time || initialData.end);
+
         setFormData({
           type: initialData.type || 'audiência',
           title: initialData.title || '',
@@ -98,7 +94,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           }
         });
       } else {
-        const initialDate = defaultDate ? defaultDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        const initialDateStr = defaultDate ? defaultDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
         const now = new Date();
         const currentHour = now.getHours();
         const nextHour = (currentHour + 1).toString().padStart(2, '0') + ':00';
@@ -109,7 +105,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           title: '',
           case_id: defaultCaseId || '',
           client_id: '',
-          date: initialDate,
+          date: initialDateStr,
           startTime: nextHour,
           endTime: endHour,
           description: '',
@@ -135,15 +131,15 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
   const filteredCases = useMemo(() => {
     if (!searchProcess) return cases.slice(0, 5);
-    return cases.filter(c => 
-      c.process_number.includes(searchProcess) || 
+    return (cases as any[]).filter(c =>
+      c.process_number.includes(searchProcess) ||
       (c.court && c.court.toLowerCase().includes(searchProcess.toLowerCase()))
     ).slice(0, 10);
   }, [cases, searchProcess]);
 
   const filteredClients = useMemo(() => {
     if (!searchClient) return clients.slice(0, 5);
-    return clients.filter(c => 
+    return (clients as any[]).filter(c =>
       c.name.toLowerCase().includes(searchClient.toLowerCase()) ||
       c.cpf_cnpj.includes(searchClient)
     ).slice(0, 10);
@@ -152,19 +148,27 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      onSave?.(formData);
+    try {
+      if (onSave) {
+        await onSave(formData);
+      }
       setIsSubmitting(false);
       onClose();
-    }, 500);
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
 
+  const selectedCase = cases.find((c: any) => c.id === formData.case_id);
+  const selectedClient = clients.find((c: any) => c.id === formData.client_id);
+
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
-        
+
         <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-10">
           <div className="flex items-center justify-between">
             <div>
@@ -179,7 +183,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar pb-32">
+        <form id="create-event-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar pb-32">
           <section className="space-y-8">
             <div className="space-y-4">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Tipo de Compromisso</label>
@@ -204,13 +208,13 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Título do Evento</label>
-              <input 
+              <input
                 type="text"
                 required
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
                 placeholder={eventTypes.find(t => t.id === formData.type)?.placeholder}
-                className="w-full px-6 py-5 bg-slate-50 dark:bg-slate-800 border-none rounded-3xl focus:ring-2 focus:ring-primary-500 dark:text-white text-xl font-bold placeholder:text-slate-400 shadow-inner"
+                className="w-full px-6 py-5 bg-slate-50 dark:bg-slate-800 border-none rounded-3xl focus:ring-2 focus:ring-primary-500 dark:text-white text-xl font-bold placeholder:text-slate-400 shadow-inner outline-none transition-all"
               />
             </div>
           </section>
@@ -220,19 +224,25 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 relative" ref={processListRef}>
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Processo</label>
-                <input 
-                  type="text"
-                  value={searchProcess || (formData.case_id ? cases.find(c => c.id === formData.case_id)?.process_number : '')}
-                  onChange={(e) => { setSearchProcess(e.target.value); setShowProcessList(true); }}
-                  onFocus={() => setShowProcessList(true)}
-                  placeholder="Buscar processo..."
-                  className="w-full pl-4 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner"
-                />
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                    <Search size={16} />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchProcess || (selectedCase?.process_number || '')}
+                    onChange={(e) => { setSearchProcess(e.target.value); setShowProcessList(true); }}
+                    onFocus={() => setShowProcessList(true)}
+                    placeholder="Buscar processo..."
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
+                  />
+                </div>
                 {showProcessList && filteredCases.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden">
-                    {filteredCases.map(c => (
-                      <button key={c.id} type="button" onClick={() => { setFormData({...formData, case_id: c.id}); setShowProcessList(false); setSearchProcess(''); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                    {filteredCases.map((c: any) => (
+                      <button key={c.id} type="button" onClick={() => { setFormData({ ...formData, case_id: c.id }); setShowProcessList(false); setSearchProcess(''); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors">
                         <p className="text-xs font-bold dark:text-white">{c.process_number}</p>
+                        <p className="text-[9px] text-slate-400 uppercase tracking-widest">{c.court}</p>
                       </button>
                     ))}
                   </div>
@@ -241,19 +251,25 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
               <div className="space-y-2 relative" ref={clientListRef}>
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Cliente</label>
-                <input 
-                  type="text"
-                  value={searchClient || (formData.client_id ? clients.find(c => c.id === formData.client_id)?.name : '')}
-                  onChange={(e) => { setSearchClient(e.target.value); setShowClientList(true); }}
-                  onFocus={() => setShowClientList(true)}
-                  placeholder="Buscar cliente..."
-                  className="w-full pl-4 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
-                />
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                    <Users size={16} />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchClient || (selectedClient?.name || '')}
+                    onChange={(e) => { setSearchClient(e.target.value); setShowClientList(true); }}
+                    onFocus={() => setShowClientList(true)}
+                    placeholder="Buscar cliente..."
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
+                  />
+                </div>
                 {showClientList && filteredClients.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden">
-                    {filteredClients.map(c => (
-                      <button key={c.id} type="button" onClick={() => { setFormData({...formData, client_id: c.id}); setShowClientList(false); setSearchClient(''); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                    {filteredClients.map((c: any) => (
+                      <button key={c.id} type="button" onClick={() => { setFormData({ ...formData, client_id: c.id }); setShowClientList(false); setSearchClient(''); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors">
                         <p className="text-xs font-bold dark:text-white">{c.name}</p>
+                        <p className="text-[9px] text-slate-400 tracking-widest">{c.cpf_cnpj}</p>
                       </button>
                     ))}
                   </div>
@@ -267,32 +283,32 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Data</label>
-                <input 
+                <input
                   type="date"
                   required
                   value={formData.date}
                   onChange={e => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Início</label>
-                <input 
+                <input
                   type="time"
                   required
                   value={formData.startTime}
                   onChange={e => setFormData({ ...formData, startTime: e.target.value })}
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Fim</label>
-                <input 
+                <input
                   type="time"
                   required
                   value={formData.endTime}
                   onChange={e => setFormData({ ...formData, endTime: e.target.value })}
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
             </div>
@@ -301,10 +317,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
         <div className="px-10 py-8 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky bottom-0 z-20 flex items-center justify-between">
           <button type="button" onClick={onClose} className="px-6 py-3 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest">Cancelar</button>
-          <button 
+          <button
+            form="create-event-form"
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-3 px-12 py-4 rounded-[1.5rem] font-black uppercase tracking-[0.2em] transition-all shadow-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white shadow-primary-500/30"
+            className="flex items-center gap-3 px-12 py-4 rounded-[1.5rem] font-black uppercase tracking-[0.2em] transition-all shadow-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white shadow-primary-500/30 active:scale-95 disabled:opacity-50"
           >
             {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
             Salvar Evento

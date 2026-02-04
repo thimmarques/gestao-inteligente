@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home, Users, Folder, Calendar, Clock, DollarSign,
-  BarChart2, Users2, Settings, LogOut, Menu, X, Bell, Moon, Sun, Search,
-  ChevronDown, User, Target, ShieldAlert, FileSearch, Shield
+  BarChart2, Users2, Settings, LogOut, Moon, Sun, Bell, ListTodo, User, ChevronRight, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useApp } from '../../contexts/AppContext';
-import { getCriticalLogsCount24h } from '../../utils/auditLogger';
+import { useDeadlines, useSchedules, useNotifications, useTasks } from '../../hooks/useQueries';
 
 interface SidebarItemProps {
   to: string;
@@ -28,7 +28,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, badge, badge
   >
     <div className="flex items-center gap-3">
       {icon}
-      <span className="font-medium">{label}</span>
+      <span className="font-medium text-sm">{label}</span>
     </div>
     {badge !== undefined && badge > 0 && (
       <span className={`${badgeColor} text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center`}>
@@ -38,15 +38,17 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, badge, badge
   </Link>
 );
 
-// Changed from React.FC to standard function with optional children to resolve TS error in App.tsx
 export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
   const { signOut, user } = useAuth();
   const { lawyer, office } = useApp();
+
+  const { data: deadlines = [] } = useDeadlines();
+  const { data: schedules = [] } = useSchedules();
+  const { data: notifications = [] } = useNotifications();
+  const { data: tasks = [] } = useTasks();
 
   const displayUser = lawyer || user;
 
@@ -58,23 +60,23 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
     }
   }, [isDarkMode]);
 
-  const sideBadges = useMemo(() => {
-    const deadlines = JSON.parse(localStorage.getItem('legaltech_deadlines') || '[]');
-    const schedules = JSON.parse(localStorage.getItem('legaltech_schedules') || '[]');
-    const pendingDeadlines = deadlines.filter((d: any) => d.status === 'pendente').length;
-    const today = new Date().toDateString();
-    const todaySchedules = schedules.filter((s: any) =>
-      s.status === 'agendado' && new Date(s.start_time).toDateString() === today
-    ).length;
-    return { deadlines: pendingDeadlines, schedules: todaySchedules };
-  }, [location.pathname]);
+  const unreadNotifications = notifications.filter(n => !n.read).length;
+  const pendingDeadlines = deadlines.filter((d: any) => d.status === 'pendente').length;
+
+  const today = new Date().toDateString();
+  const todaySchedules = schedules.filter((s: any) =>
+    s.status === 'agendado' && new Date(s.start_time).toDateString() === today
+  ).length;
+
+  const pendingTasks = tasks.filter((t: any) => t.status === 'pendente').length;
 
   const menuItems = [
     { to: '/', icon: <Home size={20} />, label: 'Dashboard' },
     { to: '/clientes', icon: <Users size={20} />, label: 'Clientes' },
     { to: '/processos', icon: <Folder size={20} />, label: 'Processos' },
-    { to: '/agenda', icon: <Calendar size={20} />, label: 'Agenda', badge: sideBadges.schedules },
-    { to: '/prazos', icon: <Clock size={20} />, label: 'Prazos', badge: sideBadges.deadlines },
+    { to: '/agenda', icon: <Calendar size={20} />, label: 'Agenda', badge: todaySchedules },
+    { to: '/prazos', icon: <Clock size={20} />, label: 'Prazos', badge: pendingDeadlines },
+    { to: '/tarefas', icon: <ListTodo size={20} />, label: 'Tarefas', badge: pendingTasks },
     { to: '/financeiro', icon: <DollarSign size={20} />, label: 'Financeiro' },
     { to: '/relatorios', icon: <BarChart2 size={20} />, label: 'Relatórios' },
     { to: '/equipe', icon: <Users2 size={20} />, label: 'Equipe' },
@@ -117,8 +119,18 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 flex items-center justify-end px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0 z-30 shadow-sm">
-          <div className="flex items-center gap-4">
+        <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0 z-30 shadow-sm">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden p-2 text-slate-600 dark:text-slate-400">
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <div className="flex items-center gap-4 ml-auto">
+            <button className="relative p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
+              <Bell size={20} />
+              {unreadNotifications > 0 && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+              )}
+            </button>
             <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>

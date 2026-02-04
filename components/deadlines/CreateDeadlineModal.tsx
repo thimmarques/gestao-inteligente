@@ -1,13 +1,11 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  X, Save, Loader2, Calendar, AlertTriangle, AlertCircle, 
+import {
+  X, Save, Loader2, Calendar, AlertTriangle, AlertCircle,
   MinusCircle, Circle, Briefcase, Info, Check, ArrowRight
 } from 'lucide-react';
 import { Deadline, Case } from '../../types';
-import { calculateDaysRemaining } from '../../utils/deadlineCalculations';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { useCases } from '../../hooks/useQueries';
 
 interface CreateDeadlineModalProps {
   isOpen: boolean;
@@ -23,7 +21,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   isOpen, onClose, onSave, defaultCaseId, mode = 'create', initialData
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cases, setCases] = useState<Case[]>([]);
+  const { data: cases = [] } = useCases();
   const [searchTerm, setSearchTerm] = useState('');
   const [showCaseList, setShowCaseList] = useState(false);
 
@@ -36,13 +34,10 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   });
 
   useEffect(() => {
-    const storedCases = JSON.parse(localStorage.getItem('legalflow_cases') || '[]');
-    setCases(storedCases);
-
     if (initialData) {
       setFormData({
         ...initialData,
-        deadline_date: initialData.deadline_date.split('T')[0]
+        deadline_date: initialData.deadline_date ? initialData.deadline_date.split('T')[0] : ''
       });
     } else {
       setFormData({
@@ -55,18 +50,23 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
     }
   }, [isOpen, initialData, defaultCaseId]);
 
-  const selectedCase = cases.find(c => c.id === formData.case_id);
-  const filteredCases = cases.filter(c => 
-    c.process_number.includes(searchTerm) || 
-    c.court.toLowerCase().includes(searchTerm.toLowerCase())
+  const selectedCase = cases.find((c: any) => c.id === formData.case_id);
+  const filteredCases = (cases as any[]).filter(c =>
+    c.process_number.includes(searchTerm) ||
+    (c.court && c.court.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await onSave(formData);
-    setIsSubmitting(false);
-    onClose();
+    try {
+      await onSave(formData);
+      setIsSubmitting(false);
+      onClose();
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
+    }
   };
 
   const priorityOptions = [
@@ -81,42 +81,44 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
-        
+
         <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold dark:text-white">{mode === 'create' ? 'Novo Prazo' : 'Editar Prazo'}</h2>
             <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-500"><X size={24} /></button>
           </div>
-          <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Todos os campos opcionais.</p>
+          <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Configure o prazo processual.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto max-h-[70vh] custom-scrollbar">
+        <form id="create-deadline-form" onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto max-h-[70vh] custom-scrollbar">
           <div className="space-y-1.5">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Título do Prazo</label>
-            <input 
+            <input
               type="text"
+              required
               placeholder="Ex: Contestação, Recurso"
               value={formData.title}
-              onChange={e => setFormData({...formData, title: e.target.value})}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
+              onChange={e => setFormData({ ...formData, title: e.target.value })}
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
             />
           </div>
 
           <div className="space-y-1.5 relative">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Processo Vinculado</label>
-            <input 
+            <input
               type="text"
               placeholder="Buscar processo..."
-              value={selectedCase ? selectedCase.process_number : searchTerm}
+              value={searchTerm || (selectedCase ? selectedCase.process_number : '')}
               onChange={e => { setSearchTerm(e.target.value); setShowCaseList(true); }}
               onFocus={() => setShowCaseList(true)}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
             />
-            {showCaseList && searchTerm && (
+            {showCaseList && searchTerm && filteredCases.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto animate-in slide-in-from-top-2">
-                {filteredCases.map(c => (
-                  <button key={c.id} type="button" onClick={() => { setFormData({...formData, case_id: c.id}); setShowCaseList(false); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700">
+                {filteredCases.map((c: any) => (
+                  <button key={c.id} type="button" onClick={() => { setFormData({ ...formData, case_id: c.id }); setShowCaseList(false); setSearchTerm(''); }} className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0">
                     <p className="text-sm font-bold dark:text-white font-mono">{c.process_number}</p>
+                    <p className="text-[9px] text-slate-400 uppercase tracking-widest">{c.court}</p>
                   </button>
                 ))}
               </div>
@@ -125,11 +127,12 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Data Limite</label>
-            <input 
+            <input
               type="date"
+              required
               value={formData.deadline_date}
-              onChange={e => setFormData({...formData, deadline_date: e.target.value})}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              onChange={e => setFormData({ ...formData, deadline_date: e.target.value })}
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm outline-none transition-all shadow-sm"
             />
           </div>
 
@@ -140,8 +143,8 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => setFormData({...formData, priority: opt.id})}
-                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? 'border-primary-600 bg-primary-50/50' : 'border-slate-50 dark:border-slate-800'}`}
+                  onClick={() => setFormData({ ...formData, priority: opt.id })}
+                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-slate-50 dark:border-slate-800 hover:border-slate-200'}`}
                 >
                   <opt.icon size={20} className={opt.color} />
                   <span className="text-[10px] font-black uppercase tracking-widest">{opt.label}</span>
@@ -152,22 +155,23 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Descrição</label>
-            <textarea 
+            <textarea
               rows={3}
               placeholder="Detalhes adicionais..."
               value={formData.description}
-              onChange={e => setFormData({...formData, description: e.target.value})}
-              className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
+              className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner outline-none transition-all"
             />
           </div>
         </form>
 
         <div className="p-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <button type="button" onClick={onClose} className="text-sm font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest">Cancelar</button>
-          <button 
-            onClick={handleSubmit}
+          <button
+            form="create-deadline-form"
+            type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-3 px-10 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all"
+            className="flex items-center gap-3 px-10 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all disabled:opacity-50"
           >
             {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
             Salvar Prazo

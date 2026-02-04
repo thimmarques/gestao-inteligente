@@ -1,19 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, DollarSign, Plus, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import React from 'react';
+import { TrendingUp, TrendingDown, DollarSign, ArrowUpRight, ArrowDownRight, Loader2 } from 'lucide-react';
 import { formatCurrency, formatDate } from '../../../utils/formatters.ts';
+import { useFinancesByCase } from '../../../hooks/useQueries';
 
 interface FinanceTabProps {
   caseId: string;
 }
 
 export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
-  const [records, setRecords] = useState<any[]>([]);
-
-  useEffect(() => {
-    const allFinance = JSON.parse(localStorage.getItem('legaltech_finances') || '[]');
-    setRecords(allFinance.filter((f: any) => f.case_id === caseId));
-  }, [caseId]);
+  const { data: records = [], isLoading } = useFinancesByCase(caseId);
 
   const totalRevenue = records.filter(r => r.type === 'receita').reduce((acc, r) => acc + r.amount, 0);
   const totalExpense = records.filter(r => r.type === 'despesa').reduce((acc, r) => acc + r.amount, 0);
@@ -66,7 +62,14 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {records.length > 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-20 text-center">
+                    <Loader2 size={32} className="animate-spin text-primary-600 mx-auto mb-2" />
+                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Carregando dados...</p>
+                  </td>
+                </tr>
+              ) : records.length > 0 ? (
                 records.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                     <td className="px-6 py-4">
@@ -80,11 +83,10 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500">{formatDate(r.due_date)}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
-                        r.status === 'pago' ? 'bg-green-100 text-green-700 dark:bg-green-900/30' : 
-                        r.status === 'vencido' ? 'bg-red-100 text-red-700 dark:bg-red-900/30' : 
-                        'bg-orange-100 text-orange-700 dark:bg-orange-900/30'
-                      }`}>
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${r.status === 'pago' ? 'bg-green-100 text-green-700 dark:bg-green-900/30' :
+                        r.status === 'vencido' ? 'bg-red-100 text-red-700 dark:bg-red-900/30' :
+                          'bg-orange-100 text-orange-700 dark:bg-orange-900/30'
+                        }`}>
                         {r.status}
                       </span>
                     </td>

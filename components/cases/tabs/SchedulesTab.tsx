@@ -1,19 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, MapPin, Video, Eye, CheckCircle2, Clock } from 'lucide-react';
-import { formatDate } from '../../../utils/formatters.ts';
+import React from 'react';
+import { Calendar, MapPin, Video, Eye, CheckCircle2, Clock, Loader2 } from 'lucide-react';
+import { useSchedulesByCase } from '../../../hooks/useQueries';
 
 interface SchedulesTabProps {
   caseId: string;
 }
 
 export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
-  const [schedules, setSchedules] = useState<any[]>([]);
-
-  useEffect(() => {
-    const allSchedules = JSON.parse(localStorage.getItem('legaltech_schedules') || '[]');
-    setSchedules(allSchedules.filter((s: any) => s.case_id === caseId));
-  }, [caseId]);
+  const { data: schedules = [], isLoading } = useSchedulesByCase(caseId);
 
   const upcoming = schedules.filter(s => new Date(s.start_time) >= new Date()).sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
   const history = schedules.filter(s => new Date(s.start_time) < new Date()).sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
@@ -33,9 +28,8 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           </div>
           <div className="sm:col-span-2 space-y-2">
             <div className="flex items-center gap-2">
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                schedule.type === 'audiência' ? 'bg-red-50 dark:bg-red-900/20 text-red-600' : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600'
-              }`}>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${schedule.type === 'audiência' ? 'bg-red-50 dark:bg-red-900/20 text-red-600' : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600'
+                }`}>
                 {schedule.type}
               </span>
               {isHistory && <span className="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase tracking-widest"><CheckCircle2 size={10} /> Concluída</span>}
@@ -82,7 +76,12 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800"></div>
         </h4>
         <div className="grid grid-cols-1 gap-4">
-          {upcoming.length > 0 ? (
+          {isLoading ? (
+            <div className="py-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 text-center">
+              <Loader2 size={32} className="animate-spin text-primary-600 mx-auto mb-2" />
+              <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Carregando compromissos...</p>
+            </div>
+          ) : upcoming.length > 0 ? (
             upcoming.map(s => <ScheduleCard key={s.id} schedule={s} />)
           ) : (
             <div className="py-12 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800 text-center text-slate-500">

@@ -1,34 +1,43 @@
 
-import { Client, ClientType } from '../types';
+import { Client } from '../types';
+import { supabase } from '../lib/supabase';
 import { logAction } from '../utils/auditLogger.ts';
-
-const STORAGE_KEY = 'legaltech_clients';
 
 export const clientService = {
   getClients: async (): Promise<Client[]> => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    await new Promise(r => setTimeout(r, 300));
-    return data ? JSON.parse(data) : [];
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
   },
 
   getClient: async (id: string): Promise<Client | null> => {
-    const clients = await clientService.getClients();
-    return clients.find(c => c.id === id) || null;
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
   },
 
   createClient: async (data: Omit<Client, 'id' | 'created_at' | 'updated_at' | 'process_count'>): Promise<Client> => {
-    const clients = await clientService.getClients();
-    const newClient: Client = {
-      ...data,
-      id: crypto.randomUUID(),
-      process_count: 0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-    clients.push(newClient);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(clients));
-    
-    logAction({
+    const { data: newClient, error } = await supabase
+      .from('clients')
+      .insert({
+        ...data,
+        process_count: 0
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await logAction({
       action: 'create',
       entity_type: 'client',
       entity_id: newClient.id,
@@ -37,51 +46,51 @@ export const clientService = {
       criticality: 'normal'
     });
 
-    await new Promise(r => setTimeout(r, 500));
     return newClient;
   },
 
   updateClient: async (id: string, data: Partial<Client>): Promise<Client> => {
-    const clients = await clientService.getClients();
-    const index = clients.findIndex(c => c.id === id);
-    if (index === -1) throw new Error('Cliente não encontrado');
-    
-    const before = { ...clients[index] };
-    clients[index] = { 
-      ...clients[index], 
-      ...data, 
-      updated_at: new Date().toISOString() 
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(clients));
+    const { data: updatedClient, error } = await supabase
+      .from('clients')
+      .update({
+        ...data,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
 
-    logAction({
+    if (error) throw error;
+
+    await logAction({
       action: 'update',
       entity_type: 'client',
       entity_id: id,
-      entity_description: `Dados do cliente atualizados: ${clients[index].name}`,
-      details: { before, after: clients[index] },
+      entity_description: `Dados do cliente atualizados: ${updatedClient.name}`,
+      details: { after: updatedClient },
       criticality: 'normal'
     });
 
-    await new Promise(r => setTimeout(r, 500));
-    return clients[index];
+    return updatedClient;
   },
 
   deleteClient: async (id: string): Promise<void> => {
-    const clients = await clientService.getClients();
-    const clientToDelete = clients.find(c => c.id === id);
-    const filtered = clients.filter(c => c.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    // Get client name before delete for logging
+    const { data: client } = await supabase.from('clients').select('name').eq('id', id).single();
 
-    logAction({
+    const { error } = await supabase
+      .from('clients')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await logAction({
       action: 'delete',
       entity_type: 'client',
       entity_id: id,
-      entity_description: `Cliente removido do sistema: ${clientToDelete?.name || id}`,
-      details: { deleted_data: clientToDelete },
+      entity_description: `Cliente removido: ${client?.name || 'ID ' + id}`,
       criticality: 'crítico'
     });
-
-    await new Promise(r => setTimeout(r, 500));
   }
 };

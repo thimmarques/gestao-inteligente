@@ -1,79 +1,114 @@
 
 import { Deadline } from '../types.ts';
-
-const STORAGE_KEY = 'legaltech_deadlines';
+import { supabase } from '../lib/supabase';
+import { logAction } from '../utils/auditLogger.ts';
 
 export const deadlineService = {
-  
   getDeadlines: async (): Promise<Deadline[]> => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    await new Promise(r => setTimeout(r, 200)); // Latência simulada
-    
-    if (!data) return [];
-    
-    const deadlines = JSON.parse(data);
-    
-    // Join com cases e clients para display
-    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-    const clients = JSON.parse(localStorage.getItem('legaltech_clients') || '[]');
-    
-    return deadlines.map((d: any) => {
-      const relatedCase = cases.find((c: any) => c.id === d.case_id);
-      const relatedClient = relatedCase ? clients.find((cl: any) => cl.id === relatedCase.client_id) : null;
-      
-      return {
-        ...d,
-        case: relatedCase ? {
-          process_number: relatedCase.process_number,
-          client: relatedClient ? { name: relatedClient.name } : { name: 'Cliente N/A' }
-        } : null
-      };
+    const { data, error } = await supabase
+      .from('deadlines')
+      .select(`
+        *,
+        case:cases(
+          process_number,
+          client:clients(name)
+        )
+      `)
+      .order('deadline_date', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getDeadline: async (id: string): Promise<Deadline | null> => {
+    const { data, error } = await supabase
+      .from('deadlines')
+      .select(`
+        *,
+        case:cases(
+          process_number,
+          client:clients(name)
+        )
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  createDeadline: async (data: Omit<Deadline, 'id' | 'created_at' | 'case'>): Promise<Deadline> => {
+    const { data: newDeadline, error } = await supabase
+      .from('deadlines')
+      .insert(data)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'create',
+      entity_type: 'deadline',
+      entity_id: newDeadline.id,
+      entity_description: `Novo prazo processual: ${newDeadline.title}`,
+      details: { deadline_date: newDeadline.deadline_date },
+      criticality: 'normal'
+    });
+
+    return newDeadline;
+  },
+
+  updateDeadline: async (id: string, data: Partial<Deadline>): Promise<Deadline> => {
+    const { case: _, ...pureData } = data as any;
+
+    const { data: updatedDeadline, error } = await supabase
+      .from('deadlines')
+      .update(pureData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'update',
+      entity_type: 'deadline',
+      entity_id: id,
+      entity_description: `Prazo atualizado: ${updatedDeadline.title}`,
+      details: { after: updatedDeadline },
+      criticality: 'normal'
+    });
+
+    return updatedDeadline;
+  },
+
+  deleteDeadline: async (id: string): Promise<void> => {
+    const { data: deadline } = await supabase.from('deadlines').select('title').eq('id', id).single();
+
+    const { error } = await supabase
+      .from('deadlines')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'delete',
+      entity_type: 'deadline',
+      entity_id: id,
+      entity_description: `Prazo removido: ${deadline?.title || 'ID ' + id}`,
+      criticality: 'importante'
     });
   },
-  
-  getDeadline: async (id: string): Promise<Deadline | null> => {
-    const deadlines = await deadlineService.getDeadlines();
-    return deadlines.find(d => d.id === id) || null;
-  },
-  
-  createDeadline: async (data: Omit<Deadline, 'id' | 'created_at' | 'case'>): Promise<Deadline> => {
-    const deadlines = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    
-    const newDeadline = {
-      ...data,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString()
-    };
-    
-    deadlines.push(newDeadline);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(deadlines));
-    
-    await new Promise(r => setTimeout(r, 400));
-    return newDeadline as unknown as Deadline;
-  },
-  
-  updateDeadline: async (id: string, data: Partial<Deadline>): Promise<Deadline> => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const deadlines = raw ? JSON.parse(raw) : [];
-    const index = deadlines.findIndex((d: any) => d.id === id);
-    
-    if (index === -1) throw new Error('Prazo não encontrado');
-    
-    // Removemos o objeto 'case' injetado antes de salvar de volta no localStorage
-    const { case: _, ...pureData } = data;
-    
-    deadlines[index] = { ...deadlines[index], ...pureData };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(deadlines));
-    
-    await new Promise(r => setTimeout(r, 400));
-    return deadlines[index];
-  },
-  
-  deleteDeadline: async (id: string): Promise<void> => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const deadlines = raw ? JSON.parse(raw) : [];
-    const filtered = deadlines.filter((d: any) => d.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-    await new Promise(r => setTimeout(r, 400));
+
+  getDeadlinesByCase: async (caseId: string): Promise<Deadline[]> => {
+    const { data, error } = await supabase
+      .from('deadlines')
+      .select('*')
+      .eq('case_id', caseId)
+      .order('deadline_date', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
   }
 };

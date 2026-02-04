@@ -1,78 +1,128 @@
 
 import { FinanceRecord } from '../types.ts';
-
-const STORAGE_KEY = 'legaltech_finances';
+import { supabase } from '../lib/supabase';
+import { logAction } from '../utils/auditLogger.ts';
 
 export const financeService = {
   getFinances: async (): Promise<FinanceRecord[]> => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    await new Promise(r => setTimeout(r, 200));
-    
-    if (!data) return [];
-    
-    const finances = JSON.parse(data);
-    const clients = JSON.parse(localStorage.getItem('legaltech_clients') || '[]');
-    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-    
-    return finances.map((f: any) => ({
-      ...f,
-      client: f.client_id ? clients.find((c: any) => c.id === f.client_id) : null,
-      case: f.case_id ? cases.find((c: any) => c.id === f.case_id) : null
-    }));
+    const { data, error } = await supabase
+      .from('finance_records')
+      .select(`
+        *,
+        client:clients(name),
+        case:cases(process_number)
+      `)
+      .order('due_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
   },
 
   getRevenues: async (): Promise<FinanceRecord[]> => {
-    const finances = await financeService.getFinances();
-    return finances.filter(f => f.type === 'receita');
+    const { data, error } = await supabase
+      .from('finance_records')
+      .select(`
+        *,
+        client:clients(name),
+        case:cases(process_number)
+      `)
+      .eq('type', 'receita')
+      .order('due_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
   },
 
   getExpenses: async (): Promise<FinanceRecord[]> => {
-    const finances = await financeService.getFinances();
-    return finances.filter(f => f.type === 'despesa');
+    const { data, error } = await supabase
+      .from('finance_records')
+      .select(`
+        *,
+        client:clients(name),
+        case:cases(process_number)
+      `)
+      .eq('type', 'despesa')
+      .order('due_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
   },
 
   createRecord: async (data: Omit<FinanceRecord, 'id' | 'created_at'>): Promise<FinanceRecord> => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const records = raw ? JSON.parse(raw) : [];
-    
-    const newRecord = {
-      ...data,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString()
-    };
-    
-    records.push(newRecord);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-    await new Promise(r => setTimeout(r, 400));
-    return newRecord as unknown as FinanceRecord;
+    const { client: _, case: __, ...pureData } = data as any;
+
+    const { data: newRecord, error } = await supabase
+      .from('finance_records')
+      .insert(pureData)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'create',
+      entity_type: 'finance',
+      entity_id: newRecord.id,
+      entity_description: `Novo lançamento financeiro: ${newRecord.title} (${newRecord.type})`,
+      details: { amount: newRecord.amount, type: newRecord.type },
+      criticality: 'normal'
+    });
+
+    return newRecord;
   },
 
   updateRecord: async (id: string, data: Partial<FinanceRecord>): Promise<FinanceRecord> => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const records = raw ? JSON.parse(raw) : [];
-    const index = records.findIndex((r: any) => r.id === id);
-    
-    if (index === -1) throw new Error('Registro não encontrado');
-    
-    // Remove UI-only injected fields
     const { client, case: _, ...pureData } = data as any;
-    
-    records[index] = { ...records[index], ...pureData };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-    await new Promise(r => setTimeout(r, 400));
-    return records[index];
+
+    const { data: updatedRecord, error } = await supabase
+      .from('finance_records')
+      .update(pureData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'update',
+      entity_type: 'finance',
+      entity_id: id,
+      entity_description: `Registro financeiro atualizado: ${updatedRecord.title}`,
+      details: { after: updatedRecord },
+      criticality: 'importante'
+    });
+
+    return updatedRecord;
   },
 
   deleteRecord: async (id: string): Promise<void> => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const records = raw ? JSON.parse(raw) : [];
-    const filtered = records.filter((r: any) => r.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-    await new Promise(r => setTimeout(r, 400));
+    const { data: record } = await supabase.from('finance_records').select('title, amount').eq('id', id).single();
+
+    const { error } = await supabase
+      .from('finance_records')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await logAction({
+      action: 'delete',
+      entity_type: 'finance',
+      entity_id: id,
+      entity_description: `Lançamento financeiro removido: ${record?.title || 'ID ' + id}`,
+      details: { amount: record?.amount },
+      criticality: 'crítico'
+    });
   },
 
   getFinancesByCase: async (caseId: string): Promise<FinanceRecord[]> => {
-    const finances = await financeService.getFinances();
-    return finances.filter(f => f.case_id === caseId);
+    const { data, error } = await supabase
+      .from('finance_records')
+      .select('*')
+      .eq('case_id', caseId)
+      .order('due_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
   }
 };

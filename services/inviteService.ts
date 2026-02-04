@@ -1,50 +1,56 @@
 
 import { TeamRole } from '../types/team.ts';
+import { supabase } from '../lib/supabase';
 
 export interface PendingInvite {
   id: string;
   email: string;
   role: TeamRole;
-  sender_name: string;
-  status: 'pending' | 'accepted' | 'expired';
-  sent_at: string;
+  sender_id: string;
+  office_id: string;
+  status: 'pending' | 'accepted' | 'expired' | 'canceled';
+  created_at: string;
   expires_at: string;
 }
 
 export const inviteService = {
-  sendInvite: async (email: string, role: TeamRole, senderName: string): Promise<void> => {
-    // Simular latência de SMTP
-    await new Promise(r => setTimeout(r, 2000));
-    
-    const invites: PendingInvite[] = JSON.parse(localStorage.getItem('legaltech_invites') || '[]');
-    
+  sendInvite: async (email: string, role: TeamRole, senderId: string, officeId: string): Promise<void> => {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 7);
 
-    const invite: PendingInvite = {
-      id: crypto.randomUUID(),
-      email,
-      role,
-      sender_name: senderName,
-      status: 'pending',
-      sent_at: new Date().toISOString(),
-      expires_at: expiryDate.toISOString()
-    };
-    
-    invites.push(invite);
-    localStorage.setItem('legaltech_invites', JSON.stringify(invites));
-    
-    console.log(`[SIMULAÇÃO] Email enviado para ${email} com link: https://legaltech.com/invite/${invite.id}`);
+    const { error } = await supabase
+      .from('invites')
+      .insert({
+        email,
+        role,
+        sender_id: senderId,
+        office_id: officeId,
+        status: 'pending',
+        expires_at: expiryDate.toISOString()
+      });
+
+    if (error) throw error;
+
+    // In a real app, this would trigger an Edge Function to send email
+    console.log(`[SUPABASE] Convite registrado para ${email}`);
   },
-  
+
   getPendingInvites: async (): Promise<PendingInvite[]> => {
-    const invites = JSON.parse(localStorage.getItem('legaltech_invites') || '[]');
-    return invites.filter((i: PendingInvite) => i.status === 'pending');
+    const { data, error } = await supabase
+      .from('invites')
+      .select('*')
+      .eq('status', 'pending');
+
+    if (error) throw error;
+    return data || [];
   },
 
   cancelInvite: async (id: string): Promise<void> => {
-    const invites: PendingInvite[] = JSON.parse(localStorage.getItem('legaltech_invites') || '[]');
-    const updated = invites.filter(i => i.id !== id);
-    localStorage.setItem('legaltech_invites', JSON.stringify(updated));
+    const { error } = await supabase
+      .from('invites')
+      .update({ status: 'canceled' })
+      .eq('id', id);
+
+    if (error) throw error;
   }
 };

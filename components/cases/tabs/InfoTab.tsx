@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { FileText, Tag, StickyNote, BarChart3, User, Gavel, Calendar, Clock } from 'lucide-react';
-import { Case } from '../../../types';
+import { CaseWithRelations } from '../../../types';
 import { formatCurrency, formatDate } from '../../../utils/formatters';
 
 interface InfoTabProps {
-  caseData: Case;
+  caseData: CaseWithRelations;
 }
 
 export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
@@ -64,14 +64,16 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Cliente</p>
                 <button className="flex items-center gap-2 text-sm font-bold text-primary-600 hover:underline">
                   <User size={14} />
-                  Cliente {caseData.client_id}
+                  {caseData.client?.name || 'ID ' + caseData.client_id}
                 </button>
               </div>
               <div className="col-span-full space-y-1">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Advogado Responsável</p>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-primary-600">CS</div>
-                  <p className="text-sm font-medium dark:text-white">Dr. Carlos Silva</p>
+                  <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-primary-600">
+                    {caseData.lawyer?.name?.[0] || 'A'}
+                  </div>
+                  <p className="text-sm font-medium dark:text-white">{caseData.lawyer?.name || 'Não atribuído'}</p>
                 </div>
               </div>
             </div>
@@ -140,7 +142,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 </div>
                 <span className="text-sm font-medium text-slate-500">Prazos Pendentes</span>
               </div>
-              <span className="text-lg font-bold dark:text-white">3</span>
+              <span className="text-lg font-bold dark:text-white">{caseData.deadlines_count || 0}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -149,16 +151,18 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 </div>
                 <span className="text-sm font-medium text-slate-500">Audiências Futuras</span>
               </div>
-              <span className="text-lg font-bold dark:text-white">1</span>
+              <span className="text-lg font-bold dark:text-white">{caseData.schedules_count || 0}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-500">
                   <FileText size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-500">Documentos</span>
+                <span className="text-sm font-medium text-slate-500">Saldo Financeiro</span>
               </div>
-              <span className="text-lg font-bold dark:text-white">12</span>
+              <span className={`text-lg font-bold ${caseData.finances_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {formatCurrency(caseData.finances_balance || 0)}
+              </span>
             </div>
             <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">

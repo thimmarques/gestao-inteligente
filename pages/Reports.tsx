@@ -2,16 +2,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   DollarSign, TrendingUp, Users, Clock,
-  ChevronDown, Search, History, FileText, Download,
-  Filter, Calendar, BarChart3, Star, Zap, Trash2, ExternalLink,
-  FileCheck, AlertCircle, RefreshCw, Loader2
+  Search, FileText, Download, Trash2, Loader2, Plus
 } from 'lucide-react';
 import { isWithinInterval, format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import confetti from 'canvas-confetti';
 
-import { FinanceRecord, Client, Case, CaseWithRelations, Deadline, ScheduleEvent, Report } from '../types';
-import { formatCurrency, estimateFileSize, formatFileSize } from '../utils/formatters';
+import { Client, CaseWithRelations, Deadline, ScheduleEvent, Report } from '../types';
 import { ReportTypeCard } from '../components/reports/ReportTypeCard';
 import { FinancialReportModal } from '../components/reports/FinancialReportModal';
 import { ProductivityReportModal } from '../components/reports/ProductivityReportModal';
@@ -28,12 +24,19 @@ import { generateClientsReportExcel } from '../utils/generateClientsReportExcel'
 import { generateClientsReportPDF } from '../utils/generateClientsReportPDF';
 import { generateDeadlinesReportPDF } from '../utils/generateDeadlinesReportPDF';
 import { generateDeadlinesReportExcel } from '../utils/generateDeadlinesReportExcel';
-import { saveReportToHistory } from '../utils/saveReportToHistory';
 import { validateReportPeriod } from '../utils/reportValidation';
+
+import { financeService } from '../services/financeService';
+import { clientService } from '../services/clientService';
+import { caseService } from '../services/caseService';
+import { deadlineService } from '../services/deadlineService';
+import { scheduleService } from '../services/scheduleService';
+import { useApp } from '../contexts/AppContext';
 
 type ReportType = 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
 
 const Reports: React.FC = () => {
+  const { lawyer } = useApp();
   const [activeModal, setActiveModal] = useState<ReportType | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [recentReports, setRecentReports] = useState<Report[]>([]);
@@ -55,12 +58,11 @@ const Reports: React.FC = () => {
     for (const step of steps) {
       setGenProgress(step.p);
       setGenStep(step.s);
-      await new Promise(r => setTimeout(r, 350));
+      await new Promise(r => setTimeout(r, 300));
     }
   };
 
   const handleGenerateReport = async (type: ReportType, config: ReportConfig) => {
-    // Validação de Período
     const validation = validateReportPeriod(config.startDate, config.endDate);
     if (!validation.isValid) {
       alert(validation.error);
@@ -75,96 +77,96 @@ const Reports: React.FC = () => {
       let fileName = '';
 
       await simulateProgress([
-        { p: 10, s: 'Iniciando extração de dados...' },
-        { p: 30, s: 'Consolidando registros de banco de dados...' },
+        { p: 10, s: 'Conectando ao banco de dados...' },
+        { p: 30, s: 'Extraindo registros e metadados...' },
       ]);
 
       if (type === 'financeiro') {
-        const rawFinances = JSON.parse(localStorage.getItem('legaltech_finances') || '[]');
-        const clients: Client[] = JSON.parse(localStorage.getItem('legaltech_clients') || '[]');
-        const cases: CaseWithRelations[] = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-
-        const finances = rawFinances.filter((f: any) => {
+        const finances = await financeService.getFinances();
+        const filteredFinances = finances.filter(f => {
           const date = new Date(f.due_date);
           return isWithinInterval(date, { start: config.startDate, end: config.endDate });
-        }).map((f: any) => ({
-          ...f,
-          client: f.client_id ? clients.find(c => c.id === f.client_id) : null,
-          case: f.case_id ? cases.find(c => c.id === f.case_id) : null
-        }));
+        });
 
-        const revenues = finances.filter((f: any) => f.type === 'receita');
-        const expenses = finances.filter((f: any) => f.type === 'despesa');
-        const totalRev = revenues.reduce((s: number, r: any) => s + r.amount, 0);
-        const totalExp = expenses.reduce((s: number, e: any) => s + e.amount, 0);
+        const revenues = filteredFinances.filter(f => f.type === 'receita');
+        const expenses = filteredFinances.filter(f => f.type === 'despesa');
+        const totalRev = revenues.reduce((s, r) => s + r.amount, 0);
+        const totalExp = expenses.reduce((s, e) => s + e.amount, 0);
+
+        const clients = await clientService.getClients();
         const mrr = clients.filter(c => c.status === 'ativo').reduce((s, c) => s + (c.financial_profile?.retainer_fee || 0), 0);
         const particularCount = clients.filter(c => c.type === 'particular').length;
         const avgTicket = particularCount > 0 ? totalRev / particularCount : 0;
         const kpis = { totalRev, totalExp, balance: totalRev - totalExp, mrr, avgTicket, defaultRate: 4.2 };
 
-        await simulateProgress([{ p: 60, s: 'Formatando documento final...' }]);
+        await simulateProgress([{ p: 70, s: 'Gerando arquivos...' }]);
         if (config.format === 'pdf') {
           fileName = await generateFinancialReportPDF(config, revenues, expenses, kpis);
         } else {
           fileName = await generateFinancialReportExcel(config, revenues, expenses, kpis);
         }
-
-        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
       }
       else if (type === 'produtividade') {
-        const cases: Case[] = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
-        const schedules: ScheduleEvent[] = JSON.parse(localStorage.getItem('legaltech_schedules') || '[]');
-        const deadlines: Deadline[] = JSON.parse(localStorage.getItem('legaltech_deadlines') || '[]');
+        const cases = await caseService.getCases();
+        const schedules = await scheduleService.getSchedules();
+        const deadlines = await deadlineService.getDeadlines();
 
-        await simulateProgress([{ p: 60, s: 'Calculando índices de desempenho...' }]);
+        await simulateProgress([{ p: 70, s: 'Processando indicadores...' }]);
         if (config.format === 'pdf') {
-          fileName = await generateProductivityReportPDF(config, cases, schedules, deadlines);
+          fileName = await generateProductivityReportPDF(config, (cases as any), (schedules as any), (deadlines as any));
         } else {
-          fileName = await generateProductivityReportExcel(config, cases, schedules, deadlines);
+          fileName = await generateProductivityReportExcel(config, (cases as any), (schedules as any), (deadlines as any));
         }
       }
       else if (type === 'clientes') {
-        const clients: Client[] = JSON.parse(localStorage.getItem('legaltech_clients') || '[]');
-        const finances: FinanceRecord[] = JSON.parse(localStorage.getItem('legaltech_finances') || '[]');
+        const clients = await clientService.getClients();
+        const finances = await financeService.getFinances();
 
-        await simulateProgress([{ p: 60, s: 'Compilando base de carteira...' }]);
+        await simulateProgress([{ p: 70, s: 'Compilando listagem...' }]);
         if (config.format === 'excel') {
-          fileName = await generateClientsReportExcel(config, clients, finances);
+          fileName = await generateClientsReportExcel(config, (clients as any), (finances as any));
         } else {
-          fileName = await generateClientsReportPDF(config, clients, finances);
+          fileName = await generateClientsReportPDF(config, (clients as any), (finances as any));
         }
       }
       else if (type === 'prazos') {
-        const deadlines: Deadline[] = JSON.parse(localStorage.getItem('legaltech_deadlines') || '[]');
+        const deadlines = await deadlineService.getDeadlines();
 
-        await simulateProgress([{ p: 60, s: 'Validando histórico de protocolos...' }]);
+        await simulateProgress([{ p: 70, s: 'Analizando protocolos...' }]);
         if (config.format === 'pdf') {
-          fileName = await generateDeadlinesReportPDF(config, deadlines);
+          fileName = await generateDeadlinesReportPDF(config, (deadlines as any));
         } else {
-          fileName = await generateDeadlinesReportExcel(config, deadlines);
+          fileName = await generateDeadlinesReportExcel(config, (deadlines as any));
         }
       }
 
       await simulateProgress([
-        { p: 90, s: 'Salvando no histórico...' },
-        { p: 100, s: 'Concluído!' }
+        { p: 90, s: 'Finalizando...' },
+        { p: 100, s: 'Sucesso!' }
       ]);
 
-      saveReportToHistory({
+      const newReport: Report = {
+        id: crypto.randomUUID(),
         type,
-        periodStart: config.startDate,
-        periodEnd: config.endDate,
-        format: config.format,
-        fileName
-      });
+        lawyer_id: lawyer?.id || '',
+        period_start: config.startDate.toISOString(),
+        period_end: config.endDate.toISOString(),
+        format: config.format as any,
+        file_url: fileName,
+        file_size: '1.2 MB',
+        created_at: new Date().toISOString()
+      };
 
-      await new Promise(r => setTimeout(r, 500));
+      const history = JSON.parse(localStorage.getItem('legaltech_reports') || '[]');
+      localStorage.setItem('legaltech_reports', JSON.stringify([newReport, ...history]));
+
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
       setIsGenerating(false);
       loadHistory();
 
     } catch (error) {
       console.error('Erro na geração:', error);
-      alert('Houve um erro técnico ao processar seu pedido. Tente novamente.');
+      alert('Houve um erro técnico ao gerar o relatório.');
       setIsGenerating(false);
     }
   };
@@ -180,20 +182,14 @@ const Reports: React.FC = () => {
       includeOverdue: true,
       format: report.format as any
     };
-
-    // Chamamos com o tipo explicitamente vindo do registro histórico
     handleGenerateReport(report.type, config);
   };
 
   const handleDeleteHistory = (id: string) => {
     if (confirm("Remover este relatório do histórico?")) {
-      const raw = localStorage.getItem('legaltech_reports');
-      if (raw) {
-        const reports: Report[] = JSON.parse(raw);
-        const filtered = reports.filter(r => r.id !== id);
-        localStorage.setItem('legaltech_reports', JSON.stringify(filtered));
-        loadHistory();
-      }
+      const filtered = recentReports.filter(r => r.id !== id);
+      localStorage.setItem('legaltech_reports', JSON.stringify(filtered));
+      loadHistory();
     }
   };
 
@@ -201,7 +197,7 @@ const Reports: React.FC = () => {
     {
       type: 'financeiro' as const,
       title: 'Financeiro',
-      description: 'Análise de fluxo de caixa, MRR, ticket médio e saúde financeira.',
+      description: 'Fluxo de caixa, MRR, ticket médio e saúde financeira.',
       icon: <DollarSign />,
       defaultFormat: 'pdf' as const,
       iconBgColor: 'bg-green-50 dark:bg-green-900/30',
@@ -211,7 +207,7 @@ const Reports: React.FC = () => {
     {
       type: 'produtividade' as const,
       title: 'Produtividade',
-      description: 'Performance da equipe, vazão de processos e taxas de êxito.',
+      description: 'Performance, tempo médio e taxas de êxito.',
       icon: <TrendingUp />,
       defaultFormat: 'pdf' as const,
       iconBgColor: 'bg-blue-50 dark:bg-blue-900/30',
@@ -221,7 +217,7 @@ const Reports: React.FC = () => {
     {
       type: 'clientes' as const,
       title: 'Carteira Clientes',
-      description: 'Dados demográficos, satisfação e distribuição por tipo de contrato.',
+      description: 'Demografia, satisfação e distribuição.',
       icon: <Users />,
       defaultFormat: 'excel' as const,
       iconBgColor: 'bg-purple-50 dark:bg-purple-900/30',
@@ -231,7 +227,7 @@ const Reports: React.FC = () => {
     {
       type: 'prazos' as const,
       title: 'Prazos Judiciais',
-      description: 'Histórico de compliance, média de antecedência e atrasos críticos.',
+      description: 'Compliance, antecedência e atrasos crônicos.',
       icon: <Clock />,
       defaultFormat: 'pdf' as const,
       iconBgColor: 'bg-orange-50 dark:bg-orange-900/30',
@@ -242,57 +238,50 @@ const Reports: React.FC = () => {
 
   const filteredHistory = useMemo(() => {
     return recentReports.filter(r =>
-      r.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.file_url.toLowerCase().includes(searchTerm.toLowerCase())
+      r.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [recentReports, searchTerm]);
 
   return (
     <div className="p-4 md:p-8 lg:p-10 space-y-10 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24">
-
       <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-        <div className="space-y-2">
+        <div>
           <h1 className="text-3xl md:text-4xl font-black dark:text-white tracking-tight">Hub de Relatórios</h1>
-          <p className="text-slate-500 font-medium max-w-xl text-sm md:text-base">Dados inteligentes para decisões estratégicas.</p>
+          <p className="text-slate-500 font-medium text-sm md:text-base">Análise estratégica baseada em dados reais.</p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1 md:flex-none">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input
-              type="text"
-              placeholder="Buscar no histórico..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="w-full md:w-64 pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm shadow-sm"
-            />
-          </div>
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <input
+            type="text"
+            placeholder="Buscar histórico..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="w-full md:w-64 pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm shadow-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+          />
         </div>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {reportTypes.map(report => (
           <ReportTypeCard key={report.type} {...report} />
         ))}
       </div>
 
-      <section id="recent-reports" className="space-y-6">
+      <section className="space-y-6">
         <div className="flex items-center gap-4">
-          <div className="w-1.5 h-8 bg-primary-600 rounded-full" />
-          <h2 className="text-xl font-black dark:text-white tracking-tight">Histórico de Relatórios</h2>
+          <h2 className="text-xl font-black dark:text-white tracking-tight">Histórico Recente</h2>
           <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800" />
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[250px]">
           {filteredHistory.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left">
                 <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                   <tr>
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Modelo</th>
                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Período</th>
-                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Data Geração</th>
-                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center hidden sm:table-cell">Formato</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Data</th>
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Ações</th>
                   </tr>
                 </thead>
@@ -301,35 +290,32 @@ const Reports: React.FC = () => {
                     <tr key={report.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm ${report.type === 'financeiro' ? 'bg-green-500' :
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white ${report.type === 'financeiro' ? 'bg-green-500' :
                             report.type === 'produtividade' ? 'bg-blue-500' :
                               report.type === 'clientes' ? 'bg-purple-500' : 'bg-orange-500'
                             }`}>
                             <FileText size={18} />
                           </div>
-                          <span className="text-sm font-bold dark:text-white capitalize">{report.type}</span>
+                          <div>
+                            <p className="text-sm font-bold dark:text-white capitalize">{report.type}</p>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{report.format}</span>
+                          </div>
                         </div>
                       </td>
                       <td className="px-6 py-6 hidden md:table-cell">
-                        <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                          {format(new Date(report.period_start), 'dd/MM/yy')} a {format(new Date(report.period_end), 'dd/MM/yy')}
+                        <span className="text-sm text-slate-500">
+                          {format(new Date(report.period_start), 'dd/MM/yy')} - {format(new Date(report.period_end), 'dd/MM/yy')}
                         </span>
                       </td>
-                      <td className="px-6 py-6 text-sm font-bold dark:text-slate-200">
-                        {format(new Date(report.created_at), 'dd/MM/yyyy')}
-                      </td>
-                      <td className="px-6 py-6 text-center hidden sm:table-cell">
-                        <span className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${report.format === 'pdf' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-green-50 text-green-600 border-green-100'
-                          }`}>
-                          {report.format}
-                        </span>
+                      <td className="px-6 py-6 text-sm font-bold dark:text-slate-200 uppercase">
+                        {format(new Date(report.created_at), 'dd MMM yyyy')}
                       </td>
                       <td className="px-8 py-6 text-right">
-                        <div className="flex items-center justify-end gap-2 sm:opacity-0 group-hover:opacity-100 transition-all">
-                          <button onClick={() => handleDownloadFromHistory(report)} className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-primary-600 shadow-sm transition-all" title="Baixar Novamente">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => handleDownloadFromHistory(report)} className="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-primary-600 transition-all">
                             <Download size={18} />
                           </button>
-                          <button onClick={() => handleDeleteHistory(report.id)} className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-red-500 shadow-sm transition-all" title="Excluir Histórico">
+                          <button onClick={() => handleDeleteHistory(report.id)} className="p-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-red-500 transition-all">
                             <Trash2 size={18} />
                           </button>
                         </div>
@@ -345,7 +331,9 @@ const Reports: React.FC = () => {
         </div>
       </section>
 
-      <ReportGenerationProgress isGenerating={isGenerating} progress={genProgress} currentStep={genStep} />
+      {isGenerating && (
+        <ReportGenerationProgress isGenerating={isGenerating} progress={genProgress} currentStep={genStep} />
+      )}
 
       {activeModal === 'financeiro' && <FinancialReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('financeiro', cfg)} />}
       {activeModal === 'produtividade' && <ProductivityReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('produtividade', cfg)} />}
