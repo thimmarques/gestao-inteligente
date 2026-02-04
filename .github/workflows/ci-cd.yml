@@ -1,4 +1,4 @@
-# CI/CD Pipeline - Fixed Supabase push command V2
+# CI/CD Pipeline - Fixed Supabase push command V3 (with Secret Validation)
 name: CI/CD Pipeline
 
 on:
@@ -51,6 +51,12 @@ jobs:
         uses: supabase/setup-cli@v1
         with:
           version: latest
+
+      - name: Verify Supabase Secrets
+        run: |
+          if [ -z "${{ secrets.SUPABASE_PROJECT_ID }}" ]; then echo "::error::SUPABASE_PROJECT_ID is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "${{ secrets.SUPABASE_DB_PASSWORD }}" ]; then echo "::error::SUPABASE_DB_PASSWORD is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]; then echo "::error::SUPABASE_ACCESS_TOKEN is missing in GitHub Secrets"; exit 1; fi
 
       - name: Supabase Migrations
         run: supabase db push --db-url "postgresql://postgres:${{ secrets.SUPABASE_DB_PASSWORD }}@db.${{ secrets.SUPABASE_PROJECT_ID }}.supabase.co:5432/postgres"
