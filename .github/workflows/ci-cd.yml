@@ -1,4 +1,4 @@
-# CI/CD Pipeline - Fixed Supabase push command V4 (Added Env Mapping)
+# CI/CD Pipeline - Fixed Supabase push command V5 (Using Supabase Link)
 name: CI/CD Pipeline
 
 on:
@@ -62,8 +62,11 @@ jobs:
           if [ -z "$SUPABASE_DB_PASSWORD" ]; then echo "::error::SUPABASE_DB_PASSWORD is missing in GitHub Secrets"; exit 1; fi
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then echo "::error::SUPABASE_ACCESS_TOKEN is missing in GitHub Secrets"; exit 1; fi
 
+      - name: Link Supabase Project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
+
       - name: Supabase Migrations
-        run: supabase db push --db-url "postgresql://postgres:$SUPABASE_DB_PASSWORD@db.$SUPABASE_PROJECT_ID.supabase.co:5432/postgres"
+        run: supabase db push --password "$SUPABASE_DB_PASSWORD"
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
