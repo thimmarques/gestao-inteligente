@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Home, Users, Folder, Calendar, Clock, DollarSign,
-  BarChart2, Users2, Settings, LogOut, Moon, Sun, Bell, ListTodo, User, ChevronRight, Menu, X
+  BarChart2, Users2, Settings, LogOut, Moon, Sun, Bell, ListTodo, User, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useApp } from '../../contexts/AppContext';

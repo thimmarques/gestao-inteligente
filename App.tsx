@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
@@ -24,7 +24,7 @@ const Deadlines = lazy(() => import('./pages/Deadlines.tsx'));
 const Reports = lazy(() => import('./pages/Reports.tsx'));
 const Settings = lazy(() => import('./pages/Settings.tsx'));
 const Team = lazy(() => import('./pages/Team.tsx'));
-const Tasks = lazy(() => import('./pages/Tasks.tsx'));
+// const Tasks = lazy(() => import('./pages/Tasks.tsx'));
 const Login = lazy(() => import('./pages/Login.tsx'));
 const Signup = lazy(() => import('./pages/Signup.tsx'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));

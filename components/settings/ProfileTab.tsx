@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { User, Lock, Mail, Phone, Briefcase, FileText, Check, Loader2, Rocket } from 'lucide-react';
+import { User, Loader2, Rocket, Check } from 'lucide-react';
 import { PhotoUpload } from './PhotoUpload.tsx';
-import { Lawyer, Role } from '../../types.ts';
+import { Lawyer } from '../../types.ts';
 import { useAuth } from '../../contexts/AuthContext';
 import { profileService } from '../../services/profileService';
 import { useNavigate } from 'react-router-dom';
