@@ -110,7 +110,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold truncate dark:text-white leading-tight">{displayUser?.name || "Advogado"}</p>
-                <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">OAB/{displayUser?.oab || "SP 000.000"}</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">{displayUser?.oab ? `OAB/${displayUser.oab}` : 'OAB não informada'}</p>
               </div>
             </div>
           </div>

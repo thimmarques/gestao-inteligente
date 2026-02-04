@@ -89,7 +89,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="p-6 md:p-8 lg:p-10 space-y-10 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-slate-100">
       <header className="space-y-1">
-        <h1 className="text-3xl font-black tracking-tight">Bom dia, {lawyer?.name?.split(' ')[0] || 'Advogado'}</h1>
+        <h1 className="text-3xl font-black tracking-tight">Bom dia, Dr. {lawyer?.name || 'Advogado'}</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium">Resumo estratégico do seu escritório.</p>
       </header>
 

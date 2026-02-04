@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { UserPlus, ChevronRight, RefreshCw, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { TeamMember } from '../types/team';
 import { TeamMemberCard } from '../components/team/TeamMemberCard';
 import { TeamMemberTable } from '../components/team/TeamMemberTable';
@@ -16,6 +17,7 @@ import { supabase } from '../lib/supabase';
 
 const Team: React.FC = () => {
   const { lawyer: currentUser } = useApp();
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'cards' | 'table'>(() => (localStorage.getItem('team_view') as any) || 'cards');
   const [activeTab, setActiveTab] = useState<'todos' | 'admin' | 'lawyer' | 'assistant'>('todos');
   const [filterState, setFilterState] = useState({ search: '', roles: [], status: 'todos', sort: 'name_asc' });
@@ -130,7 +132,15 @@ const Team: React.FC = () => {
         isOpen={!!selectedMember}
         member={selectedMember}
         onClose={() => setSelectedMember(null)}
-        onEdit={() => { setSelectedMember(null); alert('Redirecionando para edição em Configurações...'); }}
+        onEdit={() => {
+          setSelectedMember(null);
+          if (currentUser && selectedMember?.id === currentUser.id) {
+            navigate('/settings?tab=perfil');
+          } else {
+            // If admin editing another user, logic could go here or show toast "Editing others not implemented yet"
+            navigate('/settings?tab=equipe'); // Fallback or placeholder
+          }
+        }}
         onDelete={handleDeleteMember}
         currentUserId={currentUser?.id || ''}
       />
