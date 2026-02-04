@@ -1,4 +1,4 @@
-# CI/CD Pipeline - Fixed Supabase push command
+# CI/CD Pipeline - Fixed Supabase push command V2
 name: CI/CD Pipeline
 
 on:
@@ -67,9 +67,9 @@ jobs:
 
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
+        if: always() && env.SLACK_WEBHOOK_URL != ''
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
