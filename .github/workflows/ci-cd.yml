@@ -1,4 +1,4 @@
-# CI/CD Pipeline - Fixed Supabase push command V5 (Using Supabase Link)
+# CI/CD Pipeline - Fixed Supabase push command V6 (Added Vercel Validation)
 name: CI/CD Pipeline
 
 on:
@@ -67,6 +67,12 @@ jobs:
 
       - name: Supabase Migrations
         run: supabase db push --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Verify Vercel Secrets
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then echo "::error::VERCEL_TOKEN is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "${{ secrets.VERCEL_ORG_ID }}" ]; then echo "::error::VERCEL_ORG_ID is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then echo "::error::VERCEL_PROJECT_ID is missing in GitHub Secrets"; exit 1; fi
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
