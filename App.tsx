@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
@@ -36,10 +36,15 @@ const PageLoader = () => (
 );
 
 const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) return <PageLoader />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  if (user?.first_login && location.pathname !== '/settings') {
+    return <Navigate to="/settings" replace />;
+  }
 
   return <>{children}</>;
 };
@@ -74,7 +79,7 @@ const AppRoutes = () => {
                 <Route path="/prazos" element={<Deadlines />} />
                 <Route path="/financeiro" element={<Finance />} />
                 <Route path="/relatorios" element={<Reports />} />
-                <Route path="/configuracoes" element={<Settings />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/equipe" element={<Team />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

@@ -101,7 +101,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
           <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
             {menuItems.map((item) => <SidebarItem key={item.to} {...item} active={location.pathname === item.to} />)}
             <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
-              <SidebarItem to="/configuracoes" icon={<Settings size={20} />} label="Configurações" active={location.pathname === '/configuracoes'} />
+              <SidebarItem to="/settings" icon={<Settings size={20} />} label="Configurações" active={location.pathname === '/settings'} />
             </div>
           </nav>
           <div className="p-4 border-t border-slate-200 dark:border-slate-800">

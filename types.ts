@@ -24,6 +24,7 @@ export type CaseType = 'cível' | 'trabalhista' | 'criminal' | 'família' | 'tri
 export interface Lawyer {
   id: string;
   name: string;
+  full_name?: string;
   email: string;
   role: Role;
   oab?: string;
@@ -32,6 +33,7 @@ export interface Lawyer {
   phone?: string;
   specialty?: string;
   bio?: string;
+  first_login?: boolean;
 }
 
 export interface Office {

@@ -57,7 +57,7 @@ export const CriticalLogsWidget: React.FC = () => {
             {criticalLogs.map((log: any) => (
               <Link
                 key={log.id}
-                to={`/configuracoes?tab=logs&id=${log.id}`}
+                to={`/settings?tab=logs&id=${log.id}`}
                 className="flex items-center justify-between p-3 hover:bg-red-500/5 dark:hover:bg-red-500/10 rounded-2xl transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/item"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -93,7 +93,7 @@ export const CriticalLogsWidget: React.FC = () => {
 
       <div className="p-4 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
         <Link
-          to="/configuracoes?tab=logs"
+          to="/settings?tab=logs"
           className="flex items-center justify-center gap-2 text-[10px] font-black text-primary-600 uppercase tracking-[0.2em] hover:gap-3 transition-all"
         >
           Central de Auditoria

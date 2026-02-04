@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 import { Lock, Mail, Loader2, User, ArrowLeft } from 'lucide-react';
 
 const signupSchema = z.object({
-    name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+    full_name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
     email: z.string().email('E-mail inválido'),
     password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
 });
@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
                 password: data.password,
                 options: {
                     data: {
-                        name: data.name,
+                        full_name: data.full_name,
                     },
                 },
             });
@@ -95,13 +95,13 @@ const Signup: React.FC = () => {
                             <div className="relative">
                                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                 <input
-                                    {...register('name')}
+                                    {...register('full_name')}
                                     type="text"
                                     placeholder="Seu nome"
-                                    className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.name ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                                    className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.full_name ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                                 />
                             </div>
-                            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+                            {errors.full_name && <p className="mt-1 text-xs text-red-500">{errors.full_name.message}</p>}
                         </div>
 
                         <div>

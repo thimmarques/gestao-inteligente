@@ -10,6 +10,7 @@ interface User {
   oab?: string;
   office_id: string;
   photo_url?: string;
+  first_login: boolean;
 }
 
 interface AuthContextType {
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           oab: data.oab,
           office_id: data.office_id,
           photo_url: data.photo_url,
+          first_login: data.first_login,
         });
       }
     } catch (error) {

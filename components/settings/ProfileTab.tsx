@@ -1,15 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
-import { User, Lock, Mail, Phone, Briefcase, FileText, Check, Loader2 } from 'lucide-react';
+import { User, Lock, Mail, Phone, Briefcase, FileText, Check, Loader2, Rocket } from 'lucide-react';
 import { PhotoUpload } from './PhotoUpload.tsx';
-import { Lawyer } from '../../types.ts';
-import { useApp } from '../../contexts/AppContext';
-import { updateLawyer } from '../../utils/settingsPersistence.ts';
+import { Lawyer, Role } from '../../types.ts';
+import { useAuth } from '../../contexts/AuthContext';
+import { profileService } from '../../services/profileService';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfileTab: React.FC = () => {
-  const { lawyer, refreshAll } = useApp();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Lawyer>>({
+    full_name: '',
     name: '',
     email: '',
     oab: '',
@@ -20,10 +22,13 @@ export const ProfileTab: React.FC = () => {
   });
 
   useEffect(() => {
-    if (lawyer) {
-      setFormData(lawyer);
+    if (user) {
+      setFormData({
+        ...user,
+        full_name: (user as any).full_name || user.name,
+      } as Partial<Lawyer>);
     }
-  }, [lawyer]);
+  }, [user]);
 
   const handleChange = (field: keyof Lawyer, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -31,21 +36,61 @@ export const ProfileTab: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user?.id) return;
+
     setIsSaving(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    updateLawyer(formData);
-    refreshAll();
-    setIsSaving(false);
-    alert('Perfil atualizado!');
+    try {
+      await profileService.updateProfile(user.id, {
+        ...formData,
+        name: formData.full_name || formData.name, // Keep both in sync
+      });
+      alert('Perfil atualizado!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Erro ao atualizar perfil');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCompleteRegistration = async () => {
+    if (!user?.id) return;
+    setIsSaving(true);
+    try {
+      await profileService.updateProfile(user.id, {
+        ...formData,
+        name: formData.full_name || formData.name,
+        first_login: false
+      });
+      navigate('/', { replace: true });
+      window.location.reload(); // Force refresh to update auth state/redirection logic
+    } catch (error) {
+      console.error('Error completing registration:', error);
+      alert('Erro ao completar cadastro');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500">
+      {user?.first_login && (
+        <div className="bg-primary-600 text-white p-6 rounded-[2.5rem] shadow-xl shadow-primary-500/20 flex flex-col md:flex-row items-center gap-6 animate-bounce-subtle">
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center shrink-0">
+            <Rocket size={32} />
+          </div>
+          <div className="flex-1 text-center md:text-left">
+            <h3 className="text-xl font-black tracking-tight">Seja bem-vindo(a)!</h3>
+            <p className="text-primary-100 font-medium">Complete seus dados profissionais para liberar o acesso ao dashboard.</p>
+          </div>
+        </div>
+      )}
+
       <section className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center">
         <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Foto de Perfil</h3>
         <PhotoUpload
           currentPhotoUrl={formData.photo_url}
-          name={formData.name || ''}
+          name={formData.full_name || formData.name || ''}
           onPhotoChange={(url) => handleChange('photo_url', url)}
           onPhotoRemove={() => handleChange('photo_url', '')}
         />
@@ -63,8 +108,8 @@ export const ProfileTab: React.FC = () => {
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Nome Completo</label>
               <input
                 type="text"
-                value={formData.name || ''}
-                onChange={(e) => handleChange('name', e.target.value)}
+                value={formData.full_name || formData.name || ''}
+                onChange={(e) => handleChange('full_name', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -115,14 +160,26 @@ export const ProfileTab: React.FC = () => {
         </div>
 
         <div className="flex justify-end gap-4 px-4">
-          <button
-            type="submit"
-            disabled={isSaving}
-            className="flex items-center gap-2 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 active:scale-95 transition-all"
-          >
-            {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Check size={20} />}
-            Salvar Alterações
-          </button>
+          {user?.first_login ? (
+            <button
+              type="button"
+              onClick={handleCompleteRegistration}
+              disabled={isSaving}
+              className="flex items-center gap-2 px-12 py-4 bg-slate-950 dark:bg-primary-600 hover:bg-slate-900 dark:hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
+            >
+              {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Check size={20} />}
+              Completar Cadastro
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="flex items-center gap-2 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 active:scale-95 transition-all"
+            >
+              {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Check size={20} />}
+              Salvar Alterações
+            </button>
+          )}
         </div>
       </form>
     </div>
