@@ -3,13 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Layout } from './components/layout/Layout';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
-import { seedLawyer } from './utils/seedLawyer.ts';
-import { seedClients } from './utils/seedClients.ts';
-import { seedCases } from './utils/seedCases.ts';
-import { seedFinances } from './utils/seedFinances.ts';
-import { seedDeadlines } from './utils/seedDeadlines.ts';
-import { seedSchedules } from './utils/seedSchedules.ts';
-import { seedAuditLogs } from './utils/seedAuditLogs.ts';
 
 // Pages
 const Dashboard = lazy(() => import('./pages/Dashboard.tsx'));
@@ -22,6 +15,8 @@ const Reports = lazy(() => import('./pages/Reports.tsx'));
 const Settings = lazy(() => import('./pages/Settings.tsx'));
 const Team = lazy(() => import('./pages/Team.tsx'));
 const Login = lazy(() => import('./pages/Login.tsx'));
+const Signup = lazy(() => import('./pages/Signup.tsx'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-slate-950">
@@ -29,29 +24,31 @@ const PageLoader = () => (
   </div>
 );
 
-// Added optional children type to resolve TS error when component is rendered within Route element prop
 const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return <PageLoader />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+
   return <>{children}</>;
 };
 
 const AppRoutes = () => {
-  useEffect(() => {
-    seedLawyer();
-    seedClients();
-    seedCases();
-    seedFinances();
-    seedDeadlines();
-    seedSchedules();
-    seedAuditLogs();
-  }, []);
-
   return (
     <Routes>
       <Route path="/login" element={
         <Suspense fallback={<PageLoader />}>
           <Login />
+        </Suspense>
+      } />
+      <Route path="/auth/signup" element={
+        <Suspense fallback={<PageLoader />}>
+          <Signup />
+        </Suspense>
+      } />
+      <Route path="/auth/reset" element={
+        <Suspense fallback={<PageLoader />}>
+          <ResetPassword />
         </Suspense>
       } />
       <Route path="/*" element={

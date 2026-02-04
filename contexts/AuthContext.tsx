@@ -1,5 +1,6 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { User as SupabaseUser } from '@supabase/supabase-js';
 
 interface User {
   id: string;
@@ -8,12 +9,13 @@ interface User {
   role: 'admin' | 'lawyer' | 'assistant';
   oab?: string;
   office_id: string;
+  photo_url?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, name: string) => void;
-  logout: () => void;
+  isLoading: boolean;
+  signOut: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -23,37 +25,66 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const session = localStorage.getItem('legaltech_fake_session');
-    if (session) {
-      setUser(JSON.parse(session));
+  const fetchProfile = async (sessionUser: SupabaseUser) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setUser({
+          id: data.id,
+          email: data.email,
+          name: data.name,
+          role: data.role,
+          oab: data.oab,
+          office_id: data.office_id,
+          photo_url: data.photo_url,
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    // Check active session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        fetchProfile(session.user);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        fetchProfile(session.user);
+      } else {
+        setUser(null);
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const login = (email: string, name: string) => {
-    const userData: User = { 
-      id: 'lawyer-default',
-      email, 
-      name, 
-      role: 'admin',
-      office_id: 'office-default'
-    };
-    setUser(userData);
-    localStorage.setItem('legaltech_fake_session', JSON.stringify(userData));
-    localStorage.setItem('current_lawyer', JSON.stringify(userData));
-  };
-
-  const logout = () => {
+  const signOut = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('legaltech_fake_session');
-    localStorage.removeItem('current_lawyer');
   };
-
-  if (isLoading) return null;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, isLoading, signOut, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

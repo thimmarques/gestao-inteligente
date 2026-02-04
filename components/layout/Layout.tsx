@@ -45,8 +45,10 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { signOut, user } = useAuth();
   const { lawyer, office } = useApp();
+
+  const displayUser = lawyer || user;
 
   useEffect(() => {
     if (isDarkMode) {
@@ -103,11 +105,11 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
           <div className="p-4 border-t border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
               <div className="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden bg-slate-200">
-                {lawyer?.photo_url ? <img src={lawyer.photo_url} className="w-full h-full object-cover" /> : <User size={20} className="text-slate-400 m-auto mt-2" />}
+                {displayUser?.photo_url ? <img src={displayUser.photo_url} className="w-full h-full object-cover" /> : <User size={20} className="text-slate-400 m-auto mt-2" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold truncate dark:text-white leading-tight">{lawyer?.name || "Advogado"}</p>
-                <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">OAB/{lawyer?.oab || "SP 000.000"}</p>
+                <p className="text-sm font-bold truncate dark:text-white leading-tight">{displayUser?.name || "Advogado"}</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">OAB/{displayUser?.oab || "SP 000.000"}</p>
               </div>
             </div>
           </div>
@@ -120,7 +122,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
             <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button onClick={() => logout()} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl" title="Sair">
+            <button onClick={() => signOut()} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl" title="Sair">
               <LogOut size={20} />
             </button>
           </div>
