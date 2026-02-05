@@ -44,7 +44,7 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   // Set initial role if not set or invalid for current user
   useEffect(() => {
     if (availableRoles.length > 0) {
-      const isValid = availableRoles.some(r => r.value === role);
+      const isValid = availableRoles.some((r) => r.value === role);
       if (!isValid) {
         setRole(availableRoles[0].value);
       }
@@ -154,7 +154,8 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
 
         <div className="px-8 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
           <p className="text-[10px] text-slate-500 text-center leading-relaxed">
-            O convidado receberá um e-mail com as instruções para criar sua conta e acessar o painel do escritório.
+            O convidado receberá um e-mail com as instruções para criar sua
+            conta e acessar o painel do escritório.
           </p>
         </div>
       </div>

@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { UserPlus, ChevronRight, RefreshCw, Loader2, Users, Mail } from "lucide-react";
+import {
+  UserPlus,
+  ChevronRight,
+  RefreshCw,
+  Loader2,
+  Users,
+  Mail,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Role } from "../types";
 import { TeamMember } from "../types/team";
@@ -24,9 +31,14 @@ const PendingInvitesList: React.FC = () => {
     enabled: !!currentUser?.office_id,
   });
 
-  const pendingInvites = invites.filter((i: any) => i.status === 'pending' || i.status === 'sent');
+  const pendingInvites = invites.filter(
+    (i: any) => i.status === "pending" || i.status === "sent",
+  );
 
-  if (isLoading) return <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl" />;
+  if (isLoading)
+    return (
+      <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl" />
+    );
   if (pendingInvites.length === 0) return null;
 
   return (
@@ -39,7 +51,8 @@ const PendingInvitesList: React.FC = () => {
           <div className="space-y-1">
             <p className="font-bold text-sm dark:text-white">{invite.email}</p>
             <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {invite.role} • Enviado em {new Date(invite.created_at).toLocaleDateString()}
+              {invite.role} • Enviado em{" "}
+              {new Date(invite.created_at).toLocaleDateString()}
             </p>
           </div>
           <span className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-[9px] font-black uppercase tracking-widest rounded-full">
@@ -108,7 +121,13 @@ const Team: React.FC = () => {
     setSelectedMember(null);
   };
 
-  const isStaff = (currentUser?.role as any) === Role.ASSISTANT || (currentUser?.role as any) === Role.INTERN || (currentUser?.role as any) === "assistant" || (currentUser?.role as any) === "intern" || (currentUser?.role as any) === "assistente" || (currentUser?.role as any) === "estagiario";
+  const isStaff =
+    (currentUser?.role as any) === Role.ASSISTANT ||
+    (currentUser?.role as any) === Role.INTERN ||
+    (currentUser?.role as any) === "assistant" ||
+    (currentUser?.role as any) === "intern" ||
+    (currentUser?.role as any) === "assistente" ||
+    (currentUser?.role as any) === "estagiario";
 
   return (
     <div className="p-4 md:p-8 lg:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
@@ -148,10 +167,11 @@ const Team: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === tab
-                  ? "bg-primary-600 text-white shadow-lg"
-                  : "text-slate-500 hover:text-slate-700"
-                  }`}
+                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
+                  activeTab === tab
+                    ? "bg-primary-600 text-white shadow-lg"
+                    : "text-slate-500 hover:text-slate-700"
+                }`}
               >
                 {tab === "lawyer"
                   ? "Advogado"

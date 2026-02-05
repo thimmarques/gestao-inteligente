@@ -1,4 +1,10 @@
-export type TeamRole = "admin" | "lawyer" | "assistant" | "intern" | "advogado" | "assistente";
+export type TeamRole =
+  | "admin"
+  | "lawyer"
+  | "assistant"
+  | "intern"
+  | "advogado"
+  | "assistente";
 
 export interface Invite {
   id: string;
