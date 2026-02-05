@@ -100,8 +100,6 @@ const Team: React.FC = () => {
       });
   }, [teamMembers, filterState, activeTab]);
 
-
-
   const handleDeleteMember = async (id: string) => {
     const { error } = await supabase.from("profiles").delete().eq("id", id);
     if (error) throw error;
@@ -155,10 +153,11 @@ const Team: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`px - 5 py - 2.5 rounded - xl text - [9px] font - black uppercase tracking - widest transition - all ${activeTab === tab
-                  ? "bg-primary-600 text-white shadow-lg"
-                  : "text-slate-500 hover:text-slate-700"
-                  } `}
+                className={`px - 5 py - 2.5 rounded - xl text - [9px] font - black uppercase tracking - widest transition - all ${
+                  activeTab === tab
+                    ? "bg-primary-600 text-white shadow-lg"
+                    : "text-slate-500 hover:text-slate-700"
+                } `}
               >
                 {tab === "lawyer"
                   ? "Advogado"
