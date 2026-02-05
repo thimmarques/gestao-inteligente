@@ -4,11 +4,27 @@ import { supabase } from '../lib/supabase';
 import { logAction } from '../utils/auditLogger.ts';
 
 export const clientService = {
-  getClients: async (): Promise<Client[]> => {
-    const { data, error } = await supabase
+  getClients: async (options?: { page?: number; limit?: number; search?: string; type?: string }): Promise<Client[]> => {
+    let query = supabase
       .from('clients')
       .select('*')
       .order('name', { ascending: true });
+
+    if (options?.type && options.type !== 'todos') {
+      query = query.eq('type', options.type);
+    }
+
+    if (options?.search) {
+      query = query.or(`name.ilike.%${options.search}%,cpf_cnpj.ilike.%${options.search}%,email.ilike.%${options.search}%`);
+    }
+
+    if (options?.page && options?.limit) {
+      const from = (options.page - 1) * options.limit;
+      const to = from + options.limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return data || [];

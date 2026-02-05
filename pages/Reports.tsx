@@ -11,14 +11,7 @@ import { ReportTypeCard } from '../components/reports/ReportTypeCard';
 import { ReportGenerationProgress } from '../components/reports/ReportGenerationProgress';
 import { ReportsEmptyState } from '../components/reports/ReportsEmptyState';
 
-import { generateFinancialReportPDF, ReportConfig } from '../utils/generateFinancialReportPDF';
-import { generateFinancialReportExcel } from '../utils/generateFinancialReportExcel';
-import { generateProductivityReportPDF } from '../utils/generateProductivityReportPDF';
-import { generateProductivityReportExcel } from '../utils/generateProductivityReportExcel';
-import { generateClientsReportExcel } from '../utils/generateClientsReportExcel';
-import { generateClientsReportPDF } from '../utils/generateClientsReportPDF';
-import { generateDeadlinesReportPDF } from '../utils/generateDeadlinesReportPDF';
-import { generateDeadlinesReportExcel } from '../utils/generateDeadlinesReportExcel';
+import type { ReportConfig } from '../utils/generateFinancialReportPDF';
 import { validateReportPeriod } from '../utils/reportValidation';
 
 import { financeService } from '../services/financeService';
@@ -102,8 +95,10 @@ const Reports: React.FC = () => {
 
         await simulateProgress([{ p: 70, s: 'Gerando arquivos...' }]);
         if (config.format === 'pdf') {
+          const { generateFinancialReportPDF } = await import('../utils/generateFinancialReportPDF');
           fileName = await generateFinancialReportPDF(config, revenues, expenses, kpis);
         } else {
+          const { generateFinancialReportExcel } = await import('../utils/generateFinancialReportExcel');
           fileName = await generateFinancialReportExcel(config, revenues, expenses, kpis);
         }
       }
@@ -116,8 +111,10 @@ const Reports: React.FC = () => {
 
         await simulateProgress([{ p: 70, s: 'Processando indicadores...' }]);
         if (config.format === 'pdf') {
+          const { generateProductivityReportPDF } = await import('../utils/generateProductivityReportPDF');
           fileName = await generateProductivityReportPDF(config, (cases as any), (schedules as any), (deadlines as any));
         } else {
+          const { generateProductivityReportExcel } = await import('../utils/generateProductivityReportExcel');
           fileName = await generateProductivityReportExcel(config, (cases as any), (schedules as any), (deadlines as any));
         }
       }
@@ -129,8 +126,10 @@ const Reports: React.FC = () => {
 
         await simulateProgress([{ p: 70, s: 'Compilando listagem...' }]);
         if (config.format === 'excel') {
+          const { generateClientsReportExcel } = await import('../utils/generateClientsReportExcel');
           fileName = await generateClientsReportExcel(config, (clients as any), (finances as any));
         } else {
+          const { generateClientsReportPDF } = await import('../utils/generateClientsReportPDF');
           fileName = await generateClientsReportPDF(config, (clients as any), (finances as any));
         }
       }
@@ -139,8 +138,10 @@ const Reports: React.FC = () => {
 
         await simulateProgress([{ p: 70, s: 'Analizando protocolos...' }]);
         if (config.format === 'pdf') {
+          const { generateDeadlinesReportPDF } = await import('../utils/generateDeadlinesReportPDF');
           fileName = await generateDeadlinesReportPDF(config, (deadlines as any));
         } else {
+          const { generateDeadlinesReportExcel } = await import('../utils/generateDeadlinesReportExcel');
           fileName = await generateDeadlinesReportExcel(config, (deadlines as any));
         }
       }

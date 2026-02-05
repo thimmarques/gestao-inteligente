@@ -22,6 +22,20 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, '.'),
       }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            ui: ['lucide-react', 'sonner', 'canvas-confetti'],
+            charts: ['recharts'],
+            calendar: ['react-big-calendar', 'date-fns'],
+            reporting: ['jspdf', 'jspdf-autotable', 'xlsx'],
+            validation: ['zod', 'react-hook-form', '@hookform/resolvers']
+          }
+        }
+      }
     }
   };
 });

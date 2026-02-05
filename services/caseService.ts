@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase';
 import { logAction } from '../utils/auditLogger.ts';
 
 export const caseService = {
-  getCases: async (): Promise<CaseWithRelations[]> => {
-    const { data, error } = await supabase
+  getCases: async (options?: { page?: number; limit?: number; search?: string; status?: string }): Promise<CaseWithRelations[]> => {
+    let query = supabase
       .from('cases')
       .select(`
         *,
@@ -13,6 +13,23 @@ export const caseService = {
         lawyer:profiles(*)
       `)
       .order('created_at', { ascending: false });
+
+    if (options?.status && options.status !== 'todos') {
+      query = query.eq('status', options.status);
+    }
+
+    if (options?.search) {
+      // Search is trickier with relations, but we can search on case fields
+      query = query.or(`title.ilike.%${options.search}%,process_number.ilike.%${options.search}%`);
+    }
+
+    if (options?.page && options?.limit) {
+      const from = (options.page - 1) * options.limit;
+      const to = from + options.limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
 

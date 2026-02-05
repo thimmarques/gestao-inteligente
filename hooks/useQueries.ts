@@ -8,19 +8,21 @@ import { scheduleService } from '../services/scheduleService';
 import { taskService } from '../services/taskService';
 import { notificationService } from '../services/notificationService';
 
-export const useClients = () => {
+export const useClients = (options?: { page?: number; limit?: number; search?: string; type?: string }) => {
     return useQuery({
-        queryKey: ['clients'],
-        queryFn: () => clientService.getClients(),
-        staleTime: 1000 * 60 * 5 // 5 minutes
+        queryKey: ['clients', options],
+        queryFn: () => clientService.getClients(options),
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        placeholderData: (previousData) => previousData // Keep previous data while fetching new page
     });
 };
 
-export const useCases = () => {
+export const useCases = (options?: { page?: number; limit?: number; search?: string; status?: string }) => {
     return useQuery({
-        queryKey: ['cases'],
-        queryFn: () => caseService.getCases(),
-        staleTime: 1000 * 60 * 5 // 5 minutes
+        queryKey: ['cases', options],
+        queryFn: () => caseService.getCases(options),
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        placeholderData: (previousData) => previousData
     });
 };
 
@@ -103,8 +105,8 @@ export const useTeam = () => {
                 .select('*')
                 .order('name', { ascending: true });
             if (error) throw error;
-            return data;
-        }
+        },
+        staleTime: 1000 * 60 * 30 // 30 minutes
     });
 };
 
