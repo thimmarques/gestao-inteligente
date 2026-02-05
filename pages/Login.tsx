@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { supabase } from '../lib/supabase';
-import { Lock, Mail, Loader2, Github } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { supabase } from "../lib/supabase";
+import { Lock, Mail, Loader2, Github } from "lucide-react";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
-  email: z.string().email('E-mail inválido'),
-  password: z.string().min(1, 'Senha é obrigatória'),
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(1, "Senha é obrigatória"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -18,7 +19,11 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -33,25 +38,26 @@ const Login: React.FC = () => {
       });
 
       if (error) throw error;
-      navigate('/');
+      toast.success("Login realizado com sucesso!");
+      navigate("/");
     } catch (err: any) {
-      setError(err.message || 'Erro ao fazer login');
+      toast.error(err.message || "Erro ao fazer login");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialLogin = async (provider: 'google' | 'github') => {
+  const handleSocialLogin = async (provider: "google" | "github") => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: window.location.origin
-        }
+          redirectTo: window.location.origin,
+        },
       });
       if (error) throw error;
     } catch (err: any) {
-      setError(err.message || `Erro ao entrar com ${provider}`);
+      toast.error(err.message || `Erro ao entrar com ${provider}`);
     }
   };
 
@@ -59,9 +65,13 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl text-white font-bold text-3xl mb-4 shadow-xl shadow-primary-500/20">L</div>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl text-white font-bold text-3xl mb-4 shadow-xl shadow-primary-500/20">
+            L
+          </div>
           <h1 className="text-3xl font-bold dark:text-white">LegalTech</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2">Gestão Jurídica Inteligente</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-2">
+            Gestão Jurídica Inteligente
+          </p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
@@ -73,34 +83,57 @@ const Login: React.FC = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">E-mail</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                E-mail
+              </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={18}
+                />
                 <input
-                  {...register('email')}
+                  {...register("email")}
                   type="email"
                   placeholder="seu@email.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
-              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Senha</label>
-                <Link to="/auth/reset" className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">Esqueceu a senha?</Link>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Senha
+                </label>
+                <Link
+                  to="/auth/reset"
+                  className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+                >
+                  Esqueceu a senha?
+                </Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={18}
+                />
                 <input
-                  {...register('password')}
+                  {...register("password")}
                   type="password"
                   placeholder="••••••••"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
-              {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <button
@@ -108,7 +141,11 @@ const Login: React.FC = () => {
               disabled={loading}
               className="w-full py-3 bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-70 text-white rounded-xl font-bold text-lg shadow-lg shadow-primary-500/30 transition-all flex items-center justify-center gap-2"
             >
-              {loading ? <Loader2 className="animate-spin" size={20} /> : 'Entrar'}
+              {loading ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                "Entrar"
+              )}
             </button>
           </form>
 
@@ -117,20 +154,26 @@ const Login: React.FC = () => {
               <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-slate-900 text-slate-500">Ou entre com</span>
+              <span className="px-4 bg-white dark:bg-slate-900 text-slate-500">
+                Ou entre com
+              </span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => handleSocialLogin('google')}
+              onClick={() => handleSocialLogin("google")}
               className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
             >
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+              <img
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
               Google
             </button>
             <button
-              onClick={() => handleSocialLogin('github')}
+              onClick={() => handleSocialLogin("github")}
               className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
             >
               <Github className="w-5 h-5" />
@@ -139,14 +182,19 @@ const Login: React.FC = () => {
           </div>
 
           <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-            Não tem uma conta?{' '}
-            <Link to="/auth/signup" className="font-bold text-primary-600 hover:text-primary-700 transition-colors">
+            Não tem uma conta?{" "}
+            <Link
+              to="/auth/signup"
+              className="font-bold text-primary-600 hover:text-primary-700 transition-colors"
+            >
               Cadastre-se grátis
             </Link>
           </p>
         </div>
 
-        <p className="text-center text-xs text-slate-400 mt-8">LegalTech 2026</p>
+        <p className="text-center text-xs text-slate-400 mt-8">
+          LegalTech 2026
+        </p>
       </div>
     </div>
   );

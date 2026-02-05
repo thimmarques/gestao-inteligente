@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { FileText, Loader2 } from 'lucide-react';
+import React from "react";
+import { FileText, Loader2 } from "lucide-react";
 
 interface ReportGenerationProgressProps {
   isGenerating: boolean;
@@ -8,9 +7,9 @@ interface ReportGenerationProgressProps {
   currentStep: string;
 }
 
-export const ReportGenerationProgress: React.FC<ReportGenerationProgressProps> = ({
-  isGenerating, progress, currentStep
-}) => {
+export const ReportGenerationProgress: React.FC<
+  ReportGenerationProgressProps
+> = ({ isGenerating, progress, currentStep }) => {
   if (!isGenerating) return null;
 
   return (
@@ -26,22 +25,29 @@ export const ReportGenerationProgress: React.FC<ReportGenerationProgressProps> =
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-2xl font-black dark:text-white tracking-tight">Gerando Relatório...</h3>
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest animate-pulse">{currentStep}</p>
+          <h3 className="text-2xl font-black dark:text-white tracking-tight">
+            Gerando Relatório...
+          </h3>
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest animate-pulse">
+            {currentStep}
+          </p>
         </div>
 
         <div className="w-full space-y-4">
           <div className="h-4 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-primary-600 to-indigo-600 transition-all duration-500 ease-out shadow-lg"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-3xl font-black text-primary-600 tabular-nums tracking-tighter">{progress}%</p>
+          <p className="text-3xl font-black text-primary-600 tabular-nums tracking-tighter">
+            {progress}%
+          </p>
         </div>
 
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
-          Não feche esta janela. Estamos compilando dados, capturando gráficos e formatando seu documento profissional.
+          Não feche esta janela. Estamos compilando dados, capturando gráficos e
+          formatando seu documento profissional.
         </p>
       </div>
     </div>

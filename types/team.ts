@@ -1,5 +1,4 @@
-
-export type TeamRole = 'admin' | 'advogado' | 'assistente';
+export type TeamRole = "admin" | "advogado" | "assistente";
 
 export interface TeamMemberPermissions {
   can_create_cases: boolean;
@@ -31,7 +30,7 @@ export interface TeamMember {
   oab?: string;
   phone: string;
   photo_url?: string;
-  status: 'ativo' | 'inativo';
+  status: "ativo" | "inativo";
   specialty?: string;
   bio?: string;
   permissions: TeamMemberPermissions;

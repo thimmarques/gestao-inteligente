@@ -1,8 +1,5 @@
 {
   "name": "LegalTech - Gestão Jurídica Inteligente",
   "description": "Plataforma completa para gestão de escritórios de advocacia, processos, clientes e financeiro.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "requestFramePermissions": ["camera", "microphone"]
 }

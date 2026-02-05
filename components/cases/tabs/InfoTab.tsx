@@ -1,8 +1,16 @@
-
-import React from 'react';
-import { FileText, Tag, StickyNote, BarChart3, User, Gavel, Calendar, Clock } from 'lucide-react';
-import { CaseWithRelations } from '../../../types';
-import { formatCurrency, formatDate } from '../../../utils/formatters';
+import React from "react";
+import {
+  FileText,
+  Tag,
+  StickyNote,
+  BarChart3,
+  User,
+  Gavel,
+  Calendar,
+  Clock,
+} from "lucide-react";
+import { CaseWithRelations } from "../../../types";
+import { formatCurrency, formatDate } from "../../../utils/formatters";
 
 interface InfoTabProps {
   caseData: CaseWithRelations;
@@ -29,51 +37,86 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
           <div className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Número do Processo</p>
-                <p className="font-mono text-sm font-bold text-primary-600 dark:text-primary-400">{caseData.process_number}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Número do Processo
+                </p>
+                <p className="font-mono text-sm font-bold text-primary-600 dark:text-primary-400">
+                  {caseData.process_number}
+                </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Tribunal / Vara</p>
-                <p className="text-sm font-medium dark:text-white truncate" title={caseData.court}>{caseData.court}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Tribunal / Vara
+                </p>
+                <p
+                  className="text-sm font-medium dark:text-white truncate"
+                  title={caseData.court}
+                >
+                  {caseData.court}
+                </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Tipo de Ação</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Tipo de Ação
+                </p>
                 <span className="inline-block px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-100 dark:border-blue-800">
                   {caseData.type}
                 </span>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Status Atual</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Status Atual
+                </p>
                 <span className="inline-block px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase rounded border border-slate-200 dark:border-slate-700">
                   {caseData.status}
                 </span>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Valor da Causa</p>
-                <p className="text-sm font-bold dark:text-white">{formatCurrency(caseData.value)}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Valor da Causa
+                </p>
+                <p className="text-sm font-bold dark:text-white">
+                  {formatCurrency(caseData.value)}
+                </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Data de Início</p>
-                <p className="text-sm font-medium dark:text-white">{formatDate(caseData.started_at)}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Data de Início
+                </p>
+                <p className="text-sm font-medium dark:text-white">
+                  {formatDate(caseData.started_at)}
+                </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Data de Encerramento</p>
-                <p className="text-sm font-medium dark:text-white">{caseData.ended_at ? formatDate(caseData.ended_at) : 'Em andamento'}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Data de Encerramento
+                </p>
+                <p className="text-sm font-medium dark:text-white">
+                  {caseData.ended_at
+                    ? formatDate(caseData.ended_at)
+                    : "Em andamento"}
+                </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Cliente</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Cliente
+                </p>
                 <button className="flex items-center gap-2 text-sm font-bold text-primary-600 hover:underline">
                   <User size={14} />
-                  {caseData.client?.name || 'ID ' + caseData.client_id}
+                  {caseData.client?.name || "ID " + caseData.client_id}
                 </button>
               </div>
               <div className="col-span-full space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Advogado Responsável</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Advogado Responsável
+                </p>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-primary-600">
-                    {caseData.lawyer?.name?.[0] || 'A'}
+                    {caseData.lawyer?.name?.[0] || "A"}
                   </div>
-                  <p className="text-sm font-medium dark:text-white">{caseData.lawyer?.name || 'Não atribuído'}</p>
+                  <p className="text-sm font-medium dark:text-white">
+                    {caseData.lawyer?.name || "Não atribuído"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -87,18 +130,25 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
               <Tag size={18} className="text-primary-500" />
               <h3 className="font-bold dark:text-white">Tags</h3>
             </div>
-            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">Editar</button>
+            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">
+              Editar
+            </button>
           </div>
           <div className="p-6">
             <div className="flex flex-wrap gap-2">
               {caseData.tags && caseData.tags.length > 0 ? (
-                caseData.tags.map(tag => (
-                  <span key={tag} className="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-100 dark:border-slate-700">
+                caseData.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-100 dark:border-slate-700"
+                  >
                     #{tag}
                   </span>
                 ))
               ) : (
-                <p className="text-sm text-slate-400 italic">Nenhuma tag vinculada ao processo.</p>
+                <p className="text-sm text-slate-400 italic">
+                  Nenhuma tag vinculada ao processo.
+                </p>
               )}
             </div>
           </div>
@@ -111,7 +161,9 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
               <StickyNote size={18} className="text-primary-500" />
               <h3 className="font-bold dark:text-white">Notas do Processo</h3>
             </div>
-            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">Editar</button>
+            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">
+              Editar
+            </button>
           </div>
           <div className="p-6">
             <div className="max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
@@ -120,7 +172,9 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                   {caseData.notes}
                 </p>
               ) : (
-                <p className="text-sm text-slate-400 italic">Nenhuma nota adicionada.</p>
+                <p className="text-sm text-slate-400 italic">
+                  Nenhuma nota adicionada.
+                </p>
               )}
             </div>
           </div>
@@ -140,27 +194,39 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 <div className="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-500">
                   <Clock size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-500">Prazos Pendentes</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Prazos Pendentes
+                </span>
               </div>
-              <span className="text-lg font-bold dark:text-white">{caseData.deadlines_count || 0}</span>
+              <span className="text-lg font-bold dark:text-white">
+                {caseData.deadlines_count || 0}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500">
                   <Calendar size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-500">Audiências Futuras</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Audiências Futuras
+                </span>
               </div>
-              <span className="text-lg font-bold dark:text-white">{caseData.schedules_count || 0}</span>
+              <span className="text-lg font-bold dark:text-white">
+                {caseData.schedules_count || 0}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-500">
                   <FileText size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-500">Saldo Financeiro</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Saldo Financeiro
+                </span>
               </div>
-              <span className={`text-lg font-bold ${caseData.finances_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span
+                className={`text-lg font-bold ${caseData.finances_balance >= 0 ? "text-green-600" : "text-red-600"}`}
+              >
                 {formatCurrency(caseData.finances_balance || 0)}
               </span>
             </div>
@@ -169,9 +235,13 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500">
                   <BarChart3 size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-500">Dias de Processo</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Dias de Processo
+                </span>
               </div>
-              <span className="text-lg font-bold dark:text-white">{diffInDays(caseData.started_at)}</span>
+              <span className="text-lg font-bold dark:text-white">
+                {diffInDays(caseData.started_at)}
+              </span>
             </div>
           </div>
         </div>

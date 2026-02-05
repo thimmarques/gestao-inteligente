@@ -4,7 +4,14 @@ DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
 CREATE POLICY "Authenticated users can view all profiles" 
 ON public.profiles FOR SELECT 
 TO authenticated 
-USING (true);
+USING (true); 
+-- NOTE: Single Tenant MVP. Everyone sees everyone.
+-- To restrict by office (Multi-Tenant), use:
+-- USING (
+--   office_id IN (
+--     SELECT office_id FROM public.profiles WHERE id = auth.uid()
+--   )
+-- );
 
 -- Ensure users can still only update their own profile
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;

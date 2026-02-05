@@ -1,26 +1,28 @@
-
-import React from 'react';
-import { 
-  Calendar, 
-  CalendarDays, 
-  CalendarClock, 
+import React from "react";
+import {
+  Calendar,
+  CalendarDays,
+  CalendarClock,
   List,
-  ChevronDown
-} from 'lucide-react';
+  ChevronDown,
+} from "lucide-react";
 
-export type CalendarViewType = 'month' | 'week' | 'day' | 'agenda';
+export type CalendarViewType = "month" | "week" | "day" | "agenda";
 
 interface CalendarViewTabsProps {
   currentView: CalendarViewType;
   onViewChange: (view: CalendarViewType) => void;
 }
 
-export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({ currentView, onViewChange }) => {
+export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({
+  currentView,
+  onViewChange,
+}) => {
   const views = [
-    { id: 'month', label: 'Mês', icon: <Calendar size={16} /> },
-    { id: 'week', label: 'Semana', icon: <CalendarDays size={16} /> },
-    { id: 'day', label: 'Dia', icon: <CalendarClock size={16} /> },
-    { id: 'agenda', label: 'Lista', icon: <List size={16} /> },
+    { id: "month", label: "Mês", icon: <Calendar size={16} /> },
+    { id: "week", label: "Semana", icon: <CalendarDays size={16} /> },
+    { id: "day", label: "Dia", icon: <CalendarClock size={16} /> },
+    { id: "agenda", label: "Lista", icon: <List size={16} /> },
   ];
 
   return (
@@ -44,7 +46,7 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({ currentView,
       </div>
 
       {/* Desktop Tabs View */}
-      <div 
+      <div
         className="hidden md:flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
         role="tablist"
       >
@@ -58,9 +60,10 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({ currentView,
               onClick={() => onViewChange(view.id as CalendarViewType)}
               className={`
                 flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.12em] transition-all duration-200
-                ${isActive 
-                  ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/20' 
-                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                ${
+                  isActive
+                    ? "bg-primary-600 text-white shadow-lg shadow-primary-500/20"
+                    : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 }
               `}
             >

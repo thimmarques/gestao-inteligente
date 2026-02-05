@@ -1,25 +1,31 @@
-
 export enum Role {
-  ADMIN = 'admin',
-  LAWYER = 'lawyer',
-  ASSISTANT = 'assistant'
+  ADMIN = "admin",
+  LAWYER = "lawyer",
+  ASSISTANT = "assistant",
 }
 
 export enum ClientType {
-  PARTICULAR = 'particular',
-  DEFENSORIA = 'defensoria'
+  PARTICULAR = "particular",
+  DEFENSORIA = "defensoria",
 }
 
 export enum CaseStatus {
-  DISTRIBUIDO = 'distribuído',
-  ANDAMENTO = 'andamento',
-  SENTENCIADO = 'sentenciado',
-  RECURSO = 'recurso',
-  ARQUIVADO = 'arquivado',
-  ENCERRADO = 'encerrado'
+  DISTRIBUIDO = "distribuído",
+  ANDAMENTO = "andamento",
+  SENTENCIADO = "sentenciado",
+  RECURSO = "recurso",
+  ARQUIVADO = "arquivado",
+  ENCERRADO = "encerrado",
 }
 
-export type CaseType = 'cível' | 'trabalhista' | 'criminal' | 'família' | 'tributário' | 'administrativo' | 'previdenciário';
+export type CaseType =
+  | "cível"
+  | "trabalhista"
+  | "criminal"
+  | "família"
+  | "tributário"
+  | "administrativo"
+  | "previdenciário";
 
 export interface Lawyer {
   id: string;
@@ -48,7 +54,7 @@ export interface Office {
 }
 
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'system';
+  theme: "light" | "dark" | "system";
   fontSize: number;
   notifications: {
     nearDeadlines: boolean;
@@ -59,8 +65,8 @@ export interface UserPreferences {
     weeklySummary: boolean;
   };
   timezone: string;
-  dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
-  timeFormat: '24h' | '12h';
+  dateFormat: "DD/MM/YYYY" | "MM/DD/YYYY" | "YYYY-MM-DD";
+  timeFormat: "24h" | "12h";
 }
 
 export interface ClientFinancialProfile {
@@ -89,7 +95,7 @@ export interface Client {
   cpf_cnpj: string;
   email?: string;
   phone: string;
-  status: 'ativo' | 'inativo';
+  status: "ativo" | "inativo";
   photo_url?: string | null;
   process_count: number;
   notes?: string;
@@ -109,7 +115,7 @@ export interface Case {
   court: string;
   type: CaseType;
   status: CaseStatus;
-  outcome?: 'ganho' | 'perdido' | 'acordo' | 'em_andamento';
+  outcome?: "ganho" | "perdido" | "acordo" | "em_andamento";
   value: number;
   started_at: string;
   ended_at?: string | null;
@@ -136,14 +142,14 @@ export interface ScheduleEvent {
   office_id: string;
   title: string;
   description: string;
-  type: 'audiência' | 'reunião' | 'prazo' | 'compromisso';
+  type: "audiência" | "reunião" | "prazo" | "compromisso";
   start_time: string;
   end_time: string;
   location?: string | null;
   virtual_link?: string | null;
   google_event_id?: string | null;
   reminder_sent: boolean;
-  status: 'agendado' | 'concluído' | 'cancelado';
+  status: "agendado" | "concluído" | "cancelado";
   created_at: string;
 }
 
@@ -153,13 +159,13 @@ export interface FinanceRecord {
   office_id: string;
   client_id?: string | null;
   case_id?: string | null;
-  type: 'receita' | 'despesa';
+  type: "receita" | "despesa";
   title: string;
   category: string;
   amount: number;
   due_date: string;
   paid_date?: string | null;
-  status: 'pendente' | 'pago' | 'vencido';
+  status: "pendente" | "pago" | "vencido";
   payment_method?: string;
   notes?: string;
   created_at: string;
@@ -178,7 +184,7 @@ export interface ForecastMonth {
   variable_expenses: number;
   projected_expenses: number;
   projected_balance: number;
-  confidence: 'baixa' | 'média' | 'alta';
+  confidence: "baixa" | "média" | "alta";
   is_adjusted?: boolean;
 }
 
@@ -189,8 +195,8 @@ export interface Deadline {
   title: string;
   description: string;
   deadline_date: string;
-  priority: 'baixa' | 'média' | 'alta' | 'urgente';
-  status: 'pendente' | 'concluído' | 'vencido';
+  priority: "baixa" | "média" | "alta" | "urgente";
+  status: "pendente" | "concluído" | "vencido";
   completed_at?: string | null;
   created_at: string;
   case?: {
@@ -209,10 +215,10 @@ export interface DeadlineWithRelations extends Deadline {
 export interface Report {
   id: string;
   lawyer_id: string;
-  type: 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
+  type: "financeiro" | "produtividade" | "clientes" | "prazos";
   period_start: string;
   period_end: string;
-  format: 'pdf' | 'excel';
+  format: "pdf" | "excel";
   file_url: string;
   file_size: string;
   created_at: string;
@@ -228,6 +234,6 @@ export interface DeadlineFilters {
 }
 
 export interface DeadlineSort {
-  field: 'deadline_date' | 'priority' | 'process' | 'client' | 'status';
-  direction: 'asc' | 'desc';
+  field: "deadline_date" | "priority" | "process" | "client" | "status";
+  direction: "asc" | "desc";
 }

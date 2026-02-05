@@ -1,20 +1,35 @@
-
-import React from 'react';
-import { Clock, Calendar as CalendarIcon, MapPin, Video, ChevronRight } from 'lucide-react';
-import { ScheduleEvent } from '../../types';
-import { getEventColor, getEventIcon } from '../../utils/eventColors';
-import { format, isToday, isTomorrow, startOfDay } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import React from "react";
+import {
+  Clock,
+  Calendar as CalendarIcon,
+  MapPin,
+  Video,
+  ChevronRight,
+} from "lucide-react";
+import { ScheduleEvent } from "../../types";
+import { getEventColor, getEventIcon } from "../../utils/eventColors";
+import { format, isToday, isTomorrow, startOfDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface UpcomingEventsBalloonProps {
   events: ScheduleEvent[];
   onEventClick: (event: ScheduleEvent) => void;
 }
 
-export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({ events, onEventClick }) => {
+export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
+  events,
+  onEventClick,
+}) => {
   const upcoming = events
-    .filter(e => e.status === 'agendado' && new Date(e.start_time) >= startOfDay(new Date()))
-    .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
+    .filter(
+      (e) =>
+        e.status === "agendado" &&
+        new Date(e.start_time) >= startOfDay(new Date()),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
+    )
     .slice(0, 5);
 
   if (upcoming.length === 0) return null;
@@ -27,8 +42,12 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({ ev
             <CalendarIcon size={20} />
           </div>
           <div>
-            <h3 className="text-sm font-black dark:text-white uppercase tracking-widest">Snapshot Diário</h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Próximos 5 compromissos</p>
+            <h3 className="text-sm font-black dark:text-white uppercase tracking-widest">
+              Snapshot Diário
+            </h3>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">
+              Próximos 5 compromissos
+            </p>
           </div>
         </div>
       </header>
@@ -49,12 +68,14 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({ ev
               onClick={() => onEventClick(event)}
               className="w-full flex items-center gap-4 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group text-left"
             >
-              <div 
+              <div
                 className="w-12 h-12 rounded-2xl shrink-0 flex flex-col items-center justify-center text-white shadow-lg"
                 style={{ backgroundColor: eventColor }}
               >
                 <Icon size={18} />
-                <span className="text-[8px] font-black uppercase mt-0.5">{format(startDate, 'HH:mm')}</span>
+                <span className="text-[8px] font-black uppercase mt-0.5">
+                  {format(startDate, "HH:mm")}
+                </span>
               </div>
 
               <div className="flex-1 min-w-0">
@@ -76,23 +97,28 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({ ev
                     <MapPin size={10} className="text-slate-400" />
                   )}
                   <span className="text-[10px] text-slate-500 truncate">
-                    {event.virtual_link ? 'Link Virtual' : event.location || 'Local não definido'}
+                    {event.virtual_link
+                      ? "Link Virtual"
+                      : event.location || "Local não definido"}
                   </span>
                 </div>
               </div>
 
-              <ChevronRight size={16} className="text-slate-300 group-hover:text-primary-500 transition-all" />
+              <ChevronRight
+                size={16}
+                className="text-slate-300 group-hover:text-primary-500 transition-all"
+              />
             </button>
           );
         })}
       </div>
 
       <div className="pt-2">
-         <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-tight">
-              Sua agenda está sincronizada com o Google Calendar.
-            </p>
-         </div>
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-tight">
+            Sua agenda está sincronizada com o Google Calendar.
+          </p>
+        </div>
       </div>
     </div>
   );

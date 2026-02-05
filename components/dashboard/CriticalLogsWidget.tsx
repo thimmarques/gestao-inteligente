@@ -1,12 +1,21 @@
-
-import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { ShieldAlert, ShieldCheck, ChevronRight, Trash2, Shield, Lock, AlertTriangle, ExternalLink, Loader2 } from 'lucide-react';
-import { AuditLog } from '../../types/audit.ts';
-import { formatDistanceToNow, subDays } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { useAuditLogs } from '../../hooks/useQueries';
-import { useApp } from '../../contexts/AppContext';
+import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
+import {
+  ShieldAlert,
+  ShieldCheck,
+  ChevronRight,
+  Trash2,
+  Shield,
+  Lock,
+  AlertTriangle,
+  ExternalLink,
+  Loader2,
+} from "lucide-react";
+import { AuditLog } from "../../types/audit.ts";
+import { formatDistanceToNow, subDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useAuditLogs } from "../../hooks/useQueries";
+import { useApp } from "../../contexts/AppContext";
 
 export const CriticalLogsWidget: React.FC = () => {
   const { lawyer } = useApp();
@@ -16,14 +25,21 @@ export const CriticalLogsWidget: React.FC = () => {
     const sevenDaysAgo = subDays(new Date(), 7);
 
     return logs
-      .filter((l: any) => l.criticality === 'crítico' && new Date(l.created_at || l.timestamp) >= sevenDaysAgo)
+      .filter(
+        (l: any) =>
+          l.criticality === "crítico" &&
+          new Date(l.created_at || l.timestamp) >= sevenDaysAgo,
+      )
       .slice(0, 8);
   }, [logs]);
 
   const getActionIcon = (action: string) => {
-    if (action === 'delete') return <Trash2 className="text-red-500" size={16} />;
-    if (action === 'permission_change') return <Lock className="text-purple-500" size={16} />;
-    if (action === 'access_denied') return <ShieldAlert className="text-orange-500" size={16} />;
+    if (action === "delete")
+      return <Trash2 className="text-red-500" size={16} />;
+    if (action === "permission_change")
+      return <Lock className="text-purple-500" size={16} />;
+    if (action === "access_denied")
+      return <ShieldAlert className="text-orange-500" size={16} />;
     return <AlertTriangle className="text-red-400" size={16} />;
   };
 
@@ -37,8 +53,12 @@ export const CriticalLogsWidget: React.FC = () => {
             <ShieldAlert size={20} />
           </div>
           <div>
-            <h3 className="text-base font-bold dark:text-white tracking-tight text-slate-800">Alertas Críticos</h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Segurança</p>
+            <h3 className="text-base font-bold dark:text-white tracking-tight text-slate-800">
+              Alertas Críticos
+            </h3>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Segurança
+            </p>
           </div>
         </div>
         {criticalLogs.length > 0 && (
@@ -76,7 +96,10 @@ export const CriticalLogsWidget: React.FC = () => {
                 </div>
                 <div className="text-right shrink-0">
                   <p className="text-[9px] font-medium text-slate-400">
-                    {formatDistanceToNow(new Date(log.created_at || log.timestamp), { addSuffix: true, locale: ptBR })}
+                    {formatDistanceToNow(
+                      new Date(log.created_at || log.timestamp),
+                      { addSuffix: true, locale: ptBR },
+                    )}
                   </p>
                 </div>
               </Link>
@@ -85,8 +108,12 @@ export const CriticalLogsWidget: React.FC = () => {
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-center opacity-60">
             <ShieldCheck size={48} className="text-green-500 mb-4 opacity-50" />
-            <p className="text-sm font-bold dark:text-white text-slate-700">Tudo Seguro</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Nenhum evento crítico</p>
+            <p className="text-sm font-bold dark:text-white text-slate-700">
+              Tudo Seguro
+            </p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">
+              Nenhum evento crítico
+            </p>
           </div>
         )}
       </div>

@@ -1,10 +1,20 @@
-
-import React from 'react';
-import { Mail, Phone, ExternalLink, UserPlus, Shield, FileSignature, HandHeart } from 'lucide-react';
-import { Client, ClientType } from '../../types';
-import { formatCPF, formatPhone } from '../../utils/formatters';
-import { generateProcuracaoPDF, generateDeclaracaoHipossuficienciaPDF } from '../../utils/generateLegalDocuments';
-import { useApp } from '../../contexts/AppContext';
+import React from "react";
+import {
+  Mail,
+  Phone,
+  ExternalLink,
+  UserPlus,
+  Shield,
+  FileSignature,
+  HandHeart,
+} from "lucide-react";
+import { Client, ClientType } from "../../types";
+import { formatCPF, formatPhone } from "../../utils/formatters";
+import {
+  generateProcuracaoPDF,
+  generateDeclaracaoHipossuficienciaPDF,
+} from "../../utils/generateLegalDocuments";
+import { useApp } from "../../contexts/AppContext";
 
 interface ClientCardProps {
   client: Client;
@@ -26,26 +36,39 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
 
   return (
     <div
-      className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === 'inativo' ? 'opacity-60' : ''}`}
+      className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === "inativo" ? "opacity-60" : ""}`}
       onClick={onClick}
     >
       {/* Avatar */}
       <div className="relative w-24 h-24 mb-4">
         <div className="w-full h-full rounded-[2rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl font-bold text-primary-600 border-4 border-white dark:border-slate-900 shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
-          {client.photo_url ? <img src={client.photo_url} alt="" /> : client.name.charAt(0).toUpperCase()}
+          {client.photo_url ? (
+            <img src={client.photo_url} alt="" />
+          ) : (
+            client.name.charAt(0).toUpperCase()
+          )}
         </div>
-        <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 ${client.status === 'ativo' ? 'bg-green-500' : 'bg-slate-400'}`} />
+        <div
+          className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 ${client.status === "ativo" ? "bg-green-500" : "bg-slate-400"}`}
+        />
       </div>
 
       <h3 className="text-lg font-bold dark:text-white truncate w-full px-2 mb-1 group-hover:text-primary-600 transition-colors">
         {client.name}
       </h3>
 
-      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase inline-flex items-center gap-1 mb-4 ${client.type === ClientType.PARTICULAR
-        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-        }`}>
-        {client.type === ClientType.PARTICULAR ? <UserPlus size={10} /> : <Shield size={10} />}
+      <span
+        className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase inline-flex items-center gap-1 mb-4 ${
+          client.type === ClientType.PARTICULAR
+            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+        }`}
+      >
+        {client.type === ClientType.PARTICULAR ? (
+          <UserPlus size={10} />
+        ) : (
+          <Shield size={10} />
+        )}
         {client.type}
       </span>
 
@@ -53,7 +76,9 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
 
       <div className="w-full space-y-3 mb-6">
         <div className="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400">
-          <span className="font-mono text-xs">{formatCPF(client.cpf_cnpj)}</span>
+          <span className="font-mono text-xs">
+            {formatCPF(client.cpf_cnpj)}
+          </span>
         </div>
 
         <div className="flex flex-col gap-2">

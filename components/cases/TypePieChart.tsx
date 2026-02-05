@@ -1,22 +1,36 @@
-
-import React, { useMemo } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import React, { useMemo } from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
 
 export const TypePieChart: React.FC = () => {
   const chartData = useMemo(() => {
-    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
+    const cases = JSON.parse(localStorage.getItem("legaltech_cases") || "[]");
     const counts: Record<string, number> = {};
-    
+
     cases.forEach((c: any) => {
       counts[c.type] = (counts[c.type] || 0) + 1;
     });
 
-    const COLORS = ['#3b82f6', '#22c55e', '#ef4444', '#f59e0b', '#ec4899', '#eab308', '#8b5cf6'];
+    const COLORS = [
+      "#3b82f6",
+      "#22c55e",
+      "#ef4444",
+      "#f59e0b",
+      "#ec4899",
+      "#eab308",
+      "#8b5cf6",
+    ];
 
     return Object.entries(counts).map(([type, count], index) => ({
       type: type.charAt(0).toUpperCase() + type.slice(1),
       count,
-      color: COLORS[index % COLORS.length]
+      color: COLORS[index % COLORS.length],
     }));
   }, []);
 
@@ -47,17 +61,17 @@ export const TypePieChart: React.FC = () => {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ 
-                  backgroundColor: '#1e293b', 
-                  border: 'none', 
-                  borderRadius: '12px',
-                  color: '#fff',
-                  fontSize: '12px'
+                contentStyle={{
+                  backgroundColor: "#1e293b",
+                  border: "none",
+                  borderRadius: "12px",
+                  color: "#fff",
+                  fontSize: "12px",
                 }}
               />
-              <Legend 
-                layout="vertical" 
-                align="right" 
+              <Legend
+                layout="vertical"
+                align="right"
                 verticalAlign="middle"
                 iconSize={10}
                 formatter={(value) => (
@@ -70,7 +84,7 @@ export const TypePieChart: React.FC = () => {
           </ResponsiveContainer>
         ) : (
           <div className="h-full flex items-center justify-center text-slate-400 italic text-sm">
-             Sem dados de processos para exibir.
+            Sem dados de processos para exibir.
           </div>
         )}
       </div>

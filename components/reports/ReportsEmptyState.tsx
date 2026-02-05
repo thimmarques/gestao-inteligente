@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { FileText, History } from 'lucide-react';
+import React from "react";
+import { FileText, History } from "lucide-react";
 
 export const ReportsEmptyState: React.FC = () => {
   return (
@@ -13,15 +12,22 @@ export const ReportsEmptyState: React.FC = () => {
           <History size={20} />
         </div>
       </div>
-      
-      <h3 className="text-xl font-black dark:text-white tracking-tight mb-2">Nenhum relatório gerado ainda</h3>
+
+      <h3 className="text-xl font-black dark:text-white tracking-tight mb-2">
+        Nenhum relatório gerado ainda
+      </h3>
       <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
-        Sua central de inteligência está vazia. Escolha um dos modelos acima para compilar seus dados jurídicos e financeiros.
+        Sua central de inteligência está vazia. Escolha um dos modelos acima
+        para compilar seus dados jurídicos e financeiros.
       </p>
-      
+
       <div className="mt-8 flex gap-2">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" style={{ animationDelay: `${i * 200}ms` }} />
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse"
+            style={{ animationDelay: `${i * 200}ms` }}
+          />
         ))}
       </div>
     </div>

@@ -1,7 +1,16 @@
-
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Lawyer, Office, UserPreferences } from '../types';
-import { getCurrentLawyer, getOffice, getPreferences } from '../utils/settingsPersistence';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { Lawyer, Office, UserPreferences } from "../types";
+import {
+  getCurrentLawyer,
+  getOffice,
+  getPreferences,
+} from "../utils/settingsPersistence";
 
 interface AppContextType {
   lawyer: Lawyer | null;
@@ -14,10 +23,13 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
   const [office, setOffice] = useState<Office>(getOffice());
-  const [preferences, setPreferences] = useState<UserPreferences>(getPreferences());
+  const [preferences, setPreferences] =
+    useState<UserPreferences>(getPreferences());
 
   const refreshAll = useCallback(() => {
     setLawyer(getCurrentLawyer());
@@ -30,24 +42,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // Ouvir mudanças de outras abas
     const handleStorage = (e: StorageEvent) => {
-      if (e.key?.includes('legalflow') || e.key === 'current_lawyer') {
+      if (e.key?.includes("legalflow") || e.key === "current_lawyer") {
         refreshAll();
       }
     };
 
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, [refreshAll]);
 
   return (
-    <AppContext.Provider value={{ 
-      lawyer, 
-      office, 
-      preferences, 
-      refreshAll,
-      updateLocalLawyer: setLawyer,
-      updateLocalOffice: setOffice
-    }}>
+    <AppContext.Provider
+      value={{
+        lawyer,
+        office,
+        preferences,
+        refreshAll,
+        updateLocalLawyer: setLawyer,
+        updateLocalOffice: setOffice,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
@@ -55,6 +69,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) throw new Error('useApp must be used within AppProvider');
+  if (!context) throw new Error("useApp must be used within AppProvider");
   return context;
 };
