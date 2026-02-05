@@ -21,8 +21,6 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   const [role, setRole] = useState<string>("lawyer");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!isOpen) return null;
-
   const userRole = (currentUser?.role as string) || "";
   const isAdmin = userRole === "admin";
   const isLawyer = userRole === "lawyer" || userRole === Role.LAWYER;
@@ -50,6 +48,8 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
       }
     }
   }, [availableRoles, role]);
+
+  if (!isOpen) return null;
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();

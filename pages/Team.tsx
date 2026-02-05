@@ -1,13 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  UserPlus,
-  ChevronRight,
-  RefreshCw,
-  Loader2,
-  Users,
-  Mail,
-} from "lucide-react";
+import { UserPlus, ChevronRight, RefreshCw, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Role } from "../types";
 import { TeamMember } from "../types/team";
@@ -18,7 +11,7 @@ import { TeamFilters } from "../components/team/TeamFilters";
 import { AddTeamMemberModal } from "../components/team/AddTeamMemberModal";
 import { TeamMemberDetailsModal } from "../components/team/TeamMemberDetailsModal";
 import { useApp } from "../contexts/AppContext";
-import { checkPermission } from "../utils/permissions";
+
 import { inviteService } from "../services/inviteService";
 import { useTeam } from "../hooks/useQueries";
 import { supabase } from "../lib/supabase";
@@ -107,12 +100,7 @@ const Team: React.FC = () => {
       });
   }, [teamMembers, filterState, activeTab]);
 
-  const handleAddMember = async (data: any) => {
-    if (!currentUser) return;
-    await inviteService.createInvite(data.email, data.role);
-    refetch();
-    setIsAddModalOpen(false);
-  };
+
 
   const handleDeleteMember = async (id: string) => {
     const { error } = await supabase.from("profiles").delete().eq("id", id);
@@ -167,11 +155,10 @@ const Team: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === tab
-                    ? "bg-primary-600 text-white shadow-lg"
-                    : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`px - 5 py - 2.5 rounded - xl text - [9px] font - black uppercase tracking - widest transition - all ${activeTab === tab
+                  ? "bg-primary-600 text-white shadow-lg"
+                  : "text-slate-500 hover:text-slate-700"
+                  } `}
               >
                 {tab === "lawyer"
                   ? "Advogado"
