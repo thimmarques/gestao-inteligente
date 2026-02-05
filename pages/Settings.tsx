@@ -14,7 +14,6 @@ import {
   FileSearch,
   Shield,
   Users,
-  CreditCard,
 } from "lucide-react";
 import { useApp } from "../contexts/AppContext";
 import { checkPermission } from "../utils/permissions";
@@ -35,7 +34,6 @@ type SettingsTab =
   | "logs"
   | "preferencias"
   | "seguranca"
-  | "assinatura"
   | "sobre";
 
 const Settings: React.FC = () => {
@@ -113,12 +111,6 @@ const Settings: React.FC = () => {
         color: "text-orange-500",
       },
       {
-        id: "assinatura",
-        label: "Assinatura e Plano",
-        icon: CreditCard,
-        color: "text-amber-500",
-      },
-      {
         id: "seguranca",
         label: "Segurança",
         icon: ShieldCheck,
@@ -148,8 +140,6 @@ const Settings: React.FC = () => {
         return <SecurityTab />;
       case "logs":
         return <LogsTab />;
-      case "assinatura":
-        return <div className="p-8">Assinatura</div>;
       case "sobre":
         return <AboutTab />;
       default:

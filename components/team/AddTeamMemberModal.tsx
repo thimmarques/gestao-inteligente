@@ -23,12 +23,37 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
 
   if (!isOpen) return null;
 
-  const isAdmin = (currentUser?.role as string) === "admin";
-  const isLawyer = (currentUser?.role as string) === "lawyer" || (currentUser?.role as string) === Role.LAWYER;
+  const userRole = (currentUser?.role as string) || "";
+  const isAdmin = userRole === "admin";
+  const isLawyer = userRole === "lawyer" || userRole === Role.LAWYER;
+
+  // Define available options based on current user's role
+  const availableRoles = React.useMemo(() => {
+    const roles = [];
+    if (isAdmin) {
+      roles.push({ value: "admin", label: "Administrador" });
+      roles.push({ value: "lawyer", label: "Advogado" });
+    }
+    if (isAdmin || isLawyer) {
+      roles.push({ value: "assistant", label: "Assistente" });
+      roles.push({ value: "intern", label: "Estagiário" });
+    }
+    return roles;
+  }, [isAdmin, isLawyer]);
+
+  // Set initial role if not set or invalid for current user
+  React.useEffect(() => {
+    if (availableRoles.length > 0) {
+      const isValid = availableRoles.some(r => r.value === role);
+      if (!isValid) {
+        setRole(availableRoles[0].value);
+      }
+    }
+  }, [availableRoles, role]);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !role) return;
 
     setIsSubmitting(true);
     try {
@@ -100,12 +125,13 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
+                className="w-full pl-12 pr-10 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm cursor-pointer"
               >
-                {isAdmin && <option value="admin">Administrador</option>}
-                {isAdmin && <option value="lawyer">Advogado</option>}
-                {(isAdmin || isLawyer) && <option value="assistant">Assistente</option>}
-                {(isAdmin || isLawyer) && <option value="intern">Estagiário</option>}
+                {availableRoles.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
