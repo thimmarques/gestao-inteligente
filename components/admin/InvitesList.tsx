@@ -38,11 +38,30 @@ export const InvitesList: React.FC = () => {
         createMutation.mutate();
     };
 
+    const { data: profile } = useQuery({
+        queryKey: ['profile'],
+        queryFn: async () => {
+            const { data: { user } } = await import('../../lib/supabase').then(m => m.supabase.auth.getUser());
+            if (!user) return null;
+            const { data } = await import('../../lib/supabase').then(m => m.supabase.from('profiles').select('office_id').eq('id', user.id).single());
+            return data;
+        }
+    });
+
     const copyLink = (token: string) => {
         const link = `${window.location.origin}/auth/invite?token=${token}`;
         navigator.clipboard.writeText(link);
         toast.success('Link copiado!');
     };
+
+    if (profile && !profile.office_id) {
+        return (
+            <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-2xl border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200">
+                <h3 className="font-bold mb-2">Configuração Pendente</h3>
+                <p>Seu usuário não está vinculado a um escritório. Por favor, entre em contato com o suporte ou aguarde a atualização do sistema.</p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
