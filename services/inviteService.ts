@@ -35,8 +35,21 @@ export const inviteService = {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Usuario nao autenticado');
 
-    const { data: profile } = await supabase.from('profiles').select('office_id').eq('id', user.id).single();
-    if (!profile?.office_id) throw new Error('Usuario sem escritorio');
+    console.log('[DEBUG] createInvite - User:', user.id);
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('office_id, role, name')
+      .eq('id', user.id)
+      .single();
+
+    console.log('[DEBUG] createInvite - Profile:', profile);
+    console.log('[DEBUG] createInvite - Profile Error:', profileError);
+
+    if (profileError || !profile?.office_id) {
+      console.error('[DEBUG] Missing Office ID. User metadata:', user.user_metadata);
+      throw new Error(`Usuario sem escritorio (ID: ${user.id}). Detalhes no console.`);
+    }
 
     const { data, error } = await supabase
       .from('invites')

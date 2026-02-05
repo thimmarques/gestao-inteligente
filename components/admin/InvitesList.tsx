@@ -38,7 +38,7 @@ export const InvitesList: React.FC = () => {
         createMutation.mutate();
     };
 
-    const { data: profile } = useQuery({
+    const { data: profile, isLoading: isLoadingProfile } = useQuery({
         queryKey: ['profile'],
         queryFn: async () => {
             const { data: { user } } = await import('../../lib/supabase').then(m => m.supabase.auth.getUser());
@@ -53,6 +53,10 @@ export const InvitesList: React.FC = () => {
         navigator.clipboard.writeText(link);
         toast.success('Link copiado!');
     };
+
+    if (isLoadingProfile) {
+        return <div className="p-8 text-center"><Loader2 className="animate-spin m-auto text-slate-400" /></div>;
+    }
 
     if (profile && !profile.office_id) {
         return (
