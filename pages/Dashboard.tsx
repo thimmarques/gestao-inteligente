@@ -3,11 +3,11 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users, Folder, Clock, DollarSign, ArrowUpRight, ArrowDownRight,
-  TrendingUp, BarChart3, Loader2
+  TrendingUp, BarChart3, Loader2, MoreHorizontal, Calendar as CalendarIcon, FileText
 } from 'lucide-react';
 import {
   CartesianGrid, Tooltip,
-  ResponsiveContainer, AreaChart, Area
+  ResponsiveContainer, AreaChart, Area, XAxis, YAxis
 } from 'recharts';
 import { formatCurrency } from '../utils/formatters';
 import { TeamWidget } from '../components/dashboard/TeamWidget';
@@ -19,37 +19,37 @@ import { scheduleService } from '../services/scheduleService';
 import { deadlineService } from '../services/deadlineService';
 import { useClients, useCases, useDeadlines, useFinances, useSchedules } from '../hooks/useQueries';
 
-const KPICard = ({ label, value, trend, isPositive, icon, sub, onClick }: any) => (
+const KPICard = ({ label, value, trend, isPositive, icon, sub, onClick, colorClass }: any) => (
   <button
     onClick={onClick}
-    className="relative bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm text-left hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
+    className="relative bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow text-left hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden w-full"
   >
-    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-500">
-      {React.cloneElement(icon, { size: 100, strokeWidth: 1 })}
-    </div>
+    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${colorClass} to-transparent rounded-bl-full -mr-10 -mt-10 opacity-20 group-hover:opacity-30 transition-opacity`} />
 
     <div className="relative z-10">
-      <div className="flex items-center justify-between mb-6">
-        <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors shadow-inner">
-          {icon}
+      <div className="flex items-center justify-between mb-8">
+        <div className={`p-3.5 rounded-2xl shadow-sm ring-1 ring-inset ${isPositive ? 'bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-900/30' : 'bg-rose-50 text-rose-600 ring-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:ring-rose-900/30'}`}>
+          {React.cloneElement(icon, { size: 22 })}
         </div>
-        <div className={`flex items-center gap-1.5 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest ${isPositive ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400'
-          }`}>
-          {isPositive ? <ArrowUpRight size={12} strokeWidth={3} /> : <ArrowDownRight size={12} strokeWidth={3} />}
-          {trend}
-        </div>
+        {trend && (
+          <div className={`flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${isPositive ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20' : 'bg-rose-50 text-rose-600 dark:bg-rose-900/20'
+            }`}>
+            {isPositive ? <ArrowUpRight size={12} strokeWidth={2.5} /> : <ArrowDownRight size={12} strokeWidth={2.5} />}
+            {trend}
+          </div>
+        )}
       </div>
 
       <div className="space-y-1">
-        <h3 className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">{label}</h3>
-        <span className="text-3xl font-black dark:text-white tracking-tight block">{value}</span>
+        <h3 className="text-slate-500 dark:text-slate-400 text-[11px] font-bold uppercase tracking-widest">{label}</h3>
+        <span className="text-3xl font-black dark:text-white tracking-tight block text-slate-800">{value}</span>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-800">
-        <p className="text-xs font-medium text-slate-400 flex items-center gap-2 group-hover:text-primary-500 transition-colors">
-          {sub} <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+      {sub && (
+        <p className="mt-4 text-[10px] font-medium text-slate-400 flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+          {sub}
         </p>
-      </div>
+      )}
     </div>
   </button>
 );
@@ -85,26 +85,32 @@ const Dashboard: React.FC = () => {
   const isLoading = loadingClients || loadingCases || loadingDeadlines || loadingFinances || loadingSchedules;
 
   const statsCards = [
-    { label: 'Clientes Ativos', value: clients.filter((c: any) => c.status === 'ativo').length, trend: '0%', isPositive: true, icon: <Users className="text-blue-500" />, sub: `${clients.filter((c: any) => c.type === 'particular').length} Particulares`, path: '/clientes' },
-    { label: 'Processos', value: cases.length, trend: '0', isPositive: true, icon: <Folder className="text-indigo-500" />, sub: 'Em andamento', path: '/processos' },
-    { label: 'Prazos Pendentes', value: deadlines.filter((d: any) => d.status === 'pendente').length, trend: `${stats.urgentDeadlines} urgentes`, isPositive: false, icon: <Clock className="text-orange-500" />, sub: 'Monitorados', path: '/prazos' },
-    { label: 'Receita do Mês', value: formatCurrency(stats.revenueThisMonth), trend: '0%', isPositive: true, icon: <DollarSign className="text-green-500" />, sub: 'Efetivado', path: '/financeiro' },
+    { label: 'Clientes Ativos', value: clients.filter((c: any) => c.status === 'ativo').length, trend: '+12%', isPositive: true, icon: <Users />, sub: 'Base total de clientes', path: '/clientes', colorClass: 'from-blue-500' },
+    { label: 'Processos', value: cases.length, trend: '+5%', isPositive: true, icon: <Folder />, sub: 'Processos em andamento', path: '/processos', colorClass: 'from-indigo-500' },
+    { label: 'Prazos Pendentes', value: deadlines.filter((d: any) => d.status === 'pendente').length, trend: `${stats.urgentDeadlines} URGENTES`, isPositive: stats.urgentDeadlines === 0, icon: <Clock />, sub: 'Monitoramento de prazos', path: '/prazos', colorClass: 'from-orange-500' },
+    { label: 'Receita (Mês)', value: formatCurrency(stats.revenueThisMonth), trend: '+8%', isPositive: true, icon: <DollarSign />, sub: 'Entradas confirmadas', path: '/financeiro', colorClass: 'from-emerald-500' },
   ];
 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="animate-spin text-primary-600" size={40} />
-        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Carregando painel estratégico...</p>
+        <Loader2 className="animate-spin text-primary-200" size={48} />
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest animate-pulse">Carregando Dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 md:p-8 lg:p-10 space-y-10 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-slate-100">
-      <header className="space-y-1">
-        <h1 className="text-3xl font-black tracking-tight">Bom dia, Dr. {lawyer?.name || 'Advogado'}</h1>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">Resumo estratégico do seu escritório.</p>
+    <div className="p-6 md:p-10 space-y-10 animate-in fade-in duration-500 pb-32 text-slate-800 dark:text-slate-100 max-w-[1600px] mx-auto">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Bom dia, Dr. {lawyer?.name || 'Advogado'}</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">Aqui está o resumo estratégico do seu escritório hoje.</p>
+        </div>
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-white dark:bg-slate-900 px-4 py-2 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <CalendarIcon size={14} />
+          {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -118,30 +124,59 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-black text-lg tracking-tight flex items-center gap-3">
-              <div className="p-2 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-primary-600">
+            <h3 className="font-bold text-lg tracking-tight flex items-center gap-3 text-slate-800 dark:text-white">
+              <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-primary-600">
                 <TrendingUp size={20} />
               </div>
-              Histórico de Receita
+              Performance Financeira
             </h3>
+            <button onClick={() => navigate('/financeiro')} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-primary-600 transition-colors">
+              <MoreHorizontal size={20} />
+            </button>
           </div>
-          <div className="h-[300px] flex flex-col items-center justify-center text-slate-400">
+          <div className="h-[320px] w-full">
             {finances.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={finances.slice(-10)}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.1} />
+                <AreaChart data={finances.slice(-10)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" strokeOpacity={0.5} />
+                  <XAxis dataKey="due_date" hide />
+                  <YAxis hide />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px', color: '#fff' }}
+                    contentStyle={{
+                      backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      color: '#fff',
+                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                    }}
+                    itemStyle={{ color: '#fff' }}
+                    labelStyle={{ display: 'none' }}
+                    formatter={(value: number) => [formatCurrency(value), 'Valor']}
                   />
-                  <Area type="monotone" dataKey="amount" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} />
+                  <Area
+                    type="monotone"
+                    dataKey="amount"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorIncome)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="text-center italic space-y-2">
-                <BarChart3 size={40} className="mx-auto opacity-20" />
-                <p>Nenhum dado financeiro vinculado.</p>
+              <div className="h-full flex flex-col items-center justify-center text-slate-400 italic space-y-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full">
+                  <BarChart3 size={32} className="opacity-50" />
+                </div>
+                <p>Nenhum dado financeiro para exibir.</p>
               </div>
             )}
           </div>
@@ -153,53 +188,72 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-10">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-bold text-lg flex items-center gap-2">
-              <Clock className="text-primary-500" size={20} />
-              Agenda Hoje
+            <h3 className="font-bold text-lg flex items-center gap-3 text-slate-800 dark:text-white">
+              <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl text-indigo-600">
+                <Clock size={20} />
+              </div>
+              Agenda de Hoje
             </h3>
-            <button onClick={() => navigate('/agenda')} className="text-xs font-bold text-primary-600 uppercase hover:underline">Ver tudo</button>
+            <button onClick={() => navigate('/agenda')} className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-widest hover:underline transition-all">Ver Completa</button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {stats.todaySchedules.length > 0 ? (
               stats.todaySchedules.slice(0, 5).map((task: any, i: number) => (
-                <button key={i} onClick={() => setSelectedEvent(task)} className="w-full flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group text-left">
-                  <div className="text-sm font-bold text-slate-400 shrink-0">
+                <button key={i} onClick={() => setSelectedEvent(task)} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30 transition-all group text-left">
+                  <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl font-bold text-xs text-slate-500 group-hover:text-indigo-600 group-hover:bg-white dark:group-hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700">
                     {new Date(task.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <span className="text-sm font-semibold group-hover:text-primary-600 transition-colors block truncate">{task.title}</span>
+                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors block truncate">{task.title}</span>
+                  </div>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-all opacity-0 group-hover:opacity-100">
+                    <ArrowUpRight size={16} />
                   </div>
                 </button>
               ))
             ) : (
-              <p className="text-sm text-slate-400 italic py-4 text-center">Sem eventos para hoje.</p>
+              <div className="flex flex-col items-center justify-center py-12 text-slate-400">
+                <CalendarIcon size={32} className="mb-2 opacity-50" />
+                <p className="text-sm italic">Sua agenda está livre hoje.</p>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-bold text-lg">Prazos Ativos</h3>
-            <button onClick={() => navigate('/prazos')} className="text-xs font-bold text-primary-600 uppercase hover:underline">Ver tudo</button>
+            <h3 className="font-bold text-lg flex items-center gap-3 text-slate-800 dark:text-white">
+              <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-xl text-orange-600">
+                <FileText size={20} />
+              </div>
+              Prazos Pendentes
+            </h3>
+            <button onClick={() => navigate('/prazos')} className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-widest hover:underline transition-all">Gerenciar</button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {deadlines.filter((d: any) => d.status === 'pendente').length > 0 ? (
-              deadlines.filter((d: any) => d.status === 'pendente').slice(0, 3).map((deadline: any, i: number) => (
-                <button key={i} onClick={() => setSelectedDeadline(deadline)} className="w-full flex items-center gap-4 p-3 border border-slate-100 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all text-left">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-100 text-orange-600 shrink-0">
-                    <Clock size={16} />
+              deadlines.filter((d: any) => d.status === 'pendente').slice(0, 4).map((deadline: any, i: number) => (
+                <button key={i} onClick={() => setSelectedDeadline(deadline)} className="w-full flex items-center gap-4 p-3 border border-slate-100 dark:border-slate-800 rounded-2xl hover:bg-orange-50/50 dark:hover:bg-orange-900/10 hover:border-orange-200 dark:hover:border-orange-900/30 transition-all text-left group">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-50 dark:bg-orange-900/20 text-orange-500 shrink-0 group-hover:scale-110 transition-transform">
+                    <Clock size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold truncate">{deadline.title}</h4>
-                    <p className="text-xs text-slate-500">{new Date(deadline.deadline_date).toLocaleDateString()}</p>
+                    <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors">{deadline.title}</h4>
+                    <p className="text-xs text-slate-400 group-hover:text-slate-500">{new Date(deadline.deadline_date).toLocaleDateString()}</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-orange-400 group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 transition-all opacity-0 group-hover:opacity-100">
+                    <ArrowUpRight size={16} />
                   </div>
                 </button>
               ))
             ) : (
-              <p className="text-sm text-slate-400 italic py-4 text-center">Nenhum prazo pendente.</p>
+              <div className="flex flex-col items-center justify-center py-12 text-slate-400">
+                <Clock size={32} className="mb-2 opacity-50" />
+                <p className="text-sm italic">Nenhum prazo pendente.</p>
+              </div>
             )}
           </div>
         </div>

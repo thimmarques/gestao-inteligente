@@ -19,6 +19,27 @@
 @layer base {
     body {
         font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@layer utilities {
+    .glass-panel {
+        @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800/50;
+    }
+
+    .soft-shadow {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .soft-shadow-hover {
+        @apply transition-all duration-300;
+
+        &:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
     }
 }
 

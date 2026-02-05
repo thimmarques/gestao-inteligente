@@ -11,14 +11,16 @@ import { notificationService } from '../services/notificationService';
 export const useClients = () => {
     return useQuery({
         queryKey: ['clients'],
-        queryFn: () => clientService.getClients()
+        queryFn: () => clientService.getClients(),
+        staleTime: 1000 * 60 * 5 // 5 minutes
     });
 };
 
 export const useCases = () => {
     return useQuery({
         queryKey: ['cases'],
-        queryFn: () => caseService.getCases()
+        queryFn: () => caseService.getCases(),
+        staleTime: 1000 * 60 * 5 // 5 minutes
     });
 };
 
@@ -33,7 +35,8 @@ export const useCase = (id: string | null) => {
 export const useDeadlines = () => {
     return useQuery({
         queryKey: ['deadlines'],
-        queryFn: () => deadlineService.getDeadlines()
+        queryFn: () => deadlineService.getDeadlines(),
+        staleTime: 1000 * 60 * 2 // 2 minutes
     });
 };
 
@@ -48,7 +51,8 @@ export const useDeadlinesByCase = (caseId: string) => {
 export const useFinances = () => {
     return useQuery({
         queryKey: ['finances'],
-        queryFn: () => financeService.getFinances()
+        queryFn: () => financeService.getFinances(),
+        staleTime: 1000 * 60 * 5 // 5 minutes
     });
 };
 
@@ -63,7 +67,8 @@ export const useFinancesByCase = (caseId: string) => {
 export const useSchedules = () => {
     return useQuery({
         queryKey: ['schedules'],
-        queryFn: () => scheduleService.getSchedules()
+        queryFn: () => scheduleService.getSchedules(),
+        staleTime: 1000 * 60 * 2 // 2 minutes
     });
 };
 

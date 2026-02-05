@@ -107,9 +107,11 @@ const Reports: React.FC = () => {
         }
       }
       else if (type === 'produtividade') {
-        const cases = await caseService.getCases();
-        const schedules = await scheduleService.getSchedules();
-        const deadlines = await deadlineService.getDeadlines();
+        const [cases, schedules, deadlines] = await Promise.all([
+          caseService.getCases(),
+          scheduleService.getSchedules(),
+          deadlineService.getDeadlines()
+        ]);
 
         await simulateProgress([{ p: 70, s: 'Processando indicadores...' }]);
         if (config.format === 'pdf') {
@@ -119,8 +121,10 @@ const Reports: React.FC = () => {
         }
       }
       else if (type === 'clientes') {
-        const clients = await clientService.getClients();
-        const finances = await financeService.getFinances();
+        const [clients, finances] = await Promise.all([
+          clientService.getClients(),
+          financeService.getFinances()
+        ]);
 
         await simulateProgress([{ p: 70, s: 'Compilando listagem...' }]);
         if (config.format === 'excel') {
