@@ -58,11 +58,23 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ currentPhotoUrl, onPho
 
     // Simular delay de processamento/compressão
     setTimeout(() => {
-      updateLawyer({ photo_url: previewUrl });
-      onPhotoChange(previewUrl);
-      refreshAll(); // CRÍTICO: Atualiza o contexto global
-      setIsUploading(false);
-      setIsEditing(false);
+      try {
+        try {
+          updateLawyer({ photo_url: previewUrl });
+        } catch (error) {
+          console.error('Erro ao salvar localmente (possivelmente limite de storage):', error);
+          // Não impede o fluxo, pois o objetivo principal é passar a URL para o pai
+        }
+
+        onPhotoChange(previewUrl);
+        refreshAll(); // CRÍTICO: Atualiza o contexto global
+        setIsEditing(false);
+      } catch (error) {
+        console.error('Erro ao processar foto:', error);
+        alert('Erro ao processar a imagem. Tente uma imagem menor.');
+      } finally {
+        setIsUploading(false);
+      }
     }, 800);
   };
 

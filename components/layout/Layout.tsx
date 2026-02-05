@@ -54,7 +54,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const { data: notifications = [] } = useNotifications();
   const { data: tasks = [] } = useTasks();
 
-  const displayUser = lawyer || user;
+  const displayUser = user || lawyer;
 
   useEffect(() => {
     if (isDarkMode) {

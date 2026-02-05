@@ -5,10 +5,15 @@ import { Lawyer } from '../../types.ts';
 import { useAuth } from '../../contexts/AuthContext';
 import { profileService } from '../../services/profileService';
 import { useNavigate } from 'react-router-dom';
+import { useApp } from '../../contexts/AppContext';
+import { updateLawyer } from '../../utils/settingsPersistence';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const ProfileTab: React.FC = () => {
   const { user, refreshProfile } = useAuth();
+  const { refreshAll } = useApp();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Lawyer>>({
     full_name: '',
@@ -40,11 +45,19 @@ export const ProfileTab: React.FC = () => {
 
     setIsSaving(true);
     try {
-      await profileService.updateProfile(user.id, {
+      const updates = {
         ...formData,
         name: formData.full_name || formData.name, // Keep both in sync
-      });
+      };
+
+      await profileService.updateProfile(user.id, updates);
+
+      // Sync with localStorage and AppContext
+      updateLawyer(updates);
+      refreshAll();
+
       await refreshProfile();
+      await queryClient.invalidateQueries({ queryKey: ['team'] });
       alert('Perfil atualizado!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -58,12 +71,20 @@ export const ProfileTab: React.FC = () => {
     if (!user?.id) return;
     setIsSaving(true);
     try {
-      await profileService.updateProfile(user.id, {
+      const updates = {
         ...formData,
         name: formData.full_name || formData.name,
         first_login: false
-      });
+      };
+
+      await profileService.updateProfile(user.id, updates);
+
+      // Sync with localStorage and AppContext
+      updateLawyer(updates);
+      refreshAll();
+
       await refreshProfile();
+      await queryClient.invalidateQueries({ queryKey: ['team'] });
       navigate('/', { replace: true });
       window.location.reload(); // Force refresh to update auth state/redirection logic
     } catch (error) {
