@@ -47,11 +47,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => (
   <Link
     to={to}
-    className={`relative flex items-center justify-between px-4 py-3 my-1 rounded-xl transition-all duration-300 group ${
-      active
+    className={`relative flex items-center justify-between px-4 py-3 my-1 rounded-xl transition-all duration-300 group ${active
         ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold shadow-sm"
         : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
-    }`}
+      }`}
   >
     {active && (
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary-600 rounded-r-full shadow-[0_0_12px_rgba(37,99,235,0.6)]" />
@@ -125,12 +124,6 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
       icon: <Clock size={20} />,
       label: "Prazos",
       badge: pendingDeadlines,
-    },
-    {
-      to: "/tarefas",
-      icon: <ListTodo size={20} />,
-      label: "Tarefas",
-      badge: pendingTasks,
     },
     { to: "/financeiro", icon: <DollarSign size={20} />, label: "Financeiro" },
     { to: "/relatorios", icon: <BarChart2 size={20} />, label: "Relatórios" },

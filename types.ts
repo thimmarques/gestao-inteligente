@@ -2,6 +2,7 @@ export enum Role {
   ADMIN = "admin",
   LAWYER = "lawyer",
   ASSISTANT = "assistant",
+  INTERN = "intern",
 }
 
 export enum ClientType {

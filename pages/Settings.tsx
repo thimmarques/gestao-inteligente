@@ -14,6 +14,7 @@ import {
   FileSearch,
   Shield,
   Users,
+  CreditCard,
 } from "lucide-react";
 import { useApp } from "../contexts/AppContext";
 import { checkPermission } from "../utils/permissions";
@@ -26,7 +27,6 @@ import { PreferencesTab } from "../components/settings/PreferencesTab";
 import { SecurityTab } from "../components/settings/SecurityTab";
 import { AboutTab } from "../components/settings/AboutTab";
 import { LogsTab } from "../components/settings/LogsTab";
-import { SettingsInvites } from "../components/settings/SettingsInvites";
 
 type SettingsTab =
   | "perfil"
@@ -35,7 +35,7 @@ type SettingsTab =
   | "logs"
   | "preferencias"
   | "seguranca"
-  | "convites"
+  | "assinatura"
   | "sobre";
 
 const Settings: React.FC = () => {
@@ -79,14 +79,14 @@ const Settings: React.FC = () => {
       color: string;
       alert?: boolean;
     }[] = [
-      { id: "perfil", label: "Meu Perfil", icon: User, color: "text-blue-500" },
-      {
-        id: "escritorio",
-        label: "Escritório",
-        icon: Building2,
-        color: "text-indigo-500",
-      },
-    ];
+        { id: "perfil", label: "Meu Perfil", icon: User, color: "text-blue-500" },
+        {
+          id: "escritorio",
+          label: "Escritório",
+          icon: Building2,
+          color: "text-indigo-500",
+        },
+      ];
 
     items.push({
       id: "integracoes",
@@ -105,21 +105,18 @@ const Settings: React.FC = () => {
       });
     }
 
-    if (currentUser?.office_id) {
-      items.push({
-        id: "convites",
-        label: "Membros e Convites",
-        icon: Users,
-        color: "text-purple-500", // using Users from lucide-react (imported in line 16 of view_file 527 output)
-      });
-    }
-
     items.push(
       {
         id: "preferencias",
         label: "Preferências",
         icon: Monitor,
         color: "text-orange-500",
+      },
+      {
+        id: "assinatura",
+        label: "Assinatura e Plano",
+        icon: CreditCard,
+        color: "text-amber-500",
       },
       {
         id: "seguranca",
@@ -151,8 +148,8 @@ const Settings: React.FC = () => {
         return <SecurityTab />;
       case "logs":
         return <LogsTab />;
-      case "convites":
-        return <SettingsInvites />;
+      case "assinatura":
+        return <div className="p-8">Assinatura</div>;
       case "sobre":
         return <AboutTab />;
       default:
@@ -196,11 +193,10 @@ const Settings: React.FC = () => {
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id as SettingsTab)}
-                  className={`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group shrink-0 lg:shrink lg:w-full whitespace-nowrap ${
-                    isActive
-                      ? "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl scale-[1.02]"
-                      : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/50"
-                  }`}
+                  className={`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group shrink-0 lg:shrink lg:w-full whitespace-nowrap ${isActive
+                    ? "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl scale-[1.02]"
+                    : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/50"
+                    }`}
                 >
                   <div
                     className={`p-2 rounded-xl transition-colors relative ${isActive ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600" : "bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500"}`}

@@ -1,4 +1,14 @@
-export type TeamRole = "admin" | "advogado" | "assistente";
+export type TeamRole = "admin" | "lawyer" | "assistant" | "intern" | "advogado" | "assistente";
+
+export interface Invite {
+  id: string;
+  email: string;
+  role: TeamRole;
+  status: "pending" | "sent" | "accepted" | "revoked";
+  created_at: string;
+  office_id: string;
+  created_by: string;
+}
 
 export interface TeamMemberPermissions {
   can_create_cases: boolean;
