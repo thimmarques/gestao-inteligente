@@ -75,7 +75,7 @@ jobs:
           if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then echo "::error::VERCEL_PROJECT_ID is missing in GitHub Secrets"; exit 1; fi
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
+        uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
