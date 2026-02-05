@@ -40,6 +40,7 @@ To maintain optimal performance (`Lighthouse Score > 90`):
 - [ ] **Icons**: Import specific icons (`import { User } from 'lucide-react'`) instead of the whole library.
 
 ## Improvements (Phase 1)
+
 - [x] **RLS Refined**: `profiles` policy documented as Single Tenant (MVP). Code for Multi-tenant restriction prepared in migrations.
 - [x] **Visual Feedback**: `sonner` (Toast) replaces `alert()` and `console.error` in Auth & Forms.
 - [x] **Code Style**: Prettier check added to CI (`npm run prettier:check`).
