@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
 import {
   DollarSign, TrendingUp, Users, Clock,
   Search, FileText, Download, Trash2, Loader2, Plus
@@ -9,10 +8,6 @@ import confetti from 'canvas-confetti';
 
 import { Client, CaseWithRelations, Deadline, ScheduleEvent, Report } from '../types';
 import { ReportTypeCard } from '../components/reports/ReportTypeCard';
-import { FinancialReportModal } from '../components/reports/FinancialReportModal';
-import { ProductivityReportModal } from '../components/reports/ProductivityReportModal';
-import { ClientsReportModal } from '../components/reports/ClientsReportModal';
-import { DeadlinesReportModal } from '../components/reports/DeadlinesReportModal';
 import { ReportGenerationProgress } from '../components/reports/ReportGenerationProgress';
 import { ReportsEmptyState } from '../components/reports/ReportsEmptyState';
 
@@ -32,6 +27,12 @@ import { caseService } from '../services/caseService';
 import { deadlineService } from '../services/deadlineService';
 import { scheduleService } from '../services/scheduleService';
 import { useApp } from '../contexts/AppContext';
+
+// Lazy Load Modals
+const FinancialReportModal = lazy(() => import('../components/reports/FinancialReportModal').then(m => ({ default: m.FinancialReportModal })));
+const ProductivityReportModal = lazy(() => import('../components/reports/ProductivityReportModal').then(m => ({ default: m.ProductivityReportModal })));
+const ClientsReportModal = lazy(() => import('../components/reports/ClientsReportModal').then(m => ({ default: m.ClientsReportModal })));
+const DeadlinesReportModal = lazy(() => import('../components/reports/DeadlinesReportModal').then(m => ({ default: m.DeadlinesReportModal })));
 
 type ReportType = 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
 
@@ -339,10 +340,12 @@ const Reports: React.FC = () => {
         <ReportGenerationProgress isGenerating={isGenerating} progress={genProgress} currentStep={genStep} />
       )}
 
-      {activeModal === 'financeiro' && <FinancialReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('financeiro', cfg)} />}
-      {activeModal === 'produtividade' && <ProductivityReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('produtividade', cfg)} />}
-      {activeModal === 'clientes' && <ClientsReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('clientes', cfg)} />}
-      {activeModal === 'prazos' && <DeadlinesReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('prazos', cfg)} />}
+      <Suspense fallback={null}>
+        {activeModal === 'financeiro' && <FinancialReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('financeiro', cfg)} />}
+        {activeModal === 'produtividade' && <ProductivityReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('produtividade', cfg)} />}
+        {activeModal === 'clientes' && <ClientsReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('clientes', cfg)} />}
+        {activeModal === 'prazos' && <DeadlinesReportModal isOpen={true} onClose={() => setActiveModal(null)} onGenerate={(cfg) => handleGenerateReport('prazos', cfg)} />}
+      </Suspense>
     </div>
   );
 };
