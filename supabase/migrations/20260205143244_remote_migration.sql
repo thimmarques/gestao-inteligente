@@ -1,0 +1,4 @@
+-- Placeholder for remote migration 20260205143244
+-- The original migration content could not be retrieved due to missing Docker environment.
+-- This file exists to satisfy Supabase CLI sync checks.
+-- If you need the actual schema changes for a fresh deploy, please recreate this migration.
