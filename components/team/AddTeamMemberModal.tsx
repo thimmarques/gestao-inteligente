@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { X, Mail, Plus, Loader2, Shield } from "lucide-react";
 import { inviteService } from "../../services/inviteService";
 import { useApp } from "../../contexts/AppContext";
@@ -28,7 +28,7 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   const isLawyer = userRole === "lawyer" || userRole === Role.LAWYER;
 
   // Define available options based on current user's role
-  const availableRoles = React.useMemo(() => {
+  const availableRoles = useMemo(() => {
     const roles = [];
     if (isAdmin) {
       roles.push({ value: "admin", label: "Administrador" });
@@ -42,7 +42,7 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   }, [isAdmin, isLawyer]);
 
   // Set initial role if not set or invalid for current user
-  React.useEffect(() => {
+  useEffect(() => {
     if (availableRoles.length > 0) {
       const isValid = availableRoles.some(r => r.value === role);
       if (!isValid) {

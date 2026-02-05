@@ -16,6 +16,41 @@ import { inviteService } from "../services/inviteService";
 import { useTeam } from "../hooks/useQueries";
 import { supabase } from "../lib/supabase";
 
+const PendingInvitesList: React.FC = () => {
+  const { lawyer: currentUser } = useApp();
+  const { data: invites = [] as any[], isLoading } = useQuery({
+    queryKey: ["invites"],
+    queryFn: () => inviteService.listInvites(),
+    enabled: !!currentUser?.office_id,
+  });
+
+  const pendingInvites = invites.filter((i: any) => i.status === 'pending' || i.status === 'sent');
+
+  if (isLoading) return <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl" />;
+  if (pendingInvites.length === 0) return null;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {pendingInvites.map((invite) => (
+        <div
+          key={invite.id}
+          className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-dotted border-slate-300 dark:border-slate-700 flex items-center justify-between"
+        >
+          <div className="space-y-1">
+            <p className="font-bold text-sm dark:text-white">{invite.email}</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+              {invite.role} • Enviado em {new Date(invite.created_at).toLocaleDateString()}
+            </p>
+          </div>
+          <span className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-[9px] font-black uppercase tracking-widest rounded-full">
+            Pendente
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const Team: React.FC = () => {
   const { lawyer: currentUser } = useApp();
   const navigate = useNavigate();
@@ -214,41 +249,6 @@ const Team: React.FC = () => {
         onDelete={handleDeleteMember}
         currentUserId={currentUser?.id || ""}
       />
-    </div>
-  );
-};
-
-const PendingInvitesList: React.FC = () => {
-  const { lawyer: currentUser } = useApp();
-  const { data: invites = [] as any[], isLoading } = useQuery({
-    queryKey: ["invites"],
-    queryFn: () => inviteService.listInvites(),
-    enabled: !!currentUser?.office_id,
-  });
-
-  const pendingInvites = invites.filter((i: any) => i.status === 'pending' || i.status === 'sent');
-
-  if (isLoading) return <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl" />;
-  if (pendingInvites.length === 0) return null;
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {pendingInvites.map((invite) => (
-        <div
-          key={invite.id}
-          className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-dotted border-slate-300 dark:border-slate-700 flex items-center justify-between"
-        >
-          <div className="space-y-1">
-            <p className="font-bold text-sm dark:text-white">{invite.email}</p>
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {invite.role} • Enviado em {new Date(invite.created_at).toLocaleDateString()}
-            </p>
-          </div>
-          <span className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-[9px] font-black uppercase tracking-widest rounded-full">
-            Pendente
-          </span>
-        </div>
-      ))}
     </div>
   );
 };
