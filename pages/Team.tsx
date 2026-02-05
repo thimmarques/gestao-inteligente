@@ -59,12 +59,7 @@ const Team: React.FC = () => {
 
   const handleAddMember = async (data: any) => {
     if (!currentUser) return;
-    await inviteService.sendInvite(
-      data.email,
-      data.role,
-      currentUser.id,
-      currentUser.office_id,
-    );
+    await inviteService.createInvite(data.email, data.role);
     refetch();
     setIsAddModalOpen(false);
   };
@@ -107,11 +102,10 @@ const Team: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === tab
+                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === tab
                     ? "bg-primary-600 text-white shadow-lg"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 {tab === "lawyer"
                   ? "Advogado"
