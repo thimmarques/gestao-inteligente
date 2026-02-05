@@ -45,21 +45,45 @@ To maintain optimal performance (`Lighthouse Score > 90`):
 - [x] **Visual Feedback**: `sonner` (Toast) replaces `alert()` and `console.error` in Auth & Forms.
 - [x] **Code Style**: Prettier check added to CI (`npm run prettier:check`).
 
-## 🚀 Piloto: Autenticação por Convite
+## 🔐 Sistema de Convites (Invite-Only)
 
-Este recurso experimental permite que admins convidem novos membros.
+O sistema utiliza um fluxo seguro baseado em convites por email.
 
-### Rotas
-- **Admin**: `/admin/invites` (Gerar convites)
-- **Convite**: `/auth/invite?token=...` (Link enviado ao usuário)
+### Como funciona
+1. **Envio:** O Admin acessa `Configurações > Membros e Convites` e envia um convite por email.
+   - O convite é registrado no banco como `status: sent`.
+   - Uma Edge Function (`send-invite-email`) garante a segurança e envia o email (mockado no console por enquanto).
+2. **Aceite:** O usuário recebe o email e acessa a página de Signup (`/auth/signup`) ou Login via Magic Link.
+3. **Vínculo Automático:** Ao criar a conta (ou fazer o primeiro login), uma trigger (`handle_new_user`) detecta o convite pendente pelo email.
+   - O usuário é automaticamente vinculado ao Escritório do convite.
+   - O cargo (Admin, Lawyer, etc.) é atribuído conforme o convite.
+   - O convite é marcado como `accepted`.
 
 ### Configuração
-Para desativar o cadastro público e usar apenas convites, defina no `.env`:
-```bash
-VITE_INVITE_ONLY_MODE=true
+Para restringir o acesso público e permitir apenas convidados:
+1. Defina `VITE_INVITE_ONLY_MODE=true` no `.env`.
+2. Isso ocultará o formulário de cadastro público.
+
+### Setup Inicial (Bootstrap)
+Como o primeiro usuário não tem quem o convide, ele deve ser criado manualmente ou via SQL se o `VITE_INVITE_ONLY_MODE` estiver ativo.
+
+**Opção 1 (Recomendada):** Deixe `VITE_INVITE_ONLY_MODE=false` inicialmente, crie o primeiro usuário (que gerará seu escritório automaticamente), e depois ative o modo restrito.
+
+**Opção 2 (Manual via SQL):**
+Se precisar promover um usuário existente ou criar um escritório manualmente:
+
+```sql
+-- 1. Crie o Escritório
+INSERT INTO public.offices (name) VALUES ('Meu Escritório') RETURNING id;
+
+-- 2. Vincule o Usuário (pegue o ID do usuário em auth.users)
+UPDATE public.profiles 
+SET office_id = 'ID_DO_ESCRITORIO', role = 'admin' 
+WHERE email = 'seu@email.com';
 ```
 
 ### Deploy da Edge Function
 ```bash
-npx supabase functions deploy accept-invite --no-verify-jwt
+supabase functions deploy send-invite-email --no-verify-jwt
 ```
+*Nota: `--no-verify-jwt` é usado porque a função verifica a autenticação internamente para validar permissões customizadas.*
