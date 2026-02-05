@@ -58,7 +58,13 @@ export const InvitesList: React.FC = () => {
         return (
             <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-2xl border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200">
                 <h3 className="font-bold mb-2">Configuração Pendente</h3>
-                <p>Seu usuário não está vinculado a um escritório. Por favor, entre em contato com o suporte ou aguarde a atualização do sistema.</p>
+                <p className="mb-4">Seu usuário não está vinculado a um escritório. Por favor, complete o cadastro.</p>
+                <a
+                    href="/settings"
+                    className="inline-block px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg font-medium transition-colors"
+                >
+                    Ir para Configurações
+                </a>
             </div>
         );
     }
