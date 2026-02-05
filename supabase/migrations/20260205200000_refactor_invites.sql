@@ -9,9 +9,14 @@ ALTER TABLE public.invites
 ALTER COLUMN token DROP NOT NULL;
 
 -- 2. Data Migration (Backfill status)
-UPDATE public.invites 
-SET status = 'accepted' 
-WHERE accepted_at IS NOT NULL;
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='invites' AND column_name='accepted_at') THEN
+    UPDATE public.invites 
+    SET status = 'accepted' 
+    WHERE accepted_at IS NOT NULL;
+  END IF;
+END $$;
 
 -- 3. Constraints
 -- Avoid duplicate pending invites for sam email+office
