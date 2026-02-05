@@ -105,6 +105,7 @@ export const useTeam = () => {
                 .select('*')
                 .order('name', { ascending: true });
             if (error) throw error;
+            return data;
         },
         staleTime: 1000 * 60 * 30 // 30 minutes
     });
