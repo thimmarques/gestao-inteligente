@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Home, Users, Folder, Calendar, Clock, DollarSign, 
-  BarChart2, FileText, TrendingUp, Users2, Target, 
+import {
+  Home, Users, Folder, Calendar, Clock, DollarSign,
+  BarChart2, FileText, TrendingUp, Users2, Target,
   Settings, LogOut, Menu, X, Bell, Moon, Sun, Search
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { Avatar } from './Avatar';
 
 interface SidebarItemProps {
   to: string;
@@ -20,11 +22,10 @@ interface SidebarItemProps {
 const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, badge, badgeColor = "bg-red-500", active }) => (
   <Link
     to={to}
-    className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
-      active 
-        ? 'bg-primary-600 text-white shadow-md' 
-        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
-    }`}
+    className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${active
+      ? 'bg-primary-600 text-white shadow-md'
+      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+      }`}
   >
     <div className="flex items-center gap-3">
       {icon}
@@ -43,6 +44,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [isDarkMode, setIsDarkMode] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     if (isDarkMode) {
@@ -71,7 +73,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
       {/* Mobile Sidebar Overlay */}
       {!isSidebarOpen && (
-        <button 
+        <button
           onClick={() => setIsSidebarOpen(true)}
           className="lg:hidden fixed bottom-4 left-4 z-50 p-3 bg-primary-600 text-white rounded-full shadow-lg"
         >
@@ -97,13 +99,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
           <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
             {menuItems.map((item) => (
-              <SidebarItem 
-                key={item.to} 
-                {...item} 
-                active={location.pathname === item.to} 
+              <SidebarItem
+                key={item.to}
+                {...item}
+                active={location.pathname === item.to}
               />
             ))}
-            
+
             <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
               <SidebarItem to="/foco" icon={<Target size={20} />} label="Modo Foco" />
               <SidebarItem to="/configuracoes" icon={<Settings size={20} />} label="Configurações" />
@@ -112,12 +114,28 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
           <div className="p-4 border-t border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-3 p-2">
-              <img src="https://picsum.photos/seed/lawyer/40/40" className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700" alt="Avatar" />
+              <Avatar
+                src={user?.photo_url || null}
+                name={user?.name || 'User'}
+                size="md"
+                className="border border-slate-200 dark:border-slate-700 hover:scale-105 transition-transform cursor-pointer"
+                onClick={() => navigate('/configuracoes')}
+              />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate dark:text-white">Dr. Carlos Silva</p>
-                <p className="text-xs text-slate-500 truncate">OAB/SP 123.456</p>
+                <p className="text-sm font-semibold truncate dark:text-white" title={user?.name || ''}>
+                  {user?.name || 'Usuário'}
+                </p>
+                {user?.oab ? (
+                  <p className="text-xs text-slate-500 truncate font-mono">
+                    OAB {user.oab}
+                  </p>
+                ) : (
+                  <p className="text-xs text-slate-500 truncate">
+                    {user?.email}
+                  </p>
+                )}
               </div>
-              <button onClick={() => navigate('/login')} className="text-slate-400 hover:text-red-500">
+              <button onClick={() => signOut()} className="text-slate-400 hover:text-red-500 transition-colors" title="Sair">
                 <LogOut size={18} />
               </button>
             </div>
@@ -132,9 +150,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="flex-1 max-w-xl hidden md:block">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-              <input 
-                type="text" 
-                placeholder="Buscar processos, clientes... (Ctrl + K)" 
+              <input
+                type="text"
+                placeholder="Buscar processos, clientes... (Ctrl + K)"
                 className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm border-none focus:ring-2 focus:ring-primary-500"
               />
             </div>

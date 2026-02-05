@@ -2,6 +2,7 @@
 import React from 'react';
 import { Crown, Briefcase, UserCog, Phone, Mail, ChevronRight } from 'lucide-react';
 import { TeamMember } from '../../types/team.ts';
+import { Avatar } from '../ui/Avatar';
 
 interface TeamMemberCardProps {
   member: TeamMember;
@@ -23,11 +24,10 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick,
   const Icon = config.icon;
 
   return (
-    <div 
+    <div
       onClick={onClick}
-      className={`relative bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border transition-all cursor-pointer group hover:shadow-2xl hover:-translate-y-1 ${
-        isMe ? 'border-2 border-yellow-500/50 shadow-xl shadow-yellow-500/5' : 'border-slate-200 dark:border-slate-800'
-      }`}
+      className={`relative bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border transition-all cursor-pointer group hover:shadow-2xl hover:-translate-y-1 ${isMe ? 'border-2 border-yellow-500/50 shadow-xl shadow-yellow-500/5' : 'border-slate-200 dark:border-slate-800'
+        }`}
     >
       {/* Role Badge */}
       <div className={`absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 rounded-full border border-current opacity-80 ${config.color} ${config.bg}`}>
@@ -37,9 +37,8 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick,
 
       {/* Status & Me Badge */}
       <div className="absolute top-4 left-4 flex gap-2">
-        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-          member.status === 'ativo' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-slate-50 text-slate-400 border-slate-200'
-        }`}>
+        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${member.status === 'ativo' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-slate-50 text-slate-400 border-slate-200'
+          }`}>
           <div className={`w-1.5 h-1.5 rounded-full ${member.status === 'ativo' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
           {member.status}
         </div>
@@ -52,15 +51,12 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick,
 
       {/* Avatar & Header */}
       <div className="flex flex-col items-center text-center mt-6">
-        <div className="w-24 h-24 rounded-[2rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-105 transition-transform duration-500">
-          {member.photo_url ? (
-            <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-3xl font-black text-slate-300 dark:text-slate-600">
-              {member.name.split(' ').map(n => n[0]).join('')}
-            </span>
-          )}
-        </div>
+        <Avatar
+          src={member.photo_url}
+          name={member.name}
+          size="custom"
+          className="w-24 h-24 !rounded-[2rem] border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-105 transition-transform duration-500 text-3xl"
+        />
         <h3 className="text-lg font-black dark:text-white mt-4 tracking-tight group-hover:text-primary-600 transition-colors">{member.name}</h3>
         {member.oab && <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">OAB/{member.oab}</p>}
         <p className="text-xs text-slate-500 mt-2 flex items-center gap-1.5 truncate w-full justify-center px-4"><Mail size={12} /> {member.email}</p>

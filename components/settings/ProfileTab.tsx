@@ -7,7 +7,7 @@ import { profileService } from '../../services/profileService';
 import { useNavigate } from 'react-router-dom';
 
 export const ProfileTab: React.FC = () => {
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Lawyer>>({
@@ -44,6 +44,7 @@ export const ProfileTab: React.FC = () => {
         ...formData,
         name: formData.full_name || formData.name, // Keep both in sync
       });
+      await refreshProfile();
       alert('Perfil atualizado!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -62,6 +63,7 @@ export const ProfileTab: React.FC = () => {
         name: formData.full_name || formData.name,
         first_login: false
       });
+      await refreshProfile();
       navigate('/', { replace: true });
       window.location.reload(); // Force refresh to update auth state/redirection logic
     } catch (error) {

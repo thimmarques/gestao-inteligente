@@ -18,6 +18,7 @@ interface AuthContextType {
   isLoading: boolean;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -85,8 +86,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const refreshProfile = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      await fetchProfile(session.user);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, signOut, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, isLoading, signOut, isAuthenticated: !!user, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -12,7 +12,7 @@ import {
 import { formatCurrency } from '../utils/formatters';
 import { TeamWidget } from '../components/dashboard/TeamWidget';
 import { CriticalLogsWidget } from '../components/dashboard/CriticalLogsWidget';
-import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
 import { DeadlineDetailsModal } from '../components/deadlines/DeadlineDetailsModal';
 import { scheduleService } from '../services/scheduleService';
@@ -55,8 +55,15 @@ const KPICard = ({ label, value, trend, isPositive, icon, sub, onClick, colorCla
 );
 
 const Dashboard: React.FC = () => {
-  const { lawyer } = useApp();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return 'Bom dia';
+    if (hour >= 12 && hour < 18) return 'Boa tarde';
+    return 'Boa noite';
+  };
 
   const { data: clients = [], isLoading: loadingClients } = useClients();
   const { data: cases = [], isLoading: loadingCases } = useCases();
@@ -104,7 +111,9 @@ const Dashboard: React.FC = () => {
     <div className="p-6 md:p-10 space-y-10 animate-in fade-in duration-500 pb-32 text-slate-800 dark:text-slate-100 max-w-[1600px] mx-auto">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Bom dia, Dr. {lawyer?.name || 'Advogado'}</h1>
+          <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+            {getGreeting()}, {user?.name || 'Advogado'}
+          </h1>
           <p className="text-slate-500 dark:text-slate-400 font-medium">Aqui está o resumo estratégico do seu escritório hoje.</p>
         </div>
         <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-white dark:bg-slate-900 px-4 py-2 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
@@ -184,7 +193,7 @@ const Dashboard: React.FC = () => {
 
         <div className="space-y-6">
           <TeamWidget />
-          {lawyer?.role === 'admin' && <CriticalLogsWidget />}
+          {user?.role === 'admin' && <CriticalLogsWidget />}
         </div>
       </div>
 
