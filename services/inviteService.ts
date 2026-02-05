@@ -1,58 +1,80 @@
-import { TeamRole } from "../types/team.ts";
-import { supabase } from "../lib/supabase";
+import { supabase } from '../lib/supabase';
+import { Role } from '../types';
 
-export interface PendingInvite {
+export interface Invite {
   id: string;
-  email: string;
-  role: TeamRole;
-  sender_id: string;
   office_id: string;
-  status: "pending" | "accepted" | "expired" | "canceled";
+  email: string;
+  role: Role;
+  token: string;
+  created_by: string;
   created_at: string;
   expires_at: string;
+  accepted_at: string | null;
 }
 
 export const inviteService = {
-  sendInvite: async (
-    email: string,
-    role: TeamRole,
-    senderId: string,
-    officeId: string,
-  ): Promise<void> => {
-    const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 7);
+  // Admin/Lawyer: Create an invite
+  async createInvite(email: string, role: string) {
+    // Generate a simple random token for MVP (in production, use crypto.randomUUID)
+    const token = crypto.randomUUID();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiry
 
-    const { error } = await supabase.from("invites").insert({
-      email,
-      role,
-      sender_id: senderId,
-      office_id: officeId,
-      status: "pending",
-      expires_at: expiryDate.toISOString(),
+    // We use the 'invites' table directly via RLS
+    // Note: get_auth_office_id() in database handles the office assignment validation via RLS policy
+    // But we need to pass office_id if we want to be explicit, OR let the RLS/Trigger handle it.
+    // However, our policy says "Admins can manage office invites WHERE office_id = get_auth_office_id()".
+    // So we must Insert with the correct office_id.
+
+    // First, let's get the current user's office_id from profiles (client side or assume checking)
+    // For safety, we can query it first or rely on the fact that RLS 'WITH CHECK' might fail if we guess wrong.
+    // A better approach for the MVP is: fetch profile first.
+
+    // Actually, simpler: Let the user provide it from their context, or fetch it here.
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Usuario nao autenticado');
+
+    const { data: profile } = await supabase.from('profiles').select('office_id').eq('id', user.id).single();
+    if (!profile?.office_id) throw new Error('Usuario sem escritorio');
+
+    const { data, error } = await supabase
+      .from('invites')
+      .insert({
+        office_id: profile.office_id,
+        email,
+        role,
+        token,
+        created_by: user.id,
+        expires_at: expiresAt.toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Admin: List invites
+  async listInvites() {
+    const { data, error } = await supabase
+      .from('invites')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as Invite[];
+  },
+
+  // Public: Accept invite (Calls Edge Function)
+  async acceptInvite(token: string, password: string, fullName: string) {
+    const { data, error } = await supabase.functions.invoke('accept-invite', {
+      body: { token, password, full_name: fullName }
     });
 
     if (error) throw error;
+    if (data?.error) throw new Error(data.error);
 
-    // In a real app, this would trigger an Edge Function to send email
-    console.log(`[SUPABASE] Convite registrado para ${email}`);
-  },
-
-  getPendingInvites: async (): Promise<PendingInvite[]> => {
-    const { data, error } = await supabase
-      .from("invites")
-      .select("*")
-      .eq("status", "pending");
-
-    if (error) throw error;
-    return data || [];
-  },
-
-  cancelInvite: async (id: string): Promise<void> => {
-    const { error } = await supabase
-      .from("invites")
-      .update({ status: "canceled" })
-      .eq("id", id);
-
-    if (error) throw error;
-  },
+    return data;
+  }
 };

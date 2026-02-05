@@ -22,6 +22,9 @@ const queryClient = new QueryClient({
 });
 
 // Pages
+import { InvitePage } from './pages/auth/InvitePage';
+import { InvitesList } from './components/admin/InvitesList';
+
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const Clients = lazy(() => import("./pages/Clients.tsx"));
 const Finance = lazy(() => import("./pages/Finance.tsx"));
@@ -67,12 +70,19 @@ const AppRoutes = () => {
           </Suspense>
         }
       />
+      <Route path="/auth/invite" element={<InvitePage />} />
       <Route
         path="/auth/signup"
         element={
-          <Suspense fallback={<PageLoader />}>
-            <Signup />
-          </Suspense>
+          import.meta.env.VITE_INVITE_ONLY_MODE === 'true' ? (
+            <div className="min-h-screen flex items-center justify-center font-bold text-slate-500">
+              Acesso somente por convite. Solicite ao administrador.
+            </div>
+          ) : (
+            <Suspense fallback={<PageLoader />}>
+              <Signup />
+            </Suspense>
+          )
         }
       />
       <Route
@@ -91,6 +101,7 @@ const AppRoutes = () => {
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
+                  <Route path="/admin/invites" element={<div className="p-8"><h1 className="text-2xl font-bold mb-6 dark:text-white">Gestão de Convites</h1><InvitesList /></div>} />
                   <Route path="/clientes" element={<Clients />} />
                   <Route path="/processos" element={<Cases />} />
                   <Route path="/agenda" element={<Schedule />} />

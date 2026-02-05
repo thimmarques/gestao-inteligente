@@ -44,3 +44,22 @@ To maintain optimal performance (`Lighthouse Score > 90`):
 - [x] **RLS Refined**: `profiles` policy documented as Single Tenant (MVP). Code for Multi-tenant restriction prepared in migrations.
 - [x] **Visual Feedback**: `sonner` (Toast) replaces `alert()` and `console.error` in Auth & Forms.
 - [x] **Code Style**: Prettier check added to CI (`npm run prettier:check`).
+
+## 🚀 Piloto: Autenticação por Convite
+
+Este recurso experimental permite que admins convidem novos membros.
+
+### Rotas
+- **Admin**: `/admin/invites` (Gerar convites)
+- **Convite**: `/auth/invite?token=...` (Link enviado ao usuário)
+
+### Configuração
+Para desativar o cadastro público e usar apenas convites, defina no `.env`:
+```bash
+VITE_INVITE_ONLY_MODE=true
+```
+
+### Deploy da Edge Function
+```bash
+npx supabase functions deploy accept-invite --no-verify-jwt
+```
