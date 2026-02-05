@@ -4,12 +4,20 @@ CREATE TABLE IF NOT EXISTS public.invites (
   office_id UUID REFERENCES public.offices(id) NOT NULL,
   email TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('admin', 'lawyer', 'assistant', 'intern')),
-  token TEXT NOT NULL UNIQUE,
+  token TEXT UNIQUE, -- Made nullable initially here to be safe, or we handle it next
   created_by UUID REFERENCES auth.users(id) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
   accepted_at TIMESTAMP WITH TIME ZONE
 );
+
+-- Safely ensure token column exists if table already existed without it
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='invites' AND column_name='token') THEN
+     ALTER TABLE public.invites ADD COLUMN token TEXT UNIQUE;
+  END IF;
+END $$;
 
 -- Create Indexes
 CREATE INDEX IF NOT EXISTS idx_invites_token ON public.invites(token);

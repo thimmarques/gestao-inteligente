@@ -71,7 +71,7 @@ const AppRoutes = () => {
       <Route
         path="/auth/signup"
         element={
-          import.meta.env.VITE_INVITE_ONLY_MODE === 'true' ? (
+          import.meta.env.VITE_INVITE_ONLY_MODE === "true" ? (
             <div className="min-h-screen flex items-center justify-center font-bold text-slate-500">
               Acesso somente por convite. Solicite ao administrador.
             </div>

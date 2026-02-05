@@ -50,6 +50,7 @@ To maintain optimal performance (`Lighthouse Score > 90`):
 O sistema utiliza um fluxo seguro baseado em convites por email.
 
 ### Como funciona
+
 1. **Envio:** O Admin acessa `Configurações > Membros e Convites` e envia um convite por email.
    - O convite é registrado no banco como `status: sent`.
    - Uma Edge Function (`send-invite-email`) garante a segurança e envia o email (mockado no console por enquanto).
@@ -60,11 +61,14 @@ O sistema utiliza um fluxo seguro baseado em convites por email.
    - O convite é marcado como `accepted`.
 
 ### Configuração
+
 Para restringir o acesso público e permitir apenas convidados:
+
 1. Defina `VITE_INVITE_ONLY_MODE=true` no `.env`.
 2. Isso ocultará o formulário de cadastro público.
 
 ### Setup Inicial (Bootstrap)
+
 Como o primeiro usuário não tem quem o convide, ele deve ser criado manualmente ou via SQL se o `VITE_INVITE_ONLY_MODE` estiver ativo.
 
 **Opção 1 (Recomendada):** Deixe `VITE_INVITE_ONLY_MODE=false` inicialmente, crie o primeiro usuário (que gerará seu escritório automaticamente), e depois ative o modo restrito.
@@ -77,13 +81,15 @@ Se precisar promover um usuário existente ou criar um escritório manualmente:
 INSERT INTO public.offices (name) VALUES ('Meu Escritório') RETURNING id;
 
 -- 2. Vincule o Usuário (pegue o ID do usuário em auth.users)
-UPDATE public.profiles 
-SET office_id = 'ID_DO_ESCRITORIO', role = 'admin' 
+UPDATE public.profiles
+SET office_id = 'ID_DO_ESCRITORIO', role = 'admin'
 WHERE email = 'seu@email.com';
 ```
 
 ### Deploy da Edge Function
+
 ```bash
 supabase functions deploy send-invite-email --no-verify-jwt
 ```
-*Nota: `--no-verify-jwt` é usado porque a função verifica a autenticação internamente para validar permissões customizadas.*
+
+_Nota: `--no-verify-jwt` é usado porque a função verifica a autenticação internamente para validar permissões customizadas._
