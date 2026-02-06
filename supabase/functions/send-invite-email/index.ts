@@ -23,11 +23,32 @@ Deno.serve(async (req) => {
       throw new Error('Internal infrastructure error: missing secrets');
     }
 
-    // 1. Auth Validation (User Request Fix)
-    // 1. Auth Validation (Instrumented)
-    const authHeader = req.headers.get('Authorization');
+    // 2. Parse Body First (to get token fallback if needed)
+    let body;
+    try {
+      body = await req.json();
+      console.log('[DEBUG] Request body:', body);
+    } catch (e) {
+      console.error('[DEBUG] Failed to parse request JSON:', e);
+      return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
 
-    // Check strict Bearer presence
+    // 3. Auth Validation (Check Header OR Body Fallback)
+    let authHeader = req.headers.get('Authorization');
+
+    // Fallback: check body if header missing
+    if (
+      (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) &&
+      body?.token_fallback
+    ) {
+      console.log('[DEBUG] Using token_fallback from body');
+      authHeader = `Bearer ${body.token_fallback}`;
+    }
+
+    // Check strict Bearer presence again
     if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
       console.error('[DEBUG] Missing or invalid Authorization header');
       return new Response(
@@ -78,18 +99,6 @@ Deno.serve(async (req) => {
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRole);
 
     console.log('[DEBUG] User authenticated:', user.id);
-
-    let body;
-    try {
-      body = await req.json();
-      console.log('[DEBUG] Request body:', body);
-    } catch (e) {
-      console.error('[DEBUG] Failed to parse request JSON:', e);
-      return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
-      });
-    }
 
     const { email, role } = body;
 

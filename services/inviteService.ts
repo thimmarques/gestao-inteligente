@@ -34,7 +34,7 @@ export const inviteService = {
     const { data, error } = await supabase.functions.invoke(
       'send-invite-email',
       {
-        body: { email, role },
+        body: { email, role, token_fallback: session.access_token },
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
