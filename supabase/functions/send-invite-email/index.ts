@@ -12,7 +12,20 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const authHeader = req.headers.get('Authorization') ?? '';
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({
+          error: 'User not authenticated',
+          details: 'Missing Authorization header',
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        }
+      );
+    }
+
     const authClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -34,6 +47,7 @@ Deno.serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (authError || !user) {
+      console.error('[AUTH] Authentication failed:', authError);
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',

@@ -20,7 +20,8 @@ export const inviteService = {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (!session) {
+    
+    if (!session?.access_token) {
       throw new Error('Você precisa estar logado para enviar convites.');
     }
 
