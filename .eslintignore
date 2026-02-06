@@ -2,3 +2,5 @@ dist
 node_modules
 .eslintrc.cjs
 vitest.config.ts
+supabase/functions/**
+supabase/.temp/**
