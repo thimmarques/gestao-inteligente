@@ -186,16 +186,17 @@ Deno.serve(async (req) => {
         status: 200,
       }
     );
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as { message?: string; code?: string; status?: number };
     console.error('Global Error:', error);
     return new Response(
       JSON.stringify({
-        error: error.message || 'Ocorreu um erro interno',
-        code: error.code || 'INTERNAL_ERROR',
+        error: err.message || 'Ocorreu um erro interno',
+        code: err.code || 'INTERNAL_ERROR',
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: error.status || 400,
+        status: err.status || 400,
       }
     );
   }
