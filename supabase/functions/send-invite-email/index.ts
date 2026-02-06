@@ -107,7 +107,8 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',
-          details: 'Invalid or expired token (Manual Verification)',
+          details: `Manual Verification Failed: ${e instanceof Error ? e.message : String(e)}`,
+          debug_secret_len: supabaseJwtSecret ? supabaseJwtSecret.length : 0, // Debugging secret presence
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
