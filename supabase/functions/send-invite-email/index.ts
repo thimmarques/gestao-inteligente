@@ -23,17 +23,30 @@ Deno.serve(async (req) => {
       throw new Error('Internal infrastructure error: missing secrets');
     }
 
-    // 2. Parse Body First (to get token fallback if needed)
-    let body;
+    // 2. Parse Body First (Robustly)
+    // deno-lint-ignore no-explicit-any
+    let body: any = {};
     try {
-      body = await req.json();
-      console.log('[DEBUG] Request body:', body);
+      const text = await req.text();
+      if (text) {
+        body = JSON.parse(text);
+        // Handle "double-stringified" body which can happen with some client versions
+        if (typeof body === 'string') {
+          try {
+            body = JSON.parse(body);
+          } catch (_e) {
+            // ignore if it's just a string body
+            console.log('[DEBUG] Body is a string, not JSON');
+          }
+        }
+      }
+      console.log(
+        '[DEBUG] Request body:',
+        typeof body === 'object' ? JSON.stringify(body) : body
+      );
     } catch (e) {
       console.error('[DEBUG] Failed to parse request JSON:', e);
-      return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
-      });
+      // Don't fail hard here, continue with empty body to see if we can at least log auth
     }
 
     // 3. Auth Validation (Check Header OR Body Fallback)
