@@ -16,10 +16,10 @@ import { clientService } from '../services/clientService';
 import { Client } from '../types';
 import { formatPhone } from '../utils/formatters';
 import { CreateClientModal } from '../components/clients/CreateClientModal';
-import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const Clients: React.FC = () => {
-  const { lawyer } = useApp();
+  const { user: lawyer } = useAuth();
   const { data: clients = [], isLoading, refetch } = useClients();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('todos');

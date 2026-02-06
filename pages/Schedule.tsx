@@ -32,7 +32,7 @@ import { scheduleService } from '../services/scheduleService';
 import { filterSchedules, ScheduleFilters } from '../utils/scheduleFilters';
 import { getEventColor } from '../utils/eventColors';
 import { ScheduleEvent } from '../types';
-import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useSchedules } from '../hooks/useQueries';
 
 const locales = { 'pt-BR': ptBR };
@@ -45,7 +45,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const Schedule: React.FC = () => {
-  const { lawyer } = useApp();
+  const { user: lawyer } = useAuth();
   const [view, setView] = useState<CalendarViewType>('month');
   const [date, setDate] = useState(new Date());
   const { data: schedules = [], isLoading, refetch } = useSchedules();
