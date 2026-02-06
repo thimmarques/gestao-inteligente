@@ -57,6 +57,7 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -95,6 +96,8 @@ jobs:
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
         if: always() && env.SLACK_WEBHOOK_URL != ''
+        # env:
+        #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
