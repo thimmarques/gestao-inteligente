@@ -32,13 +32,19 @@ Deno.serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (!user) {
-      throw new Error('User not authenticated');
+      return new Response(JSON.stringify({ error: 'User not authenticated' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 401,
+      });
     }
 
     const { email, role } = await req.json();
 
     if (!email || !role) {
-      throw new Error('Email and Role are required');
+      return new Response(JSON.stringify({ error: 'Email and Role are required' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
     }
 
     // 1. Get Creator's Profile (Office & Role) using Admin client to bypass RLS
@@ -50,7 +56,10 @@ Deno.serve(async (req) => {
 
     if (profileError || !profile?.office_id) {
       console.error('Profile Error:', profileError);
-      throw new Error('Profile not found or no office assigned');
+      return new Response(JSON.stringify({ error: 'Profile not found or no office assigned' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 404,
+      });
     }
 
     // 2. Permission Check
@@ -58,10 +67,16 @@ Deno.serve(async (req) => {
     if (profile.role !== 'admin') {
       if (profile.role === 'lawyer') {
         if (!['assistant', 'intern'].includes(role)) {
-          throw new Error('Lawyers can only invite Assistants or Interns');
+          return new Response(JSON.stringify({ error: 'Lawyers can only invite Assistants or Interns' }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 403,
+          });
         }
       } else {
-        throw new Error('Permission denied: You cannot send invites.');
+        return new Response(JSON.stringify({ error: 'Permission denied: You cannot send invites.' }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 403,
+        });
       }
     }
 
