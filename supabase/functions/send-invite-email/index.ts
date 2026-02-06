@@ -14,38 +14,26 @@ Deno.serve(async (req) => {
   try {
     console.log('[DEBUG] Request received:', req.method);
 
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      console.error('[DEBUG] Missing Authorization header');
-      return new Response(
-        JSON.stringify({
-          error: 'User not authenticated',
-          details: 'Missing Authorization header',
-        }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 401,
-        }
-      );
-    }
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
-    const supabaseServiceRole = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabaseServiceRole = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
     if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRole) {
       console.error('[DEBUG] Missing environment variables');
       throw new Error('Internal infrastructure error: missing secrets');
     }
 
+    // 1. Auth Validation (User Request Fix)
+    const authHeader = req.headers.get('Authorization') ?? '';
+
+    // Create client with SUPABASE_ANON_KEY and pass the bearer token
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
         headers: { Authorization: authHeader },
       },
     });
 
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRole);
-
+    // Validate user using getUser()
     const {
       data: { user },
       error: authError,
@@ -64,6 +52,8 @@ Deno.serve(async (req) => {
         }
       );
     }
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRole);
 
     console.log('[DEBUG] User authenticated:', user.id);
 
