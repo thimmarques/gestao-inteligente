@@ -34,8 +34,15 @@ export const inviteService = {
     );
 
     if (error) {
-      // supabase-js functions.invoke returns error if network fails or non-2xx status
-      // We try to extract more info if available
+      console.error('Edge Function Error:', error);
+      // Try to extract the error message from the response body if available
+      if (error instanceof Error && 'context' in error) {
+        // @ts-ignore
+        const body = await error.context.json().catch(() => ({}));
+        if (body.error) {
+          throw new Error(body.error); // Use the friendlier error message from the backend
+        }
+      }
       throw error;
     }
 
