@@ -10,14 +10,14 @@ import { TeamViewToggle } from '../components/team/TeamViewToggle';
 import { TeamFilters } from '../components/team/TeamFilters';
 import { AddTeamMemberModal } from '../components/team/AddTeamMemberModal';
 import { TeamMemberDetailsModal } from '../components/team/TeamMemberDetailsModal';
-import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 
 import { inviteService } from '../services/inviteService';
 import { useTeam } from '../hooks/useQueries';
 import { supabase } from '../lib/supabase';
 
 const PendingInvitesList: React.FC = () => {
-  const { lawyer: currentUser } = useApp();
+  const { user: currentUser } = useAuth();
   const { data: invites = [] as any[], isLoading } = useQuery({
     queryKey: ['invites'],
     queryFn: () => inviteService.listInvites(),
@@ -58,7 +58,7 @@ const PendingInvitesList: React.FC = () => {
 };
 
 const Team: React.FC = () => {
-  const { lawyer: currentUser } = useApp();
+  const { user: currentUser } = useAuth();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'cards' | 'table'>(
     () => (localStorage.getItem('team_view') as any) || 'cards'
@@ -153,11 +153,11 @@ const Team: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`px - 5 py - 2.5 rounded - xl text - [9px] font - black uppercase tracking - widest transition - all ${
+                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
                   activeTab === tab
                     ? 'bg-primary-600 text-white shadow-lg'
                     : 'text-slate-500 hover:text-slate-700'
-                } `}
+                }`}
               >
                 {tab === 'lawyer'
                   ? 'Advogado'

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { X, Mail, Plus, Loader2, Shield } from 'lucide-react';
 import { inviteService } from '../../services/inviteService';
-import { useApp } from '../../contexts/AppContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
 import { Role } from '../../types';
 
@@ -16,7 +16,7 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const { lawyer: currentUser } = useApp();
+  const { user: currentUser } = useAuth();
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<string>('lawyer');
   const [isSubmitting, setIsSubmitting] = useState(false);
