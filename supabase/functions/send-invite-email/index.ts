@@ -192,7 +192,6 @@ Deno.serve(async (req) => {
         token: token,
         expires_at: expiresAt.toISOString(),
         created_by: user.id,
-        sender_id: user.id,
       })
       .select()
       .single();

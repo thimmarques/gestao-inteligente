@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useClients } from '../hooks/useQueries';
 import { clientService } from '../services/clientService';
+import { caseService } from '../services/caseService';
 import { Client } from '../types';
 import { formatPhone } from '../utils/formatters';
 import { CreateClientModal } from '../components/clients/CreateClientModal';
@@ -37,22 +38,87 @@ const Clients: React.FC = () => {
     });
   }, [clients, searchTerm, filterType]);
 
-  const handleSaveClient = async (data: any) => {
+  const handleSaveClient = async (formData: any) => {
     if (!lawyer) return;
 
     try {
+      // 1. Extrair e formatar dados extras para o campo notes
+      const {
+        address,
+        rg,
+        rg_issuer,
+        profession,
+        income,
+        nationality,
+        marital_status,
+        process,
+        ...clientData
+      } = formData;
+
+      const addressString = address
+        ? `\n\nENDEREÇO:\n${address.street || ''}, ${address.number || ''} - ${address.neighborhood || ''}\n${address.city || ''} - ${address.state || ''}\nCEP: ${address.cep || ''}`
+        : '';
+
+      const personalInfoString = `\n\nDADOS PESSOAIS:\nRG: ${rg || '-'} (${rg_issuer || '-'})\nProfissão: ${profession || '-'}\nRenda: ${income || '-'}\nNacionalidade: ${nationality || '-'}\nEstado Civil: ${marital_status || '-'}`;
+
+      const finalNotes =
+        (clientData.notes || '') + personalInfoString + addressString;
+
+      const cleanClientData = {
+        ...clientData,
+        notes: finalNotes,
+        office_id: lawyer.office_id,
+      };
+
+      let savedClient: Client;
+
       if (editingClient) {
-        await clientService.updateClient(editingClient.id, data);
+        // Remove office_id from update if present to avoid RLS issues or unwanted changes
+        // identifying fields to update
+        const { office_id, ...updateData } = cleanClientData;
+        savedClient = await clientService.updateClient(
+          editingClient.id,
+          updateData
+        );
       } else {
-        await clientService.createClient({
-          ...data,
-          office_id: lawyer.office_id,
-        });
+        savedClient = await clientService.createClient(cleanClientData);
+
+        // 2. Se houver processo, criar o caso relacionado
+        if (process && process.number) {
+          try {
+            // Import CaseStatus dynamically or use string 'andamento' if matched with DB constraint
+            // Importing caseService at the top of file is needed.
+            // Using logic here assuming caseService is available.
+            await caseService.createCase({
+              client_id: savedClient.id,
+              lawyer_id: lawyer.id,
+              office_id: lawyer.office_id,
+              process_number: process.number,
+              court: 'Tribunal de Justiça', // Default
+              type: process.legal_area || 'cível',
+              status: 'andamento' as any, // Cast to any or CaseStatus.ANDAMENTO
+              value: clientData.financial_profile?.valor_honorarios
+                ? parseFloat(clientData.financial_profile.valor_honorarios)
+                : 0,
+              started_at: new Date().toISOString(),
+              notes: process.description || '',
+              tags: [],
+            });
+          } catch (caseError) {
+            console.error('Erro ao criar processo automático:', caseError);
+            // Non-blocking error for client creation
+            alert(
+              'Cliente salvo, mas houve um erro ao criar o processo automaticamente.'
+            );
+          }
+        }
       }
+
       refetch();
+      setIsModalOpen(false); // Close modal on success
     } catch (err) {
       console.error(err);
-      alert('Erro ao salvar cliente.');
+      alert('Erro ao salvar cliente: ' + (err as Error).message);
     }
   };
 
