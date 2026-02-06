@@ -1,4 +1,5 @@
 import { createClient } from 'supabase';
+import { verify } from 'djwt';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,8 +18,14 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseServiceRole = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseJwtSecret = Deno.env.get('SUPABASE_JWT_SECRET')!;
 
-    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRole) {
+    if (
+      !supabaseUrl ||
+      !supabaseAnonKey ||
+      !supabaseServiceRole ||
+      !supabaseJwtSecret
+    ) {
       console.error('[DEBUG] Missing environment variables');
       throw new Error('Internal infrastructure error: missing secrets');
     }
@@ -81,26 +88,26 @@ Deno.serve(async (req) => {
       authHeader.substring(0, 20) + '...'
     );
 
-    // Create client with SUPABASE_ANON_KEY and pass the bearer token
-    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: { Authorization: authHeader },
-      },
-    });
+    // Verify JWT manually
+    let user;
+    try {
+      const token = authHeader.replace('Bearer ', '');
+      const key = await crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(supabaseJwtSecret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['verify']
+      );
 
-    // Validate user using getUser()
-    const {
-      data: { user },
-      error: authError,
-    } = await authClient.auth.getUser();
-
-    if (authError || !user) {
-      console.error('[DEBUG] Auth validation failed. User:', user);
-      console.error('[DEBUG] Auth error:', authError);
+      const payload = await verify(token, key);
+      user = { id: payload.sub };
+    } catch (e) {
+      console.error('[DEBUG] JWT Verification failed:', e);
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',
-          details: authError?.message || 'Sessão inválida ou expirada',
+          details: 'Invalid or expired token (Manual Verification)',
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
