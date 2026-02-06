@@ -37,7 +37,7 @@ export const inviteService = {
       console.error('Edge Function Error:', error);
       // Try to extract the error message from the response body if available
       if (error instanceof Error && 'context' in error) {
-        // @ts-ignore
+        // @ts-expect-error - context exists on some Supabase errors but is not in the type definition
         const body = await error.context.json().catch(() => ({}));
         if (body.error) {
           throw new Error(body.error); // Use the friendlier error message from the backend
