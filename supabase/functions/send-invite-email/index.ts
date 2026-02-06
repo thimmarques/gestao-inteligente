@@ -100,11 +100,15 @@ Deno.serve(async (req) => {
       .single();
 
     if (profileError || !profile?.office_id) {
-      console.error('[DEBUG] Profile fetch failed:', profileError || 'No office_id');
+      console.error(
+        '[DEBUG] Profile fetch failed:',
+        profileError || 'No office_id'
+      );
       return new Response(
         JSON.stringify({
           error: 'Profile Error',
-          details: profileError?.message || 'Profile not found or no office assigned',
+          details:
+            profileError?.message || 'Profile not found or no office assigned',
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
