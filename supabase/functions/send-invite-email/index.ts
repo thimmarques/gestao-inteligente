@@ -100,7 +100,27 @@ Deno.serve(async (req) => {
         ['verify']
       );
 
-      const payload = await verify(token, key);
+      let payload = await verify(token, key);
+
+      // If the header token is 'anon' role, check if we have a user token in the body
+      if (payload.role === 'anon' && body?.token_fallback) {
+        console.log(
+          '[DEBUG] Anon token detected, checking token_fallback for user auth'
+        );
+        try {
+          const userToken = body.token_fallback;
+          payload = await verify(userToken, key);
+          console.log('[DEBUG] Fallback token verified successfully');
+        } catch (fallbackError) {
+          console.error(
+            '[DEBUG] Fallback token verification failed:',
+            fallbackError
+          );
+          // Throw to trigger the catch block below
+          throw new Error(`Fallback Token Invalid: ${fallbackError}`);
+        }
+      }
+
       user = { id: payload.sub };
     } catch (e) {
       console.error('[DEBUG] JWT Verification failed:', e);

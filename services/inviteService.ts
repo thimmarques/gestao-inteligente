@@ -36,7 +36,7 @@ export const inviteService = {
       {
         body: { email, role, token_fallback: session.access_token },
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
       }
     );
