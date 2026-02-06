@@ -24,7 +24,23 @@ Deno.serve(async (req) => {
     }
 
     // 1. Auth Validation (User Request Fix)
-    const authHeader = req.headers.get('Authorization') ?? '';
+    // 1. Auth Validation (Instrumented)
+    const authHeader = req.headers.get('Authorization');
+
+    // Check strict Bearer presence
+    if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
+      console.error('[DEBUG] Missing or invalid Authorization header');
+      return new Response(
+        JSON.stringify({
+          error: 'User not authenticated',
+          details: 'Missing Bearer token',
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        }
+      );
+    }
 
     // Create client with SUPABASE_ANON_KEY and pass the bearer token
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
