@@ -48,7 +48,11 @@ export const inviteService = {
         // @ts-expect-error - context exists on some Supabase errors but is not in the type definition
         const body = await error.context.json().catch(() => ({}));
         if (body.error) {
-          throw new Error(body.error); // Use the friendlier error message from the backend
+          // Include details if available for debugging
+          const details = body.details
+            ? ` (${JSON.stringify(body.details)})`
+            : '';
+          throw new Error(`${body.error}${details}`);
         }
       }
       throw error;
