@@ -12,12 +12,13 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization') ?? '';
     const authClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: authHeader },
         },
       }
     );
@@ -29,14 +30,23 @@ Deno.serve(async (req) => {
 
     const {
       data: { user },
+      error: authError,
     } = await authClient.auth.getUser();
 
-    if (!user) {
-      return new Response(JSON.stringify({ error: 'User not authenticated' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 401,
-      });
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({
+          error: 'User not authenticated',
+          details: authError?.message || 'Sessão inválida ou expirada',
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        }
+      );
     }
+
+    console.log(`[AUTH] User resolved: ${user.id}`);
 
     const { email, role } = await req.json();
 
