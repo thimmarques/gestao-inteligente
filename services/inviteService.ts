@@ -23,8 +23,15 @@ export const inviteService = {
       },
     );
 
-    if (error) throw error;
-    if (data?.error) throw new Error(data.error);
+    if (error) {
+      // supabase-js functions.invoke returns error if network fails or non-2xx status
+      // We try to extract more info if available
+      throw error;
+    }
+
+    if (data?.error) {
+      throw new Error(data.error);
+    }
 
     return data;
   },

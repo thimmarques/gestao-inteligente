@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.21.0";
 
 const corsHeaders = {
@@ -7,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -61,33 +60,32 @@ serve(async (req) => {
     }
 
     // 3. Upsert Invite (Prevent duplicates for pending)
-    // We use Service Role to bypass RLS for checking/inserting safely if needed,
-    // but better to use the user's context if Policies allow.
-    // However, for consistency and "system action" of sending email, we'll use Admin Client for the DB write
-    // to ensure we strictly control the data, though User Client is fine if RLS is correct.
-    // Let's stick to User Client first to respect RLS policies we created.
-
-    // Check if invite exists
     const { data: existingInvite } = await supabaseClient
       .from("invites")
       .select("id, status")
       .eq("office_id", profile.office_id)
       .eq("email", email)
-      .in("status", ["pending", "sent"])
+      .in("status", ["pending"])
       .maybeSingle();
 
     if (existingInvite) {
       return new Response(
         JSON.stringify({
-          message: "Invite already pending for this user.",
-          invite: existingInvite,
+          error: "Convite já pendente para este usuário.",
+          code: "DUPLICATE_INVITE",
+          details: { invite_id: existingInvite.id }
         }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 200,
+          status: 400,
         },
       );
     }
+
+    // Generate a secure token
+    const token = crypto.randomUUID();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiration
 
     // Insert new invite
     const { data: newInvite, error: insertError } = await supabaseClient
@@ -96,29 +94,44 @@ serve(async (req) => {
         office_id: profile.office_id,
         email,
         role,
-        status: "sent",
+        status: "pending",
+        token: token,
+        expires_at: expiresAt.toISOString(),
         created_by: user.id,
+        sender_id: user.id,
       })
       .select()
       .single();
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      console.error("Insert Error:", insertError);
+      return new Response(
+        JSON.stringify({
+          error: "Falha ao registrar convite no banco de dados.",
+          code: "DB_INSERT_ERROR",
+          details: insertError
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 500,
+        },
+      );
+    }
 
     // 4. Mock Email Sending
+    const inviteLink = `${req.headers.get("origin") || "http://localhost:5173"}/accept-invite?token=${token}`;
     console.log(
-      `[MOCK EMAIL] To: ${email} | Subject: Convite para ${profile.office_id} | From: ${profile.name}`,
+      `[MOCK EMAIL] To: ${email} | Subject: Convite para ${profile.office_id} | From: ${profile.name}`
     );
     console.log(
-      `[MOCK EMAIL] Body: Olá! Você foi convidado para participar do escritório no Gestão Inteligente.`,
-    );
-    console.log(
-      `[MOCK EMAIL] Action: Acesse ${req.headers.get("origin") || "http://localhost:5173"}/login para entrar.`,
+      `[MOCK EMAIL] Link: ${inviteLink}`
     );
 
     return new Response(
       JSON.stringify({
         message: "Invite sent successfully",
         invite: newInvite,
+        link: inviteLink, // For testing/dev purposes
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -126,9 +139,16 @@ serve(async (req) => {
       },
     );
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 400,
-    });
+    console.error("Global Error:", error);
+    return new Response(
+      JSON.stringify({
+        error: error.message || "Ocorreu um erro interno",
+        code: error.code || "INTERNAL_ERROR"
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: error.status || 400,
+      }
+    );
   }
 });

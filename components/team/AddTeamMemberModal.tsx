@@ -63,8 +63,24 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
       onClose();
       setEmail("");
     } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || "Erro ao enviar convite");
+      console.error("Erro ao enviar convite:", {
+        message: error.message,
+        name: error.name,
+        status: error.status,
+        context: error.context,
+        details: error
+      });
+
+      let errorMessage = "Erro ao enviar convite";
+
+      // Attempt to extract message from Supabase Edge Function error
+      if (error.context?.json?.error) {
+        errorMessage = error.context.json.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
