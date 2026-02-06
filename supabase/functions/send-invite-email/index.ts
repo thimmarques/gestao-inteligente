@@ -12,8 +12,11 @@ Deno.serve(async (req) => {
   }
 
   try {
+    console.log('[DEBUG] Request received:', req.method);
+
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
+      console.error('[DEBUG] Missing Authorization header');
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',
@@ -26,20 +29,22 @@ Deno.serve(async (req) => {
       );
     }
 
-    const authClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: authHeader },
-        },
-      }
-    );
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    const supabaseServiceRole = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRole) {
+      console.error('[DEBUG] Missing environment variables');
+      throw new Error('Internal infrastructure error: missing secrets');
+    }
+
+    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    });
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRole);
 
     const {
       data: { user },
@@ -47,7 +52,7 @@ Deno.serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (authError || !user) {
-      console.error('[AUTH] Authentication failed:', authError);
+      console.error('[DEBUG] Auth validation failed:', authError);
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',
@@ -60,9 +65,21 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log(`[AUTH] User resolved: ${user.id}`);
+    console.log('[DEBUG] User authenticated:', user.id);
 
-    const { email, role } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+      console.log('[DEBUG] Request body:', body);
+    } catch (e) {
+      console.error('[DEBUG] Failed to parse request JSON:', e);
+      return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
+
+    const { email, role } = body;
 
     if (!email || !role) {
       return new Response(
@@ -75,6 +92,7 @@ Deno.serve(async (req) => {
     }
 
     // 1. Get Creator's Profile (Office & Role) using Admin client to bypass RLS
+    console.log('[DEBUG] Fetching profile for user:', user.id);
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
       .select('office_id, role, name')
@@ -82,15 +100,20 @@ Deno.serve(async (req) => {
       .single();
 
     if (profileError || !profile?.office_id) {
-      console.error('Profile Error:', profileError);
+      console.error('[DEBUG] Profile fetch failed:', profileError || 'No office_id');
       return new Response(
-        JSON.stringify({ error: 'Profile not found or no office assigned' }),
+        JSON.stringify({
+          error: 'Profile Error',
+          details: profileError?.message || 'Profile not found or no office assigned',
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 404,
         }
       );
     }
+
+    console.log('[DEBUG] Profile found:', profile);
 
     // 2. Permission Check
     // Admin can invite anyone. Lawyer can ONLY invite assistant/intern.
@@ -201,16 +224,27 @@ Deno.serve(async (req) => {
       }
     );
   } catch (error) {
-    const err = error as { message?: string; code?: string; status?: number };
-    console.error('Global Error:', error);
+    const err = error as {
+      message?: string;
+      code?: string;
+      status?: number;
+      stack?: string;
+    };
+    console.error('[DEBUG] Global Error Catch-all:', {
+      message: err.message,
+      code: err.code,
+      status: err.status,
+      stack: err.stack,
+    });
     return new Response(
       JSON.stringify({
-        error: err.message || 'Ocorreu um erro interno',
+        error: err.message || 'Ocorreu um erro interno inesperado',
         code: err.code || 'INTERNAL_ERROR',
+        details: err.stack, // Help identify where it crashed
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: err.status || 400,
+        status: err.status || 500, // Revert to 500 for unexpected errors unless status provided
       }
     );
   }
