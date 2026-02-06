@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const supabaseClient = createClient(
+    const authClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
@@ -22,9 +22,14 @@ Deno.serve(async (req) => {
       }
     );
 
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
     const {
       data: { user },
-    } = await supabaseClient.auth.getUser();
+    } = await authClient.auth.getUser();
 
     if (!user) {
       throw new Error('User not authenticated');
@@ -36,14 +41,15 @@ Deno.serve(async (req) => {
       throw new Error('Email and Role are required');
     }
 
-    // 1. Get Creator's Profile (Office & Role)
-    const { data: profile, error: profileError } = await supabaseClient
+    // 1. Get Creator's Profile (Office & Role) using Admin client to bypass RLS
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
       .select('office_id, role, name')
       .eq('id', user.id)
       .single();
 
     if (profileError || !profile?.office_id) {
+      console.error('Profile Error:', profileError);
       throw new Error('Profile not found or no office assigned');
     }
 
@@ -60,7 +66,7 @@ Deno.serve(async (req) => {
     }
 
     // 3. Upsert Invite (Prevent duplicates for pending)
-    const { data: existingInvite } = await supabaseClient
+    const { data: existingInvite } = await supabaseAdmin
       .from('invites')
       .select('id, status')
       .eq('office_id', profile.office_id)
@@ -87,8 +93,8 @@ Deno.serve(async (req) => {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiration
 
-    // Insert new invite
-    const { data: newInvite, error: insertError } = await supabaseClient
+    // Insert new invite using Admin client
+    const { data: newInvite, error: insertError } = await supabaseAdmin
       .from('invites')
       .insert({
         office_id: profile.office_id,
@@ -113,7 +119,7 @@ Deno.serve(async (req) => {
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 500,
+          status: 400, // Using 400 for better frontend visibility of the error
         }
       );
     }
