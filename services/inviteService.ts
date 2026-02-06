@@ -30,6 +30,9 @@ export const inviteService = {
       'send-invite-email',
       {
         body: { email, role },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       }
     );
 
