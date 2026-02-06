@@ -1,12 +1,12 @@
-import { ScheduleEvent } from "../types";
+import { ScheduleEvent } from '../types';
 
 export function checkScheduleConflict(
   newEvent: { start: Date; end: Date; lawyer_id: string },
-  existingEvents: ScheduleEvent[],
+  existingEvents: ScheduleEvent[]
 ): ScheduleEvent | null {
   // Filtrar eventos do mesmo advogado que não estejam cancelados
   const lawyerEvents = existingEvents.filter(
-    (e) => e.lawyer_id === newEvent.lawyer_id && e.status !== "cancelado",
+    (e) => e.lawyer_id === newEvent.lawyer_id && e.status !== 'cancelado'
   );
 
   // Verificar sobreposição

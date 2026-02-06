@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Lock,
   Eye,
@@ -9,32 +9,32 @@ import {
   X,
   ShieldCheck,
   Loader2,
-} from "lucide-react";
+} from 'lucide-react';
 
 export const SecurityTab: React.FC = () => {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [passwords, setPasswords] = useState({
-    current: "",
-    new: "",
-    confirm: "",
+    current: '',
+    new: '',
+    confirm: '',
   });
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsChanging(true);
     await new Promise((r) => setTimeout(r, 1500));
-    setPasswords({ current: "", new: "", confirm: "" });
+    setPasswords({ current: '', new: '', confirm: '' });
     setIsChanging(false);
-    alert("Senha alterada!");
+    alert('Senha alterada!');
   };
 
   const handleDeleteAccount = () => {
-    const confirmText = prompt("Digite DELETE para confirmar:");
-    if (confirmText === "DELETE") {
+    const confirmText = prompt('Digite DELETE para confirmar:');
+    if (confirmText === 'DELETE') {
       localStorage.clear();
-      window.location.href = "/#/login";
+      window.location.href = '/#/login';
     }
   };
 
@@ -57,7 +57,7 @@ export const SecurityTab: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type={showCurrent ? "text" : "password"}
+                type={showCurrent ? 'text' : 'password'}
                 value={passwords.current}
                 onChange={(e) =>
                   setPasswords({ ...passwords, current: e.target.value })
@@ -80,7 +80,7 @@ export const SecurityTab: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type={showNew ? "text" : "password"}
+                type={showNew ? 'text' : 'password'}
                 value={passwords.new}
                 onChange={(e) =>
                   setPasswords({ ...passwords, new: e.target.value })

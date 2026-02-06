@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Sun,
   Moon,
@@ -9,8 +9,8 @@ import {
   Clock,
   Save,
   Loader2,
-} from "lucide-react";
-import { useTheme } from "../../hooks/useTheme.ts";
+} from 'lucide-react';
+import { useTheme } from '../../hooks/useTheme.ts';
 
 export const PreferencesTab: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -29,11 +29,11 @@ export const PreferencesTab: React.FC = () => {
     setIsSaving(true);
     await new Promise((r) => setTimeout(r, 1000));
     localStorage.setItem(
-      "legaltech_preferences",
-      JSON.stringify({ fontSize, notifications }),
+      'legaltech_preferences',
+      JSON.stringify({ fontSize, notifications })
     );
     setIsSaving(false);
-    alert("Preferências salvas!");
+    alert('Preferências salvas!');
   };
 
   const toggleNotification = (key: keyof typeof notifications) => {
@@ -41,9 +41,9 @@ export const PreferencesTab: React.FC = () => {
   };
 
   const themes = [
-    { id: "light", label: "Claro", icon: Sun },
-    { id: "dark", label: "Escuro", icon: Moon },
-    { id: "system", label: "Sistema", icon: Monitor },
+    { id: 'light', label: 'Claro', icon: Sun },
+    { id: 'dark', label: 'Escuro', icon: Moon },
+    { id: 'system', label: 'Sistema', icon: Monitor },
   ];
 
   return (
@@ -72,17 +72,17 @@ export const PreferencesTab: React.FC = () => {
                   onClick={() => setTheme(t.id as any)}
                   className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all group ${
                     isActive
-                      ? "border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg"
-                      : "border-slate-100 dark:border-slate-800 hover:border-slate-200"
+                      ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg'
+                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isActive ? "bg-primary-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500"}`}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isActive ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500'}`}
                   >
                     <Icon size={20} />
                   </div>
                   <span
-                    className={`text-sm font-bold uppercase tracking-widest ${isActive ? "text-primary-700 dark:text-primary-400" : "text-slate-500"}`}
+                    className={`text-sm font-bold uppercase tracking-widest ${isActive ? 'text-primary-700 dark:text-primary-400' : 'text-slate-500'}`}
                   >
                     {t.label}
                   </span>

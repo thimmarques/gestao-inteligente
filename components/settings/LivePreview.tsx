@@ -1,6 +1,6 @@
-import React from "react";
-import { useApp } from "../../contexts/AppContext.tsx";
-import { Search, Bell, Moon, User, ChevronDown } from "lucide-react";
+import React from 'react';
+import { useApp } from '../../contexts/AppContext.tsx';
+import { Search, Bell, Moon, User, ChevronDown } from 'lucide-react';
 
 export const LivePreview: React.FC = () => {
   const { lawyer, office } = useApp();
@@ -71,7 +71,7 @@ export const LivePreview: React.FC = () => {
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className={`h-6 rounded-lg ${i === 1 ? "bg-primary-600 shadow-lg shadow-primary-500/20" : "bg-slate-100 dark:bg-slate-900"}`}
+                    className={`h-6 rounded-lg ${i === 1 ? 'bg-primary-600 shadow-lg shadow-primary-500/20' : 'bg-slate-100 dark:bg-slate-900'}`}
                   />
                 ))}
               </div>

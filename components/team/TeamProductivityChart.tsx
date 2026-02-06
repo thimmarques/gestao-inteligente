@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -9,9 +9,9 @@ import {
   ResponsiveContainer,
   Legend,
   Cell,
-} from "recharts";
-import { Calendar, TrendingUp } from "lucide-react";
-import { TeamMember } from "../../types/team";
+} from 'recharts';
+import { Calendar, TrendingUp } from 'lucide-react';
+import { TeamMember } from '../../types/team';
 
 interface TeamProductivityChartProps {
   members: TeamMember[];
@@ -20,13 +20,13 @@ interface TeamProductivityChartProps {
 export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
   members,
 }) => {
-  const [period, setPeriod] = useState("este-mes");
+  const [period, setPeriod] = useState('este-mes');
 
   const data = useMemo(() => {
     return members
-      .filter((m) => m.role !== "assistente" && m.status === "ativo")
+      .filter((m) => m.role !== 'assistente' && m.status === 'ativo')
       .map((m) => ({
-        name: m.name.split(" ")[0],
+        name: m.name.split(' ')[0],
         processos: m.stats?.active_cases || 0,
         concluidos: m.stats?.completed_cases || 0,
         taxaSucesso: m.stats?.success_rate || 0,
@@ -47,14 +47,14 @@ export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
         </div>
 
         <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shadow-inner">
-          {["Este Mês", "Últimos 3 Meses", "Este Ano"].map((p) => (
+          {['Este Mês', 'Últimos 3 Meses', 'Este Ano'].map((p) => (
             <button
               key={p}
-              onClick={() => setPeriod(p.toLowerCase().replace(/ /g, "-"))}
+              onClick={() => setPeriod(p.toLowerCase().replace(/ /g, '-'))}
               className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
-                period === p.toLowerCase().replace(/ /g, "-")
-                  ? "bg-white dark:bg-slate-700 text-primary-600 shadow-sm"
-                  : "text-slate-400"
+                period === p.toLowerCase().replace(/ /g, '-')
+                  ? 'bg-white dark:bg-slate-700 text-primary-600 shadow-sm'
+                  : 'text-slate-400'
               }`}
             >
               {p}
@@ -79,25 +79,25 @@ export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#94a3b8", fontSize: 11, fontWeight: 700 }}
+              tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }}
               dy={10}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#94a3b8", fontSize: 11, fontWeight: 700 }}
+              tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#0f172a",
-                border: "none",
-                borderRadius: "1.5rem",
-                color: "#fff",
-                fontSize: "12px",
-                boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+                backgroundColor: '#0f172a',
+                border: 'none',
+                borderRadius: '1.5rem',
+                color: '#fff',
+                fontSize: '12px',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
               }}
-              itemStyle={{ padding: "4px 0" }}
-              cursor={{ fill: "rgba(59, 130, 246, 0.05)" }}
+              itemStyle={{ padding: '4px 0' }}
+              cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
             />
             <Legend
               verticalAlign="top"

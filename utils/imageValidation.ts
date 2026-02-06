@@ -1,4 +1,4 @@
-import { formatFileSize } from "./formatters";
+import { formatFileSize } from './formatters';
 
 interface ImageValidationResult {
   isValid: boolean;
@@ -13,7 +13,7 @@ export async function validateImageUpload(
     minWidth?: number;
     minHeight?: number;
     allowedTypes?: string[];
-  } = {},
+  } = {}
 ): Promise<ImageValidationResult> {
   // 1. Validar tamanho
   const maxSize = options.maxSize || 5 * 1024 * 1024; // 5MB padrão
@@ -26,20 +26,20 @@ export async function validateImageUpload(
 
   // 2. Validar tipo
   const allowedTypes = options.allowedTypes || [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/svg+xml",
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/svg+xml',
   ];
   if (!allowedTypes.includes(file.type)) {
     return {
       isValid: false,
-      error: "Formato de arquivo não suportado. Use JPG, PNG ou WebP.",
+      error: 'Formato de arquivo não suportado. Use JPG, PNG ou WebP.',
     };
   }
 
   // 3. Validar dimensões (Exceto para SVG)
-  if (file.type === "image/svg+xml") return { isValid: true };
+  if (file.type === 'image/svg+xml') return { isValid: true };
 
   return new Promise((resolve) => {
     const img = new Image();
@@ -64,7 +64,7 @@ export async function validateImageUpload(
       URL.revokeObjectURL(objectUrl);
       resolve({
         isValid: false,
-        error: "O arquivo de imagem parece estar corrompido.",
+        error: 'O arquivo de imagem parece estar corrompido.',
       });
     };
 

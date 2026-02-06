@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   ShieldCheck,
   Zap,
@@ -10,17 +10,17 @@ import {
   Code2,
   Heart,
   Scale,
-} from "lucide-react";
+} from 'lucide-react';
 
 export const AboutTab: React.FC = () => {
   const features = [
-    "Gestão completa de Clientes e Processos",
-    "Agenda Jurídica sincronizada com Google",
-    "Prazos Processuais com IA de alertas",
-    "Controle Financeiro e Fluxo de Caixa",
-    "Inteligência Preditiva de Receitas",
-    "Relatórios estratégicos em PDF/Excel",
-    "Segurança e Criptografia de Ponta",
+    'Gestão completa de Clientes e Processos',
+    'Agenda Jurídica sincronizada com Google',
+    'Prazos Processuais com IA de alertas',
+    'Controle Financeiro e Fluxo de Caixa',
+    'Inteligência Preditiva de Receitas',
+    'Relatórios estratégicos em PDF/Excel',
+    'Segurança e Criptografia de Ponta',
   ];
 
   return (
@@ -117,7 +117,7 @@ export const AboutTab: React.FC = () => {
 
       <footer className="text-center pt-10 border-t border-slate-100 dark:border-slate-800">
         <p className="flex items-center justify-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-          Desenvolvido com{" "}
+          Desenvolvido com{' '}
           <Heart size={14} className="text-red-500 fill-red-500" /> para
           Advogados Brasileiros
         </p>

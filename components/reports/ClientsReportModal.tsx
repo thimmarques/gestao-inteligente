@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Users,
@@ -6,9 +6,9 @@ import {
   Download,
   FileSpreadsheet,
   FileText,
-} from "lucide-react";
-import { format, startOfMonth, endOfMonth } from "date-fns";
-import { ReportConfig } from "../../utils/generateFinancialReportPDF";
+} from 'lucide-react';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
+import { ReportConfig } from '../../utils/generateFinancialReportPDF';
 
 interface ClientsReportModalProps {
   isOpen: boolean;
@@ -29,7 +29,7 @@ export const ClientsReportModal: React.FC<ClientsReportModalProps> = ({
     includeCharts: true,
     includeSummary: true,
     includeOverdue: true,
-    format: "excel",
+    format: 'excel',
   });
 
   if (!isOpen) return null;
@@ -69,7 +69,7 @@ export const ClientsReportModal: React.FC<ClientsReportModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <input
                 type="date"
-                value={format(config.startDate, "yyyy-MM-dd")}
+                value={format(config.startDate, 'yyyy-MM-dd')}
                 onChange={(e) =>
                   setConfig({ ...config, startDate: new Date(e.target.value) })
                 }
@@ -77,7 +77,7 @@ export const ClientsReportModal: React.FC<ClientsReportModalProps> = ({
               />
               <input
                 type="date"
-                value={format(config.endDate, "yyyy-MM-dd")}
+                value={format(config.endDate, 'yyyy-MM-dd')}
                 onChange={(e) =>
                   setConfig({ ...config, endDate: new Date(e.target.value) })
                 }
@@ -92,15 +92,15 @@ export const ClientsReportModal: React.FC<ClientsReportModalProps> = ({
             </h3>
             <div className="grid grid-cols-2 gap-6">
               <button
-                onClick={() => setConfig({ ...config, format: "excel" })}
-                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === "excel" ? "border-green-600 bg-green-50/50 dark:bg-green-900/20 shadow-lg" : "border-slate-100 dark:border-slate-800"}`}
+                onClick={() => setConfig({ ...config, format: 'excel' })}
+                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'excel' ? 'border-green-600 bg-green-50/50 dark:bg-green-900/20 shadow-lg' : 'border-slate-100 dark:border-slate-800'}`}
               >
                 <FileSpreadsheet
                   size={32}
                   className={
-                    config.format === "excel"
-                      ? "text-green-600"
-                      : "text-slate-400"
+                    config.format === 'excel'
+                      ? 'text-green-600'
+                      : 'text-slate-400'
                   }
                 />
                 <span className="text-xs font-black uppercase tracking-widest dark:text-white">
@@ -108,15 +108,15 @@ export const ClientsReportModal: React.FC<ClientsReportModalProps> = ({
                 </span>
               </button>
               <button
-                onClick={() => setConfig({ ...config, format: "pdf" })}
-                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === "pdf" ? "border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg" : "border-slate-100 dark:border-slate-800"}`}
+                onClick={() => setConfig({ ...config, format: 'pdf' })}
+                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'pdf' ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg' : 'border-slate-100 dark:border-slate-800'}`}
               >
                 <FileText
                   size={32}
                   className={
-                    config.format === "pdf"
-                      ? "text-primary-600"
-                      : "text-slate-400"
+                    config.format === 'pdf'
+                      ? 'text-primary-600'
+                      : 'text-slate-400'
                   }
                 />
                 <span className="text-xs font-black uppercase tracking-widest dark:text-white">

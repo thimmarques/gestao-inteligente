@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Globe,
   RefreshCw,
@@ -7,8 +7,8 @@ import {
   AlertCircle,
   Loader2,
   FileText,
-} from "lucide-react";
-import { googleAuthService } from "../../services/googleAuthService.ts";
+} from 'lucide-react';
+import { googleAuthService } from '../../services/googleAuthService.ts';
 
 export const IntegrationsTab: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -32,14 +32,14 @@ export const IntegrationsTab: React.FC = () => {
         setLastSync(new Date().toISOString());
       }
     } catch (error) {
-      alert("Erro ao conectar com Google. Tente novamente.");
+      alert('Erro ao conectar com Google. Tente novamente.');
     } finally {
       setIsConnecting(false);
     }
   };
 
   const handleDisconnect = async () => {
-    if (confirm("Deseja realmente desconectar sua conta do Google Calendar?")) {
+    if (confirm('Deseja realmente desconectar sua conta do Google Calendar?')) {
       await googleAuthService.disconnect();
       setIsConnected(false);
       setConnectedEmail(null);
@@ -72,14 +72,14 @@ export const IntegrationsTab: React.FC = () => {
               <span
                 className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest self-start md:self-center flex items-center gap-2 border ${
                   isConnected
-                    ? "bg-green-50 text-green-600 border-green-200"
-                    : "bg-slate-100 text-slate-500 border-slate-200"
+                    ? 'bg-green-50 text-green-600 border-green-200'
+                    : 'bg-slate-100 text-slate-500 border-slate-200'
                 }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-slate-400"}`}
+                  className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-400'}`}
                 />
-                {isConnected ? "Conectado" : "Desconectado"}
+                {isConnected ? 'Conectado' : 'Desconectado'}
               </span>
             </div>
 
@@ -104,8 +104,8 @@ export const IntegrationsTab: React.FC = () => {
                     <p className="text-sm font-bold dark:text-white flex items-center gap-2">
                       <RefreshCw size={16} className="text-primary-500" />
                       {lastSync
-                        ? new Date(lastSync).toLocaleString("pt-BR")
-                        : "Nunca"}
+                        ? new Date(lastSync).toLocaleString('pt-BR')
+                        : 'Nunca'}
                     </p>
                   </div>
                 </div>
@@ -147,7 +147,7 @@ export const IntegrationsTab: React.FC = () => {
                   ) : (
                     <Globe size={24} />
                   )}
-                  {isConnecting ? "Conectando..." : "Conectar Google Calendar"}
+                  {isConnecting ? 'Conectando...' : 'Conectar Google Calendar'}
                 </button>
               </div>
             )}

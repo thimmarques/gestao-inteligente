@@ -1,6 +1,6 @@
-import React from "react";
-import { Phone } from "lucide-react";
-import { formatPhone } from "../../utils/formatters";
+import React from 'react';
+import { Phone } from 'lucide-react';
+import { formatPhone } from '../../utils/formatters';
 
 interface PhoneInputProps {
   value: string;
@@ -14,7 +14,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   error,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/\D/g, "").slice(0, 11);
+    const rawValue = e.target.value.replace(/\D/g, '').slice(0, 11);
     onChange(rawValue);
   };
 
@@ -32,7 +32,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           maxLength={15}
           placeholder="(00) 00000-0000"
           className={`w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
-            error ? "ring-2 ring-red-500" : "focus:ring-primary-500"
+            error ? 'ring-2 ring-red-500' : 'focus:ring-primary-500'
           }`}
         />
       </div>

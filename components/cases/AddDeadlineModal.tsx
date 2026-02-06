@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { X, Save, Lock, Clock, AlertTriangle } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { X, Save, Lock, Clock, AlertTriangle } from 'lucide-react';
 
 interface AddDeadlineModalProps {
   caseId: string;
@@ -15,10 +15,10 @@ export const AddDeadlineModal: React.FC<AddDeadlineModalProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    title: "",
-    deadline_date: "",
-    priority: "média",
-    description: "",
+    title: '',
+    deadline_date: '',
+    priority: 'média',
+    description: '',
   });
 
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
@@ -27,7 +27,7 @@ export const AddDeadlineModal: React.FC<AddDeadlineModalProps> = ({
     if (formData.deadline_date) {
       const diff = Math.ceil(
         (new Date(formData.deadline_date).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24),
+          (1000 * 60 * 60 * 24)
       );
       setDaysRemaining(diff);
     } else {
@@ -44,20 +44,20 @@ export const AddDeadlineModal: React.FC<AddDeadlineModalProps> = ({
       ...formData,
       id: Math.random().toString(36).substr(2, 9),
       case_id: caseId,
-      status: "pendente",
+      status: 'pendente',
       created_at: new Date().toISOString(),
     };
 
     const existing = JSON.parse(
-      localStorage.getItem("legaltech_deadlines") || "[]",
+      localStorage.getItem('legaltech_deadlines') || '[]'
     );
     localStorage.setItem(
-      "legaltech_deadlines",
-      JSON.stringify([...existing, newDeadline]),
+      'legaltech_deadlines',
+      JSON.stringify([...existing, newDeadline])
     );
 
     // Simulate toast
-    alert("Prazo adicionado com sucesso!");
+    alert('Prazo adicionado com sucesso!');
     onClose();
     window.location.reload(); // Quick refresh to update state in parent
   };
@@ -143,10 +143,10 @@ export const AddDeadlineModal: React.FC<AddDeadlineModalProps> = ({
             <div
               className={`p-3 rounded-xl flex items-center gap-3 border ${
                 daysRemaining < 0
-                  ? "bg-red-50 border-red-100 text-red-600 dark:bg-red-900/10 dark:border-red-900/30"
+                  ? 'bg-red-50 border-red-100 text-red-600 dark:bg-red-900/10 dark:border-red-900/30'
                   : daysRemaining <= 3
-                    ? "bg-orange-50 border-orange-100 text-orange-600 dark:bg-orange-900/10 dark:border-orange-900/30"
-                    : "bg-blue-50 border-blue-100 text-blue-600 dark:bg-blue-900/10 dark:border-blue-900/30"
+                    ? 'bg-orange-50 border-orange-100 text-orange-600 dark:bg-orange-900/10 dark:border-orange-900/30'
+                    : 'bg-blue-50 border-blue-100 text-blue-600 dark:bg-blue-900/10 dark:border-blue-900/30'
               }`}
             >
               <Clock size={18} />
@@ -154,7 +154,7 @@ export const AddDeadlineModal: React.FC<AddDeadlineModalProps> = ({
                 {daysRemaining < 0
                   ? `Vencido há ${Math.abs(daysRemaining)} dias`
                   : daysRemaining === 0
-                    ? "Vence HOJE"
+                    ? 'Vence HOJE'
                     : `Faltam ${daysRemaining} dias`}
               </span>
             </div>

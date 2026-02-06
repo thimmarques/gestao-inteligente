@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Camera, Trash2, X, Upload, Check, Loader2 } from "lucide-react";
-import { useApp } from "../../contexts/AppContext";
-import { updateLawyer } from "../../utils/settingsPersistence";
+import React, { useState, useRef, useEffect } from 'react';
+import { Camera, Trash2, X, Upload, Check, Loader2 } from 'lucide-react';
+import { useApp } from '../../contexts/AppContext';
+import { updateLawyer } from '../../utils/settingsPersistence';
 
 interface PhotoUploadProps {
   currentPhotoUrl?: string;
@@ -18,7 +18,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
 }) => {
   const { refreshAll } = useApp();
   const [previewUrl, setPreviewUrl] = useState<string | null>(
-    currentPhotoUrl || null,
+    currentPhotoUrl || null
   );
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -30,10 +30,10 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
   }, [currentPhotoUrl]);
 
   const initials = name
-    .split(" ")
+    .split(' ')
     .filter(Boolean)
     .map((n) => n[0])
-    .join("")
+    .join('')
     .substring(0, 2)
     .toUpperCase();
 
@@ -42,12 +42,12 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Arquivo muito grande. Máximo: 5MB");
+      alert('Arquivo muito grande. Máximo: 5MB');
       return;
     }
 
-    if (!file.type.startsWith("image/")) {
-      alert("Apenas imagens são aceitas");
+    if (!file.type.startsWith('image/')) {
+      alert('Apenas imagens são aceitas');
       return;
     }
 
@@ -69,8 +69,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
           updateLawyer({ photo_url: previewUrl });
         } catch (error) {
           console.error(
-            "Erro ao salvar localmente (possivelmente limite de storage):",
-            error,
+            'Erro ao salvar localmente (possivelmente limite de storage):',
+            error
           );
           // Não impede o fluxo, pois o objetivo principal é passar a URL para o pai
         }
@@ -79,8 +79,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
         refreshAll(); // CRÍTICO: Atualiza o contexto global
         setIsEditing(false);
       } catch (error) {
-        console.error("Erro ao processar foto:", error);
-        alert("Erro ao processar a imagem. Tente uma imagem menor.");
+        console.error('Erro ao processar foto:', error);
+        alert('Erro ao processar a imagem. Tente uma imagem menor.');
       } finally {
         setIsUploading(false);
       }
@@ -88,9 +88,9 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
   };
 
   const handleRemove = () => {
-    if (confirm("Deseja remover sua foto de perfil?")) {
+    if (confirm('Deseja remover sua foto de perfil?')) {
       setPreviewUrl(null);
-      updateLawyer({ photo_url: "" });
+      updateLawyer({ photo_url: '' });
       onPhotoRemove();
       refreshAll(); // CRÍTICO: Atualiza o contexto global
     }
@@ -108,7 +108,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
             />
           ) : (
             <span className="text-4xl font-bold text-slate-400">
-              {initials || "??"}
+              {initials || '??'}
             </span>
           )}
         </div>

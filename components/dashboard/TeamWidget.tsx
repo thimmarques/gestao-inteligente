@@ -1,7 +1,7 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Users2, ExternalLink, ChevronRight, Loader2 } from "lucide-react";
-import { useTeam } from "../../hooks/useQueries";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Users2, ExternalLink, ChevronRight, Loader2 } from 'lucide-react';
+import { useTeam } from '../../hooks/useQueries';
 
 interface TeamWidgetProps {
   members?: any[];
@@ -15,9 +15,9 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
 
   const members = propMembers || teamData;
   const activeMembers = members
-    .filter((m) => m.status === "ativo")
+    .filter((m) => m.status === 'ativo')
     .sort(
-      (a, b) => (b.stats?.active_cases || 0) - (a.stats?.active_cases || 0),
+      (a, b) => (b.stats?.active_cases || 0) - (a.stats?.active_cases || 0)
     );
 
   return (
@@ -34,7 +34,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
               Time Jurídico
             </h3>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              {isLoading ? "..." : `${activeMembers.length} ATIVOS`}
+              {isLoading ? '...' : `${activeMembers.length} ATIVOS`}
             </span>
           </div>
         </div>
@@ -55,7 +55,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
           activeMembers.slice(0, 5).map((m) => (
             <button
               key={m.id}
-              onClick={() => navigate("/equipe")}
+              onClick={() => navigate('/equipe')}
               className="w-full flex items-center justify-between p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-2xl transition-all group/item text-left border border-transparent hover:border-slate-100 dark:hover:border-slate-800"
             >
               <div className="flex items-center gap-3">

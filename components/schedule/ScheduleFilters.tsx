@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Filter,
   X,
@@ -8,8 +8,8 @@ import {
   Gavel,
   Calendar as CalendarIcon,
   ShieldCheck,
-} from "lucide-react";
-import { ScheduleFilters } from "../../utils/scheduleFilters";
+} from 'lucide-react';
+import { ScheduleFilters } from '../../utils/scheduleFilters';
 
 interface ScheduleFiltersBarProps {
   filters: ScheduleFilters;
@@ -25,16 +25,16 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
   if (!isOpen || !filters) return null;
 
   const eventTypes = [
-    { id: "audiência", label: "Audiências", icon: Gavel },
-    { id: "reunião", label: "Reuniões", icon: Users },
-    { id: "prazo", label: "Prazos", icon: Clock },
-    { id: "compromisso", label: "Compromissos", icon: CalendarIcon },
+    { id: 'audiência', label: 'Audiências', icon: Gavel },
+    { id: 'reunião', label: 'Reuniões', icon: Users },
+    { id: 'prazo', label: 'Prazos', icon: Clock },
+    { id: 'compromisso', label: 'Compromissos', icon: CalendarIcon },
   ];
 
   const statusOptions = [
-    { id: "agendado", label: "Agendados" },
-    { id: "concluído", label: "Concluídos" },
-    { id: "cancelado", label: "Cancelados" },
+    { id: 'agendado', label: 'Agendados' },
+    { id: 'concluído', label: 'Concluídos' },
+    { id: 'cancelado', label: 'Cancelados' },
   ];
 
   const toggleType = (type: string) => {
@@ -92,8 +92,8 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
                   onClick={() => toggleType(t.id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all border ${
                     isActive
-                      ? "bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20"
-                      : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500"
+                      ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500'
                   }`}
                 >
                   <Icon size={12} />
@@ -119,8 +119,8 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
                   onClick={() => toggleStatus(s.id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all border ${
                     isActive
-                      ? "bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20"
-                      : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500"
+                      ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500'
                   }`}
                 >
                   {s.label}
@@ -142,13 +142,13 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
             }
             className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all ${
               filters.showOnlyMine
-                ? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 text-indigo-700 dark:text-indigo-400"
-                : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500"
+                ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 text-indigo-700 dark:text-indigo-400'
+                : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500'
             }`}
           >
             <div className="flex items-center gap-3">
               <div
-                className={`p-2 rounded-lg ${filters.showOnlyMine ? "bg-indigo-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-400"}`}
+                className={`p-2 rounded-lg ${filters.showOnlyMine ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-400'}`}
               >
                 <ShieldCheck size={16} />
               </div>
@@ -157,10 +157,10 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
               </span>
             </div>
             <div
-              className={`w-10 h-5 rounded-full relative transition-all ${filters.showOnlyMine ? "bg-indigo-600" : "bg-slate-300 dark:bg-slate-600"}`}
+              className={`w-10 h-5 rounded-full relative transition-all ${filters.showOnlyMine ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}
             >
               <div
-                className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-all ${filters.showOnlyMine ? "translate-x-5" : ""}`}
+                className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-all ${filters.showOnlyMine ? 'translate-x-5' : ''}`}
               />
             </div>
           </button>

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { supabase } from "../lib/supabase";
-import { Mail, Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { Mail, Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 const ResetPassword: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -22,7 +22,7 @@ const ResetPassword: React.FC = () => {
       if (error) throw error;
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Erro ao enviar e-mail de recuperação");
+      setError(err.message || 'Erro ao enviar e-mail de recuperação');
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ const ResetPassword: React.FC = () => {
                   {loading ? (
                     <Loader2 className="animate-spin" size={20} />
                   ) : (
-                    "Enviar link de recuperação"
+                    'Enviar link de recuperação'
                   )}
                 </button>
 

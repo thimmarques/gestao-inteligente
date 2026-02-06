@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from 'react';
 import {
   Upload,
   FileText,
@@ -7,7 +7,7 @@ import {
   Trash2,
   X,
   Loader2,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface DocumentsTabProps {
   caseId: string;
@@ -35,8 +35,8 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
       const newDocs = Array.from(files).map((f) => ({
         id: Math.random().toString(36).substr(2, 9),
         name: f.name,
-        size: (f.size / (1024 * 1024)).toFixed(2) + " MB",
-        type: f.name.split(".").pop()?.toLowerCase(),
+        size: (f.size / (1024 * 1024)).toFixed(2) + ' MB',
+        type: f.name.split('.').pop()?.toLowerCase(),
         uploaded_at: new Date().toISOString(),
       }));
       setDocuments((prev) => [...prev, ...newDocs]);
@@ -63,11 +63,11 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={() => document.getElementById("file-upload")?.click()}
+        onClick={() => document.getElementById('file-upload')?.click()}
         className={`relative p-12 border-2 border-dashed rounded-[2.5rem] text-center transition-all cursor-pointer ${
           isDragging
-            ? "border-primary-500 bg-primary-50 dark:bg-primary-900/10"
-            : "border-slate-200 dark:border-slate-800 hover:border-primary-400"
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
+            : 'border-slate-200 dark:border-slate-800 hover:border-primary-400'
         }`}
       >
         <input
@@ -122,12 +122,12 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
                 <div className="flex flex-col items-center text-center gap-3">
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
-                      doc.type === "pdf"
-                        ? "bg-red-50 text-red-500"
-                        : "bg-blue-50 text-blue-500"
+                      doc.type === 'pdf'
+                        ? 'bg-red-50 text-red-500'
+                        : 'bg-blue-50 text-blue-500'
                     }`}
                   >
-                    {["jpg", "png"].includes(doc.type) ? (
+                    {['jpg', 'png'].includes(doc.type) ? (
                       <ImageIcon size={24} />
                     ) : (
                       <FileText size={24} />

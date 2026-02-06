@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   FileText,
   Tag,
@@ -8,9 +8,9 @@ import {
   Gavel,
   Calendar,
   Clock,
-} from "lucide-react";
-import { CaseWithRelations } from "../../../types";
-import { formatCurrency, formatDate } from "../../../utils/formatters";
+} from 'lucide-react';
+import { CaseWithRelations } from '../../../types';
+import { formatCurrency, formatDate } from '../../../utils/formatters';
 
 interface InfoTabProps {
   caseData: CaseWithRelations;
@@ -94,7 +94,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 <p className="text-sm font-medium dark:text-white">
                   {caseData.ended_at
                     ? formatDate(caseData.ended_at)
-                    : "Em andamento"}
+                    : 'Em andamento'}
                 </p>
               </div>
               <div className="space-y-1">
@@ -103,7 +103,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 </p>
                 <button className="flex items-center gap-2 text-sm font-bold text-primary-600 hover:underline">
                   <User size={14} />
-                  {caseData.client?.name || "ID " + caseData.client_id}
+                  {caseData.client?.name || 'ID ' + caseData.client_id}
                 </button>
               </div>
               <div className="col-span-full space-y-1">
@@ -112,10 +112,10 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-primary-600">
-                    {caseData.lawyer?.name?.[0] || "A"}
+                    {caseData.lawyer?.name?.[0] || 'A'}
                   </div>
                   <p className="text-sm font-medium dark:text-white">
-                    {caseData.lawyer?.name || "Não atribuído"}
+                    {caseData.lawyer?.name || 'Não atribuído'}
                   </p>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 </span>
               </div>
               <span
-                className={`text-lg font-bold ${caseData.finances_balance >= 0 ? "text-green-600" : "text-red-600"}`}
+                className={`text-lg font-bold ${caseData.finances_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}
               >
                 {formatCurrency(caseData.finances_balance || 0)}
               </span>

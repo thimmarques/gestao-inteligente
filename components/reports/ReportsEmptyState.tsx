@@ -1,5 +1,5 @@
-import React from "react";
-import { FileText, History } from "lucide-react";
+import React from 'react';
+import { FileText, History } from 'lucide-react';
 
 export const ReportsEmptyState: React.FC = () => {
   return (

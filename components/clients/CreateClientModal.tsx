@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   X,
   UserPlus,
@@ -30,97 +30,97 @@ import {
   Wallet,
   HandCoins,
   ChevronDown,
-} from "lucide-react";
-import { ClientType, Client } from "../../types";
-import { CPFCNPJInput } from "./CPFCNPJInput";
-import { PhoneInput } from "./PhoneInput";
+} from 'lucide-react';
+import { ClientType, Client } from '../../types';
+import { CPFCNPJInput } from './CPFCNPJInput';
+import { PhoneInput } from './PhoneInput';
 
 interface CreateClientModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: any) => void;
   initialData?: Client | null;
-  mode?: "create" | "edit";
+  mode?: 'create' | 'edit';
 }
 
-type InternalTab = "pessoal" | "endereco" | "processo";
+type InternalTab = 'pessoal' | 'endereco' | 'processo';
 
 export const CreateClientModal: React.FC<CreateClientModalProps> = ({
   isOpen,
   onClose,
   onSave,
   initialData,
-  mode = "create",
+  mode = 'create',
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [activeTab, setActiveTab] = useState<InternalTab>("pessoal");
+  const [activeTab, setActiveTab] = useState<InternalTab>('pessoal');
   const [isSaving, setIsSaving] = useState(false);
   const [isSearchingCEP, setIsSearchingCEP] = useState(false);
 
   const [formData, setFormData] = useState<any>({
-    name: "",
+    name: '',
     type: ClientType.PARTICULAR,
-    cpf_cnpj: "",
-    email: "",
-    phone: "",
-    status: "ativo",
-    nationality: "Brasileiro(a)",
-    marital_status: "Solteiro(a)",
-    profession: "",
-    income: "",
-    rg: "",
-    rg_issuer: "SSP/SP",
+    cpf_cnpj: '',
+    email: '',
+    phone: '',
+    status: 'ativo',
+    nationality: 'Brasileiro(a)',
+    marital_status: 'Solteiro(a)',
+    profession: '',
+    income: '',
+    rg: '',
+    rg_issuer: 'SSP/SP',
     address: {
-      cep: "",
-      street: "",
-      number: "",
-      neighborhood: "",
-      city: "",
-      state: "",
+      cep: '',
+      street: '',
+      number: '',
+      neighborhood: '',
+      city: '',
+      state: '',
     },
     process: {
-      number: "",
-      legal_area: "cível",
-      description: "",
+      number: '',
+      legal_area: 'cível',
+      description: '',
     },
     financial_profile: {
-      payment_method: "PIX",
-      honorarios_firmados: "",
+      payment_method: 'PIX',
+      honorarios_firmados: '',
       tem_entrada: false,
-      valor_entrada: "",
-      num_parcelas_restante: "1",
+      valor_entrada: '',
+      num_parcelas_restante: '1',
       billing_day: 10,
-      percentual_acordado: "",
-      valor_honorarios: "",
-      data_pagamento_final: "",
-      comarca: "",
-      appointment_date: "",
+      percentual_acordado: '',
+      valor_honorarios: '',
+      data_pagamento_final: '',
+      comarca: '',
+      appointment_date: '',
       tem_recurso: false,
       guia_principal: {
-        protocolo: "",
-        valor: "740",
-        data: "2026-01",
-        status: "Pago pelo Estado",
+        protocolo: '',
+        valor: '740',
+        data: '2026-01',
+        status: 'Pago pelo Estado',
       },
       guia_recurso: {
-        protocolo: "",
-        valor: "360",
-        data: "2026-01",
-        status: "Pago pelo Estado",
+        protocolo: '',
+        valor: '360',
+        data: '2026-01',
+        status: 'Pago pelo Estado',
       },
     },
-    notes: "",
+    notes: '',
   });
 
   useEffect(() => {
     if (isOpen) {
-      if (initialData || mode === "edit") {
+      if (initialData || mode === 'edit') {
         setFormData({ ...formData, ...initialData });
         setCurrentStep(2);
-        setActiveTab("pessoal");
+        setActiveTab('pessoal');
       } else {
         setCurrentStep(1);
-        setActiveTab("pessoal");
+        setActiveTab('pessoal');
       }
     }
   }, [initialData, isOpen, mode]);
@@ -128,18 +128,18 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
   const legalAreaOptions = useMemo(() => {
     if (formData.type === ClientType.DEFENSORIA) {
       return [
-        { value: "cível", label: "Cível", icon: Scale },
-        { value: "criminal", label: "Criminal", icon: Shield },
+        { value: 'cível', label: 'Cível', icon: Scale },
+        { value: 'criminal', label: 'Criminal', icon: Shield },
       ];
     }
     return [
-      { value: "cível", label: "Cível", icon: Scale },
-      { value: "trabalhista", label: "Trabalhista", icon: Briefcase },
-      { value: "criminal", label: "Criminal", icon: Shield },
-      { value: "família", label: "Família", icon: Users },
-      { value: "tributário", label: "Tributário", icon: DollarSign },
-      { value: "previdenciário", label: "Previdenciário", icon: Heart },
-      { value: "administrativo", label: "Administrativo", icon: Building },
+      { value: 'cível', label: 'Cível', icon: Scale },
+      { value: 'trabalhista', label: 'Trabalhista', icon: Briefcase },
+      { value: 'criminal', label: 'Criminal', icon: Shield },
+      { value: 'família', label: 'Família', icon: Users },
+      { value: 'tributário', label: 'Tributário', icon: DollarSign },
+      { value: 'previdenciário', label: 'Previdenciário', icon: Heart },
+      { value: 'administrativo', label: 'Administrativo', icon: Building },
     ];
   }, [formData.type]);
 
@@ -152,8 +152,8 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
   const handleNext = () => {
     if (currentStep === 2) {
-      if (activeTab === "pessoal") setActiveTab("endereco");
-      else if (activeTab === "endereco") setActiveTab("processo");
+      if (activeTab === 'pessoal') setActiveTab('endereco');
+      else if (activeTab === 'endereco') setActiveTab('processo');
       else setCurrentStep(3);
     } else {
       setCurrentStep((prev) => Math.min(prev + 1, 4));
@@ -162,9 +162,9 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
   const handleBack = () => {
     if (currentStep === 2) {
-      if (activeTab === "processo") setActiveTab("endereco");
-      else if (activeTab === "endereco") setActiveTab("pessoal");
-      else if (mode !== "edit") setCurrentStep(1);
+      if (activeTab === 'processo') setActiveTab('endereco');
+      else if (activeTab === 'endereco') setActiveTab('pessoal');
+      else if (mode !== 'edit') setCurrentStep(1);
     } else {
       setCurrentStep((prev) => Math.max(prev - 1, 1));
     }
@@ -181,7 +181,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
   };
 
   const handleCEPBlur = async () => {
-    const cep = formData.address.cep.replace(/\D/g, "");
+    const cep = formData.address.cep.replace(/\D/g, '');
     if (cep.length !== 8) return;
 
     setIsSearchingCEP(true);
@@ -201,25 +201,25 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
         }));
       }
     } catch (error) {
-      console.error("Erro ao buscar CEP", error);
+      console.error('Erro ao buscar CEP', error);
     } finally {
       setIsSearchingCEP(false);
     }
   };
 
   const steps = [
-    { id: 1, label: "Tipo" },
-    { id: 2, label: "Dados" },
-    { id: 3, label: "Específicos" },
-    { id: 4, label: "Finalizar" },
+    { id: 1, label: 'Tipo' },
+    { id: 2, label: 'Dados' },
+    { id: 3, label: 'Específicos' },
+    { id: 4, label: 'Finalizar' },
   ];
 
   const formatCNJ = (v: string) => {
-    v = v.replace(/\D/g, "");
+    v = v.replace(/\D/g, '');
     if (v.length > 20) v = v.substring(0, 20);
     return v.replace(
       /(\d{7})(\d{2})(\d{4})(\d{1})(\d{2})(\d{4})/,
-      "$1-$2.$3.$4.$5.$6",
+      '$1-$2.$3.$4.$5.$6'
     );
   };
 
@@ -229,9 +229,9 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
         <div className="px-8 pt-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
           <div>
             <h2 className="text-xl font-bold dark:text-white">
-              {mode === "edit"
+              {mode === 'edit'
                 ? `Editar Cliente - ${formData.name}`
-                : "Novo Cliente"}
+                : 'Novo Cliente'}
             </h2>
             <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">
               Etapa {currentStep} de 4
@@ -259,16 +259,16 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
                     currentStep === s.id
-                      ? "bg-primary-600 text-white scale-110 shadow-lg"
+                      ? 'bg-primary-600 text-white scale-110 shadow-lg'
                       : currentStep > s.id
-                        ? "bg-primary-600 text-white"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                        ? 'bg-primary-600 text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                   }`}
                 >
                   {currentStep > s.id ? <Check size={14} /> : s.id}
                 </div>
                 <span
-                  className={`text-[10px] font-bold uppercase tracking-widest ${currentStep >= s.id ? "text-primary-600" : "text-slate-400"}`}
+                  className={`text-[10px] font-bold uppercase tracking-widest ${currentStep >= s.id ? 'text-primary-600' : 'text-slate-400'}`}
                 >
                   {s.label}
                 </span>
@@ -285,18 +285,18 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <button
-                  disabled={mode === "edit"}
+                  disabled={mode === 'edit'}
                   onClick={() =>
                     setFormData({ ...formData, type: ClientType.PARTICULAR })
                   }
                   className={`p-8 rounded-2xl border-2 text-left transition-all hover:scale-[1.02] ${
                     formData.type === ClientType.PARTICULAR
-                      ? "border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg"
-                      : "border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50"
+                      ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg'
+                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50'
                   }`}
                 >
                   <div
-                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.PARTICULAR ? "bg-primary-600 text-white shadow-xl shadow-primary-500/30" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}
+                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.PARTICULAR ? 'bg-primary-600 text-white shadow-xl shadow-primary-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
                   >
                     <UserPlus size={40} />
                   </div>
@@ -308,18 +308,18 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                   </p>
                 </button>
                 <button
-                  disabled={mode === "edit"}
+                  disabled={mode === 'edit'}
                   onClick={() =>
                     setFormData({ ...formData, type: ClientType.DEFENSORIA })
                   }
                   className={`p-8 rounded-2xl border-2 text-left transition-all hover:scale-[1.02] ${
                     formData.type === ClientType.DEFENSORIA
-                      ? "border-green-600 bg-green-50/50 dark:bg-green-900/20 shadow-lg"
-                      : "border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50"
+                      ? 'border-green-600 bg-green-50/50 dark:bg-green-900/20 shadow-lg'
+                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50'
                   }`}
                 >
                   <div
-                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.DEFENSORIA ? "bg-green-600 text-white shadow-xl shadow-green-500/30" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}
+                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.DEFENSORIA ? 'bg-green-600 text-white shadow-xl shadow-green-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
                   >
                     <Scale size={40} />
                   </div>
@@ -337,24 +337,24 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
           {currentStep === 2 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="flex border-b border-slate-100 dark:border-slate-800 mb-6">
-                {(["pessoal", "endereco", "processo"] as InternalTab[]).map(
+                {(['pessoal', 'endereco', 'processo'] as InternalTab[]).map(
                   (tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       className={`px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all border-b-2 ${
                         activeTab === tab
-                          ? "border-primary-600 text-primary-600"
-                          : "border-transparent text-slate-400 hover:text-slate-600"
+                          ? 'border-primary-600 text-primary-600'
+                          : 'border-transparent text-slate-400 hover:text-slate-600'
                       }`}
                     >
                       {tab}
                     </button>
-                  ),
+                  )
                 )}
               </div>
 
-              {activeTab === "pessoal" && (
+              {activeTab === 'pessoal' && (
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-6 animate-in fade-in duration-200">
                   <div className="md:col-span-6 space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
@@ -367,8 +367,8 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         <Scale size={16} className="text-green-500" />
                       )}
                       {formData.type === ClientType.PARTICULAR
-                        ? "Particular / Contratual"
-                        : "Defensoria Pública"}
+                        ? 'Particular / Contratual'
+                        : 'Defensoria Pública'}
                     </div>
                   </div>
                   <div className="md:col-span-6 space-y-1.5">
@@ -514,7 +514,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                 </div>
               )}
 
-              {activeTab === "endereco" && (
+              {activeTab === 'endereco' && (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 animate-in fade-in duration-200">
                   <div className="md:col-span-1 space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
@@ -531,7 +531,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                             address: {
                               ...formData.address,
                               cep: e.target.value
-                                .replace(/\D/g, "")
+                                .replace(/\D/g, '')
                                 .substring(0, 8),
                             },
                           })
@@ -626,7 +626,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                 </div>
               )}
 
-              {activeTab === "processo" && (
+              {activeTab === 'processo' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-200">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
@@ -678,7 +678,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         Objeto / Descrição
                       </label>
                       <span className="text-[10px] font-bold text-slate-400">
-                        {(formData.process.description || "").length}/1000
+                        {(formData.process.description || '').length}/1000
                       </span>
                     </div>
                     <textarea
@@ -709,7 +709,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                     Configuração Financeira
                   </h3>
 
-                  {formData.process.legal_area === "trabalhista" ? (
+                  {formData.process.legal_area === 'trabalhista' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800">
                       <div className="md:col-span-2 flex items-center gap-3 mb-2">
                         <Briefcase size={20} className="text-blue-500" />
@@ -843,7 +843,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         </div>
 
                         {formData.financial_profile.payment_method ===
-                          "Cartão de Crédito" && (
+                          'Cartão de Crédito' && (
                           <div className="space-y-1.5 md:col-span-2 animate-in slide-in-from-top-2">
                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
                               Número de Parcelas do Restante
@@ -871,7 +871,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                               >
                                 {Array.from(
                                   { length: 10 },
-                                  (_, i) => i + 1,
+                                  (_, i) => i + 1
                                 ).map((n) => (
                                   <option key={n} value={n}>
                                     {n}x no cartão
@@ -909,7 +909,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.financial_profile.tem_entrada ? "bg-primary-600 text-white shadow-md" : "text-slate-400"}`}
+                              className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.financial_profile.tem_entrada ? 'bg-primary-600 text-white shadow-md' : 'text-slate-400'}`}
                             >
                               Sim
                             </button>
@@ -921,11 +921,11 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   financial_profile: {
                                     ...formData.financial_profile,
                                     tem_entrada: false,
-                                    valor_entrada: "",
+                                    valor_entrada: '',
                                   },
                                 })
                               }
-                              className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${!formData.financial_profile.tem_entrada ? "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-white shadow-md" : "text-slate-400"}`}
+                              className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${!formData.financial_profile.tem_entrada ? 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-white shadow-md' : 'text-slate-400'}`}
                             >
                               Não
                             </button>
@@ -1033,8 +1033,8 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         }
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                           formData.financial_profile.tem_recurso
-                            ? "bg-slate-800 text-white shadow-lg"
-                            : "bg-white dark:bg-slate-700 text-slate-500"
+                            ? 'bg-slate-800 text-white shadow-lg'
+                            : 'bg-white dark:bg-slate-700 text-slate-500'
                         }`}
                       >
                         {formData.financial_profile.tem_recurso ? (
@@ -1143,7 +1143,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       </div>
 
                       <div
-                        className={`space-y-6 transition-all duration-500 ${formData.financial_profile.tem_recurso ? "opacity-100 translate-x-0" : "opacity-30 pointer-events-none grayscale"}`}
+                        className={`space-y-6 transition-all duration-500 ${formData.financial_profile.tem_recurso ? 'opacity-100 translate-x-0' : 'opacity-30 pointer-events-none grayscale'}`}
                       >
                         <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                           Recurso (30%)
@@ -1254,7 +1254,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       Nome
                     </p>
                     <p className="text-sm font-bold dark:text-white">
-                      {formData.name || "-"}
+                      {formData.name || '-'}
                     </p>
                   </div>
                   <div>
@@ -1262,7 +1262,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       Documento
                     </p>
                     <p className="text-sm font-mono dark:text-white">
-                      {formData.cpf_cnpj || "-"}
+                      {formData.cpf_cnpj || '-'}
                     </p>
                   </div>
                 </div>
@@ -1293,7 +1293,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
           <button
             disabled={
               currentStep === 1 ||
-              (mode === "edit" && currentStep === 2 && activeTab === "pessoal")
+              (mode === 'edit' && currentStep === 2 && activeTab === 'pessoal')
             }
             onClick={handleBack}
             className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-700 disabled:opacity-0 transition-all"
@@ -1324,7 +1324,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                 className="flex items-center gap-3 px-10 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 text-white rounded-2xl font-bold transition-all shadow-xl shadow-purple-500/20 active:scale-95"
               >
                 {isSaving ? <Loader2 size={18} /> : <Save size={18} />}
-                {mode === "edit" ? "Atualizar Cliente" : "Salvar Cliente"}
+                {mode === 'edit' ? 'Atualizar Cliente' : 'Salvar Cliente'}
               </button>
             )}
           </div>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { X, Search, Check, Calendar, Globe, Loader2, Info } from "lucide-react";
-import { googleCalendarService } from "../../services/googleCalendarService.ts";
+import React, { useState } from 'react';
+import { X, Search, Check, Calendar, Globe, Loader2, Info } from 'lucide-react';
+import { googleCalendarService } from '../../services/googleCalendarService.ts';
 
 interface ImportGoogleModalProps {
   isOpen: boolean;
@@ -17,8 +17,8 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [importing, setImporting] = useState(false);
   const [dateRange, setDateRange] = useState({
-    start: new Date().toISOString().split("T")[0],
-    end: new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0],
+    start: new Date().toISOString().split('T')[0],
+    end: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
   });
   const [availableEvents, setAvailableEvents] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -29,7 +29,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
     setLoading(true);
     const events = await googleCalendarService.listEvents(
       new Date(dateRange.start),
-      new Date(dateRange.end),
+      new Date(dateRange.end)
     );
     setAvailableEvents(events);
     setSelectedIds(events.map((e) => e.id));
@@ -40,7 +40,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
   const handleImport = async () => {
     setImporting(true);
     const eventsToImport = availableEvents.filter((e) =>
-      selectedIds.includes(e.id),
+      selectedIds.includes(e.id)
     );
 
     // Simulação de importação em massa
@@ -62,7 +62,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
 
   const toggleEvent = (id: string) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
 
@@ -150,7 +150,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                 ) : (
                   <Search size={24} />
                 )}
-                {loading ? "Buscando Eventos..." : "Ver Eventos Disponíveis"}
+                {loading ? 'Buscando Eventos...' : 'Ver Eventos Disponíveis'}
               </button>
             </div>
           ) : (
@@ -164,8 +164,8 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                     onClick={toggleSelectAll}
                     className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-all ${
                       selectedIds.length === availableEvents.length
-                        ? "bg-primary-600 border-primary-600"
-                        : "border-slate-200 dark:border-slate-700 group-hover:border-primary-400"
+                        ? 'bg-primary-600 border-primary-600'
+                        : 'border-slate-200 dark:border-slate-700 group-hover:border-primary-400'
                     }`}
                   >
                     {selectedIds.length === availableEvents.length && (
@@ -188,15 +188,15 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                       onClick={() => toggleEvent(event.id)}
                       className={`flex items-center gap-4 p-4 rounded-3xl border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-800"
-                          : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-slate-200"
+                          ? 'bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-800'
+                          : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-slate-200'
                       }`}
                     >
                       <div
                         className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-all ${
                           isSelected
-                            ? "bg-primary-600 border-primary-600 shadow-sm"
-                            : "border-slate-200 dark:border-slate-700"
+                            ? 'bg-primary-600 border-primary-600 shadow-sm'
+                            : 'border-slate-200 dark:border-slate-700'
                         }`}
                       >
                         {isSelected && (
@@ -212,10 +212,10 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                           {event.summary}
                         </p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase">
-                          {date.toLocaleDateString("pt-BR")} às{" "}
-                          {date.toLocaleTimeString("pt-BR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
+                          {date.toLocaleDateString('pt-BR')} às{' '}
+                          {date.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                         </p>
                       </div>
@@ -234,7 +234,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
             onClick={step === 1 ? onClose : () => setStep(1)}
             className="px-6 py-3 text-sm font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors uppercase tracking-widest"
           >
-            {step === 1 ? "Cancelar" : "Voltar"}
+            {step === 1 ? 'Cancelar' : 'Voltar'}
           </button>
 
           {step === 2 && (

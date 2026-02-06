@@ -1,6 +1,6 @@
-import { Client } from "../types";
-import { supabase } from "../lib/supabase";
-import { logAction } from "../utils/auditLogger.ts";
+import { Client } from '../types';
+import { supabase } from '../lib/supabase';
+import { logAction } from '../utils/auditLogger.ts';
 
 export const clientService = {
   getClients: async (options?: {
@@ -10,17 +10,17 @@ export const clientService = {
     type?: string;
   }): Promise<Client[]> => {
     let query = supabase
-      .from("clients")
-      .select("*")
-      .order("name", { ascending: true });
+      .from('clients')
+      .select('*')
+      .order('name', { ascending: true });
 
-    if (options?.type && options.type !== "todos") {
-      query = query.eq("type", options.type);
+    if (options?.type && options.type !== 'todos') {
+      query = query.eq('type', options.type);
     }
 
     if (options?.search) {
       query = query.or(
-        `name.ilike.%${options.search}%,cpf_cnpj.ilike.%${options.search}%,email.ilike.%${options.search}%`,
+        `name.ilike.%${options.search}%,cpf_cnpj.ilike.%${options.search}%,email.ilike.%${options.search}%`
       );
     }
 
@@ -38,9 +38,9 @@ export const clientService = {
 
   getClient: async (id: string): Promise<Client | null> => {
     const { data, error } = await supabase
-      .from("clients")
-      .select("*")
-      .eq("id", id)
+      .from('clients')
+      .select('*')
+      .eq('id', id)
       .single();
 
     if (error) throw error;
@@ -48,10 +48,10 @@ export const clientService = {
   },
 
   createClient: async (
-    data: Omit<Client, "id" | "created_at" | "updated_at" | "process_count">,
+    data: Omit<Client, 'id' | 'created_at' | 'updated_at' | 'process_count'>
   ): Promise<Client> => {
     const { data: newClient, error } = await supabase
-      .from("clients")
+      .from('clients')
       .insert({
         ...data,
         process_count: 0,
@@ -62,12 +62,12 @@ export const clientService = {
     if (error) throw error;
 
     await logAction({
-      action: "create",
-      entity_type: "client",
+      action: 'create',
+      entity_type: 'client',
       entity_id: newClient.id,
       entity_description: `Novo cliente cadastrado: ${newClient.name}`,
       details: { data: newClient },
-      criticality: "normal",
+      criticality: 'normal',
     });
 
     return newClient;
@@ -75,24 +75,24 @@ export const clientService = {
 
   updateClient: async (id: string, data: Partial<Client>): Promise<Client> => {
     const { data: updatedClient, error } = await supabase
-      .from("clients")
+      .from('clients')
       .update({
         ...data,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", id)
+      .eq('id', id)
       .select()
       .single();
 
     if (error) throw error;
 
     await logAction({
-      action: "update",
-      entity_type: "client",
+      action: 'update',
+      entity_type: 'client',
       entity_id: id,
       entity_description: `Dados do cliente atualizados: ${updatedClient.name}`,
       details: { after: updatedClient },
-      criticality: "normal",
+      criticality: 'normal',
     });
 
     return updatedClient;
@@ -101,21 +101,21 @@ export const clientService = {
   deleteClient: async (id: string): Promise<void> => {
     // Get client name before delete for logging
     const { data: client } = await supabase
-      .from("clients")
-      .select("name")
-      .eq("id", id)
+      .from('clients')
+      .select('name')
+      .eq('id', id)
       .single();
 
-    const { error } = await supabase.from("clients").delete().eq("id", id);
+    const { error } = await supabase.from('clients').delete().eq('id', id);
 
     if (error) throw error;
 
     await logAction({
-      action: "delete",
-      entity_type: "client",
+      action: 'delete',
+      entity_type: 'client',
       entity_id: id,
-      entity_description: `Cliente removido: ${client?.name || "ID " + id}`,
-      criticality: "crítico",
+      entity_description: `Cliente removido: ${client?.name || 'ID ' + id}`,
+      criticality: 'crítico',
     });
   },
 };

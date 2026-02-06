@@ -1,5 +1,5 @@
-import React from "react";
-import { FileText, Loader2 } from "lucide-react";
+import React from 'react';
+import { FileText, Loader2 } from 'lucide-react';
 
 interface ReportGenerationProgressProps {
   isGenerating: boolean;

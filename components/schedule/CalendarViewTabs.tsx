@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   Calendar,
   CalendarDays,
   CalendarClock,
   List,
   ChevronDown,
-} from "lucide-react";
+} from 'lucide-react';
 
-export type CalendarViewType = "month" | "week" | "day" | "agenda";
+export type CalendarViewType = 'month' | 'week' | 'day' | 'agenda';
 
 interface CalendarViewTabsProps {
   currentView: CalendarViewType;
@@ -19,10 +19,10 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({
   onViewChange,
 }) => {
   const views = [
-    { id: "month", label: "Mês", icon: <Calendar size={16} /> },
-    { id: "week", label: "Semana", icon: <CalendarDays size={16} /> },
-    { id: "day", label: "Dia", icon: <CalendarClock size={16} /> },
-    { id: "agenda", label: "Lista", icon: <List size={16} /> },
+    { id: 'month', label: 'Mês', icon: <Calendar size={16} /> },
+    { id: 'week', label: 'Semana', icon: <CalendarDays size={16} /> },
+    { id: 'day', label: 'Dia', icon: <CalendarClock size={16} /> },
+    { id: 'agenda', label: 'Lista', icon: <List size={16} /> },
   ];
 
   return (
@@ -62,8 +62,8 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({
                 flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.12em] transition-all duration-200
                 ${
                   isActive
-                    ? "bg-primary-600 text-white shadow-lg shadow-primary-500/20"
-                    : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/20'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                 }
               `}
             >

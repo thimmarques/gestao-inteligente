@@ -1,6 +1,6 @@
-import React from "react";
-import { History, Loader2 } from "lucide-react";
-import { useAuditLogsByEntity } from "../../../hooks/useQueries";
+import React from 'react';
+import { History, Loader2 } from 'lucide-react';
+import { useAuditLogsByEntity } from '../../../hooks/useQueries';
 
 interface HistoryTabProps {
   caseId: string;
@@ -30,17 +30,17 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ caseId }) => {
             <div key={activity.id} className="relative group">
               <div
                 className={`absolute -left-[35px] top-1 w-5 h-5 rounded-full border-4 border-white dark:border-slate-900 z-10 flex items-center justify-center ${
-                  activity.action === "create"
-                    ? "bg-green-500"
-                    : activity.action === "delete"
-                      ? "bg-red-500"
-                      : "bg-blue-500"
+                  activity.action === 'create'
+                    ? 'bg-green-500'
+                    : activity.action === 'delete'
+                      ? 'bg-red-500'
+                      : 'bg-blue-500'
                 }`}
               ></div>
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-bold dark:text-white">
-                    {new Date(activity.created_at).toLocaleString("pt-BR")}
+                    {new Date(activity.created_at).toLocaleString('pt-BR')}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm group-hover:shadow-md transition-shadow">

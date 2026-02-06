@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Calendar,
@@ -18,15 +18,15 @@ import {
   UserCheck,
   // Added Loader2 to fix missing import error
   Loader2,
-} from "lucide-react";
-import { Deadline } from "../../types";
+} from 'lucide-react';
+import { Deadline } from '../../types';
 import {
   getDeadlineStatus,
   getPriorityColor,
   calculateDaysRemaining,
-} from "../../utils/deadlineCalculations";
-import { format, differenceInDays } from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from '../../utils/deadlineCalculations';
+import { format, differenceInDays } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface DeadlineDetailsModalProps {
   deadline: Deadline | null;
@@ -51,7 +51,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
 
   const { color, text, status: visualStatus } = getDeadlineStatus(deadline);
   const days = calculateDaysRemaining(deadline.deadline_date);
-  const isPendente = deadline.status !== "concluído";
+  const isPendente = deadline.status !== 'concluído';
 
   const handleToggle = async () => {
     setIsActionLoading(true);
@@ -60,7 +60,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
   };
 
   const handleConfirmDelete = () => {
-    if (confirm("Deseja realmente remover este prazo permanentemente?")) {
+    if (confirm('Deseja realmente remover este prazo permanentemente?')) {
       onDelete(deadline.id);
       onClose();
     }
@@ -70,7 +70,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
     ? (() => {
         const diff = differenceInDays(
           new Date(deadline.deadline_date),
-          new Date(deadline.completed_at),
+          new Date(deadline.completed_at)
         );
         return {
           diff,
@@ -78,7 +78,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
             diff >= 0
               ? `Concluído ${diff} dias antes do prazo`
               : `Concluído com ${Math.abs(diff)} dias de atraso`,
-          color: diff >= 0 ? "text-green-600" : "text-red-600",
+          color: diff >= 0 ? 'text-green-600' : 'text-red-600',
         };
       })()
     : null;
@@ -151,8 +151,8 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
           <div
             className={`p-10 rounded-[2.5rem] text-center border-2 transition-all ${
               isPendente
-                ? "bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800"
-                : "bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30"
+                ? 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800'
+                : 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30'
             }`}
           >
             {isPendente ? (
@@ -161,14 +161,14 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
                   className="text-7xl font-black tabular-nums tracking-tighter"
                   style={{ color }}
                 >
-                  {days === 0 ? "HOJE" : days}
+                  {days === 0 ? 'HOJE' : days}
                 </p>
                 <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">
                   {days === 0
-                    ? "O PRAZO SE ENCERRA"
+                    ? 'O PRAZO SE ENCERRA'
                     : days < 0
-                      ? "DIAS DE ATRASO"
-                      : "DIAS RESTANTES"}
+                      ? 'DIAS DE ATRASO'
+                      : 'DIAS RESTANTES'}
                 </p>
               </div>
             ) : (
@@ -202,10 +202,10 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
                     Data Limite
                   </p>
                   <p className="text-sm font-bold dark:text-white">
-                    {format(new Date(deadline.deadline_date), "dd/MM/yyyy")}
+                    {format(new Date(deadline.deadline_date), 'dd/MM/yyyy')}
                     <span className="ml-2 text-slate-400 font-medium">
                       (
-                      {format(new Date(deadline.deadline_date), "EEEE", {
+                      {format(new Date(deadline.deadline_date), 'EEEE', {
                         locale: ptBR,
                       })}
                       )
@@ -223,7 +223,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
                     Processo Vinculado
                   </p>
                   <p className="text-sm font-bold text-primary-600 hover:underline cursor-pointer truncate font-mono">
-                    {deadline.case?.process_number || "N/A"}
+                    {deadline.case?.process_number || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -256,7 +256,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
                     Cliente
                   </p>
                   <p className="text-sm font-bold dark:text-white">
-                    {deadline.case?.client.name || "N/A"}
+                    {deadline.case?.client.name || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -271,7 +271,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed italic">
               {deadline.description
                 ? `"${deadline.description}"`
-                : "Nenhuma descrição detalhada fornecida para este prazo."}
+                : 'Nenhuma descrição detalhada fornecida para este prazo.'}
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Calendar,
   Briefcase,
@@ -6,14 +6,14 @@ import {
   User,
   Eye,
   AlertTriangle,
-} from "lucide-react";
-import { Deadline } from "../../types";
+} from 'lucide-react';
+import { Deadline } from '../../types';
 import {
   getDeadlineStatus,
   getPriorityColor,
   calculateDaysRemaining,
-} from "../../utils/deadlineCalculations";
-import { format } from "date-fns";
+} from '../../utils/deadlineCalculations';
+import { format } from 'date-fns';
 
 interface DeadlineCardProps {
   deadline: Deadline;
@@ -28,12 +28,12 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
 }) => {
   const { color, text, status } = getDeadlineStatus(deadline);
   const days = calculateDaysRemaining(deadline.deadline_date);
-  const isPendente = deadline.status !== "concluído";
+  const isPendente = deadline.status !== 'concluído';
 
   return (
     <div
       onClick={() => onClick(deadline)}
-      className={`bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-slate-800 border-l-[8px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden ${!isPendente ? "opacity-60 grayscale-[0.5]" : ""}`}
+      className={`bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-slate-800 border-l-[8px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden ${!isPendente ? 'opacity-60 grayscale-[0.5]' : ''}`}
       style={{ borderLeftColor: color }}
     >
       {/* Visual Background Accent */}
@@ -42,7 +42,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div
-          className={`w-3 h-3 rounded-full ${days <= 2 && isPendente ? "animate-pulse" : ""}`}
+          className={`w-3 h-3 rounded-full ${days <= 2 && isPendente ? 'animate-pulse' : ''}`}
           style={{ backgroundColor: color }}
         />
         <span
@@ -89,7 +89,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
               Data Limite
             </p>
             <p className="text-sm font-bold dark:text-white">
-              {format(new Date(deadline.deadline_date), "dd/MM/yyyy")}
+              {format(new Date(deadline.deadline_date), 'dd/MM/yyyy')}
             </p>
           </div>
         </div>
@@ -132,8 +132,8 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           }}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
             !isPendente
-              ? "bg-green-100 text-green-700"
-              : "bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-primary-600 hover:text-white"
+              ? 'bg-green-100 text-green-700'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-primary-600 hover:text-white'
           }`}
         >
           {isPendente ? (
@@ -141,7 +141,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           ) : (
             <CheckCircle2 size={16} />
           )}
-          {isPendente ? "Marcar Concluído" : "Prazo Concluído"}
+          {isPendente ? 'Marcar Concluído' : 'Prazo Concluído'}
         </button>
 
         <button className="p-2 text-slate-300 hover:text-primary-500 transition-all">

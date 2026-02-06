@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import { X, Save, Search, Users, Loader2 } from "lucide-react";
-import { CaseStatus, CaseType } from "../../types.ts";
-import { useClients } from "../../hooks/useQueries";
-import { caseService } from "../../services/caseService";
-import { useApp } from "../../contexts/AppContext";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { X, Save, Search, Users, Loader2 } from 'lucide-react';
+import { CaseStatus, CaseType } from '../../types.ts';
+import { useClients } from '../../hooks/useQueries';
+import { caseService } from '../../services/caseService';
+import { useApp } from '../../contexts/AppContext';
 
 interface CreateCaseModalProps {
   isOpen: boolean;
@@ -20,20 +20,20 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
   const { data: clients = [] } = useClients();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [showClientList, setShowClientList] = useState(false);
   const clientListRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
-    client_id: "",
-    process_number: "",
-    court: "",
-    type: "cível" as CaseType,
-    status: "distribuído" as CaseStatus,
-    value: "",
-    started_at: new Date().toISOString().split("T")[0],
-    tags: "",
-    notes: "",
+    client_id: '',
+    process_number: '',
+    court: '',
+    type: 'cível' as CaseType,
+    status: 'distribuído' as CaseStatus,
+    value: '',
+    started_at: new Date().toISOString().split('T')[0],
+    tags: '',
+    notes: '',
   });
 
   useEffect(() => {
@@ -45,8 +45,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
         setShowClientList(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const filteredClients = useMemo(() => {
@@ -55,7 +55,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
       .filter(
         (c) =>
           c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.cpf_cnpj.includes(searchTerm),
+          c.cpf_cnpj.includes(searchTerm)
       )
       .slice(0, 10);
   }, [clients, searchTerm]);
@@ -81,9 +81,9 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
         value: Number(formData.value) || 0,
         started_at: formData.started_at,
         tags: formData.tags
-          .split(",")
+          .split(',')
           .map((t) => t.trim())
-          .filter((t) => t !== ""),
+          .filter((t) => t !== ''),
         notes: formData.notes,
       });
 
@@ -93,7 +93,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      alert("Erro ao cadastrar processo.");
+      alert('Erro ao cadastrar processo.');
     }
   };
 
@@ -138,7 +138,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
                 <input
                   placeholder="Buscar cliente pelo nome ou CPF..."
                   className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
-                  value={searchTerm || selectedClient?.name || ""}
+                  value={searchTerm || selectedClient?.name || ''}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                     setShowClientList(true);
@@ -155,7 +155,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
                       onClick={() => {
                         setFormData({ ...formData, client_id: c.id });
                         setShowClientList(false);
-                        setSearchTerm("");
+                        setSearchTerm('');
                       }}
                       className="w-full px-5 py-4 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors"
                     >

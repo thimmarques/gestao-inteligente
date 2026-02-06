@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -12,30 +12,30 @@ import {
   LayoutGrid,
   Settings,
   X,
-} from "lucide-react";
-import { Calendar, dateFnsLocalizer, View } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from 'lucide-react';
+import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 import {
   CalendarViewTabs,
   CalendarViewType,
-} from "../components/schedule/CalendarViewTabs";
-import { CreateEventModal } from "../components/schedule/CreateEventModal";
-import { EventDetailsModal } from "../components/schedule/EventDetailsModal";
-import { ImportGoogleModal } from "../components/schedule/ImportGoogleModal";
-import { GoogleSyncBadge } from "../components/schedule/GoogleSyncBadge";
-import { ScheduleFiltersBar } from "../components/schedule/ScheduleFilters";
-import { UpcomingEventsBalloon } from "../components/schedule/UpcomingEventsBalloon";
+} from '../components/schedule/CalendarViewTabs';
+import { CreateEventModal } from '../components/schedule/CreateEventModal';
+import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
+import { ImportGoogleModal } from '../components/schedule/ImportGoogleModal';
+import { GoogleSyncBadge } from '../components/schedule/GoogleSyncBadge';
+import { ScheduleFiltersBar } from '../components/schedule/ScheduleFilters';
+import { UpcomingEventsBalloon } from '../components/schedule/UpcomingEventsBalloon';
 
-import { scheduleService } from "../services/scheduleService";
-import { filterSchedules, ScheduleFilters } from "../utils/scheduleFilters";
-import { getEventColor } from "../utils/eventColors";
-import { ScheduleEvent } from "../types";
-import { useApp } from "../contexts/AppContext";
-import { useSchedules } from "../hooks/useQueries";
+import { scheduleService } from '../services/scheduleService';
+import { filterSchedules, ScheduleFilters } from '../utils/scheduleFilters';
+import { getEventColor } from '../utils/eventColors';
+import { ScheduleEvent } from '../types';
+import { useApp } from '../contexts/AppContext';
+import { useSchedules } from '../hooks/useQueries';
 
-const locales = { "pt-BR": ptBR };
+const locales = { 'pt-BR': ptBR };
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -46,13 +46,13 @@ const localizer = dateFnsLocalizer({
 
 const Schedule: React.FC = () => {
   const { lawyer } = useApp();
-  const [view, setView] = useState<CalendarViewType>("month");
+  const [view, setView] = useState<CalendarViewType>('month');
   const [date, setDate] = useState(new Date());
   const { data: schedules = [], isLoading, refetch } = useSchedules();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
-    null,
+    null
   );
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -62,22 +62,22 @@ const Schedule: React.FC = () => {
     end: Date;
   } | null>(null);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<ScheduleFilters>({
     types: [],
-    status: ["agendado"],
+    status: ['agendado'],
     clients: [],
     lawyers: [],
     showOnlyMine: false,
   });
 
   const calendarEvents = useMemo(() => {
-    const currentLawyerId = lawyer?.id || "";
+    const currentLawyerId = lawyer?.id || '';
     const filtered = filterSchedules(schedules, filters, currentLawyerId);
     const searched = filtered.filter(
       (s) =>
         !searchTerm ||
-        (s.title && s.title.toLowerCase().includes(searchTerm.toLowerCase())),
+        (s.title && s.title.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     return searched.map((s) => ({
@@ -113,7 +113,7 @@ const Schedule: React.FC = () => {
 
   const handleStatusUpdate = async (
     id: string,
-    status: ScheduleEvent["status"],
+    status: ScheduleEvent['status']
   ) => {
     setIsDetailsOpen(false);
     setSelectedEvent(null);
@@ -124,9 +124,9 @@ const Schedule: React.FC = () => {
   const handleSaveEvent = async (formData: any) => {
     const input = {
       ...formData,
-      lawyer_id: lawyer?.id || "",
-      office_id: lawyer?.office_id || "",
-      status: formData.status || "agendado",
+      lawyer_id: lawyer?.id || '',
+      office_id: lawyer?.office_id || '',
+      status: formData.status || 'agendado',
       reminder_sent: false,
       start_time:
         formData.start_time ||
@@ -154,7 +154,7 @@ const Schedule: React.FC = () => {
     <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
-          Agenda{" "}
+          Agenda{' '}
           {isLoading && (
             <Loader2 className="animate-spin text-primary-500" size={24} />
           )}
@@ -176,7 +176,7 @@ const Schedule: React.FC = () => {
             <Plus
               size={20}
               className="mr-2 group-hover:rotate-90 transition-transform"
-            />{" "}
+            />{' '}
             Novo Evento
           </button>
         </div>
@@ -201,7 +201,7 @@ const Schedule: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-                className={`p-3 rounded-xl border transition-all ${isFiltersOpen ? "bg-primary-50 border-primary-200 text-primary-600" : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500"}`}
+                className={`p-3 rounded-xl border transition-all ${isFiltersOpen ? 'bg-primary-50 border-primary-200 text-primary-600' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500'}`}
                 title="Filtros"
               >
                 <Filter size={20} />
@@ -213,7 +213,7 @@ const Schedule: React.FC = () => {
               >
                 <RefreshCw
                   size={20}
-                  className={isLoading ? "animate-spin" : ""}
+                  className={isLoading ? 'animate-spin' : ''}
                 />
               </button>
             </div>
@@ -238,23 +238,23 @@ const Schedule: React.FC = () => {
               selectable
               culture="pt-BR"
               messages={{
-                next: "Próximo",
-                previous: "Anterior",
-                today: "Hoje",
-                month: "Mês",
-                week: "Semana",
-                day: "Dia",
-                agenda: "Lista",
+                next: 'Próximo',
+                previous: 'Anterior',
+                today: 'Hoje',
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                agenda: 'Lista',
               }}
-              style={{ height: "calc(100vh - 400px)", minHeight: "600px" }}
+              style={{ height: 'calc(100vh - 400px)', minHeight: '600px' }}
               eventPropGetter={(event: any) => ({
                 style: {
                   backgroundColor: getEventColor(event.type, event.status),
-                  borderRadius: "8px",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "none",
-                  padding: "2px 8px",
+                  borderRadius: '8px',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  padding: '2px 8px',
                 },
               })}
             />
@@ -270,7 +270,7 @@ const Schedule: React.FC = () => {
         }}
         onSave={handleSaveEvent}
         initialData={selectedEvent}
-        mode={selectedEvent ? "edit" : "create"}
+        mode={selectedEvent ? 'edit' : 'create'}
       />
 
       <EventDetailsModal

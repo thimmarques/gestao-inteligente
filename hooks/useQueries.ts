@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../lib/supabase";
-import { clientService } from "../services/clientService";
-import { caseService } from "../services/caseService";
-import { deadlineService } from "../services/deadlineService";
-import { financeService } from "../services/financeService";
-import { scheduleService } from "../services/scheduleService";
-import { taskService } from "../services/taskService";
-import { notificationService } from "../services/notificationService";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase';
+import { clientService } from '../services/clientService';
+import { caseService } from '../services/caseService';
+import { deadlineService } from '../services/deadlineService';
+import { financeService } from '../services/financeService';
+import { scheduleService } from '../services/scheduleService';
+import { taskService } from '../services/taskService';
+import { notificationService } from '../services/notificationService';
 
 export const useClients = (options?: {
   page?: number;
@@ -15,7 +15,7 @@ export const useClients = (options?: {
   type?: string;
 }) => {
   return useQuery({
-    queryKey: ["clients", options],
+    queryKey: ['clients', options],
     queryFn: () => clientService.getClients(options),
     staleTime: 1000 * 60 * 5, // 5 minutes
     placeholderData: (previousData) => previousData, // Keep previous data while fetching new page
@@ -29,7 +29,7 @@ export const useCases = (options?: {
   status?: string;
 }) => {
   return useQuery({
-    queryKey: ["cases", options],
+    queryKey: ['cases', options],
     queryFn: () => caseService.getCases(options),
     staleTime: 1000 * 60 * 5, // 5 minutes
     placeholderData: (previousData) => previousData,
@@ -38,7 +38,7 @@ export const useCases = (options?: {
 
 export const useCase = (id: string | null) => {
   return useQuery({
-    queryKey: ["case", id],
+    queryKey: ['case', id],
     queryFn: () => (id ? caseService.getCaseById(id) : null),
     enabled: !!id,
   });
@@ -46,7 +46,7 @@ export const useCase = (id: string | null) => {
 
 export const useDeadlines = () => {
   return useQuery({
-    queryKey: ["deadlines"],
+    queryKey: ['deadlines'],
     queryFn: () => deadlineService.getDeadlines(),
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
@@ -54,7 +54,7 @@ export const useDeadlines = () => {
 
 export const useDeadlinesByCase = (caseId: string) => {
   return useQuery({
-    queryKey: ["deadlines", "case", caseId],
+    queryKey: ['deadlines', 'case', caseId],
     queryFn: () => deadlineService.getDeadlinesByCase(caseId),
     enabled: !!caseId,
   });
@@ -62,7 +62,7 @@ export const useDeadlinesByCase = (caseId: string) => {
 
 export const useFinances = () => {
   return useQuery({
-    queryKey: ["finances"],
+    queryKey: ['finances'],
     queryFn: () => financeService.getFinances(),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -70,7 +70,7 @@ export const useFinances = () => {
 
 export const useFinancesByCase = (caseId: string) => {
   return useQuery({
-    queryKey: ["finances", "case", caseId],
+    queryKey: ['finances', 'case', caseId],
     queryFn: () => financeService.getFinancesByCase(caseId),
     enabled: !!caseId,
   });
@@ -78,7 +78,7 @@ export const useFinancesByCase = (caseId: string) => {
 
 export const useSchedules = () => {
   return useQuery({
-    queryKey: ["schedules"],
+    queryKey: ['schedules'],
     queryFn: () => scheduleService.getSchedules(),
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
@@ -86,7 +86,7 @@ export const useSchedules = () => {
 
 export const useSchedulesByCase = (caseId: string) => {
   return useQuery({
-    queryKey: ["schedules", "case", caseId],
+    queryKey: ['schedules', 'case', caseId],
     queryFn: () => scheduleService.getSchedulesByCase(caseId),
     enabled: !!caseId,
   });
@@ -94,26 +94,26 @@ export const useSchedulesByCase = (caseId: string) => {
 
 export const useTasks = () => {
   return useQuery({
-    queryKey: ["tasks"],
+    queryKey: ['tasks'],
     queryFn: () => taskService.getTasks(),
   });
 };
 
 export const useNotifications = () => {
   return useQuery({
-    queryKey: ["notifications"],
+    queryKey: ['notifications'],
     queryFn: () => notificationService.getNotifications(),
   });
 };
 
 export const useTeam = () => {
   return useQuery({
-    queryKey: ["team"],
+    queryKey: ['team'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .order("name", { ascending: true });
+        .from('profiles')
+        .select('*')
+        .order('name', { ascending: true });
       if (error) throw error;
       return data;
     },
@@ -123,14 +123,14 @@ export const useTeam = () => {
 
 export const useAuditLogs = (officeId?: string) => {
   return useQuery({
-    queryKey: ["audit_logs", officeId],
+    queryKey: ['audit_logs', officeId],
     queryFn: async () => {
       if (!officeId) return [];
       const { data, error } = await supabase
-        .from("audit_logs")
-        .select("*")
-        .eq("office_id", officeId)
-        .order("created_at", { ascending: false })
+        .from('audit_logs')
+        .select('*')
+        .eq('office_id', officeId)
+        .order('created_at', { ascending: false })
         .limit(100);
       if (error) throw error;
       return data;
@@ -141,14 +141,14 @@ export const useAuditLogs = (officeId?: string) => {
 
 export const useAuditLogsByEntity = (entityId: string | null) => {
   return useQuery({
-    queryKey: ["audit_logs", "entity", entityId],
+    queryKey: ['audit_logs', 'entity', entityId],
     queryFn: async () => {
       if (!entityId) return [];
       const { data, error } = await supabase
-        .from("audit_logs")
-        .select("*")
-        .eq("entity_id", entityId)
-        .order("created_at", { ascending: false });
+        .from('audit_logs')
+        .select('*')
+        .eq('entity_id', entityId)
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data;
     },

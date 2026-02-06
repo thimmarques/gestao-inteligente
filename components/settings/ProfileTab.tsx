@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { User, Loader2, Rocket, Check } from "lucide-react";
-import { toast } from "sonner";
-import { PhotoUpload } from "./PhotoUpload.tsx";
-import { Lawyer } from "../../types.ts";
-import { useAuth } from "../../contexts/AuthContext";
-import { profileService } from "../../services/profileService";
-import { useNavigate } from "react-router-dom";
-import { useApp } from "../../contexts/AppContext";
-import { updateLawyer } from "../../utils/settingsPersistence";
-import { useQueryClient } from "@tanstack/react-query";
+import React, { useState, useEffect } from 'react';
+import { User, Loader2, Rocket, Check } from 'lucide-react';
+import { toast } from 'sonner';
+import { PhotoUpload } from './PhotoUpload.tsx';
+import { Lawyer } from '../../types.ts';
+import { useAuth } from '../../contexts/AuthContext';
+import { profileService } from '../../services/profileService';
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '../../contexts/AppContext';
+import { updateLawyer } from '../../utils/settingsPersistence';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const ProfileTab: React.FC = () => {
   const { user, refreshProfile } = useAuth();
@@ -17,14 +17,14 @@ export const ProfileTab: React.FC = () => {
   const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Lawyer>>({
-    full_name: "",
-    name: "",
-    email: "",
-    oab: "",
-    phone: "",
-    specialty: "",
-    bio: "",
-    photo_url: "",
+    full_name: '',
+    name: '',
+    email: '',
+    oab: '',
+    phone: '',
+    specialty: '',
+    bio: '',
+    photo_url: '',
   });
 
   useEffect(() => {
@@ -59,11 +59,11 @@ export const ProfileTab: React.FC = () => {
 
       await refreshProfile();
       await refreshProfile();
-      await queryClient.invalidateQueries({ queryKey: ["team"] });
-      toast.success("Perfil atualizado!");
+      await queryClient.invalidateQueries({ queryKey: ['team'] });
+      toast.success('Perfil atualizado!');
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Erro ao atualizar perfil");
+      console.error('Error updating profile:', error);
+      toast.error('Erro ao atualizar perfil');
     } finally {
       setIsSaving(false);
     }
@@ -86,12 +86,12 @@ export const ProfileTab: React.FC = () => {
       refreshAll();
 
       await refreshProfile();
-      await queryClient.invalidateQueries({ queryKey: ["team"] });
-      navigate("/", { replace: true });
+      await queryClient.invalidateQueries({ queryKey: ['team'] });
+      navigate('/', { replace: true });
       window.location.reload(); // Force refresh to update auth state/redirection logic
     } catch (error) {
-      console.error("Error completing registration:", error);
-      toast.error("Erro ao completar cadastro");
+      console.error('Error completing registration:', error);
+      toast.error('Erro ao completar cadastro');
     } finally {
       setIsSaving(false);
     }
@@ -122,9 +122,9 @@ export const ProfileTab: React.FC = () => {
         </h3>
         <PhotoUpload
           currentPhotoUrl={formData.photo_url}
-          name={formData.full_name || formData.name || ""}
-          onPhotoChange={(url) => handleChange("photo_url", url)}
-          onPhotoRemove={() => handleChange("photo_url", "")}
+          name={formData.full_name || formData.name || ''}
+          onPhotoChange={(url) => handleChange('photo_url', url)}
+          onPhotoRemove={() => handleChange('photo_url', '')}
         />
       </section>
 
@@ -146,8 +146,8 @@ export const ProfileTab: React.FC = () => {
               </label>
               <input
                 type="text"
-                value={formData.full_name || formData.name || ""}
-                onChange={(e) => handleChange("full_name", e.target.value)}
+                value={formData.full_name || formData.name || ''}
+                onChange={(e) => handleChange('full_name', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -159,8 +159,8 @@ export const ProfileTab: React.FC = () => {
               <input
                 type="text"
                 placeholder="UF 000.000"
-                value={formData.oab || ""}
-                onChange={(e) => handleChange("oab", e.target.value)}
+                value={formData.oab || ''}
+                onChange={(e) => handleChange('oab', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
               />
             </div>
@@ -172,7 +172,7 @@ export const ProfileTab: React.FC = () => {
               <input
                 type="email"
                 readOnly
-                value={formData.email || ""}
+                value={formData.email || ''}
                 className="w-full pl-6 pr-10 py-4 bg-slate-100 dark:bg-slate-800/50 border-none rounded-2xl text-slate-500 cursor-not-allowed text-sm"
               />
             </div>
@@ -183,8 +183,8 @@ export const ProfileTab: React.FC = () => {
               </label>
               <input
                 type="text"
-                value={formData.phone || ""}
-                onChange={(e) => handleChange("phone", e.target.value)}
+                value={formData.phone || ''}
+                onChange={(e) => handleChange('phone', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -197,8 +197,8 @@ export const ProfileTab: React.FC = () => {
                 rows={5}
                 maxLength={500}
                 placeholder="Conte um pouco sobre sua trajetória..."
-                value={formData.bio || ""}
-                onChange={(e) => handleChange("bio", e.target.value)}
+                value={formData.bio || ''}
+                onChange={(e) => handleChange('bio', e.target.value)}
                 className="w-full px-5 py-5 bg-slate-50 dark:bg-slate-800 border-none rounded-[2rem] focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
               />
             </div>

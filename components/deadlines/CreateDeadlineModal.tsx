@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   X,
   Save,
@@ -12,9 +12,9 @@ import {
   Info,
   Check,
   ArrowRight,
-} from "lucide-react";
-import { Deadline, Case } from "../../types";
-import { useCases } from "../../hooks/useQueries";
+} from 'lucide-react';
+import { Deadline, Case } from '../../types';
+import { useCases } from '../../hooks/useQueries';
 
 interface CreateDeadlineModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ interface CreateDeadlineModalProps {
   onSave?: (data: any) => void;
   onSuccess?: () => void;
   defaultCaseId?: string;
-  mode?: "create" | "edit";
+  mode?: 'create' | 'edit';
   deadlineId?: string;
   initialData?: Deadline | null;
 }
@@ -33,20 +33,20 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   onSave,
   onSuccess,
   defaultCaseId,
-  mode = "create",
+  mode = 'create',
   initialData,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: cases = [] } = useCases();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [showCaseList, setShowCaseList] = useState(false);
 
   const [formData, setFormData] = useState<any>({
-    title: "",
-    case_id: "",
-    deadline_date: "",
-    priority: "média",
-    description: "",
+    title: '',
+    case_id: '',
+    deadline_date: '',
+    priority: 'média',
+    description: '',
   });
 
   useEffect(() => {
@@ -54,18 +54,18 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
       setFormData({
         ...initialData,
         deadline_date: initialData.deadline_date
-          ? initialData.deadline_date.split("T")[0]
-          : "",
+          ? initialData.deadline_date.split('T')[0]
+          : '',
       });
     } else {
       setFormData({
-        title: "",
-        case_id: defaultCaseId || "",
+        title: '',
+        case_id: defaultCaseId || '',
         deadline_date: new Date(Date.now() + 5 * 86400000)
           .toISOString()
-          .split("T")[0],
-        priority: "média",
-        description: "",
+          .split('T')[0],
+        priority: 'média',
+        description: '',
       });
     }
   }, [isOpen, initialData, defaultCaseId]);
@@ -74,7 +74,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   const filteredCases = (cases as any[]).filter(
     (c) =>
       c.process_number.includes(searchTerm) ||
-      (c.court && c.court.toLowerCase().includes(searchTerm.toLowerCase())),
+      (c.court && c.court.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -101,14 +101,14 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   };
 
   const priorityOptions = [
-    { id: "baixa", label: "Baixa", icon: MinusCircle, color: "text-slate-400" },
-    { id: "média", label: "Média", icon: Circle, color: "text-blue-500" },
-    { id: "alta", label: "Alta", icon: AlertCircle, color: "text-orange-500" },
+    { id: 'baixa', label: 'Baixa', icon: MinusCircle, color: 'text-slate-400' },
+    { id: 'média', label: 'Média', icon: Circle, color: 'text-blue-500' },
+    { id: 'alta', label: 'Alta', icon: AlertCircle, color: 'text-orange-500' },
     {
-      id: "urgente",
-      label: "Urgente",
+      id: 'urgente',
+      label: 'Urgente',
       icon: AlertTriangle,
-      color: "text-red-500",
+      color: 'text-red-500',
     },
   ];
 
@@ -120,7 +120,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
         <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold dark:text-white">
-              {mode === "create" ? "Novo Prazo" : "Editar Prazo"}
+              {mode === 'create' ? 'Novo Prazo' : 'Editar Prazo'}
             </h2>
             <button
               onClick={onClose}
@@ -163,7 +163,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
               type="text"
               placeholder="Buscar processo..."
               value={
-                searchTerm || (selectedCase ? selectedCase.process_number : "")
+                searchTerm || (selectedCase ? selectedCase.process_number : '')
               }
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -181,7 +181,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                     onClick={() => {
                       setFormData({ ...formData, case_id: c.id });
                       setShowCaseList(false);
-                      setSearchTerm("");
+                      setSearchTerm('');
                     }}
                     className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0"
                   >
@@ -222,7 +222,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                   key={opt.id}
                   type="button"
                   onClick={() => setFormData({ ...formData, priority: opt.id })}
-                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? "border-primary-600 bg-primary-50 dark:bg-primary-900/20" : "border-slate-50 dark:border-slate-800 hover:border-slate-200"}`}
+                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-slate-50 dark:border-slate-800 hover:border-slate-200'}`}
                 >
                   <opt.icon size={20} className={opt.color} />
                   <span className="text-[10px] font-black uppercase tracking-widest">

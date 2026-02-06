@@ -133,7 +133,7 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\finance\RevenueTabl
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\layout\Layout.tsx
    17:3  warning  'ListTodo' is defined but never used               @typescript-eslint/no-unused-vars
-  111:9  warning  'pendingTasks' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  110:9  warning  'pendingTasks' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\reports\FinancialReportModal.tsx
    5:3  warning  'Check' is defined but never used    @typescript-eslint/no-unused-vars

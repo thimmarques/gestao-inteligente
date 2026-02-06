@@ -1,5 +1,5 @@
-import React from "react";
-import { Shield, FileText, MapPin, Calendar, Users, Info } from "lucide-react";
+import React from 'react';
+import { Shield, FileText, MapPin, Calendar, Users, Info } from 'lucide-react';
 
 interface DefensoriaFieldsProps {
   data: any;
@@ -24,8 +24,8 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             </label>
             <input
               type="text"
-              value={data.process_number || ""}
-              onChange={(e) => onChange("process_number", e.target.value)}
+              value={data.process_number || ''}
+              onChange={(e) => onChange('process_number', e.target.value)}
               placeholder="0000000-00.0000.0.00.0000"
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
             />
@@ -36,8 +36,8 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             </label>
             <input
               type="text"
-              value={data.comarca || ""}
-              onChange={(e) => onChange("comarca", e.target.value)}
+              value={data.comarca || ''}
+              onChange={(e) => onChange('comarca', e.target.value)}
               placeholder="Ex: São Paulo - Central"
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
@@ -48,8 +48,8 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             </label>
             <input
               type="date"
-              value={data.appointment_date || ""}
-              onChange={(e) => onChange("appointment_date", e.target.value)}
+              value={data.appointment_date || ''}
+              onChange={(e) => onChange('appointment_date', e.target.value)}
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
           </div>
@@ -58,8 +58,8 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               Tipo de Processo
             </label>
             <select
-              value={data.process_type || "cível"}
-              onChange={(e) => onChange("process_type", e.target.value)}
+              value={data.process_type || 'cível'}
+              onChange={(e) => onChange('process_type', e.target.value)}
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             >
               <option value="cível">Cível</option>
@@ -85,12 +85,12 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             <button
               type="button"
               onClick={() =>
-                onChange("has_hipossuficiencia", !data.has_hipossuficiencia)
+                onChange('has_hipossuficiencia', !data.has_hipossuficiencia)
               }
-              className={`w-12 h-6 rounded-full transition-colors relative ${data.has_hipossuficiencia ? "bg-green-600" : "bg-slate-300 dark:bg-slate-700"}`}
+              className={`w-12 h-6 rounded-full transition-colors relative ${data.has_hipossuficiencia ? 'bg-green-600' : 'bg-slate-300 dark:bg-slate-700'}`}
             >
               <div
-                className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${data.has_hipossuficiencia ? "translate-x-6" : ""}`}
+                className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${data.has_hipossuficiencia ? 'translate-x-6' : ''}`}
               />
             </button>
           </div>
@@ -100,8 +100,8 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             </label>
             <input
               type="text"
-              value={data.housing_status || ""}
-              onChange={(e) => onChange("housing_status", e.target.value)}
+              value={data.housing_status || ''}
+              onChange={(e) => onChange('housing_status', e.target.value)}
               placeholder="Ex: Aluguel, Casa Própria"
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
@@ -111,9 +111,9 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               Observações Sociais
             </label>
             <textarea
-              value={data.social_notes || ""}
+              value={data.social_notes || ''}
               onChange={(e) =>
-                onChange("social_notes", e.target.value.slice(0, 500))
+                onChange('social_notes', e.target.value.slice(0, 500))
               }
               rows={4}
               className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"

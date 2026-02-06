@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Edit,
@@ -15,14 +15,14 @@ import {
   ArrowDownRight,
   ExternalLink,
   Shield,
-} from "lucide-react";
-import { Client, ClientType } from "../../types";
+} from 'lucide-react';
+import { Client, ClientType } from '../../types';
 import {
   formatCurrency,
   formatDate,
   formatCPF,
   formatPhone,
-} from "../../utils/formatters";
+} from '../../utils/formatters';
 
 interface ClientDetailsModalProps {
   client: Client | null;
@@ -38,14 +38,14 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   onEdit,
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "geral" | "processos" | "financeiro" | "documentos"
-  >("geral");
+    'geral' | 'processos' | 'financeiro' | 'documentos'
+  >('geral');
 
   if (!isOpen || !client) return null;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert("Copiado!");
+    alert('Copiado!');
   };
 
   return (
@@ -68,9 +68,9 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 </h2>
                 <span
                   className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
-                    client.status === "ativo"
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30"
-                      : "bg-slate-100 text-slate-500"
+                    client.status === 'ativo'
+                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
+                      : 'bg-slate-100 text-slate-500'
                   }`}
                 >
                   {client.status}
@@ -80,8 +80,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 <span
                   className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase inline-flex items-center gap-1 ${
                     client.type === ClientType.PARTICULAR
-                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                      : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                   }`}
                 >
                   {client.type === ClientType.PARTICULAR ? (
@@ -117,20 +117,20 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         {/* Tabs Bar */}
         <div className="px-10 border-b border-slate-100 dark:border-slate-800 flex items-center gap-8 overflow-x-auto whitespace-nowrap scrollbar-hide shrink-0">
           {[
-            { id: "geral", label: "Dados Gerais", icon: <User size={16} /> },
+            { id: 'geral', label: 'Dados Gerais', icon: <User size={16} /> },
             {
-              id: "processos",
-              label: "Processos",
+              id: 'processos',
+              label: 'Processos',
               icon: <Briefcase size={16} />,
             },
             {
-              id: "financeiro",
-              label: "Financeiro",
+              id: 'financeiro',
+              label: 'Financeiro',
               icon: <DollarSign size={16} />,
             },
             {
-              id: "documentos",
-              label: "Documentos",
+              id: 'documentos',
+              label: 'Documentos',
               icon: <Files size={16} />,
             },
           ].map((tab) => (
@@ -139,8 +139,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 py-6 text-xs font-bold uppercase tracking-[0.2em] border-b-2 transition-all ${
                 activeTab === tab.id
-                  ? "border-primary-600 text-primary-600"
-                  : "border-transparent text-slate-400 hover:text-slate-600"
+                  ? 'border-primary-600 text-primary-600'
+                  : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               {tab.icon}
@@ -152,7 +152,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         {/* Modal Content */}
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/30 dark:bg-slate-950/20">
           <div className="max-w-4xl mx-auto h-full animate-in fade-in duration-500">
-            {activeTab === "geral" && (
+            {activeTab === 'geral' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
                   <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-8">
@@ -185,7 +185,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                           className="text-sm font-medium text-primary-600 hover:underline flex items-center gap-2"
                         >
                           <Mail size={14} />
-                          {client.email || "Não informado"}
+                          {client.email || 'Não informado'}
                         </a>
                       </div>
                       <div className="space-y-1">
@@ -218,7 +218,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
                       "
                       {client.notes ||
-                        "Nenhuma nota adicional para este cliente."}
+                        'Nenhuma nota adicional para este cliente.'}
                       "
                     </p>
                   </div>
@@ -241,7 +241,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                             </p>
                             <p className="text-lg font-bold">
                               {formatCurrency(
-                                client.financial_profile?.hourly_rate || 0,
+                                client.financial_profile?.hourly_rate || 0
                               )}
                               /h
                             </p>
@@ -257,7 +257,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                             </p>
                             <p className="text-lg font-bold">
                               {formatCurrency(
-                                client.financial_profile?.retainer_fee || 0,
+                                client.financial_profile?.retainer_fee || 0
                               )}
                               /mês
                             </p>
@@ -275,7 +275,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                               Comarca
                             </p>
                             <p className="text-lg font-bold">
-                              {client.financial_profile?.comarca || "N/A"}
+                              {client.financial_profile?.comarca || 'N/A'}
                             </p>
                           </div>
                         </div>
@@ -303,12 +303,12 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab !== "geral" && (
+            {activeTab !== 'geral' && (
               <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800 text-center">
                 <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
-                  {activeTab === "processos" ? (
+                  {activeTab === 'processos' ? (
                     <Briefcase size={40} />
-                  ) : activeTab === "financeiro" ? (
+                  ) : activeTab === 'financeiro' ? (
                     <DollarSign size={40} />
                   ) : (
                     <Files size={40} />

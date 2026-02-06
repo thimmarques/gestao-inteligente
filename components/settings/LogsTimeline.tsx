@@ -1,7 +1,7 @@
-import React from "react";
-import { AuditLog } from "../../types/audit";
-import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import React from 'react';
+import { AuditLog } from '../../types/audit';
+import { format, formatDistanceToNow, isToday, isYesterday } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import {
   Eye,
   User,
@@ -14,7 +14,7 @@ import {
   ShieldAlert,
   Download,
   Database,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface LogsTimelineProps {
   logs: AuditLog[];
@@ -34,16 +34,16 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
 
   const getActionStyle = (action: string) => {
     const styles: any = {
-      create: { icon: Plus, color: "bg-green-500" },
-      update: { icon: Edit, color: "bg-blue-500" },
-      delete: { icon: Trash2, color: "bg-red-500" },
-      permission_change: { icon: Shield, color: "bg-purple-500" },
-      access_denied: { icon: ShieldAlert, color: "bg-orange-500" },
-      login: { icon: LogIn, color: "bg-emerald-500" },
-      logout: { icon: LogOut, color: "bg-slate-400" },
-      export: { icon: Download, color: "text-orange-500" },
+      create: { icon: Plus, color: 'bg-green-500' },
+      update: { icon: Edit, color: 'bg-blue-500' },
+      delete: { icon: Trash2, color: 'bg-red-500' },
+      permission_change: { icon: Shield, color: 'bg-purple-500' },
+      access_denied: { icon: ShieldAlert, color: 'bg-orange-500' },
+      login: { icon: LogIn, color: 'bg-emerald-500' },
+      logout: { icon: LogOut, color: 'bg-slate-400' },
+      export: { icon: Download, color: 'text-orange-500' },
     };
-    return styles[action] || { icon: Database, color: "bg-slate-500" };
+    return styles[action] || { icon: Database, color: 'bg-slate-500' };
   };
 
   return (
@@ -51,8 +51,8 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
       {Object.entries(groupedLogs).map(([date, dayLogs]: any) => {
         const dateObj = new Date(date);
         let dateLabel = format(dateObj, "dd 'de' MMMM", { locale: ptBR });
-        if (isToday(dateObj)) dateLabel = "Hoje";
-        else if (isYesterday(dateObj)) dateLabel = "Ontem";
+        if (isToday(dateObj)) dateLabel = 'Hoje';
+        else if (isYesterday(dateObj)) dateLabel = 'Ontem';
 
         return (
           <div key={date} className="space-y-8">
@@ -86,7 +86,7 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
                           </span>
                         </div>
                         <span className="text-[10px] font-medium text-slate-400">
-                          {format(new Date(log.timestamp), "HH:mm:ss")} •{" "}
+                          {format(new Date(log.timestamp), 'HH:mm:ss')} •{' '}
                           {formatDistanceToNow(new Date(log.timestamp), {
                             addSuffix: true,
                             locale: ptBR,
@@ -100,7 +100,7 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
                         </div>
                         <p className="text-sm text-slate-600 dark:text-slate-300">
                           <span className="font-bold uppercase text-[10px] mr-1">
-                            {log.action.replace("_", " ")}
+                            {log.action.replace('_', ' ')}
                           </span>
                           {log.entity_description}
                         </p>
@@ -113,9 +113,9 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
                           </span>
                           <span
                             className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase ${
-                              log.criticality === "crítico"
-                                ? "text-red-500 bg-red-50"
-                                : "text-slate-500 bg-slate-50"
+                              log.criticality === 'crítico'
+                                ? 'text-red-500 bg-red-50'
+                                : 'text-slate-500 bg-slate-50'
                             }`}
                           >
                             {log.criticality}

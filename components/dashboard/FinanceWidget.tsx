@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { DollarSign, ArrowUp, ArrowDown, ExternalLink } from "lucide-react";
-import { formatCurrency } from "../../utils/formatters";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { DollarSign, ArrowUp, ArrowDown, ExternalLink } from 'lucide-react';
+import { formatCurrency } from '../../utils/formatters';
 
 interface FinanceWidgetProps {
   revenue: number;
@@ -69,7 +69,7 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({
                 <ArrowDown size={16} className="text-red-500" />
               )}
               <p
-                className={`text-2xl font-black tabular-nums ${balance >= 0 ? "text-green-600" : "text-red-600"}`}
+                className={`text-2xl font-black tabular-nums ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}
               >
                 {formatCurrency(balance)}
               </p>

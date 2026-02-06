@@ -1,31 +1,31 @@
-import React, { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { UserPlus, ChevronRight, RefreshCw, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Role } from "../types";
-import { TeamMember } from "../types/team";
-import { TeamMemberCard } from "../components/team/TeamMemberCard";
-import { TeamMemberTable } from "../components/team/TeamMemberTable";
-import { TeamViewToggle } from "../components/team/TeamViewToggle";
-import { TeamFilters } from "../components/team/TeamFilters";
-import { AddTeamMemberModal } from "../components/team/AddTeamMemberModal";
-import { TeamMemberDetailsModal } from "../components/team/TeamMemberDetailsModal";
-import { useApp } from "../contexts/AppContext";
+import React, { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { UserPlus, ChevronRight, RefreshCw, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Role } from '../types';
+import { TeamMember } from '../types/team';
+import { TeamMemberCard } from '../components/team/TeamMemberCard';
+import { TeamMemberTable } from '../components/team/TeamMemberTable';
+import { TeamViewToggle } from '../components/team/TeamViewToggle';
+import { TeamFilters } from '../components/team/TeamFilters';
+import { AddTeamMemberModal } from '../components/team/AddTeamMemberModal';
+import { TeamMemberDetailsModal } from '../components/team/TeamMemberDetailsModal';
+import { useApp } from '../contexts/AppContext';
 
-import { inviteService } from "../services/inviteService";
-import { useTeam } from "../hooks/useQueries";
-import { supabase } from "../lib/supabase";
+import { inviteService } from '../services/inviteService';
+import { useTeam } from '../hooks/useQueries';
+import { supabase } from '../lib/supabase';
 
 const PendingInvitesList: React.FC = () => {
   const { lawyer: currentUser } = useApp();
   const { data: invites = [] as any[], isLoading } = useQuery({
-    queryKey: ["invites"],
+    queryKey: ['invites'],
     queryFn: () => inviteService.listInvites(),
     enabled: !!currentUser?.office_id,
   });
 
   const pendingInvites = invites.filter(
-    (i: any) => i.status === "pending" || i.status === "sent",
+    (i: any) => i.status === 'pending' || i.status === 'sent'
   );
 
   if (isLoading)
@@ -44,7 +44,7 @@ const PendingInvitesList: React.FC = () => {
           <div className="space-y-1">
             <p className="font-bold text-sm dark:text-white">{invite.email}</p>
             <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-              {invite.role} • Enviado em{" "}
+              {invite.role} • Enviado em{' '}
               {new Date(invite.created_at).toLocaleDateString()}
             </p>
           </div>
@@ -60,17 +60,17 @@ const PendingInvitesList: React.FC = () => {
 const Team: React.FC = () => {
   const { lawyer: currentUser } = useApp();
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"cards" | "table">(
-    () => (localStorage.getItem("team_view") as any) || "cards",
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>(
+    () => (localStorage.getItem('team_view') as any) || 'cards'
   );
   const [activeTab, setActiveTab] = useState<
-    "todos" | "admin" | "lawyer" | "assistant"
-  >("todos");
+    'todos' | 'admin' | 'lawyer' | 'assistant'
+  >('todos');
   const [filterState, setFilterState] = useState({
-    search: "",
+    search: '',
     roles: [],
-    status: "todos",
-    sort: "name_asc",
+    status: 'todos',
+    sort: 'name_asc',
   });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
@@ -83,25 +83,25 @@ const Team: React.FC = () => {
           m.name.toLowerCase().includes(filterState.search.toLowerCase()) ||
           m.email.toLowerCase().includes(filterState.search.toLowerCase());
 
-        const matchTab = activeTab === "todos" || m.role === activeTab;
+        const matchTab = activeTab === 'todos' || m.role === activeTab;
         const matchRoles =
           filterState.roles.length === 0 || filterState.roles.includes(m.role);
         const matchStatus =
-          filterState.status === "todos" || m.status === filterState.status;
+          filterState.status === 'todos' || m.status === filterState.status;
 
         return matchSearch && matchTab && matchRoles && matchStatus;
       })
       .sort((a: any, b: any) => {
-        if (filterState.sort === "name_asc")
+        if (filterState.sort === 'name_asc')
           return a.name.localeCompare(b.name);
-        if (filterState.sort === "cases_desc")
+        if (filterState.sort === 'cases_desc')
           return (b.stats?.active_cases || 0) - (a.stats?.active_cases || 0);
         return 0;
       });
   }, [teamMembers, filterState, activeTab]);
 
   const handleDeleteMember = async (id: string) => {
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    const { error } = await supabase.from('profiles').delete().eq('id', id);
     if (error) throw error;
     refetch();
     setSelectedMember(null);
@@ -110,10 +110,10 @@ const Team: React.FC = () => {
   const isStaff =
     (currentUser?.role as any) === Role.ASSISTANT ||
     (currentUser?.role as any) === Role.INTERN ||
-    (currentUser?.role as any) === "assistant" ||
-    (currentUser?.role as any) === "intern" ||
-    (currentUser?.role as any) === "assistente" ||
-    (currentUser?.role as any) === "estagiario";
+    (currentUser?.role as any) === 'assistant' ||
+    (currentUser?.role as any) === 'intern' ||
+    (currentUser?.role as any) === 'assistente' ||
+    (currentUser?.role as any) === 'estagiario';
 
   return (
     <div className="p-4 md:p-8 lg:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
@@ -149,20 +149,20 @@ const Team: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            {["todos", "admin", "lawyer", "assistant"].map((tab) => (
+            {['todos', 'admin', 'lawyer', 'assistant'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
                 className={`px - 5 py - 2.5 rounded - xl text - [9px] font - black uppercase tracking - widest transition - all ${
                   activeTab === tab
-                    ? "bg-primary-600 text-white shadow-lg"
-                    : "text-slate-500 hover:text-slate-700"
+                    ? 'bg-primary-600 text-white shadow-lg'
+                    : 'text-slate-500 hover:text-slate-700'
                 } `}
               >
-                {tab === "lawyer"
-                  ? "Advogado"
-                  : tab === "assistant"
-                    ? "Assistente"
+                {tab === 'lawyer'
+                  ? 'Advogado'
+                  : tab === 'assistant'
+                    ? 'Assistente'
                     : tab}
               </button>
             ))}
@@ -193,13 +193,13 @@ const Team: React.FC = () => {
             <Users size={48} className="mb-4 opacity-20" />
             <p className="font-bold">Nenhum membro encontrado</p>
           </div>
-        ) : viewMode === "cards" ? (
+        ) : viewMode === 'cards' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredMembers.map((member: any) => (
               <TeamMemberCard
                 key={member.id}
                 member={member}
-                currentUserId={currentUser?.id || ""}
+                currentUserId={currentUser?.id || ''}
                 onClick={() => setSelectedMember(member)}
               />
             ))}
@@ -207,10 +207,10 @@ const Team: React.FC = () => {
         ) : (
           <TeamMemberTable
             members={filteredMembers}
-            currentUserId={currentUser?.id || ""}
+            currentUserId={currentUser?.id || ''}
             onRowClick={(id) =>
               setSelectedMember(
-                teamMembers.find((m: any) => m.id === id) || null,
+                teamMembers.find((m: any) => m.id === id) || null
               )
             }
           />
@@ -247,13 +247,13 @@ const Team: React.FC = () => {
         onEdit={() => {
           setSelectedMember(null);
           if (currentUser && selectedMember?.id === currentUser.id) {
-            navigate("/settings?tab=perfil");
+            navigate('/settings?tab=perfil');
           } else {
-            navigate("/settings?tab=equipe");
+            navigate('/settings?tab=equipe');
           }
         }}
         onDelete={handleDeleteMember}
-        currentUserId={currentUser?.id || ""}
+        currentUserId={currentUser?.id || ''}
       />
     </div>
   );

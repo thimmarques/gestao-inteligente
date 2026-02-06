@@ -1,16 +1,16 @@
 export type TeamRole =
-  | "admin"
-  | "lawyer"
-  | "assistant"
-  | "intern"
-  | "advogado"
-  | "assistente";
+  | 'admin'
+  | 'lawyer'
+  | 'assistant'
+  | 'intern'
+  | 'advogado'
+  | 'assistente';
 
 export interface Invite {
   id: string;
   email: string;
   role: TeamRole;
-  status: "pending" | "sent" | "accepted" | "revoked";
+  status: 'pending' | 'sent' | 'accepted' | 'revoked';
   created_at: string;
   office_id: string;
   created_by: string;
@@ -46,7 +46,7 @@ export interface TeamMember {
   oab?: string;
   phone: string;
   photo_url?: string;
-  status: "ativo" | "inativo";
+  status: 'ativo' | 'inativo';
   specialty?: string;
   bio?: string;
   permissions: TeamMemberPermissions;

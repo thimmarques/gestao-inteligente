@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -8,11 +8,11 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-} from "recharts";
+} from 'recharts';
 
 export const StatusBarChart: React.FC = () => {
   const chartData = useMemo(() => {
-    const cases = JSON.parse(localStorage.getItem("legaltech_cases") || "[]");
+    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
     const counts: Record<string, number> = {};
 
     cases.forEach((c: any) => {
@@ -20,18 +20,18 @@ export const StatusBarChart: React.FC = () => {
     });
 
     const colors: Record<string, string> = {
-      distribuído: "#64748b",
-      andamento: "#3b82f6",
-      sentenciado: "#8b5cf6",
-      recurso: "#f97316",
-      arquivado: "#eab308",
-      encerrado: "#22c55e",
+      distribuído: '#64748b',
+      andamento: '#3b82f6',
+      sentenciado: '#8b5cf6',
+      recurso: '#f97316',
+      arquivado: '#eab308',
+      encerrado: '#22c55e',
     };
 
     return Object.entries(counts).map(([status, count]) => ({
       status: status.charAt(0).toUpperCase() + status.slice(1),
       count,
-      color: colors[status.toLowerCase()] || "#94a3b8",
+      color: colors[status.toLowerCase()] || '#94a3b8',
     }));
   }, []);
 
@@ -61,21 +61,21 @@ export const StatusBarChart: React.FC = () => {
                 type="category"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: "#94a3b8" }}
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
                 width={100}
               />
               <Tooltip
-                cursor={{ fill: "transparent" }}
+                cursor={{ fill: 'transparent' }}
                 contentStyle={{
-                  backgroundColor: "#1e293b",
-                  border: "none",
-                  borderRadius: "12px",
-                  color: "#fff",
-                  fontSize: "12px",
+                  backgroundColor: '#1e293b',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontSize: '12px',
                 }}
                 formatter={(value: number) => [
                   `${value} (${((value / total) * 100).toFixed(1)}%)`,
-                  "Processos",
+                  'Processos',
                 ]}
               />
               <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={20}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Calendar,
   MapPin,
@@ -7,8 +7,8 @@ import {
   CheckCircle2,
   Clock,
   Loader2,
-} from "lucide-react";
-import { useSchedulesByCase } from "../../../hooks/useQueries";
+} from 'lucide-react';
+import { useSchedulesByCase } from '../../../hooks/useQueries';
 
 interface SchedulesTabProps {
   caseId: string;
@@ -21,13 +21,13 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
     .filter((s) => new Date(s.start_time) >= new Date())
     .sort(
       (a, b) =>
-        new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
+        new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
     );
   const history = schedules
     .filter((s) => new Date(s.start_time) < new Date())
     .sort(
       (a, b) =>
-        new Date(b.start_time).getTime() - new Date(a.start_time).getTime(),
+        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
     );
 
   const ScheduleCard: React.FC<{ schedule: any; isHistory?: boolean }> = ({
@@ -37,16 +37,16 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
     const date = new Date(schedule.start_time);
     const day = date.getDate();
     const month = date
-      .toLocaleDateString("pt-BR", { month: "short" })
+      .toLocaleDateString('pt-BR', { month: 'short' })
       .toUpperCase();
-    const time = date.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const time = date.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
 
     return (
       <div
-        className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md ${isHistory ? "opacity-70" : ""}`}
+        className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md ${isHistory ? 'opacity-70' : ''}`}
       >
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 items-center">
           <div className="flex flex-col items-center justify-center border-r border-slate-100 dark:border-slate-800 sm:pr-6">
@@ -61,9 +61,9 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
             <div className="flex items-center gap-2">
               <span
                 className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                  schedule.type === "audiência"
-                    ? "bg-red-50 dark:bg-red-900/20 text-red-600"
-                    : "bg-blue-50 dark:bg-blue-900/20 text-blue-600"
+                  schedule.type === 'audiência'
+                    ? 'bg-red-50 dark:bg-red-900/20 text-red-600'
+                    : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600'
                 }`}
               >
                 {schedule.type}

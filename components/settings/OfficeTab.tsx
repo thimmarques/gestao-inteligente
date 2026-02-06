@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Building2,
   MapPin,
@@ -8,24 +8,24 @@ import {
   Save,
   Loader2,
   Check,
-} from "lucide-react";
-import { LogoUpload } from "./LogoUpload";
-import { Office } from "../../types";
-import { useApp } from "../../contexts/AppContext";
-import { updateOffice } from "../../utils/settingsPersistence";
+} from 'lucide-react';
+import { LogoUpload } from './LogoUpload';
+import { Office } from '../../types';
+import { useApp } from '../../contexts/AppContext';
+import { updateOffice } from '../../utils/settingsPersistence';
 
 export const OfficeTab: React.FC = () => {
   const { office, refreshAll } = useApp();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Office>({
-    id: "office-1",
-    name: "Escritório Advocacia",
-    logo_url: "",
-    cnpj: "",
-    address: "",
-    phone: "",
-    email: "",
-    site: "",
+    id: 'office-1',
+    name: 'Escritório Advocacia',
+    logo_url: '',
+    cnpj: '',
+    address: '',
+    phone: '',
+    email: '',
+    site: '',
   });
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const OfficeTab: React.FC = () => {
     updateOffice(formData);
     refreshAll();
     setIsSaving(false);
-    alert("Escritório atualizado!");
+    alert('Escritório atualizado!');
   };
 
   return (
@@ -53,8 +53,8 @@ export const OfficeTab: React.FC = () => {
       <section className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-12 items-center md:items-start">
         <LogoUpload
           currentLogoUrl={formData.logo_url}
-          onLogoChange={(url) => handleChange("logo_url", url)}
-          onLogoRemove={() => handleChange("logo_url", "")}
+          onLogoChange={(url) => handleChange('logo_url', url)}
+          onLogoRemove={() => handleChange('logo_url', '')}
         />
       </section>
 
@@ -77,7 +77,7 @@ export const OfficeTab: React.FC = () => {
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => handleChange("name", e.target.value)}
+                onChange={(e) => handleChange('name', e.target.value)}
                 className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
               />
             </div>
@@ -90,7 +90,7 @@ export const OfficeTab: React.FC = () => {
                 type="text"
                 placeholder="00.000.000/0000-00"
                 value={formData.cnpj}
-                onChange={(e) => handleChange("cnpj", e.target.value)}
+                onChange={(e) => handleChange('cnpj', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
               />
             </div>
@@ -102,7 +102,7 @@ export const OfficeTab: React.FC = () => {
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
+                onChange={(e) => handleChange('email', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -114,7 +114,7 @@ export const OfficeTab: React.FC = () => {
               <input
                 type="text"
                 value={formData.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
+                onChange={(e) => handleChange('phone', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -127,7 +127,7 @@ export const OfficeTab: React.FC = () => {
                 type="url"
                 placeholder="https://..."
                 value={formData.site}
-                onChange={(e) => handleChange("site", e.target.value)}
+                onChange={(e) => handleChange('site', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
               />
             </div>
@@ -139,7 +139,7 @@ export const OfficeTab: React.FC = () => {
               <textarea
                 rows={3}
                 value={formData.address}
-                onChange={(e) => handleChange("address", e.target.value)}
+                onChange={(e) => handleChange('address', e.target.value)}
                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-[2rem] focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
                 placeholder="Logradouro, nº, bairro, cidade - UF"
               />

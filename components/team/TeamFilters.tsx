@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 // Added CheckCircle2 and Gavel to fix missing icon errors
 import {
   Search,
@@ -12,7 +12,7 @@ import {
   Users,
   CheckCircle2,
   Gavel,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface TeamFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -23,15 +23,15 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
   onFilterChange,
   resultsCount,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [openDropdown, setOpenDropdown] = useState<
-    "role" | "status" | "sort" | null
+    'role' | 'status' | 'sort' | null
   >(null);
 
   const [filters, setFilters] = useState({
     roles: [] as string[],
-    status: "todos",
-    sort: "name_asc",
+    status: 'todos',
+    sort: 'name_asc',
   });
 
   useEffect(() => {
@@ -49,18 +49,18 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
   };
 
   const handleClear = () => {
-    setSearchTerm("");
-    setFilters({ roles: [], status: "todos", sort: "name_asc" });
+    setSearchTerm('');
+    setFilters({ roles: [], status: 'todos', sort: 'name_asc' });
     onFilterChange({
-      search: "",
+      search: '',
       roles: [],
-      status: "todos",
-      sort: "name_asc",
+      status: 'todos',
+      sort: 'name_asc',
     });
   };
 
   const isFiltered =
-    searchTerm || filters.roles.length > 0 || filters.status !== "todos";
+    searchTerm || filters.roles.length > 0 || filters.status !== 'todos';
 
   return (
     <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 py-2">
@@ -79,7 +79,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
         />
         {searchTerm && (
           <button
-            onClick={() => setSearchTerm("")}
+            onClick={() => setSearchTerm('')}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
           >
             <X size={16} />
@@ -92,12 +92,12 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
         <div className="relative">
           <button
             onClick={() =>
-              setOpenDropdown(openDropdown === "role" ? null : "role")
+              setOpenDropdown(openDropdown === 'role' ? null : 'role')
             }
             className={`flex items-center gap-2 px-5 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all shadow-sm ${
               filters.roles.length > 0
-                ? "bg-primary-50 border-primary-200 text-primary-700"
-                : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500"
+                ? 'bg-primary-50 border-primary-200 text-primary-700'
+                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
             }`}
           >
             <Users size={14} />
@@ -109,13 +109,13 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             )}
             <ChevronDown
               size={14}
-              className={`transition-transform ${openDropdown === "role" ? "rotate-180" : ""}`}
+              className={`transition-transform ${openDropdown === 'role' ? 'rotate-180' : ''}`}
             />
           </button>
 
-          {openDropdown === "role" && (
+          {openDropdown === 'role' && (
             <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
-              {["admin", "advogado", "assistente"].map((r) => (
+              {['admin', 'advogado', 'assistente'].map((r) => (
                 <label
                   key={r}
                   className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-colors group"
@@ -139,17 +139,17 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
         <div className="relative">
           <button
             onClick={() =>
-              setOpenDropdown(openDropdown === "status" ? null : "status")
+              setOpenDropdown(openDropdown === 'status' ? null : 'status')
             }
             className={`flex items-center gap-2 px-5 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all shadow-sm ${
-              filters.status !== "todos"
-                ? "bg-green-50 border-green-200 text-green-700"
-                : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500"
+              filters.status !== 'todos'
+                ? 'bg-green-50 border-green-200 text-green-700'
+                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
             }`}
           >
-            {filters.status === "ativo" ? (
+            {filters.status === 'ativo' ? (
               <UserCheck size={14} />
-            ) : filters.status === "inativo" ? (
+            ) : filters.status === 'inativo' ? (
               <UserX size={14} />
             ) : (
               <Filter size={14} />
@@ -157,20 +157,20 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             Status
             <ChevronDown
               size={14}
-              className={`transition-transform ${openDropdown === "status" ? "rotate-180" : ""}`}
+              className={`transition-transform ${openDropdown === 'status' ? 'rotate-180' : ''}`}
             />
           </button>
 
-          {openDropdown === "status" && (
+          {openDropdown === 'status' && (
             <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
-              {["todos", "ativo", "inativo"].map((s) => (
+              {['todos', 'ativo', 'inativo'].map((s) => (
                 <button
                   key={s}
                   onClick={() => {
                     setFilters({ ...filters, status: s });
                     setOpenDropdown(null);
                   }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest ${filters.status === s ? "bg-primary-50 text-primary-700" : "hover:bg-slate-50 text-slate-500"}`}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest ${filters.status === s ? 'bg-primary-50 text-primary-700' : 'hover:bg-slate-50 text-slate-500'}`}
                 >
                   {s}
                   {filters.status === s && <CheckCircle2 size={14} />}
@@ -184,7 +184,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
         <div className="relative">
           <button
             onClick={() =>
-              setOpenDropdown(openDropdown === "sort" ? null : "sort")
+              setOpenDropdown(openDropdown === 'sort' ? null : 'sort')
             }
             className="flex items-center gap-2 px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 shadow-sm"
           >
@@ -192,31 +192,31 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             Ordenar
             <ChevronDown
               size={14}
-              className={`transition-transform ${openDropdown === "sort" ? "rotate-180" : ""}`}
+              className={`transition-transform ${openDropdown === 'sort' ? 'rotate-180' : ''}`}
             />
           </button>
 
-          {openDropdown === "sort" && (
+          {openDropdown === 'sort' && (
             <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
               {[
                 {
-                  id: "name_asc",
-                  label: "Nome (A-Z)",
+                  id: 'name_asc',
+                  label: 'Nome (A-Z)',
                   icon: <Users size={12} />,
                 },
                 {
-                  id: "name_desc",
-                  label: "Nome (Z-A)",
+                  id: 'name_desc',
+                  label: 'Nome (Z-A)',
                   icon: <Users size={12} />,
                 },
                 {
-                  id: "cases_desc",
-                  label: "Mais Processos",
+                  id: 'cases_desc',
+                  label: 'Mais Processos',
                   icon: <Gavel size={12} />,
                 },
                 {
-                  id: "access_desc",
-                  label: "Último Acesso",
+                  id: 'access_desc',
+                  label: 'Último Acesso',
                   icon: <Clock size={12} />,
                 },
               ].map((opt) => (
@@ -226,7 +226,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
                     setFilters({ ...filters, sort: opt.id });
                     setOpenDropdown(null);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold ${filters.sort === opt.id ? "bg-primary-50 text-primary-700" : "hover:bg-slate-50 text-slate-500"}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold ${filters.sort === opt.id ? 'bg-primary-50 text-primary-700' : 'hover:bg-slate-50 text-slate-500'}`}
                 >
                   {opt.icon}
                   {opt.label}

@@ -1,7 +1,7 @@
-import React from "react";
-import { Clock, Calendar, Loader2 } from "lucide-react";
-import { formatDate } from "../../../utils/formatters.ts";
-import { useDeadlinesByCase } from "../../../hooks/useQueries";
+import React from 'react';
+import { Clock, Calendar, Loader2 } from 'lucide-react';
+import { formatDate } from '../../../utils/formatters.ts';
+import { useDeadlinesByCase } from '../../../hooks/useQueries';
 
 interface DeadlinesTabProps {
   caseId: string;
@@ -11,54 +11,54 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
   const { data: deadlines = [], isLoading } = useDeadlinesByCase(caseId);
 
   const getStatusInfo = (date: string, status: string) => {
-    if (status === "concluído")
+    if (status === 'concluído')
       return {
-        color: "border-green-500",
-        bg: "bg-green-500",
-        text: "Concluído",
-        labelColor: "text-green-600",
+        color: 'border-green-500',
+        bg: 'bg-green-500',
+        text: 'Concluído',
+        labelColor: 'text-green-600',
       };
     const diff = Math.ceil(
-      (new Date(date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+      (new Date(date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
     );
     if (diff < 0)
       return {
-        color: "border-slate-400",
-        bg: "bg-slate-400",
+        color: 'border-slate-400',
+        bg: 'bg-slate-400',
         text: `Vencido há ${Math.abs(diff)} dias`,
-        labelColor: "text-slate-500",
+        labelColor: 'text-slate-500',
       };
     if (diff === 0)
       return {
-        color: "border-red-600",
-        bg: "bg-red-600",
-        text: "Vence HOJE",
-        labelColor: "text-red-600",
+        color: 'border-red-600',
+        bg: 'bg-red-600',
+        text: 'Vence HOJE',
+        labelColor: 'text-red-600',
       };
     if (diff <= 3)
       return {
-        color: "border-red-500",
-        bg: "bg-red-500",
+        color: 'border-red-500',
+        bg: 'bg-red-500',
         text: `Faltam ${diff} dias`,
-        labelColor: "text-red-500",
+        labelColor: 'text-red-500',
       };
     if (diff <= 7)
       return {
-        color: "border-yellow-500",
-        bg: "bg-yellow-500",
+        color: 'border-yellow-500',
+        bg: 'bg-yellow-500',
         text: `Faltam ${diff} dias`,
-        labelColor: "text-yellow-600",
+        labelColor: 'text-yellow-600',
       };
     return {
-      color: "border-green-500",
-      bg: "bg-green-500",
+      color: 'border-green-500',
+      bg: 'bg-green-500',
       text: `Faltam ${diff} dias`,
-      labelColor: "text-green-600",
+      labelColor: 'text-green-600',
     };
   };
 
   const handleAddClick = () => {
-    alert("Use o botão de novo prazo na tela principal de prazos.");
+    alert('Use o botão de novo prazo na tela principal de prazos.');
   };
 
   return (
@@ -87,12 +87,12 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
             .sort(
               (a, b) =>
                 new Date(a.deadline_date).getTime() -
-                new Date(b.deadline_date).getTime(),
+                new Date(b.deadline_date).getTime()
             )
             .map((deadline) => {
               const info = getStatusInfo(
                 deadline.deadline_date,
-                deadline.status,
+                deadline.status
               );
               return (
                 <div
@@ -117,9 +117,9 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
                         </span>
                         <span
                           className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
-                            deadline.priority === "urgente"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-slate-100 text-slate-500"
+                            deadline.priority === 'urgente'
+                              ? 'bg-red-100 text-red-600'
+                              : 'bg-slate-100 text-slate-500'
                           }`}
                         >
                           {deadline.priority}

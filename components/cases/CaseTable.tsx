@@ -1,7 +1,7 @@
-import React from "react";
-import { MoreVertical } from "lucide-react";
-import { Case } from "../../types.ts";
-import { formatCurrency } from "../../utils/formatters.ts";
+import React from 'react';
+import { MoreVertical } from 'lucide-react';
+import { Case } from '../../types.ts';
+import { formatCurrency } from '../../utils/formatters.ts';
 
 interface CaseTableProps {
   cases: Case[];
@@ -10,31 +10,31 @@ interface CaseTableProps {
 
 const statusColorMap: Record<string, string> = {
   distribuído:
-    "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
-  andamento: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+  andamento: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   sentenciado:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+    'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
   recurso:
-    "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+    'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
   arquivado:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
   encerrado:
-    "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
 };
 
 const typeColorMap: Record<string, string> = {
-  cível: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  cível: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   trabalhista:
-    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
-  criminal: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+    'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+  criminal: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
   família:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+    'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
   tributário:
-    "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
   administrativo:
-    "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400",
+    'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400',
   previdenciário:
-    "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400",
+    'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400',
 };
 
 export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
@@ -98,14 +98,14 @@ export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border border-transparent ${typeColorMap[c.type.toLowerCase()] || "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border border-transparent ${typeColorMap[c.type.toLowerCase()] || 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
                     >
                       {c.type}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${statusColorMap[c.status.toLowerCase()] || "bg-slate-100"}`}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${statusColorMap[c.status.toLowerCase()] || 'bg-slate-100'}`}
                     >
                       {c.status}
                     </span>

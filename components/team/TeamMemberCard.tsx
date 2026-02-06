@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Crown,
   Briefcase,
@@ -6,9 +6,9 @@ import {
   Phone,
   Mail,
   ChevronRight,
-} from "lucide-react";
-import { TeamMember } from "../../types/team.ts";
-import { Avatar } from "../ui/Avatar";
+} from 'lucide-react';
+import { TeamMember } from '../../types/team.ts';
+import { Avatar } from '../ui/Avatar';
 
 interface TeamMemberCardProps {
   member: TeamMember;
@@ -22,33 +22,33 @@ const roleConfig: Record<
 > = {
   admin: {
     icon: Crown,
-    color: "text-purple-600",
-    bg: "bg-purple-50 dark:bg-purple-900/30",
-    label: "Admin",
+    color: 'text-purple-600',
+    bg: 'bg-purple-50 dark:bg-purple-900/30',
+    label: 'Admin',
   },
   advogado: {
     icon: Briefcase,
-    color: "text-blue-600",
-    bg: "bg-blue-50 dark:bg-blue-900/30",
-    label: "Advogado",
+    color: 'text-blue-600',
+    bg: 'bg-blue-50 dark:bg-blue-900/30',
+    label: 'Advogado',
   },
   lawyer: {
     icon: Briefcase,
-    color: "text-blue-600",
-    bg: "bg-blue-50 dark:bg-blue-900/30",
-    label: "Advogado",
+    color: 'text-blue-600',
+    bg: 'bg-blue-50 dark:bg-blue-900/30',
+    label: 'Advogado',
   },
   assistente: {
     icon: UserCog,
-    color: "text-green-600",
-    bg: "bg-green-50 dark:bg-green-900/30",
-    label: "Assistente",
+    color: 'text-green-600',
+    bg: 'bg-green-50 dark:bg-green-900/30',
+    label: 'Assistente',
   },
   assistant: {
     icon: UserCog,
-    color: "text-green-600",
-    bg: "bg-green-50 dark:bg-green-900/30",
-    label: "Assistente",
+    color: 'text-green-600',
+    bg: 'bg-green-50 dark:bg-green-900/30',
+    label: 'Assistente',
   },
 };
 
@@ -66,8 +66,8 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
       onClick={onClick}
       className={`relative bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border transition-all cursor-pointer group hover:shadow-2xl hover:-translate-y-1 ${
         isMe
-          ? "border-2 border-yellow-500/50 shadow-xl shadow-yellow-500/5"
-          : "border-slate-200 dark:border-slate-800"
+          ? 'border-2 border-yellow-500/50 shadow-xl shadow-yellow-500/5'
+          : 'border-slate-200 dark:border-slate-800'
       }`}
     >
       {/* Role Badge */}
@@ -84,13 +84,13 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
       <div className="absolute top-4 left-4 flex gap-2">
         <div
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-            member.status === "ativo"
-              ? "bg-green-50 text-green-600 border-green-200"
-              : "bg-slate-50 text-slate-400 border-slate-200"
+            member.status === 'ativo'
+              ? 'bg-green-50 text-green-600 border-green-200'
+              : 'bg-slate-50 text-slate-400 border-slate-200'
           }`}
         >
           <div
-            className={`w-1.5 h-1.5 rounded-full ${member.status === "ativo" ? "bg-green-500 animate-pulse" : "bg-slate-300"}`}
+            className={`w-1.5 h-1.5 rounded-full ${member.status === 'ativo' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`}
           />
           {member.status}
         </div>

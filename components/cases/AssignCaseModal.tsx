@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   X,
   UserPlus,
@@ -7,8 +7,8 @@ import {
   Loader2,
   Check,
   Shield,
-} from "lucide-react";
-import { TeamMember } from "../../types/team";
+} from 'lucide-react';
+import { TeamMember } from '../../types/team';
 
 interface AssignCaseModalProps {
   caseIds: string[];
@@ -27,17 +27,17 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
 }) => {
   const [lawyers, setLawyers] = useState<TeamMember[]>([]);
   const [selectedLawyerId, setSelectedLawyerId] = useState(
-    currentLawyerId || "",
+    currentLawyerId || ''
   );
   const [notify, setNotify] = useState(true);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Buscar membros do escritório que podem receber processos
-    const team = JSON.parse(localStorage.getItem("legalflow_team") || "[]");
+    const team = JSON.parse(localStorage.getItem('legalflow_team') || '[]');
     setLawyers(
-      team.filter((m: any) => m.role !== "assistente" && m.status === "ativo"),
+      team.filter((m: any) => m.role !== 'assistente' && m.status === 'ativo')
     );
   }, [isOpen]);
 
@@ -115,7 +115,7 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
               <option value="">Selecione o advogado...</option>
               {lawyers.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {l.name} {l.oab ? `(OAB/${l.oab})` : ""}
+                  {l.name} {l.oab ? `(OAB/${l.oab})` : ''}
                 </option>
               ))}
             </select>
@@ -132,10 +132,10 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
               <button
                 type="button"
                 onClick={() => setNotify(!notify)}
-                className={`w-12 h-6 rounded-full transition-all relative ${notify ? "bg-primary-600" : "bg-slate-200 dark:bg-slate-700"}`}
+                className={`w-12 h-6 rounded-full transition-all relative ${notify ? 'bg-primary-600' : 'bg-slate-200 dark:bg-slate-700'}`}
               >
                 <div
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all ${notify ? "translate-x-6" : ""}`}
+                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all ${notify ? 'translate-x-6' : ''}`}
                 />
               </button>
             </div>

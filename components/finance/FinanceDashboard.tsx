@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -6,10 +6,10 @@ import {
   Users,
   AlertCircle,
   Info,
-} from "lucide-react";
-import { FinanceRecord, Client } from "../../types";
-import { formatCurrency } from "../../utils/formatters";
-import { isThisMonth } from "date-fns";
+} from 'lucide-react';
+import { FinanceRecord, Client } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
+import { isThisMonth } from 'date-fns';
 
 interface FinanceDashboardProps {
   revenues: FinanceRecord[];
@@ -22,20 +22,16 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
 }) => {
   const stats = useMemo(() => {
     const clients: Client[] = JSON.parse(
-      localStorage.getItem("legalflow_clients") || "[]",
+      localStorage.getItem('legalflow_clients') || '[]'
     );
 
     const paidRevenues = revenues.filter(
       (r) =>
-        r.status === "pago" &&
-        r.paid_date &&
-        isThisMonth(new Date(r.paid_date)),
+        r.status === 'pago' && r.paid_date && isThisMonth(new Date(r.paid_date))
     );
     const paidExpenses = expenses.filter(
       (e) =>
-        e.status === "pago" &&
-        e.paid_date &&
-        isThisMonth(new Date(e.paid_date)),
+        e.status === 'pago' && e.paid_date && isThisMonth(new Date(e.paid_date))
     );
 
     const totalRev = paidRevenues.reduce((sum, r) => sum + r.amount, 0);
@@ -43,18 +39,18 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
     const balance = totalRev - totalExp;
 
     const mrr = clients
-      .filter((c) => c.type === "particular" && c.status === "ativo")
+      .filter((c) => c.type === 'particular' && c.status === 'ativo')
       .reduce((sum, c) => sum + (c.financial_profile?.retainer_fee || 0), 0);
 
-    const particularClients = clients.filter((c) => c.type === "particular");
+    const particularClients = clients.filter((c) => c.type === 'particular');
     const avgTicket =
       particularClients.length > 0 ? totalRev / particularClients.length : 0;
 
     const overdueAmount = revenues
-      .filter((r) => r.status === "vencido")
+      .filter((r) => r.status === 'vencido')
       .reduce((sum, r) => sum + r.amount, 0);
     const totalPending = revenues
-      .filter((r) => ["pendente", "vencido"].includes(r.status))
+      .filter((r) => ['pendente', 'vencido'].includes(r.status))
       .reduce((sum, r) => sum + r.amount, 0);
     const defaultRate =
       totalPending > 0 ? (overdueAmount / totalPending) * 100 : 0;
@@ -73,7 +69,7 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
 
   const cards = [
     {
-      label: "Saldo do Mês",
+      label: 'Saldo do Mês',
       value: formatCurrency(stats.balance),
       icon:
         stats.balance >= 0 ? (
@@ -81,38 +77,38 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
         ) : (
           <TrendingDown size={24} />
         ),
-      color: stats.balance >= 0 ? "text-green-600" : "text-red-600",
-      bg: "bg-white dark:bg-slate-900",
-      sub: "Receitas - Despesas efetivadas",
+      color: stats.balance >= 0 ? 'text-green-600' : 'text-red-600',
+      bg: 'bg-white dark:bg-slate-900',
+      sub: 'Receitas - Despesas efetivadas',
     },
     {
-      label: "Receita Recorrente (MRR)",
+      label: 'Receita Recorrente (MRR)',
       value: formatCurrency(stats.mrr),
       icon: <Repeat size={24} />,
-      color: "text-primary-600",
-      bg: "bg-white dark:bg-slate-900",
-      tooltip: "Soma dos contratos de honorários fixos mensais",
-      sub: "Base estável do escritório",
+      color: 'text-primary-600',
+      bg: 'bg-white dark:bg-slate-900',
+      tooltip: 'Soma dos contratos de honorários fixos mensais',
+      sub: 'Base estável do escritório',
     },
     {
-      label: "Ticket Médio",
+      label: 'Ticket Médio',
       value: formatCurrency(stats.avgTicket),
       icon: <Users size={24} />,
-      color: "text-purple-600",
-      bg: "bg-white dark:bg-slate-900",
-      sub: "Média por cliente particular",
+      color: 'text-purple-600',
+      bg: 'bg-white dark:bg-slate-900',
+      sub: 'Média por cliente particular',
     },
     {
-      label: "Taxa de Inadimplência",
+      label: 'Taxa de Inadimplência',
       value: `${stats.defaultRate.toFixed(1)}%`,
       icon: <AlertCircle size={24} />,
       color:
         stats.defaultRate > 10
-          ? "text-red-600"
+          ? 'text-red-600'
           : stats.defaultRate > 5
-            ? "text-amber-600"
-            : "text-green-600",
-      bg: "bg-white dark:bg-slate-900",
+            ? 'text-amber-600'
+            : 'text-green-600',
+      bg: 'bg-white dark:bg-slate-900',
       sub: `R$ ${stats.overdueAmount.toLocaleString()} vencidos`,
     },
   ];

@@ -1,7 +1,7 @@
-import React from "react";
-import { Building, Calendar, ArrowRight, Scale } from "lucide-react";
-import { Case } from "../../types";
-import { formatCurrency, formatDate } from "../../utils/formatters";
+import React from 'react';
+import { Building, Calendar, ArrowRight, Scale } from 'lucide-react';
+import { Case } from '../../types';
+import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface CaseCardProps {
   caseData: Case;
@@ -10,26 +10,26 @@ interface CaseCardProps {
 
 const statusColorMap: Record<string, string> = {
   distribuído:
-    "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
-  andamento: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+  andamento: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   sentenciado:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+    'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
   recurso:
-    "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+    'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
   arquivado:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
   encerrado:
-    "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
 };
 
 const typeColorMap: Record<string, string> = {
-  cível: "text-blue-600 dark:text-blue-400",
-  trabalhista: "text-emerald-600 dark:text-emerald-400",
-  criminal: "text-red-600 dark:text-red-400",
-  família: "text-purple-600 dark:text-purple-400",
-  tributário: "text-amber-600 dark:text-amber-400",
-  administrativo: "text-indigo-600 dark:text-indigo-400",
-  previdenciário: "text-pink-600 dark:text-pink-400",
+  cível: 'text-blue-600 dark:text-blue-400',
+  trabalhista: 'text-emerald-600 dark:text-emerald-400',
+  criminal: 'text-red-600 dark:text-red-400',
+  família: 'text-purple-600 dark:text-purple-400',
+  tributário: 'text-amber-600 dark:text-amber-400',
+  administrativo: 'text-indigo-600 dark:text-indigo-400',
+  previdenciário: 'text-pink-600 dark:text-pink-400',
 };
 
 export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
@@ -43,7 +43,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
           {caseData.process_number}
         </span>
         <span
-          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusColorMap[caseData.status.toLowerCase()] || "bg-slate-100"}`}
+          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusColorMap[caseData.status.toLowerCase()] || 'bg-slate-100'}`}
         >
           {caseData.status}
         </span>
@@ -69,11 +69,11 @@ export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
           <Scale
             size={14}
             className={
-              typeColorMap[caseData.type.toLowerCase()] || "text-slate-400"
+              typeColorMap[caseData.type.toLowerCase()] || 'text-slate-400'
             }
           />
           <span
-            className={`text-[10px] font-black uppercase tracking-widest ${typeColorMap[caseData.type.toLowerCase()] || "text-slate-500"}`}
+            className={`text-[10px] font-black uppercase tracking-widest ${typeColorMap[caseData.type.toLowerCase()] || 'text-slate-500'}`}
           >
             Área: {caseData.type}
           </span>

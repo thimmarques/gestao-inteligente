@@ -1,4 +1,4 @@
-import { ScheduleEvent } from "../types";
+import { ScheduleEvent } from '../types';
 
 export interface ScheduleFilters {
   types: string[]; // ['audiência', 'reunião']
@@ -11,7 +11,7 @@ export interface ScheduleFilters {
 export function filterSchedules(
   schedules: ScheduleEvent[],
   filters: ScheduleFilters,
-  currentLawyerId: string,
+  currentLawyerId: string
 ): ScheduleEvent[] {
   let filtered = [...schedules];
 
@@ -28,7 +28,7 @@ export function filterSchedules(
   // Filtro por Clientes
   if (filters.clients.length > 0) {
     filtered = filtered.filter(
-      (s) => s.client_id && filters.clients.includes(s.client_id),
+      (s) => s.client_id && filters.clients.includes(s.client_id)
     );
   }
 

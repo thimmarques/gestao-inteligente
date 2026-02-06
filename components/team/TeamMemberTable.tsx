@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Edit,
   Trash2,
@@ -6,8 +6,8 @@ import {
   Briefcase,
   UserCog,
   ChevronRight,
-} from "lucide-react";
-import { TeamMember } from "../../types/team";
+} from 'lucide-react';
+import { TeamMember } from '../../types/team';
 
 interface TeamMemberTableProps {
   members: TeamMember[];
@@ -17,19 +17,19 @@ interface TeamMemberTableProps {
 
 const roleBadge = (role: string) => {
   const normalized = role.toLowerCase();
-  if (normalized === "admin")
+  if (normalized === 'admin')
     return (
       <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400 border border-purple-100 dark:border-purple-800">
         <Crown size={10} /> Admin
       </span>
     );
-  if (normalized === "advogado" || normalized === "lawyer")
+  if (normalized === 'advogado' || normalized === 'lawyer')
     return (
       <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
         <Briefcase size={10} /> Advogado
       </span>
     );
-  if (normalized === "assistente" || normalized === "assistant")
+  if (normalized === 'assistente' || normalized === 'assistant')
     return (
       <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-100 dark:border-green-800">
         <UserCog size={10} /> Assistente
@@ -83,7 +83,7 @@ export const TeamMemberTable: React.FC<TeamMemberTableProps> = ({
                   <tr
                     key={member.id}
                     onClick={() => onRowClick(member.id)}
-                    className={`group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer ${isMe ? "bg-yellow-500/5" : ""}`}
+                    className={`group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer ${isMe ? 'bg-yellow-500/5' : ''}`}
                   >
                     <td className="px-6 md:px-8 py-4">
                       <div className="flex items-center gap-4">
@@ -113,14 +113,14 @@ export const TeamMemberTable: React.FC<TeamMemberTableProps> = ({
                     </td>
                     <td className="px-6 py-4">{roleBadge(member.role)}</td>
                     <td className="px-6 py-4 font-mono text-xs font-bold text-slate-500 dark:text-slate-400 hidden lg:table-cell">
-                      {member.oab || "-"}
+                      {member.oab || '-'}
                     </td>
                     <td className="px-6 py-4 hidden sm:table-cell">
                       <div
-                        className={`flex items-center gap-2 text-[10px] font-black uppercase ${member.status === "ativo" ? "text-green-600" : "text-slate-400"}`}
+                        className={`flex items-center gap-2 text-[10px] font-black uppercase ${member.status === 'ativo' ? 'text-green-600' : 'text-slate-400'}`}
                       >
                         <div
-                          className={`w-2 h-2 rounded-full ${member.status === "ativo" ? "bg-green-500 animate-pulse" : "bg-slate-300"}`}
+                          className={`w-2 h-2 rounded-full ${member.status === 'ativo' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`}
                         />
                         {member.status}
                       </div>

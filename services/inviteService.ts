@@ -1,5 +1,5 @@
-import { supabase } from "../lib/supabase";
-import { Role } from "../types";
+import { supabase } from '../lib/supabase';
+import { Role } from '../types';
 
 export interface Invite {
   id: string;
@@ -17,10 +17,10 @@ export const inviteService = {
   // Admin/Lawyer: Create an invite (Calls Edge Function)
   async createInvite(email: string, role: string) {
     const { data, error } = await supabase.functions.invoke(
-      "send-invite-email",
+      'send-invite-email',
       {
         body: { email, role },
-      },
+      }
     );
 
     if (error) {
@@ -39,9 +39,9 @@ export const inviteService = {
   // Admin: List invites
   async listInvites() {
     const { data, error } = await supabase
-      .from("invites")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .from('invites')
+      .select('*')
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
     return data as Invite[];
@@ -49,7 +49,7 @@ export const inviteService = {
 
   // Public: Accept invite (Calls Edge Function)
   async acceptInvite(token: string, password: string, fullName: string) {
-    const { data, error } = await supabase.functions.invoke("accept-invite", {
+    const { data, error } = await supabase.functions.invoke('accept-invite', {
       body: { token, password, full_name: fullName },
     });
 

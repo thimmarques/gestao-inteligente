@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -6,9 +6,9 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Loader2,
-} from "lucide-react";
-import { formatCurrency, formatDate } from "../../../utils/formatters.ts";
-import { useFinancesByCase } from "../../../hooks/useQueries";
+} from 'lucide-react';
+import { formatCurrency, formatDate } from '../../../utils/formatters.ts';
+import { useFinancesByCase } from '../../../hooks/useQueries';
 
 interface FinanceTabProps {
   caseId: string;
@@ -18,10 +18,10 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
   const { data: records = [], isLoading } = useFinancesByCase(caseId);
 
   const totalRevenue = records
-    .filter((r) => r.type === "receita")
+    .filter((r) => r.type === 'receita')
     .reduce((acc, r) => acc + r.amount, 0);
   const totalExpense = records
-    .filter((r) => r.type === "despesa")
+    .filter((r) => r.type === 'despesa')
     .reduce((acc, r) => acc + r.amount, 0);
   const balance = totalRevenue - totalExpense;
 
@@ -64,7 +64,7 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
             </span>
           </div>
           <p
-            className={`text-3xl font-bold tracking-tight ${balance >= 0 ? "text-green-600" : "text-red-600"}`}
+            className={`text-3xl font-bold tracking-tight ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}
           >
             {formatCurrency(balance)}
           </p>
@@ -114,9 +114,9 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
                   >
                     <td className="px-6 py-4">
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${r.type === "receita" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${r.type === 'receita' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
                       >
-                        {r.type === "receita" ? (
+                        {r.type === 'receita' ? (
                           <ArrowUpRight size={16} />
                         ) : (
                           <ArrowDownRight size={16} />
@@ -127,9 +127,9 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
                       {r.category}
                     </td>
                     <td
-                      className={`px-6 py-4 text-sm font-bold tabular-nums ${r.type === "receita" ? "text-green-600" : "text-red-600"}`}
+                      className={`px-6 py-4 text-sm font-bold tabular-nums ${r.type === 'receita' ? 'text-green-600' : 'text-red-600'}`}
                     >
-                      {r.type === "receita" ? "+" : "-"}{" "}
+                      {r.type === 'receita' ? '+' : '-'}{' '}
                       {formatCurrency(r.amount)}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500">
@@ -138,11 +138,11 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
                     <td className="px-6 py-4">
                       <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
-                          r.status === "pago"
-                            ? "bg-green-100 text-green-700 dark:bg-green-900/30"
-                            : r.status === "vencido"
-                              ? "bg-red-100 text-red-700 dark:bg-red-900/30"
-                              : "bg-orange-100 text-orange-700 dark:bg-orange-900/30"
+                          r.status === 'pago'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
+                            : r.status === 'vencido'
+                              ? 'bg-red-100 text-red-700 dark:bg-red-900/30'
+                              : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30'
                         }`}
                       >
                         {r.status}

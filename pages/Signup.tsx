@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { supabase } from "../lib/supabase";
-import { Lock, Mail, Loader2, User, ArrowLeft } from "lucide-react";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { supabase } from '../lib/supabase';
+import { Lock, Mail, Loader2, User, ArrowLeft } from 'lucide-react';
 
 const signupSchema = z.object({
-  full_name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-  email: z.string().email("E-mail inválido"),
-  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+  full_name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+  email: z.string().email('E-mail inválido'),
+  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [registeredEmail, setRegisteredEmail] = useState("");
+  const [registeredEmail, setRegisteredEmail] = useState('');
 
   const {
     register,
@@ -47,7 +47,7 @@ const Signup: React.FC = () => {
       if (error) throw error;
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Erro ao criar conta");
+      setError(err.message || 'Erro ao criar conta');
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ const Signup: React.FC = () => {
               Verifique seu e-mail
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mb-8">
-              Enviamos um link de confirmação para{" "}
+              Enviamos um link de confirmação para{' '}
               <strong>{registeredEmail}</strong>. Por favor, verifique sua caixa
               de entrada e spam.
             </p>
@@ -112,10 +112,10 @@ const Signup: React.FC = () => {
                   size={18}
                 />
                 <input
-                  {...register("full_name")}
+                  {...register('full_name')}
                   type="text"
                   placeholder="Seu nome"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.full_name ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.full_name ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.full_name && (
@@ -135,10 +135,10 @@ const Signup: React.FC = () => {
                   size={18}
                 />
                 <input
-                  {...register("email")}
+                  {...register('email')}
                   type="email"
                   placeholder="seu@email.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.email && (
@@ -158,10 +158,10 @@ const Signup: React.FC = () => {
                   size={18}
                 />
                 <input
-                  {...register("password")}
+                  {...register('password')}
                   type="password"
                   placeholder="Mínimo 6 caracteres"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.password && (
@@ -179,13 +179,13 @@ const Signup: React.FC = () => {
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
               ) : (
-                "Criar minha conta"
+                'Criar minha conta'
               )}
             </button>
           </form>
 
           <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-            Já tem uma conta?{" "}
+            Já tem uma conta?{' '}
             <Link
               to="/login"
               className="font-bold text-primary-600 hover:text-primary-700 transition-colors"

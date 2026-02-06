@@ -1,4 +1,4 @@
-import { Deadline } from "../types";
+import { Deadline } from '../types';
 
 export interface DeadlineLogEntry {
   id: string;
@@ -7,10 +7,10 @@ export interface DeadlineLogEntry {
   process_number?: string;
   completed_at: string;
   user_name: string;
-  action: "finalizado" | "revertido";
+  action: 'finalizado' | 'revertido';
 }
 
-const STORAGE_KEY = "legaltech_deadlines_security_log";
+const STORAGE_KEY = 'legaltech_deadlines_security_log';
 
 export const deadlineLogger = {
   logCompletion: (deadline: Deadline, userName: string) => {
@@ -24,7 +24,7 @@ export const deadlineLogger = {
       process_number: deadline.case?.process_number,
       completed_at: new Date().toISOString(),
       user_name: userName,
-      action: "finalizado",
+      action: 'finalizado',
     };
 
     logs.unshift(newEntry);
@@ -42,7 +42,7 @@ export const deadlineLogger = {
       process_number: deadline.case?.process_number,
       completed_at: new Date().toISOString(),
       user_name: userName,
-      action: "revertido",
+      action: 'revertido',
     };
 
     logs.unshift(newEntry);

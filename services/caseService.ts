@@ -1,6 +1,6 @@
-import { Case, CaseWithRelations } from "../types";
-import { supabase } from "../lib/supabase";
-import { logAction } from "../utils/auditLogger.ts";
+import { Case, CaseWithRelations } from '../types';
+import { supabase } from '../lib/supabase';
+import { logAction } from '../utils/auditLogger.ts';
 
 export const caseService = {
   getCases: async (options?: {
@@ -10,24 +10,24 @@ export const caseService = {
     status?: string;
   }): Promise<CaseWithRelations[]> => {
     let query = supabase
-      .from("cases")
+      .from('cases')
       .select(
         `
         *,
         client:clients(*),
         lawyer:profiles(*)
-      `,
+      `
       )
-      .order("created_at", { ascending: false });
+      .order('created_at', { ascending: false });
 
-    if (options?.status && options.status !== "todos") {
-      query = query.eq("status", options.status);
+    if (options?.status && options.status !== 'todos') {
+      query = query.eq('status', options.status);
     }
 
     if (options?.search) {
       // Search is trickier with relations, but we can search on case fields
       query = query.or(
-        `title.ilike.%${options.search}%,process_number.ilike.%${options.search}%`,
+        `title.ilike.%${options.search}%,process_number.ilike.%${options.search}%`
       );
     }
 
@@ -52,15 +52,15 @@ export const caseService = {
 
   getCaseById: async (id: string): Promise<CaseWithRelations | null> => {
     const { data, error } = await supabase
-      .from("cases")
+      .from('cases')
       .select(
         `
         *,
         client:clients(*),
         lawyer:profiles(*)
-      `,
+      `
       )
-      .eq("id", id)
+      .eq('id', id)
       .single();
 
     if (error) throw error;
@@ -76,10 +76,10 @@ export const caseService = {
   },
 
   createCase: async (
-    data: Omit<Case, "id" | "created_at" | "updated_at">,
+    data: Omit<Case, 'id' | 'created_at' | 'updated_at'>
   ): Promise<Case> => {
     const { data: newCase, error } = await supabase
-      .from("cases")
+      .from('cases')
       .insert(data)
       .select()
       .single();
@@ -87,12 +87,12 @@ export const caseService = {
     if (error) throw error;
 
     await logAction({
-      action: "create",
-      entity_type: "case",
+      action: 'create',
+      entity_type: 'case',
       entity_id: newCase.id,
       entity_description: `Novo processo cadastrado: ${newCase.process_number}`,
       details: { data: newCase },
-      criticality: "normal",
+      criticality: 'normal',
     });
 
     return newCase;
@@ -100,24 +100,24 @@ export const caseService = {
 
   updateCase: async (id: string, data: Partial<Case>): Promise<Case> => {
     const { data: updatedCase, error } = await supabase
-      .from("cases")
+      .from('cases')
       .update({
         ...data,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", id)
+      .eq('id', id)
       .select()
       .single();
 
     if (error) throw error;
 
     await logAction({
-      action: "update",
-      entity_type: "case",
+      action: 'update',
+      entity_type: 'case',
       entity_id: id,
       entity_description: `Processo atualizado: ${updatedCase.process_number}`,
       details: { after: updatedCase },
-      criticality: "importante",
+      criticality: 'importante',
     });
 
     return updatedCase;
@@ -125,21 +125,21 @@ export const caseService = {
 
   deleteCase: async (id: string): Promise<void> => {
     const { data: case_data } = await supabase
-      .from("cases")
-      .select("process_number")
-      .eq("id", id)
+      .from('cases')
+      .select('process_number')
+      .eq('id', id)
       .single();
 
-    const { error } = await supabase.from("cases").delete().eq("id", id);
+    const { error } = await supabase.from('cases').delete().eq('id', id);
 
     if (error) throw error;
 
     await logAction({
-      action: "delete",
-      entity_type: "case",
+      action: 'delete',
+      entity_type: 'case',
       entity_id: id,
-      entity_description: `Processo removido: ${case_data?.process_number || "ID " + id}`,
-      criticality: "crítico",
+      entity_description: `Processo removido: ${case_data?.process_number || 'ID ' + id}`,
+      criticality: 'crítico',
     });
   },
 };

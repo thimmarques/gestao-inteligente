@@ -1,12 +1,12 @@
-import { supabase } from "../lib/supabase";
-import { Lawyer } from "../types";
+import { supabase } from '../lib/supabase';
+import { Lawyer } from '../types';
 
 export const profileService = {
   getProfile: async (id: string): Promise<Lawyer | null> => {
     const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", id)
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
       .single();
 
     if (error) throw error;
@@ -15,12 +15,12 @@ export const profileService = {
 
   updateProfile: async (
     id: string,
-    updates: Partial<Lawyer>,
+    updates: Partial<Lawyer>
   ): Promise<Lawyer> => {
     const { data, error } = await supabase
-      .from("profiles")
+      .from('profiles')
       .update(updates)
-      .eq("id", id)
+      .eq('id', id)
       .select()
       .single();
 

@@ -1,56 +1,56 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.21.0";
+import { createClient } from 'supabase';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
     const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     const { token, password, full_name } = await req.json();
 
     if (!token || !password || !full_name) {
-      throw new Error("Missing required fields: token, password, full_name");
+      throw new Error('Missing required fields: token, password, full_name');
     }
 
     // 1. Verify Invite
     const { data: invite, error: inviteError } = await supabaseAdmin
-      .from("invites")
-      .select("*")
-      .eq("token", token)
+      .from('invites')
+      .select('*')
+      .eq('token', token)
       .single();
 
     if (inviteError || !invite) {
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     if (new Date(invite.expires_at) < new Date()) {
-      return new Response(JSON.stringify({ error: "Token expired" }), {
+      return new Response(JSON.stringify({ error: 'Token expired' }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     if (invite.accepted_at) {
       return new Response(
-        JSON.stringify({ error: "Invite already accepted" }),
+        JSON.stringify({ error: 'Invite already accepted' }),
         {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -66,11 +66,11 @@ Deno.serve(async (req) => {
       });
 
     if (createError) {
-      console.error("Create User Error:", createError);
+      console.error('Create User Error:', createError);
       // If user already exists, we might want to handle linkage differently, but for now error
       return new Response(JSON.stringify({ error: createError.message }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
     // 3. Create/Update Profile (Force correct office_id and role from invite)
     // Note: The handle_new_user trigger might have run, so we upsert
     const { error: profileError } = await supabaseAdmin
-      .from("profiles")
+      .from('profiles')
       .upsert({
         id: userId,
         email: invite.email,
@@ -91,30 +91,30 @@ Deno.serve(async (req) => {
       });
 
     if (profileError) {
-      console.error("Profile Error:", profileError);
+      console.error('Profile Error:', profileError);
       // Rollback user creation? For MVP, just return error, Manual fix might be needed
       return new Response(
-        JSON.stringify({ error: "Error creating profile linkage" }),
+        JSON.stringify({ error: 'Error creating profile linkage' }),
         {
           status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     // 4. Mark Invite Accepted
     await supabaseAdmin
-      .from("invites")
+      .from('invites')
       .update({ accepted_at: new Date() })
-      .eq("id", invite.id);
+      .eq('id', invite.id);
 
     return new Response(JSON.stringify({ success: true, user_id: userId }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });

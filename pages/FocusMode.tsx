@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Play,
   Pause,
@@ -9,8 +9,8 @@ import {
   Target,
   Settings,
   Plus,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const FocusMode: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
@@ -34,8 +34,8 @@ const FocusMode: React.FC = () => {
       setTimeLeft(isBreak ? 25 * 60 : 5 * 60);
       alert(
         isBreak
-          ? "Pausa terminada! De volta ao trabalho."
-          : "Hora de uma pausa!",
+          ? 'Pausa terminada! De volta ao trabalho.'
+          : 'Hora de uma pausa!'
       );
     }
     return () => clearInterval(interval);
@@ -52,12 +52,12 @@ const FocusMode: React.FC = () => {
 
   const toggleTask = (id: string) => {
     setTasks(
-      tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
     );
   };
 
   const handleAddTask = () => {
-    const title = prompt("Digite o nome da tarefa:");
+    const title = prompt('Digite o nome da tarefa:');
     if (title) {
       setTasks([
         ...tasks,
@@ -65,7 +65,7 @@ const FocusMode: React.FC = () => {
           id: Date.now().toString(),
           title,
           completed: false,
-          priority: "média",
+          priority: 'média',
         },
       ]);
     }
@@ -74,7 +74,7 @@ const FocusMode: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 bg-slate-900 text-white flex flex-col items-center justify-center p-6 animate-in zoom-in duration-300">
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate('/')}
         className="absolute top-8 left-8 flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
       >
         <ArrowLeft size={20} />
@@ -87,7 +87,7 @@ const FocusMode: React.FC = () => {
           <div className="mb-8 flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border border-slate-700">
             <Target className="text-primary-500" size={18} />
             <span className="text-sm font-semibold tracking-wider uppercase">
-              {isBreak ? "Pausa Curta" : "Foco Total"}
+              {isBreak ? 'Pausa Curta' : 'Foco Total'}
             </span>
           </div>
 
@@ -116,8 +116,8 @@ const FocusMode: React.FC = () => {
               />
             </svg>
             <div className="absolute text-7xl font-bold tracking-tighter tabular-nums">
-              {String(minutes).padStart(2, "0")}:
-              {String(seconds).padStart(2, "0")}
+              {String(minutes).padStart(2, '0')}:
+              {String(seconds).padStart(2, '0')}
             </div>
           </div>
 
@@ -149,7 +149,7 @@ const FocusMode: React.FC = () => {
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-bold">Objetivos de Hoje</h3>
             <span className="text-sm font-medium text-slate-400">
-              {tasks.filter((t) => t.completed).length}/{tasks.length}{" "}
+              {tasks.filter((t) => t.completed).length}/{tasks.length}{' '}
               concluídos
             </span>
           </div>
@@ -162,8 +162,8 @@ const FocusMode: React.FC = () => {
                   onClick={() => toggleTask(task.id)}
                   className={`group flex items-center gap-4 p-4 rounded-2xl cursor-pointer border transition-all ${
                     task.completed
-                      ? "bg-slate-900/40 border-slate-700 opacity-60"
-                      : "bg-slate-800 border-slate-700 hover:border-primary-500 hover:shadow-lg"
+                      ? 'bg-slate-900/40 border-slate-700 opacity-60'
+                      : 'bg-slate-800 border-slate-700 hover:border-primary-500 hover:shadow-lg'
                   }`}
                 >
                   {task.completed ? (
@@ -176,7 +176,7 @@ const FocusMode: React.FC = () => {
                   )}
                   <div className="flex-1">
                     <p
-                      className={`font-medium ${task.completed ? "line-through text-slate-500" : "text-white"}`}
+                      className={`font-medium ${task.completed ? 'line-through text-slate-500' : 'text-white'}`}
                     >
                       {task.title}
                     </p>

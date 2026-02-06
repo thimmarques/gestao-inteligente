@@ -5,7 +5,7 @@ import React, {
   useCallback,
   Suspense,
   lazy,
-} from "react";
+} from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -17,9 +17,9 @@ import {
   Trash2,
   Loader2,
   Plus,
-} from "lucide-react";
-import { isWithinInterval, format } from "date-fns";
-import confetti from "canvas-confetti";
+} from 'lucide-react';
+import { isWithinInterval, format } from 'date-fns';
+import confetti from 'canvas-confetti';
 
 import {
   Client,
@@ -27,57 +27,57 @@ import {
   Deadline,
   ScheduleEvent,
   Report,
-} from "../types";
-import { ReportTypeCard } from "../components/reports/ReportTypeCard";
-import { ReportGenerationProgress } from "../components/reports/ReportGenerationProgress";
-import { ReportsEmptyState } from "../components/reports/ReportsEmptyState";
+} from '../types';
+import { ReportTypeCard } from '../components/reports/ReportTypeCard';
+import { ReportGenerationProgress } from '../components/reports/ReportGenerationProgress';
+import { ReportsEmptyState } from '../components/reports/ReportsEmptyState';
 
-import type { ReportConfig } from "../utils/generateFinancialReportPDF";
-import { validateReportPeriod } from "../utils/reportValidation";
+import type { ReportConfig } from '../utils/generateFinancialReportPDF';
+import { validateReportPeriod } from '../utils/reportValidation';
 
-import { financeService } from "../services/financeService";
-import { clientService } from "../services/clientService";
-import { caseService } from "../services/caseService";
-import { deadlineService } from "../services/deadlineService";
-import { scheduleService } from "../services/scheduleService";
-import { useApp } from "../contexts/AppContext";
+import { financeService } from '../services/financeService';
+import { clientService } from '../services/clientService';
+import { caseService } from '../services/caseService';
+import { deadlineService } from '../services/deadlineService';
+import { scheduleService } from '../services/scheduleService';
+import { useApp } from '../contexts/AppContext';
 
 // Lazy Load Modals
 const FinancialReportModal = lazy(() =>
-  import("../components/reports/FinancialReportModal").then((m) => ({
+  import('../components/reports/FinancialReportModal').then((m) => ({
     default: m.FinancialReportModal,
-  })),
+  }))
 );
 const ProductivityReportModal = lazy(() =>
-  import("../components/reports/ProductivityReportModal").then((m) => ({
+  import('../components/reports/ProductivityReportModal').then((m) => ({
     default: m.ProductivityReportModal,
-  })),
+  }))
 );
 const ClientsReportModal = lazy(() =>
-  import("../components/reports/ClientsReportModal").then((m) => ({
+  import('../components/reports/ClientsReportModal').then((m) => ({
     default: m.ClientsReportModal,
-  })),
+  }))
 );
 const DeadlinesReportModal = lazy(() =>
-  import("../components/reports/DeadlinesReportModal").then((m) => ({
+  import('../components/reports/DeadlinesReportModal').then((m) => ({
     default: m.DeadlinesReportModal,
-  })),
+  }))
 );
 
-type ReportType = "financeiro" | "produtividade" | "clientes" | "prazos";
+type ReportType = 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
 
 const Reports: React.FC = () => {
   const { lawyer } = useApp();
   const [activeModal, setActiveModal] = useState<ReportType | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [recentReports, setRecentReports] = useState<Report[]>([]);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [genProgress, setGenProgress] = useState(0);
-  const [genStep, setGenStep] = useState("");
+  const [genStep, setGenStep] = useState('');
 
   const loadHistory = useCallback(() => {
-    const raw = localStorage.getItem("legaltech_reports");
+    const raw = localStorage.getItem('legaltech_reports');
     if (raw) setRecentReports(JSON.parse(raw));
   }, []);
 
@@ -95,7 +95,7 @@ const Reports: React.FC = () => {
 
   const handleGenerateReport = async (
     type: ReportType,
-    config: ReportConfig,
+    config: ReportConfig
   ) => {
     const validation = validateReportPeriod(config.startDate, config.endDate);
     if (!validation.isValid) {
@@ -108,14 +108,14 @@ const Reports: React.FC = () => {
     setGenProgress(0);
 
     try {
-      let fileName = "";
+      let fileName = '';
 
       await simulateProgress([
-        { p: 10, s: "Conectando ao banco de dados..." },
-        { p: 30, s: "Extraindo registros e metadados..." },
+        { p: 10, s: 'Conectando ao banco de dados...' },
+        { p: 30, s: 'Extraindo registros e metadados...' },
       ]);
 
-      if (type === "financeiro") {
+      if (type === 'financeiro') {
         const finances = await financeService.getFinances();
         const filteredFinances = finances.filter((f) => {
           const date = new Date(f.due_date);
@@ -125,17 +125,17 @@ const Reports: React.FC = () => {
           });
         });
 
-        const revenues = filteredFinances.filter((f) => f.type === "receita");
-        const expenses = filteredFinances.filter((f) => f.type === "despesa");
+        const revenues = filteredFinances.filter((f) => f.type === 'receita');
+        const expenses = filteredFinances.filter((f) => f.type === 'despesa');
         const totalRev = revenues.reduce((s, r) => s + r.amount, 0);
         const totalExp = expenses.reduce((s, e) => s + e.amount, 0);
 
         const clients = await clientService.getClients();
         const mrr = clients
-          .filter((c) => c.status === "ativo")
+          .filter((c) => c.status === 'ativo')
           .reduce((s, c) => s + (c.financial_profile?.retainer_fee || 0), 0);
         const particularCount = clients.filter(
-          (c) => c.type === "particular",
+          (c) => c.type === 'particular'
         ).length;
         const avgTicket = particularCount > 0 ? totalRev / particularCount : 0;
         const kpis = {
@@ -147,126 +147,126 @@ const Reports: React.FC = () => {
           defaultRate: 4.2,
         };
 
-        await simulateProgress([{ p: 70, s: "Gerando arquivos..." }]);
-        if (config.format === "pdf") {
+        await simulateProgress([{ p: 70, s: 'Gerando arquivos...' }]);
+        if (config.format === 'pdf') {
           const { generateFinancialReportPDF } =
-            await import("../utils/generateFinancialReportPDF");
+            await import('../utils/generateFinancialReportPDF');
           fileName = await generateFinancialReportPDF(
             config,
             revenues,
             expenses,
-            kpis,
+            kpis
           );
         } else {
           const { generateFinancialReportExcel } =
-            await import("../utils/generateFinancialReportExcel");
+            await import('../utils/generateFinancialReportExcel');
           fileName = await generateFinancialReportExcel(
             config,
             revenues,
             expenses,
-            kpis,
+            kpis
           );
         }
-      } else if (type === "produtividade") {
+      } else if (type === 'produtividade') {
         const [cases, schedules, deadlines] = await Promise.all([
           caseService.getCases(),
           scheduleService.getSchedules(),
           deadlineService.getDeadlines(),
         ]);
 
-        await simulateProgress([{ p: 70, s: "Processando indicadores..." }]);
-        if (config.format === "pdf") {
+        await simulateProgress([{ p: 70, s: 'Processando indicadores...' }]);
+        if (config.format === 'pdf') {
           const { generateProductivityReportPDF } =
-            await import("../utils/generateProductivityReportPDF");
+            await import('../utils/generateProductivityReportPDF');
           fileName = await generateProductivityReportPDF(
             config,
             cases as any,
             schedules as any,
-            deadlines as any,
+            deadlines as any
           );
         } else {
           const { generateProductivityReportExcel } =
-            await import("../utils/generateProductivityReportExcel");
+            await import('../utils/generateProductivityReportExcel');
           fileName = await generateProductivityReportExcel(
             config,
             cases as any,
             schedules as any,
-            deadlines as any,
+            deadlines as any
           );
         }
-      } else if (type === "clientes") {
+      } else if (type === 'clientes') {
         const [clients, finances] = await Promise.all([
           clientService.getClients(),
           financeService.getFinances(),
         ]);
 
-        await simulateProgress([{ p: 70, s: "Compilando listagem..." }]);
-        if (config.format === "excel") {
+        await simulateProgress([{ p: 70, s: 'Compilando listagem...' }]);
+        if (config.format === 'excel') {
           const { generateClientsReportExcel } =
-            await import("../utils/generateClientsReportExcel");
+            await import('../utils/generateClientsReportExcel');
           fileName = await generateClientsReportExcel(
             config,
             clients as any,
-            finances as any,
+            finances as any
           );
         } else {
           const { generateClientsReportPDF } =
-            await import("../utils/generateClientsReportPDF");
+            await import('../utils/generateClientsReportPDF');
           fileName = await generateClientsReportPDF(
             config,
             clients as any,
-            finances as any,
+            finances as any
           );
         }
-      } else if (type === "prazos") {
+      } else if (type === 'prazos') {
         const deadlines = await deadlineService.getDeadlines();
 
-        await simulateProgress([{ p: 70, s: "Analizando protocolos..." }]);
-        if (config.format === "pdf") {
+        await simulateProgress([{ p: 70, s: 'Analizando protocolos...' }]);
+        if (config.format === 'pdf') {
           const { generateDeadlinesReportPDF } =
-            await import("../utils/generateDeadlinesReportPDF");
+            await import('../utils/generateDeadlinesReportPDF');
           fileName = await generateDeadlinesReportPDF(config, deadlines as any);
         } else {
           const { generateDeadlinesReportExcel } =
-            await import("../utils/generateDeadlinesReportExcel");
+            await import('../utils/generateDeadlinesReportExcel');
           fileName = await generateDeadlinesReportExcel(
             config,
-            deadlines as any,
+            deadlines as any
           );
         }
       }
 
       await simulateProgress([
-        { p: 90, s: "Finalizando..." },
-        { p: 100, s: "Sucesso!" },
+        { p: 90, s: 'Finalizando...' },
+        { p: 100, s: 'Sucesso!' },
       ]);
 
       const newReport: Report = {
         id: crypto.randomUUID(),
         type,
-        lawyer_id: lawyer?.id || "",
+        lawyer_id: lawyer?.id || '',
         period_start: config.startDate.toISOString(),
         period_end: config.endDate.toISOString(),
         format: config.format as any,
         file_url: fileName,
-        file_size: "1.2 MB",
+        file_size: '1.2 MB',
         created_at: new Date().toISOString(),
       };
 
       const history = JSON.parse(
-        localStorage.getItem("legaltech_reports") || "[]",
+        localStorage.getItem('legaltech_reports') || '[]'
       );
       localStorage.setItem(
-        "legaltech_reports",
-        JSON.stringify([newReport, ...history]),
+        'legaltech_reports',
+        JSON.stringify([newReport, ...history])
       );
 
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
       setIsGenerating(false);
       loadHistory();
     } catch (error) {
-      console.error("Erro na geração:", error);
-      alert("Houve um erro técnico ao gerar o relatório.");
+      console.error('Erro na geração:', error);
+      alert('Houve um erro técnico ao gerar o relatório.');
       setIsGenerating(false);
     }
   };
@@ -286,59 +286,59 @@ const Reports: React.FC = () => {
   };
 
   const handleDeleteHistory = (id: string) => {
-    if (confirm("Remover este relatório do histórico?")) {
+    if (confirm('Remover este relatório do histórico?')) {
       const filtered = recentReports.filter((r) => r.id !== id);
-      localStorage.setItem("legaltech_reports", JSON.stringify(filtered));
+      localStorage.setItem('legaltech_reports', JSON.stringify(filtered));
       loadHistory();
     }
   };
 
   const reportTypes = [
     {
-      type: "financeiro" as const,
-      title: "Financeiro",
-      description: "Fluxo de caixa, MRR, ticket médio e saúde financeira.",
+      type: 'financeiro' as const,
+      title: 'Financeiro',
+      description: 'Fluxo de caixa, MRR, ticket médio e saúde financeira.',
       icon: <DollarSign />,
-      defaultFormat: "pdf" as const,
-      iconBgColor: "bg-green-50 dark:bg-green-900/30",
-      iconColor: "text-green-600",
-      onGenerate: () => setActiveModal("financeiro"),
+      defaultFormat: 'pdf' as const,
+      iconBgColor: 'bg-green-50 dark:bg-green-900/30',
+      iconColor: 'text-green-600',
+      onGenerate: () => setActiveModal('financeiro'),
     },
     {
-      type: "produtividade" as const,
-      title: "Produtividade",
-      description: "Performance, tempo médio e taxas de êxito.",
+      type: 'produtividade' as const,
+      title: 'Produtividade',
+      description: 'Performance, tempo médio e taxas de êxito.',
       icon: <TrendingUp />,
-      defaultFormat: "pdf" as const,
-      iconBgColor: "bg-blue-50 dark:bg-blue-900/30",
-      iconColor: "text-blue-600",
-      onGenerate: () => setActiveModal("produtividade"),
+      defaultFormat: 'pdf' as const,
+      iconBgColor: 'bg-blue-50 dark:bg-blue-900/30',
+      iconColor: 'text-blue-600',
+      onGenerate: () => setActiveModal('produtividade'),
     },
     {
-      type: "clientes" as const,
-      title: "Carteira Clientes",
-      description: "Demografia, satisfação e distribuição.",
+      type: 'clientes' as const,
+      title: 'Carteira Clientes',
+      description: 'Demografia, satisfação e distribuição.',
       icon: <Users />,
-      defaultFormat: "excel" as const,
-      iconBgColor: "bg-purple-50 dark:bg-purple-900/30",
-      iconColor: "text-purple-600",
-      onGenerate: () => setActiveModal("clientes"),
+      defaultFormat: 'excel' as const,
+      iconBgColor: 'bg-purple-50 dark:bg-purple-900/30',
+      iconColor: 'text-purple-600',
+      onGenerate: () => setActiveModal('clientes'),
     },
     {
-      type: "prazos" as const,
-      title: "Prazos Judiciais",
-      description: "Compliance, antecedência e atrasos crônicos.",
+      type: 'prazos' as const,
+      title: 'Prazos Judiciais',
+      description: 'Compliance, antecedência e atrasos crônicos.',
       icon: <Clock />,
-      defaultFormat: "pdf" as const,
-      iconBgColor: "bg-orange-50 dark:bg-orange-900/30",
-      iconColor: "text-orange-600",
-      onGenerate: () => setActiveModal("prazos"),
+      defaultFormat: 'pdf' as const,
+      iconBgColor: 'bg-orange-50 dark:bg-orange-900/30',
+      iconColor: 'text-orange-600',
+      onGenerate: () => setActiveModal('prazos'),
     },
   ];
 
   const filteredHistory = useMemo(() => {
     return recentReports.filter((r) =>
-      r.type.toLowerCase().includes(searchTerm.toLowerCase()),
+      r.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [recentReports, searchTerm]);
 
@@ -412,13 +412,13 @@ const Reports: React.FC = () => {
                         <div className="flex items-center gap-4">
                           <div
                             className={`w-10 h-10 rounded-xl flex items-center justify-center text-white ${
-                              report.type === "financeiro"
-                                ? "bg-green-500"
-                                : report.type === "produtividade"
-                                  ? "bg-blue-500"
-                                  : report.type === "clientes"
-                                    ? "bg-purple-500"
-                                    : "bg-orange-500"
+                              report.type === 'financeiro'
+                                ? 'bg-green-500'
+                                : report.type === 'produtividade'
+                                  ? 'bg-blue-500'
+                                  : report.type === 'clientes'
+                                    ? 'bg-purple-500'
+                                    : 'bg-orange-500'
                             }`}
                           >
                             <FileText size={18} />
@@ -435,12 +435,12 @@ const Reports: React.FC = () => {
                       </td>
                       <td className="px-6 py-6 hidden md:table-cell">
                         <span className="text-sm text-slate-500">
-                          {format(new Date(report.period_start), "dd/MM/yy")} -{" "}
-                          {format(new Date(report.period_end), "dd/MM/yy")}
+                          {format(new Date(report.period_start), 'dd/MM/yy')} -{' '}
+                          {format(new Date(report.period_end), 'dd/MM/yy')}
                         </span>
                       </td>
                       <td className="px-6 py-6 text-sm font-bold dark:text-slate-200 uppercase">
-                        {format(new Date(report.created_at), "dd MMM yyyy")}
+                        {format(new Date(report.created_at), 'dd MMM yyyy')}
                       </td>
                       <td className="px-8 py-6 text-right">
                         <div className="flex items-center justify-end gap-2">
@@ -478,32 +478,32 @@ const Reports: React.FC = () => {
       )}
 
       <Suspense fallback={null}>
-        {activeModal === "financeiro" && (
+        {activeModal === 'financeiro' && (
           <FinancialReportModal
             isOpen={true}
             onClose={() => setActiveModal(null)}
-            onGenerate={(cfg) => handleGenerateReport("financeiro", cfg)}
+            onGenerate={(cfg) => handleGenerateReport('financeiro', cfg)}
           />
         )}
-        {activeModal === "produtividade" && (
+        {activeModal === 'produtividade' && (
           <ProductivityReportModal
             isOpen={true}
             onClose={() => setActiveModal(null)}
-            onGenerate={(cfg) => handleGenerateReport("produtividade", cfg)}
+            onGenerate={(cfg) => handleGenerateReport('produtividade', cfg)}
           />
         )}
-        {activeModal === "clientes" && (
+        {activeModal === 'clientes' && (
           <ClientsReportModal
             isOpen={true}
             onClose={() => setActiveModal(null)}
-            onGenerate={(cfg) => handleGenerateReport("clientes", cfg)}
+            onGenerate={(cfg) => handleGenerateReport('clientes', cfg)}
           />
         )}
-        {activeModal === "prazos" && (
+        {activeModal === 'prazos' && (
           <DeadlinesReportModal
             isOpen={true}
             onClose={() => setActiveModal(null)}
-            onGenerate={(cfg) => handleGenerateReport("prazos", cfg)}
+            onGenerate={(cfg) => handleGenerateReport('prazos', cfg)}
           />
         )}
       </Suspense>

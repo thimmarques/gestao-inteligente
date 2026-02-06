@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Color Palette - Extended */
@@ -44,21 +44,21 @@
 
 @layer base {
   body {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
   }
 
   /* Form Elements Reset */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
   }
 
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield;
     appearance: textfield;
   }

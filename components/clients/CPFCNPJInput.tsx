@@ -1,6 +1,6 @@
-import React from "react";
-import { CheckCircle2, XCircle } from "lucide-react";
-import { formatCPF } from "../../utils/formatters";
+import React from 'react';
+import { CheckCircle2, XCircle } from 'lucide-react';
+import { formatCPF } from '../../utils/formatters';
 
 interface CPFCNPJInputProps {
   value: string;
@@ -16,7 +16,7 @@ export const CPFCNPJInput: React.FC<CPFCNPJInputProps> = ({
   isValid,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/\D/g, "").slice(0, 14);
+    const rawValue = e.target.value.replace(/\D/g, '').slice(0, 14);
     onChange(rawValue);
   };
 
@@ -30,7 +30,7 @@ export const CPFCNPJInput: React.FC<CPFCNPJInputProps> = ({
           maxLength={18}
           placeholder="000.000.000-00"
           className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
-            error ? "ring-2 ring-red-500" : "focus:ring-primary-500"
+            error ? 'ring-2 ring-red-500' : 'focus:ring-primary-500'
           }`}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2">

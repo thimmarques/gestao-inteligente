@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Edit,
@@ -10,17 +10,17 @@ import {
   Files,
   History,
   Loader2,
-} from "lucide-react";
-import { CaseStatus } from "../../types.ts";
-import { InfoTab } from "./tabs/InfoTab.tsx";
-import { DeadlinesTab } from "./tabs/DeadlinesTab.tsx";
-import { SchedulesTab } from "./tabs/SchedulesTab.tsx";
-import { FinanceTab } from "./tabs/FinanceTab.tsx";
-import { DocumentsTab } from "./tabs/DocumentsTab.tsx";
-import { HistoryTab } from "./tabs/HistoryTab.tsx";
-import { caseService } from "../../services/caseService.ts";
-import { CaseFormModal } from "./CaseFormModal.tsx";
-import { useCase } from "../../hooks/useQueries";
+} from 'lucide-react';
+import { CaseStatus } from '../../types.ts';
+import { InfoTab } from './tabs/InfoTab.tsx';
+import { DeadlinesTab } from './tabs/DeadlinesTab.tsx';
+import { SchedulesTab } from './tabs/SchedulesTab.tsx';
+import { FinanceTab } from './tabs/FinanceTab.tsx';
+import { DocumentsTab } from './tabs/DocumentsTab.tsx';
+import { HistoryTab } from './tabs/HistoryTab.tsx';
+import { caseService } from '../../services/caseService.ts';
+import { CaseFormModal } from './CaseFormModal.tsx';
+import { useCase } from '../../hooks/useQueries';
 
 interface CaseDetailsModalProps {
   caseId: string | null;
@@ -33,7 +33,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState("Informações");
+  const [activeTab, setActiveTab] = useState('Informações');
   const { data: caseData, isLoading, refetch } = useCase(caseId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -65,27 +65,27 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   };
 
   const tabs = [
-    { name: "Informações", icon: <FileText size={16} /> },
-    { name: "Prazos", icon: <Clock size={16} /> },
-    { name: "Audiências", icon: <Users size={16} /> },
-    { name: "Financeiro", icon: <DollarSign size={16} /> },
-    { name: "Documentos", icon: <Files size={16} /> },
-    { name: "Histórico", icon: <History size={16} /> },
+    { name: 'Informações', icon: <FileText size={16} /> },
+    { name: 'Prazos', icon: <Clock size={16} /> },
+    { name: 'Audiências', icon: <Users size={16} /> },
+    { name: 'Financeiro', icon: <DollarSign size={16} /> },
+    { name: 'Documentos', icon: <Files size={16} /> },
+    { name: 'Histórico', icon: <History size={16} /> },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "Informações":
+      case 'Informações':
         return <InfoTab caseData={caseData} />;
-      case "Prazos":
+      case 'Prazos':
         return <DeadlinesTab caseId={caseData.id} />;
-      case "Audiências":
+      case 'Audiências':
         return <SchedulesTab caseId={caseData.id} />;
-      case "Financeiro":
+      case 'Financeiro':
         return <FinanceTab caseId={caseData.id} />;
-      case "Documentos":
+      case 'Documentos':
         return <DocumentsTab caseId={caseData.id} />;
-      case "Histórico":
+      case 'Histórico':
         return <HistoryTab caseId={caseData.id} />;
       default:
         return null;
@@ -106,7 +106,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
               </span>
             </div>
             <p className="text-slate-500 font-medium">
-              Cliente {caseData.client?.name || "ID " + caseData.client_id} •{" "}
+              Cliente {caseData.client?.name || 'ID ' + caseData.client_id} •{' '}
               {caseData.court}
             </p>
           </div>
@@ -142,8 +142,8 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
               onClick={() => setActiveTab(tab.name)}
               className={`flex items-center gap-2 py-5 text-sm font-bold border-b-2 transition-all whitespace-nowrap ${
                 activeTab === tab.name
-                  ? "border-primary-600 text-primary-600"
-                  : "border-transparent text-slate-400 hover:text-slate-600"
+                  ? 'border-primary-600 text-primary-600'
+                  : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               {tab.icon}

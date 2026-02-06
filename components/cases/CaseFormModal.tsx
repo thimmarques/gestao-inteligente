@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { X, Save, Loader2, Info, AlertCircle, Tag } from "lucide-react";
-import { CaseStatus, CaseType, Client } from "../../types";
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Save, Loader2, Info, AlertCircle, Tag } from 'lucide-react';
+import { CaseStatus, CaseType, Client } from '../../types';
 
 interface CaseFormModalProps {
   isOpen: boolean;
@@ -16,18 +16,18 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
   initialData,
 }) => {
   const [formData, setFormData] = useState({
-    process_number: "",
-    client_id: "",
-    court: "",
-    type: "cível" as CaseType,
+    process_number: '',
+    client_id: '',
+    court: '',
+    type: 'cível' as CaseType,
     status: CaseStatus.DISTRIBUIDO,
-    value: "",
-    started_at: new Date().toISOString().split("T")[0],
-    notes: "",
+    value: '',
+    started_at: new Date().toISOString().split('T')[0],
+    notes: '',
     tags: [] as string[],
   });
 
-  const [tagInput, setTagInput] = useState("");
+  const [tagInput, setTagInput] = useState('');
   const [clients, setClients] = useState<Client[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -37,7 +37,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
 
   useEffect(() => {
     const storedClients = JSON.parse(
-      localStorage.getItem("legaltech_clients") || "[]",
+      localStorage.getItem('legaltech_clients') || '[]'
     );
     setClients(storedClients);
 
@@ -75,14 +75,14 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
   };
 
   const handleAddTag = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && tagInput.trim()) {
+    if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
       if (formData.tags.length >= 10) return;
       const newTag = tagInput.trim().toLowerCase();
       if (!formData.tags.includes(newTag)) {
         setFormData({ ...formData, tags: [...formData.tags, newTag] });
       }
-      setTagInput("");
+      setTagInput('');
     }
   };
 
@@ -96,7 +96,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      onKeyDown={(e) => e.key === "Escape" && onClose()}
+      onKeyDown={(e) => e.key === 'Escape' && onClose()}
     >
       <div
         ref={modalRef}
@@ -112,7 +112,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                 id="modal-title"
                 className="text-xl font-bold dark:text-white"
               >
-                {initialData?.id ? "Editar Processo" : "Novo Processo"}
+                {initialData?.id ? 'Editar Processo' : 'Novo Processo'}
               </h2>
               <p className="text-sm text-slate-500">
                 Insira os detalhes do caso (todos os campos opcionais).
@@ -349,7 +349,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
               ) : (
                 <Save size={20} />
               )}
-              {initialData?.id ? "Atualizar" : "Cadastrar"} Processo
+              {initialData?.id ? 'Atualizar' : 'Cadastrar'} Processo
             </button>
           </div>
         </form>

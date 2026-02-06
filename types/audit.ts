@@ -1,24 +1,24 @@
 export type AuditAction =
-  | "create"
-  | "update"
-  | "delete"
-  | "login"
-  | "logout"
-  | "view"
-  | "permission_change"
-  | "export"
-  | "access_denied"
-  | "system";
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'login'
+  | 'logout'
+  | 'view'
+  | 'permission_change'
+  | 'export'
+  | 'access_denied'
+  | 'system';
 export type AuditEntityType =
-  | "case"
-  | "client"
-  | "deadline"
-  | "schedule"
-  | "finance"
-  | "team"
-  | "settings"
-  | "system";
-export type Criticality = "normal" | "importante" | "crítico";
+  | 'case'
+  | 'client'
+  | 'deadline'
+  | 'schedule'
+  | 'finance'
+  | 'team'
+  | 'settings'
+  | 'system';
+export type Criticality = 'normal' | 'importante' | 'crítico';
 
 export interface AuditLog {
   id: string;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Clock,
   MapPin,
@@ -6,9 +6,9 @@ import {
   Eye,
   ChevronRight,
   Calendar as CalendarIcon,
-} from "lucide-react";
-import { ScheduleEvent } from "../../types";
-import { getEventColor, getEventIcon } from "../../utils/eventColors";
+} from 'lucide-react';
+import { ScheduleEvent } from '../../types';
+import { getEventColor, getEventIcon } from '../../utils/eventColors';
 
 interface AgendaListViewProps {
   events: ScheduleEvent[];
@@ -21,13 +21,13 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
 }) => {
   // Agrupar eventos por dia
   const groupedEvents = events
-    .filter((e) => e.status !== "cancelado")
+    .filter((e) => e.status !== 'cancelado')
     .sort(
       (a, b) =>
-        new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
+        new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
     )
     .reduce((groups: Record<string, ScheduleEvent[]>, event) => {
-      const dateKey = new Date(event.start_time).toISOString().split("T")[0];
+      const dateKey = new Date(event.start_time).toISOString().split('T')[0];
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(event);
       return groups;
@@ -55,20 +55,20 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
     <div className="space-y-10 animate-in slide-in-from-bottom-4 duration-500 pb-10">
       {dates.map((dateKey) => {
         const eventsForDay = groupedEvents[dateKey];
-        const dateObj = new Date(dateKey + "T12:00:00");
-        const isToday = dateKey === new Date().toISOString().split("T")[0];
+        const dateObj = new Date(dateKey + 'T12:00:00');
+        const isToday = dateKey === new Date().toISOString().split('T')[0];
 
         return (
           <div key={dateKey} className="space-y-4">
             <header className="flex items-center gap-4 px-2">
               <div className="flex flex-col">
                 <h3
-                  className={`text-lg font-black dark:text-white ${isToday ? "text-primary-600" : ""}`}
+                  className={`text-lg font-black dark:text-white ${isToday ? 'text-primary-600' : ''}`}
                 >
-                  {dateObj.toLocaleDateString("pt-BR", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
+                  {dateObj.toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
                   })}
                 </h3>
                 {isToday && (
@@ -88,12 +88,12 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
                 const Icon = getEventIcon(event.type);
                 const color = getEventColor(event.type, event.status);
                 const startTime = new Date(event.start_time).toLocaleTimeString(
-                  "pt-BR",
-                  { hour: "2-digit", minute: "2-digit" },
+                  'pt-BR',
+                  { hour: '2-digit', minute: '2-digit' }
                 );
                 const endTime = new Date(event.end_time).toLocaleTimeString(
-                  "pt-BR",
-                  { hour: "2-digit", minute: "2-digit" },
+                  'pt-BR',
+                  { hour: '2-digit', minute: '2-digit' }
                 );
 
                 return (
@@ -127,7 +127,7 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
                           >
                             {event.type}
                           </span>
-                          {event.status === "concluído" && (
+                          {event.status === 'concluído' && (
                             <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-green-100 text-green-700 rounded-md">
                               Concluído
                             </span>
@@ -147,8 +147,8 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
                             </span>
                           ) : null}
                           <span className="flex items-center gap-1.5 text-xs text-slate-400 font-medium truncate">
-                            <CalendarIcon size={14} /> Proc.{" "}
-                            {event.case_id || "N/A"}
+                            <CalendarIcon size={14} /> Proc.{' '}
+                            {event.case_id || 'N/A'}
                           </span>
                         </div>
                       </div>

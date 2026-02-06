@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Download,
@@ -9,14 +9,14 @@ import {
   Check,
   Loader2,
   Info,
-} from "lucide-react";
-import { format, subDays } from "date-fns";
-import { AuditLog } from "../../types/audit";
-import { logAction } from "../../utils/auditLogger";
+} from 'lucide-react';
+import { format, subDays } from 'date-fns';
+import { AuditLog } from '../../types/audit';
+import { logAction } from '../../utils/auditLogger';
 import {
   generateAuditReportPDF,
   AuditReportConfig,
-} from "../../utils/generateAuditReportPDF";
+} from '../../utils/generateAuditReportPDF';
 
 interface ExportLogsModalProps {
   isOpen: boolean;
@@ -29,14 +29,14 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
   onClose,
   logs,
 }) => {
-  const [formatType, setFormatType] = useState<"csv" | "json" | "pdf">("csv");
+  const [formatType, setFormatType] = useState<'csv' | 'json' | 'pdf'>('csv');
   const [isExporting, setIsExporting] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [stepLabel, setStepLabel] = useState("");
+  const [stepLabel, setStepLabel] = useState('');
 
   const [dateRange, setDateRange] = useState({
-    start: format(subDays(new Date(), 30), "yyyy-MM-dd"),
-    end: format(new Date(), "yyyy-MM-dd"),
+    start: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
+    end: format(new Date(), 'yyyy-MM-dd'),
   });
 
   const [filters, setFilters] = useState({
@@ -58,41 +58,41 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
       const date = new Date(l.timestamp);
       const isWithinDate =
         date >= new Date(dateRange.start) &&
-        date <= new Date(dateRange.end + "T23:59:59");
+        date <= new Date(dateRange.end + 'T23:59:59');
       const isCriticalMatch =
-        !filters.onlyCritical || l.criticality === "crítico";
+        !filters.onlyCritical || l.criticality === 'crítico';
       return isWithinDate && isCriticalMatch;
     });
 
     try {
-      if (formatType === "json") {
-        setStepLabel("Gerando arquivo JSON...");
+      if (formatType === 'json') {
+        setStepLabel('Gerando arquivo JSON...');
         setProgress(50);
         await sleep(500);
         const blob = new Blob([JSON.stringify(filteredLogs, null, 2)], {
-          type: "application/json",
+          type: 'application/json',
         });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
+        const link = document.createElement('a');
         link.href = url;
-        link.download = `audit_logs_${format(new Date(), "dd-MM-yyyy")}.json`;
+        link.download = `audit_logs_${format(new Date(), 'dd-MM-yyyy')}.json`;
         link.click();
-      } else if (formatType === "csv") {
-        setStepLabel("Formatando dados em CSV...");
+      } else if (formatType === 'csv') {
+        setStepLabel('Formatando dados em CSV...');
         setProgress(50);
         await sleep(500);
         const headers = [
-          "Timestamp",
-          "Advogado",
-          "Ação",
-          "Entidade",
-          "Descrição",
-          "Criticidade",
-          "IP",
-          "User Agent",
+          'Timestamp',
+          'Advogado',
+          'Ação',
+          'Entidade',
+          'Descrição',
+          'Criticidade',
+          'IP',
+          'User Agent',
         ];
         const rows = filteredLogs.map((l) => [
-          format(new Date(l.timestamp), "dd/MM/yyyy HH:mm:ss"),
+          format(new Date(l.timestamp), 'dd/MM/yyyy HH:mm:ss'),
           l.lawyer_name,
           l.action,
           l.entity_type,
@@ -102,27 +102,27 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
           `"${l.user_agent}"`,
         ]);
         const csvContent = [
-          headers.join(","),
-          ...rows.map((r) => r.join(",")),
-        ].join("\n");
+          headers.join(','),
+          ...rows.map((r) => r.join(',')),
+        ].join('\n');
         const blob = new Blob([csvContent], {
-          type: "text/csv;charset=utf-8;",
+          type: 'text/csv;charset=utf-8;',
         });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
+        const link = document.createElement('a');
         link.href = url;
-        link.download = `audit_logs_${format(new Date(), "dd-MM-yyyy")}.csv`;
+        link.download = `audit_logs_${format(new Date(), 'dd-MM-yyyy')}.csv`;
         link.click();
-      } else if (formatType === "pdf") {
-        setStepLabel("Coletando logs...");
+      } else if (formatType === 'pdf') {
+        setStepLabel('Coletando logs...');
         setProgress(20);
         await sleep(400);
 
-        setStepLabel("Calculando estatísticas...");
+        setStepLabel('Calculando estatísticas...');
         setProgress(40);
         await sleep(600);
 
-        setStepLabel("Gerando PDF Profissional...");
+        setStepLabel('Gerando PDF Profissional...');
         setProgress(70);
         await sleep(300);
 
@@ -145,17 +145,17 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
       }
 
       setProgress(100);
-      setStepLabel("Concluído!");
+      setStepLabel('Concluído!');
       await sleep(500);
       alert(`${filteredLogs.length} registros exportados com sucesso.`);
       onClose();
     } catch (error) {
       console.error(error);
-      alert("Erro ao gerar exportação.");
+      alert('Erro ao gerar exportação.');
     } finally {
       setIsExporting(false);
       setProgress(0);
-      setStepLabel("");
+      setStepLabel('');
     }
   };
 
@@ -235,22 +235,22 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     {
-                      id: "csv",
-                      label: "CSV",
+                      id: 'csv',
+                      label: 'CSV',
                       icon: FileSpreadsheet,
-                      color: "text-green-600",
+                      color: 'text-green-600',
                     },
                     {
-                      id: "pdf",
-                      label: "PDF",
+                      id: 'pdf',
+                      label: 'PDF',
                       icon: FileText,
-                      color: "text-red-600",
+                      color: 'text-red-600',
                     },
                     {
-                      id: "json",
-                      label: "JSON",
+                      id: 'json',
+                      label: 'JSON',
                       icon: FileCode,
-                      color: "text-blue-600",
+                      color: 'text-blue-600',
                     },
                   ].map((f) => (
                     <button
@@ -258,8 +258,8 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                       onClick={() => setFormatType(f.id as any)}
                       className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
                         formatType === f.id
-                          ? "border-primary-600 bg-primary-50/10"
-                          : "border-slate-100 dark:border-slate-800 hover:border-slate-200"
+                          ? 'border-primary-600 bg-primary-50/10'
+                          : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
                       }`}
                     >
                       <f.icon size={24} className={f.color} />

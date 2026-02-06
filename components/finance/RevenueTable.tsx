@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   MoreVertical,
   CheckCircle2,
@@ -7,9 +7,9 @@ import {
   Trash2,
   User,
   Briefcase,
-} from "lucide-react";
-import { FinanceRecord } from "../../types";
-import { formatCurrency, formatDate } from "../../utils/formatters";
+} from 'lucide-react';
+import { FinanceRecord } from '../../types';
+import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface RevenueTableProps {
   revenues: FinanceRecord[];
@@ -19,15 +19,15 @@ interface RevenueTableProps {
 }
 
 const categoryColors: Record<string, string> = {
-  "Honorários Contratuais":
-    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-  "Honorários de Êxito":
-    "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-  "Consultas Avulsas":
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
-  "Retainer Fee (Mensalidade)":
-    "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
-  Outros: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
+  'Honorários Contratuais':
+    'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+  'Honorários de Êxito':
+    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  'Consultas Avulsas':
+    'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+  'Retainer Fee (Mensalidade)':
+    'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+  Outros: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
 };
 
 export const RevenueTable: React.FC<RevenueTableProps> = ({
@@ -78,8 +78,8 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
             ) : (
               revenues.map((r) => {
                 const isVencido =
-                  r.status === "vencido" ||
-                  (r.status === "pendente" &&
+                  r.status === 'vencido' ||
+                  (r.status === 'pendente' &&
                     new Date(r.due_date) < new Date());
 
                 return (
@@ -94,7 +94,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                             <User size={12} />
                           </div>
                           <span className="text-sm font-bold dark:text-white truncate max-w-[180px]">
-                            {r.client?.name || "N/A"}
+                            {r.client?.name || 'N/A'}
                           </span>
                         </div>
                         {r.case && (
@@ -106,7 +106,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                     </td>
                     <td className="px-6 py-5">
                       <span
-                        className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${categoryColors[r.category] || categoryColors["Outros"]}`}
+                        className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${categoryColors[r.category] || categoryColors['Outros']}`}
                       >
                         {r.category}
                       </span>
@@ -118,7 +118,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                     </td>
                     <td className="px-6 py-5">
                       <span
-                        className={`text-sm font-bold tabular-nums ${isVencido ? "text-red-500" : "text-slate-600 dark:text-slate-400"}`}
+                        className={`text-sm font-bold tabular-nums ${isVencido ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}`}
                       >
                         {formatDate(r.due_date)}
                       </span>
@@ -142,11 +142,11 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                     <td className="px-6 py-5">
                       <span
                         className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                          r.status === "pago"
-                            ? "bg-green-100 text-green-700"
-                            : r.status === "vencido"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-amber-100 text-amber-700"
+                          r.status === 'pago'
+                            ? 'bg-green-100 text-green-700'
+                            : r.status === 'vencido'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-amber-100 text-amber-700'
                         }`}
                       >
                         {r.status}
@@ -154,7 +154,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                     </td>
                     <td className="px-8 py-5 text-right">
                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                        {r.status !== "pago" && (
+                        {r.status !== 'pago' && (
                           <button
                             onClick={() => onQuickPayment(r)}
                             className="p-2.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-600 hover:text-white rounded-xl transition-all"

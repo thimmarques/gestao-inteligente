@@ -1,12 +1,12 @@
-import { Lawyer, Office, UserPreferences } from "../types.ts";
+import { Lawyer, Office, UserPreferences } from '../types.ts';
 
 export const STORAGE_KEYS = {
-  LAWYER: "current_lawyer",
-  OFFICE: "legaltech_office",
-  PREFERENCES: "legaltech_preferences",
-  THEME: "theme",
-  SESSION: "legaltech_fake_session",
-  TEAM: "legaltech_team",
+  LAWYER: 'current_lawyer',
+  OFFICE: 'legaltech_office',
+  PREFERENCES: 'legaltech_preferences',
+  THEME: 'theme',
+  SESSION: 'legaltech_fake_session',
+  TEAM: 'legaltech_team',
 };
 
 export function getCurrentLawyer(): Lawyer | null {
@@ -27,7 +27,7 @@ export function updateLawyer(updates: Partial<Lawyer>): void {
     const parsed = JSON.parse(session);
     localStorage.setItem(
       STORAGE_KEYS.SESSION,
-      JSON.stringify({ ...parsed, ...updates }),
+      JSON.stringify({ ...parsed, ...updates })
     );
   }
 
@@ -36,7 +36,7 @@ export function updateLawyer(updates: Partial<Lawyer>): void {
   if (teamRaw) {
     const team = JSON.parse(teamRaw);
     const index = team.findIndex(
-      (m: any) => m.id === current.id || m.email === current.email,
+      (m: any) => m.id === current.id || m.email === current.email
     );
     if (index !== -1) {
       team[index] = {
@@ -53,7 +53,7 @@ export function getOffice(): Office {
   const data = localStorage.getItem(STORAGE_KEYS.OFFICE);
   return data
     ? JSON.parse(data)
-    : ({ id: "office-1", name: "LegalTech" } as Office);
+    : ({ id: 'office-1', name: 'LegalTech' } as Office);
 }
 
 export function updateOffice(updates: Partial<Office>): void {
@@ -67,11 +67,11 @@ export function getPreferences(): UserPreferences {
   return data
     ? JSON.parse(data)
     : ({
-        theme: "dark",
+        theme: 'dark',
         fontSize: 14,
-        timezone: "America/Sao_Paulo",
-        dateFormat: "DD/MM/YYYY",
-        timeFormat: "24h",
+        timezone: 'America/Sao_Paulo',
+        dateFormat: 'DD/MM/YYYY',
+        timeFormat: '24h',
         notifications: {
           nearDeadlines: true,
           urgentDeadlines: true,

@@ -1,16 +1,16 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
   useLocation,
-} from "react-router-dom";
-import { Layout } from "./components/layout/Layout";
-import { AuthProvider, useAuth } from "./contexts/AuthContext.tsx";
-import { AppProvider as AppContextProvider } from "./contexts/AppContext.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "sonner";
+} from 'react-router-dom';
+import { Layout } from './components/layout/Layout';
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import { AppProvider as AppContextProvider } from './contexts/AppContext.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,19 +23,19 @@ const queryClient = new QueryClient({
 
 // Pages
 
-const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
-const Clients = lazy(() => import("./pages/Clients.tsx"));
-const Finance = lazy(() => import("./pages/Finance.tsx"));
-const Cases = lazy(() => import("./pages/Cases.tsx"));
-const Schedule = lazy(() => import("./pages/Schedule.tsx"));
-const Deadlines = lazy(() => import("./pages/Deadlines.tsx"));
-const Reports = lazy(() => import("./pages/Reports.tsx"));
-const Settings = lazy(() => import("./pages/Settings.tsx"));
-const Team = lazy(() => import("./pages/Team.tsx"));
+const Dashboard = lazy(() => import('./pages/Dashboard.tsx'));
+const Clients = lazy(() => import('./pages/Clients.tsx'));
+const Finance = lazy(() => import('./pages/Finance.tsx'));
+const Cases = lazy(() => import('./pages/Cases.tsx'));
+const Schedule = lazy(() => import('./pages/Schedule.tsx'));
+const Deadlines = lazy(() => import('./pages/Deadlines.tsx'));
+const Reports = lazy(() => import('./pages/Reports.tsx'));
+const Settings = lazy(() => import('./pages/Settings.tsx'));
+const Team = lazy(() => import('./pages/Team.tsx'));
 // const Tasks = lazy(() => import('./pages/Tasks.tsx'));
-const Login = lazy(() => import("./pages/Login.tsx"));
-const Signup = lazy(() => import("./pages/Signup.tsx"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
+const Login = lazy(() => import('./pages/Login.tsx'));
+const Signup = lazy(() => import('./pages/Signup.tsx'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-slate-950">
@@ -50,7 +50,7 @@ const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
   if (isLoading) return <PageLoader />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
-  if (user?.first_login && location.pathname !== "/settings") {
+  if (user?.first_login && location.pathname !== '/settings') {
     return <Navigate to="/settings" replace />;
   }
 
@@ -71,7 +71,7 @@ const AppRoutes = () => {
       <Route
         path="/auth/signup"
         element={
-          import.meta.env.VITE_INVITE_ONLY_MODE === "true" ? (
+          import.meta.env.VITE_INVITE_ONLY_MODE === 'true' ? (
             <div className="min-h-screen flex items-center justify-center font-bold text-slate-500">
               Acesso somente por convite. Solicite ao administrador.
             </div>

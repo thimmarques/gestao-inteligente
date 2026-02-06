@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   X,
   Gavel,
@@ -23,28 +23,28 @@ import {
   FileText,
   Briefcase,
   User,
-} from "lucide-react";
-import { useCases, useClients } from "../../hooks/useQueries";
+} from 'lucide-react';
+import { useCases, useClients } from '../../hooks/useQueries';
 
 interface CreateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultDate?: Date;
   defaultCaseId?: string;
-  mode?: "create" | "edit";
+  mode?: 'create' | 'edit';
   eventId?: string;
   onSave?: (event: any) => void;
   initialData?: any;
 }
 
-type EventType = "audiência" | "reunião" | "prazo" | "compromisso";
+type EventType = 'audiência' | 'reunião' | 'prazo' | 'compromisso';
 
 export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   isOpen,
   onClose,
   defaultDate,
   defaultCaseId,
-  mode = "create",
+  mode = 'create',
   eventId,
   onSave,
   initialData,
@@ -53,8 +53,8 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const { data: cases = [] } = useCases();
   const { data: clients = [] } = useClients();
 
-  const [searchProcess, setSearchProcess] = useState("");
-  const [searchClient, setSearchClient] = useState("");
+  const [searchProcess, setSearchProcess] = useState('');
+  const [searchClient, setSearchClient] = useState('');
   const [showProcessList, setShowProcessList] = useState(false);
   const [showClientList, setShowClientList] = useState(false);
 
@@ -62,21 +62,21 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const clientListRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
-    type: "audiência" as EventType,
-    title: "",
-    case_id: "",
-    client_id: "",
-    date: "",
-    startTime: "15:00",
-    endTime: "16:00",
-    description: "",
+    type: 'audiência' as EventType,
+    title: '',
+    case_id: '',
+    client_id: '',
+    date: '',
+    startTime: '15:00',
+    endTime: '16:00',
+    description: '',
     isVirtual: false,
     syncGoogle: false,
     reminders: {
       oneDayBefore: true,
       oneHourBefore: true,
       customValue: 15,
-      customUnit: "minutos",
+      customUnit: 'minutos',
     },
   });
 
@@ -96,65 +96,65 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
     if (isOpen) {
-      if (initialData && (mode === "edit" || initialData.id)) {
+      if (initialData && (mode === 'edit' || initialData.id)) {
         const start = new Date(initialData.start_time || initialData.start);
         const end = new Date(initialData.end_time || initialData.end);
 
         setFormData({
-          type: initialData.type || "audiência",
-          title: initialData.title || "",
-          case_id: initialData.case_id || "",
-          client_id: initialData.client_id || "",
-          date: start.toISOString().split("T")[0],
+          type: initialData.type || 'audiência',
+          title: initialData.title || '',
+          case_id: initialData.case_id || '',
+          client_id: initialData.client_id || '',
+          date: start.toISOString().split('T')[0],
           startTime: start.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
           endTime: end.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
-          description: initialData.description || "",
+          description: initialData.description || '',
           isVirtual: !!initialData.virtual_link,
           syncGoogle: !!initialData.google_event_id,
           reminders: {
             oneDayBefore: true,
             oneHourBefore: true,
             customValue: 15,
-            customUnit: "minutos",
+            customUnit: 'minutos',
           },
         });
       } else {
         const initialDateStr = defaultDate
-          ? defaultDate.toISOString().split("T")[0]
-          : new Date().toISOString().split("T")[0];
+          ? defaultDate.toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0];
         const now = new Date();
         const currentHour = now.getHours();
-        const nextHour = (currentHour + 1).toString().padStart(2, "0") + ":00";
-        const endHour = (currentHour + 2).toString().padStart(2, "0") + ":00";
+        const nextHour = (currentHour + 1).toString().padStart(2, '0') + ':00';
+        const endHour = (currentHour + 2).toString().padStart(2, '0') + ':00';
 
         setFormData({
-          type: "audiência",
-          title: "",
-          case_id: defaultCaseId || "",
-          client_id: "",
+          type: 'audiência',
+          title: '',
+          case_id: defaultCaseId || '',
+          client_id: '',
           date: initialDateStr,
           startTime: nextHour,
           endTime: endHour,
-          description: "",
+          description: '',
           isVirtual: false,
           syncGoogle: false,
           reminders: {
             oneDayBefore: true,
             oneHourBefore: true,
             customValue: 15,
-            customUnit: "minutos",
+            customUnit: 'minutos',
           },
         });
       }
@@ -163,44 +163,44 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
   const eventTypes = [
     {
-      id: "audiência",
-      label: "Audiência",
+      id: 'audiência',
+      label: 'Audiência',
       icon: Gavel,
-      color: "bg-red-500",
-      bg: "bg-red-50 dark:bg-red-900/20",
-      border: "border-red-200 dark:border-red-800",
-      text: "text-red-600",
-      placeholder: "Ex: Audiência de Instrução",
+      color: 'bg-red-500',
+      bg: 'bg-red-50 dark:bg-red-900/20',
+      border: 'border-red-200 dark:border-red-800',
+      text: 'text-red-600',
+      placeholder: 'Ex: Audiência de Instrução',
     },
     {
-      id: "reunião",
-      label: "Reunião",
+      id: 'reunião',
+      label: 'Reunião',
       icon: Users,
-      color: "bg-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-900/20",
-      border: "border-blue-200 dark:border-blue-800",
-      text: "text-blue-600",
-      placeholder: "Ex: Reunião com cliente",
+      color: 'bg-blue-500',
+      bg: 'bg-blue-50 dark:bg-blue-900/20',
+      border: 'border-blue-200 dark:border-blue-800',
+      text: 'text-blue-600',
+      placeholder: 'Ex: Reunião com cliente',
     },
     {
-      id: "prazo",
-      label: "Prazo",
+      id: 'prazo',
+      label: 'Prazo',
       icon: Clock,
-      color: "bg-amber-500",
-      bg: "bg-amber-50 dark:bg-amber-900/20",
-      border: "border-amber-200 dark:border-amber-800",
-      text: "text-amber-600",
-      placeholder: "Ex: Prazo para contestação",
+      color: 'bg-amber-500',
+      bg: 'bg-amber-50 dark:bg-amber-900/20',
+      border: 'border-amber-200 dark:border-amber-800',
+      text: 'text-amber-600',
+      placeholder: 'Ex: Prazo para contestação',
     },
     {
-      id: "compromisso",
-      label: "Compromisso",
+      id: 'compromisso',
+      label: 'Compromisso',
       icon: Calendar,
-      color: "bg-purple-500",
-      bg: "bg-purple-50 dark:bg-purple-900/20",
-      border: "border-purple-200 dark:border-purple-800",
-      text: "text-purple-600",
-      placeholder: "Ex: Compromisso pessoal",
+      color: 'bg-purple-500',
+      bg: 'bg-purple-50 dark:bg-purple-900/20',
+      border: 'border-purple-200 dark:border-purple-800',
+      text: 'text-purple-600',
+      placeholder: 'Ex: Compromisso pessoal',
     },
   ];
 
@@ -211,7 +211,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
         (c) =>
           c.process_number.includes(searchProcess) ||
           (c.court &&
-            c.court.toLowerCase().includes(searchProcess.toLowerCase())),
+            c.court.toLowerCase().includes(searchProcess.toLowerCase()))
       )
       .slice(0, 10);
   }, [cases, searchProcess]);
@@ -222,7 +222,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
       .filter(
         (c) =>
           c.name.toLowerCase().includes(searchClient.toLowerCase()) ||
-          c.cpf_cnpj.includes(searchClient),
+          c.cpf_cnpj.includes(searchClient)
       )
       .slice(0, 10);
   }, [clients, searchClient]);
@@ -254,7 +254,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-black dark:text-white tracking-tight">
-                {mode === "create" ? "Novo Evento" : "Editar Evento"}
+                {mode === 'create' ? 'Novo Evento' : 'Editar Evento'}
               </h2>
               <p className="text-sm font-medium text-slate-500 mt-1">
                 Configure o compromisso.
@@ -290,7 +290,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                       onClick={() =>
                         setFormData({ ...formData, type: type.id as EventType })
                       }
-                      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all relative group ${isActive ? `${type.border} ${type.bg} scale-[1.02] shadow-lg` : "border-slate-100 dark:border-slate-800 hover:border-slate-200"}`}
+                      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all relative group ${isActive ? `${type.border} ${type.bg} scale-[1.02] shadow-lg` : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'}`}
                     >
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md ${type.color}`}
@@ -298,7 +298,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                         <Icon size={20} />
                       </div>
                       <span
-                        className={`text-[10px] font-black uppercase tracking-wider ${isActive ? type.text : "text-slate-400"}`}
+                        className={`text-[10px] font-black uppercase tracking-wider ${isActive ? type.text : 'text-slate-400'}`}
                       >
                         {type.label}
                       </span>
@@ -342,7 +342,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                   </div>
                   <input
                     type="text"
-                    value={searchProcess || selectedCase?.process_number || ""}
+                    value={searchProcess || selectedCase?.process_number || ''}
                     onChange={(e) => {
                       setSearchProcess(e.target.value);
                       setShowProcessList(true);
@@ -361,7 +361,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                         onClick={() => {
                           setFormData({ ...formData, case_id: c.id });
                           setShowProcessList(false);
-                          setSearchProcess("");
+                          setSearchProcess('');
                         }}
                         className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors"
                       >
@@ -387,7 +387,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                   </div>
                   <input
                     type="text"
-                    value={searchClient || selectedClient?.name || ""}
+                    value={searchClient || selectedClient?.name || ''}
                     onChange={(e) => {
                       setSearchClient(e.target.value);
                       setShowClientList(true);
@@ -406,7 +406,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                         onClick={() => {
                           setFormData({ ...formData, client_id: c.id });
                           setShowClientList(false);
-                          setSearchClient("");
+                          setSearchClient('');
                         }}
                         className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors"
                       >

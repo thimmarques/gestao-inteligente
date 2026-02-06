@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Home,
   Users,
@@ -18,15 +18,15 @@ import {
   User,
   Menu,
   X,
-} from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
-import { useApp } from "../../contexts/AppContext";
+} from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useApp } from '../../contexts/AppContext';
 import {
   useDeadlines,
   useSchedules,
   useNotifications,
   useTasks,
-} from "../../hooks/useQueries";
+} from '../../hooks/useQueries';
 
 interface SidebarItemProps {
   to: string;
@@ -42,15 +42,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   icon,
   label,
   badge,
-  badgeColor = "bg-red-500",
+  badgeColor = 'bg-red-500',
   active,
 }) => (
   <Link
     to={to}
     className={`relative flex items-center justify-between px-4 py-3 my-1 rounded-xl transition-all duration-300 group ${
       active
-        ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold shadow-sm"
-        : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
+        ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold shadow-sm'
+        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
     }`}
   >
     {active && (
@@ -58,7 +58,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     )}
     <div className="flex items-center gap-3.5 z-10">
       <div
-        className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-105"}`}
+        className={`transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
       >
         {icon}
       </div>
@@ -90,51 +90,50 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
   const pendingDeadlines = deadlines.filter(
-    (d: any) => d.status === "pendente",
+    (d: any) => d.status === 'pendente'
   ).length;
 
   const today = new Date().toDateString();
   const todaySchedules = schedules.filter(
     (s: any) =>
-      s.status === "agendado" &&
-      new Date(s.start_time).toDateString() === today,
+      s.status === 'agendado' && new Date(s.start_time).toDateString() === today
   ).length;
 
-  const pendingTasks = tasks.filter((t: any) => t.status === "pendente").length;
+  const pendingTasks = tasks.filter((t: any) => t.status === 'pendente').length;
 
   const menuItems = [
-    { to: "/", icon: <Home size={20} />, label: "Dashboard" },
-    { to: "/clientes", icon: <Users size={20} />, label: "Clientes" },
-    { to: "/processos", icon: <Folder size={20} />, label: "Processos" },
+    { to: '/', icon: <Home size={20} />, label: 'Dashboard' },
+    { to: '/clientes', icon: <Users size={20} />, label: 'Clientes' },
+    { to: '/processos', icon: <Folder size={20} />, label: 'Processos' },
     {
-      to: "/agenda",
+      to: '/agenda',
       icon: <Calendar size={20} />,
-      label: "Agenda",
+      label: 'Agenda',
       badge: todaySchedules,
     },
     {
-      to: "/prazos",
+      to: '/prazos',
       icon: <Clock size={20} />,
-      label: "Prazos",
+      label: 'Prazos',
       badge: pendingDeadlines,
     },
-    { to: "/financeiro", icon: <DollarSign size={20} />, label: "Financeiro" },
-    { to: "/relatorios", icon: <BarChart2 size={20} />, label: "Relatórios" },
-    { to: "/equipe", icon: <Users2 size={20} />, label: "Equipe" },
+    { to: '/financeiro', icon: <DollarSign size={20} />, label: 'Financeiro' },
+    { to: '/relatorios', icon: <BarChart2 size={20} />, label: 'Relatórios' },
+    { to: '/equipe', icon: <Users2 size={20} />, label: 'Equipe' },
   ];
 
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 font-sans selection:bg-primary-500/30">
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-transform lg:static lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 w-72 bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-transform lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="h-full flex flex-col">
           <div className="p-6 border-b border-slate-100/50 dark:border-slate-800/50 flex justify-center">
@@ -178,7 +177,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                 to="/settings"
                 icon={<Settings size={20} />}
                 label="Configurações"
-                active={location.pathname === "/settings"}
+                active={location.pathname === '/settings'}
               />
             </div>
           </nav>
@@ -196,10 +195,10 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold truncate dark:text-white leading-tight group-hover:text-primary-600 transition-colors">
-                  {displayUser?.name || "Advogado"}
+                  {displayUser?.name || 'Advogado'}
                 </p>
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">
-                  {displayUser?.oab ? `OAB/${displayUser.oab}` : "OAB Pendente"}
+                  {displayUser?.oab ? `OAB/${displayUser.oab}` : 'OAB Pendente'}
                 </p>
               </div>
             </div>

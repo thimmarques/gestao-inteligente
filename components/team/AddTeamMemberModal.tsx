@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { X, Mail, Plus, Loader2, Shield } from "lucide-react";
-import { inviteService } from "../../services/inviteService";
-import { useApp } from "../../contexts/AppContext";
-import { toast } from "sonner";
-import { Role } from "../../types";
+import React, { useState, useMemo, useEffect } from 'react';
+import { X, Mail, Plus, Loader2, Shield } from 'lucide-react';
+import { inviteService } from '../../services/inviteService';
+import { useApp } from '../../contexts/AppContext';
+import { toast } from 'sonner';
+import { Role } from '../../types';
 
 interface AddTeamMemberModalProps {
   isOpen: boolean;
@@ -17,24 +17,24 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
   onSave,
 }) => {
   const { lawyer: currentUser } = useApp();
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<string>("lawyer");
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState<string>('lawyer');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const userRole = (currentUser?.role as string) || "";
-  const isAdmin = userRole === "admin";
-  const isLawyer = userRole === "lawyer" || userRole === Role.LAWYER;
+  const userRole = (currentUser?.role as string) || '';
+  const isAdmin = userRole === 'admin';
+  const isLawyer = userRole === 'lawyer' || userRole === Role.LAWYER;
 
   // Define available options based on current user's role
   const availableRoles = useMemo(() => {
     const roles = [];
     if (isAdmin) {
-      roles.push({ value: "admin", label: "Administrador" });
-      roles.push({ value: "lawyer", label: "Advogado" });
+      roles.push({ value: 'admin', label: 'Administrador' });
+      roles.push({ value: 'lawyer', label: 'Advogado' });
     }
     if (isAdmin || isLawyer) {
-      roles.push({ value: "assistant", label: "Assistente" });
-      roles.push({ value: "intern", label: "Estagiário" });
+      roles.push({ value: 'assistant', label: 'Assistente' });
+      roles.push({ value: 'intern', label: 'Estagiário' });
     }
     return roles;
   }, [isAdmin, isLawyer]);
@@ -61,17 +61,17 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
       toast.success(`Convite enviado para ${email}`);
       onSave();
       onClose();
-      setEmail("");
+      setEmail('');
     } catch (error: any) {
-      console.error("Erro ao enviar convite:", {
+      console.error('Erro ao enviar convite:', {
         message: error.message,
         name: error.name,
         status: error.status,
         context: error.context,
-        details: error
+        details: error,
       });
 
-      let errorMessage = "Erro ao enviar convite";
+      let errorMessage = 'Erro ao enviar convite';
 
       // Attempt to extract message from Supabase Edge Function error
       if (error.context?.json?.error) {
@@ -163,7 +163,7 @@ export const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
               ) : (
                 <Plus size={20} />
               )}
-              {isSubmitting ? "Enviando..." : "Enviar Convite"}
+              {isSubmitting ? 'Enviando...' : 'Enviar Convite'}
             </button>
           </div>
         </form>

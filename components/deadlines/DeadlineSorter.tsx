@@ -1,6 +1,6 @@
-import React from "react";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
-import { DeadlineSort } from "../../types";
+import React from 'react';
+import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { DeadlineSort } from '../../types';
 
 interface DeadlineSorterProps {
   currentSort: DeadlineSort;
@@ -12,17 +12,17 @@ export const DeadlineSorter: React.FC<DeadlineSorterProps> = ({
   onChange,
 }) => {
   const options = [
-    { label: "Data Limite (Crescente)", field: "deadline_date", dir: "asc" },
-    { label: "Data Limite (Decrescente)", field: "deadline_date", dir: "desc" },
-    { label: "Prioridade (Urgente primeiro)", field: "priority", dir: "asc" },
-    { label: "Prioridade (Baixa primeiro)", field: "priority", dir: "desc" },
-    { label: "Status (Vencidos primeiro)", field: "status", dir: "asc" },
-    { label: "Processo (A-Z)", field: "process", dir: "asc" },
-    { label: "Cliente (A-Z)", field: "client", dir: "asc" },
+    { label: 'Data Limite (Crescente)', field: 'deadline_date', dir: 'asc' },
+    { label: 'Data Limite (Decrescente)', field: 'deadline_date', dir: 'desc' },
+    { label: 'Prioridade (Urgente primeiro)', field: 'priority', dir: 'asc' },
+    { label: 'Prioridade (Baixa primeiro)', field: 'priority', dir: 'desc' },
+    { label: 'Status (Vencidos primeiro)', field: 'status', dir: 'asc' },
+    { label: 'Processo (A-Z)', field: 'process', dir: 'asc' },
+    { label: 'Cliente (A-Z)', field: 'client', dir: 'asc' },
   ];
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [field, direction] = e.target.value.split("|");
+    const [field, direction] = e.target.value.split('|');
     onChange({ field: field as any, direction: direction as any });
   };
 

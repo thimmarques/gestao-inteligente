@@ -1,0 +1,8 @@
+node_modules
+dist
+.gemini
+build_log.txt
+lint_output.txt
+test_output.txt
+ts_errors.txt
+supabase/migrations

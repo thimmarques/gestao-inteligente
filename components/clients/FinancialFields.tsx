@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Smartphone,
   Building2,
@@ -6,7 +6,7 @@ import {
   CreditCard,
   Banknote,
   Info,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface FinancialFieldsProps {
   data: any;
@@ -30,8 +30,8 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
             Forma de Pagamento
           </label>
           <select
-            value={data.payment_method || "PIX"}
-            onChange={(e) => onChange("payment_method", e.target.value)}
+            value={data.payment_method || 'PIX'}
+            onChange={(e) => onChange('payment_method', e.target.value)}
             className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           >
             <option value="PIX">PIX</option>
@@ -48,8 +48,8 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
           </label>
           <input
             type="number"
-            value={data.hourly_rate || ""}
-            onChange={(e) => onChange("hourly_rate", e.target.value)}
+            value={data.hourly_rate || ''}
+            onChange={(e) => onChange('hourly_rate', e.target.value)}
             placeholder="0,00"
             className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           />
@@ -69,8 +69,8 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
           </div>
           <input
             type="number"
-            value={data.retainer_fee || ""}
-            onChange={(e) => onChange("retainer_fee", e.target.value)}
+            value={data.retainer_fee || ''}
+            onChange={(e) => onChange('retainer_fee', e.target.value)}
             placeholder="0,00"
             className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           />
@@ -82,7 +82,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
           </label>
           <select
             value={data.billing_day || 10}
-            onChange={(e) => onChange("billing_day", parseInt(e.target.value))}
+            onChange={(e) => onChange('billing_day', parseInt(e.target.value))}
             className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           >
             {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
@@ -99,13 +99,13 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
               Observações Financeiras
             </label>
             <span className="text-[10px] text-slate-400">
-              {(data.financial_notes || "").length}/200
+              {(data.financial_notes || '').length}/200
             </span>
           </div>
           <textarea
-            value={data.financial_notes || ""}
+            value={data.financial_notes || ''}
             onChange={(e) =>
-              onChange("financial_notes", e.target.value.slice(0, 200))
+              onChange('financial_notes', e.target.value.slice(0, 200))
             }
             rows={3}
             className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"

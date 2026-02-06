@@ -1,6 +1,6 @@
-import React from "react";
-import { TrendingUp } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import React from 'react';
+import { TrendingUp } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface SuccessRateCardProps {
   casesWon: number;
@@ -17,10 +17,10 @@ export const SuccessRateCard: React.FC<SuccessRateCardProps> = ({
   const data =
     total > 0
       ? [
-          { name: "Ganhos", value: casesWon, color: "#22c55e" },
-          { name: "Perdidos", value: casesLost, color: "#ef4444" },
+          { name: 'Ganhos', value: casesWon, color: '#22c55e' },
+          { name: 'Perdidos', value: casesLost, color: '#ef4444' },
         ]
-      : [{ name: "Sem dados", value: 1, color: "#e2e8f0" }];
+      : [{ name: 'Sem dados', value: 1, color: '#e2e8f0' }];
 
   return (
     <div className="relative overflow-hidden bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-200 group">
@@ -41,7 +41,7 @@ export const SuccessRateCard: React.FC<SuccessRateCardProps> = ({
           <p className="text-xs font-medium text-slate-400 dark:text-slate-500">
             {total > 0
               ? `${casesWon} ganhos de ${total} concluídos`
-              : "Nenhum processo concluído"}
+              : 'Nenhum processo concluído'}
           </p>
         </div>
 

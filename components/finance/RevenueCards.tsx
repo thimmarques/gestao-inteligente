@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { Clock, CheckCircle2, AlertTriangle, TrendingUp } from "lucide-react";
-import { FinanceRecord } from "../../types";
-import { formatCurrency } from "../../utils/formatters";
-import { isThisMonth } from "date-fns";
+import React, { useMemo } from 'react';
+import { Clock, CheckCircle2, AlertTriangle, TrendingUp } from 'lucide-react';
+import { FinanceRecord } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
+import { isThisMonth } from 'date-fns';
 
 interface RevenueCardsProps {
   revenues: FinanceRecord[];
@@ -10,14 +10,12 @@ interface RevenueCardsProps {
 
 export const RevenueCards: React.FC<RevenueCardsProps> = ({ revenues }) => {
   const stats = useMemo(() => {
-    const pending = revenues.filter((r) => r.status === "pendente");
+    const pending = revenues.filter((r) => r.status === 'pendente');
     const paid = revenues.filter(
       (r) =>
-        r.status === "pago" &&
-        r.paid_date &&
-        isThisMonth(new Date(r.paid_date)),
+        r.status === 'pago' && r.paid_date && isThisMonth(new Date(r.paid_date))
     );
-    const overdue = revenues.filter((r) => r.status === "vencido");
+    const overdue = revenues.filter((r) => r.status === 'vencido');
 
     return {
       pendingSum: pending.reduce((sum, r) => sum + r.amount, 0),

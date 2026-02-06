@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   MoreVertical,
   Edit,
@@ -8,19 +8,19 @@ import {
   Shield,
   FileSignature,
   HandHeart,
-} from "lucide-react";
-import { Client, ClientType } from "../../types";
+} from 'lucide-react';
+import { Client, ClientType } from '../../types';
 import {
   formatCPF,
   formatPhone,
   formatCurrency,
   formatDate,
-} from "../../utils/formatters";
+} from '../../utils/formatters';
 import {
   generateProcuracaoPDF,
   generateDeclaracaoHipossuficienciaPDF,
-} from "../../utils/generateLegalDocuments";
-import { useApp } from "../../contexts/AppContext";
+} from '../../utils/generateLegalDocuments';
+import { useApp } from '../../contexts/AppContext';
 
 interface ClientTableProps {
   clients: Client[];
@@ -98,7 +98,7 @@ export const ClientTable: React.FC<ClientTableProps> = ({
               clients.map((client) => (
                 <tr
                   key={client.id}
-                  className={`hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group ${client.status === "inativo" ? "opacity-60" : ""}`}
+                  className={`hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group ${client.status === 'inativo' ? 'opacity-60' : ''}`}
                   onClick={() => onRowClick(client.id)}
                 >
                   <td
@@ -128,8 +128,8 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                     <span
                       className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase inline-flex items-center gap-1 ${
                         client.type === ClientType.PARTICULAR
-                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                          : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                          : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                       }`}
                     >
                       {client.type === ClientType.PARTICULAR ? (
@@ -149,16 +149,16 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                         {formatPhone(client.phone)}
                       </span>
                       <span className="text-xs text-slate-500 truncate max-w-[150px]">
-                        {client.email || "-"}
+                        {client.email || '-'}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
-                        client.status === "ativo"
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30"
-                          : "bg-slate-100 text-slate-600 dark:bg-slate-800"
+                        client.status === 'ativo'
+                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800'
                       }`}
                     >
                       {client.status}
@@ -199,7 +199,7 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                         onClick={() => onToggleStatus(client)}
                         className="p-2 text-slate-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all"
                         title={
-                          client.status === "ativo" ? "Inativar" : "Ativar"
+                          client.status === 'ativo' ? 'Inativar' : 'Ativar'
                         }
                       >
                         <Power size={16} />

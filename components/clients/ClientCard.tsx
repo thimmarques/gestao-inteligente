@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Mail,
   Phone,
@@ -7,14 +7,14 @@ import {
   Shield,
   FileSignature,
   HandHeart,
-} from "lucide-react";
-import { Client, ClientType } from "../../types";
-import { formatCPF, formatPhone } from "../../utils/formatters";
+} from 'lucide-react';
+import { Client, ClientType } from '../../types';
+import { formatCPF, formatPhone } from '../../utils/formatters';
 import {
   generateProcuracaoPDF,
   generateDeclaracaoHipossuficienciaPDF,
-} from "../../utils/generateLegalDocuments";
-import { useApp } from "../../contexts/AppContext";
+} from '../../utils/generateLegalDocuments';
+import { useApp } from '../../contexts/AppContext';
 
 interface ClientCardProps {
   client: Client;
@@ -36,7 +36,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
 
   return (
     <div
-      className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === "inativo" ? "opacity-60" : ""}`}
+      className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === 'inativo' ? 'opacity-60' : ''}`}
       onClick={onClick}
     >
       {/* Avatar */}
@@ -49,7 +49,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
           )}
         </div>
         <div
-          className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 ${client.status === "ativo" ? "bg-green-500" : "bg-slate-400"}`}
+          className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 ${client.status === 'ativo' ? 'bg-green-500' : 'bg-slate-400'}`}
         />
       </div>
 
@@ -60,8 +60,8 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
       <span
         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase inline-flex items-center gap-1 mb-4 ${
           client.type === ClientType.PARTICULAR
-            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+            : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
         }`}
       >
         {client.type === ClientType.PARTICULAR ? (

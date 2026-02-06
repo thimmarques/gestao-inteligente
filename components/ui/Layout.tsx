@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home,
   Users,
@@ -20,9 +20,9 @@ import {
   Moon,
   Sun,
   Search,
-} from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
-import { Avatar } from "./Avatar";
+} from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { Avatar } from './Avatar';
 
 interface SidebarItemProps {
   to: string;
@@ -39,15 +39,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   icon,
   label,
   badge,
-  badgeColor = "bg-red-500",
+  badgeColor = 'bg-red-500',
   active,
 }) => (
   <Link
     to={to}
     className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
       active
-        ? "bg-primary-600 text-white shadow-md"
-        : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800"
+        ? 'bg-primary-600 text-white shadow-md'
+        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
     }`}
   >
     <div className="flex items-center gap-3">
@@ -75,25 +75,25 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   const menuItems = [
-    { to: "/", icon: <Home size={20} />, label: "Dashboard" },
-    { to: "/clientes", icon: <Users size={20} />, label: "Clientes" },
-    { to: "/processos", icon: <Folder size={20} />, label: "Processos" },
-    { to: "/agenda", icon: <Calendar size={20} />, label: "Agenda", badge: 2 },
-    { to: "/prazos", icon: <Clock size={20} />, label: "Prazos", badge: 5 },
-    { to: "/financeiro", icon: <DollarSign size={20} />, label: "Financeiro" },
-    { to: "/relatorios", icon: <BarChart2 size={20} />, label: "Relatórios" },
-    { to: "/templates", icon: <FileText size={20} />, label: "Templates" },
-    { to: "/desempenho", icon: <TrendingUp size={20} />, label: "Desempenho" },
-    { to: "/equipe", icon: <Users2 size={20} />, label: "Equipe" },
+    { to: '/', icon: <Home size={20} />, label: 'Dashboard' },
+    { to: '/clientes', icon: <Users size={20} />, label: 'Clientes' },
+    { to: '/processos', icon: <Folder size={20} />, label: 'Processos' },
+    { to: '/agenda', icon: <Calendar size={20} />, label: 'Agenda', badge: 2 },
+    { to: '/prazos', icon: <Clock size={20} />, label: 'Prazos', badge: 5 },
+    { to: '/financeiro', icon: <DollarSign size={20} />, label: 'Financeiro' },
+    { to: '/relatorios', icon: <BarChart2 size={20} />, label: 'Relatórios' },
+    { to: '/templates', icon: <FileText size={20} />, label: 'Templates' },
+    { to: '/desempenho', icon: <TrendingUp size={20} />, label: 'Desempenho' },
+    { to: '/equipe', icon: <Users2 size={20} />, label: 'Equipe' },
   ];
 
   return (
@@ -112,7 +112,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
       <aside
         className={`
         fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-transform lg:static lg:translate-x-0
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
       >
         <div className="h-full flex flex-col">
@@ -160,17 +160,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
             <div className="flex items-center gap-3 p-2">
               <Avatar
                 src={user?.photo_url || null}
-                name={user?.name || "User"}
+                name={user?.name || 'User'}
                 size="md"
                 className="border border-slate-200 dark:border-slate-700 hover:scale-105 transition-transform cursor-pointer"
-                onClick={() => navigate("/configuracoes")}
+                onClick={() => navigate('/configuracoes')}
               />
               <div className="flex-1 min-w-0">
                 <p
                   className="text-sm font-semibold truncate dark:text-white"
-                  title={user?.name || ""}
+                  title={user?.name || ''}
                 >
-                  {user?.name || "Usuário"}
+                  {user?.name || 'Usuário'}
                 </p>
                 {user?.oab ? (
                   <p className="text-xs text-slate-500 truncate font-mono">

@@ -1,5 +1,5 @@
-import React from "react";
-import { Check } from "lucide-react";
+import React from 'react';
+import { Check } from 'lucide-react';
 
 interface LogDiffViewProps {
   details: string;
@@ -43,9 +43,9 @@ export const LogDiffView: React.FC<LogDiffViewProps> = ({ details }) => {
             >
               <span className="font-bold text-slate-400">{key}:</span>
               <span
-                className={`line-through opacity-60 ${before[key] !== after[key] ? "text-red-500" : "text-slate-500"}`}
+                className={`line-through opacity-60 ${before[key] !== after[key] ? 'text-red-500' : 'text-slate-500'}`}
               >
-                {String(before[key] ?? "-")}
+                {String(before[key] ?? '-')}
               </span>
             </div>
           ))}
@@ -64,9 +64,9 @@ export const LogDiffView: React.FC<LogDiffViewProps> = ({ details }) => {
             >
               <span className="font-bold text-slate-400">{key}:</span>
               <span
-                className={`font-black ${before[key] !== after[key] ? "text-green-600" : "text-slate-500 opacity-50"}`}
+                className={`font-black ${before[key] !== after[key] ? 'text-green-600' : 'text-slate-500 opacity-50'}`}
               >
-                {String(after[key] ?? "-")}
+                {String(after[key] ?? '-')}
                 {before[key] !== after[key] && (
                   <Check size={8} className="inline ml-1" />
                 )}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Users,
   UserPlus,
@@ -10,19 +10,19 @@ import {
   Mail,
   Phone,
   ExternalLink,
-} from "lucide-react";
-import { useClients } from "../hooks/useQueries";
-import { clientService } from "../services/clientService";
-import { Client } from "../types";
-import { formatPhone } from "../utils/formatters";
-import { CreateClientModal } from "../components/clients/CreateClientModal";
-import { useApp } from "../contexts/AppContext";
+} from 'lucide-react';
+import { useClients } from '../hooks/useQueries';
+import { clientService } from '../services/clientService';
+import { Client } from '../types';
+import { formatPhone } from '../utils/formatters';
+import { CreateClientModal } from '../components/clients/CreateClientModal';
+import { useApp } from '../contexts/AppContext';
 
 const Clients: React.FC = () => {
   const { lawyer } = useApp();
   const { data: clients = [], isLoading, refetch } = useClients();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("todos");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('todos');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
@@ -32,7 +32,7 @@ const Clients: React.FC = () => {
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.cpf_cnpj.includes(searchTerm) ||
         c.email?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesType = filterType === "todos" || c.type === filterType;
+      const matchesType = filterType === 'todos' || c.type === filterType;
       return matchesSearch && matchesType;
     });
   }, [clients, searchTerm, filterType]);
@@ -52,7 +52,7 @@ const Clients: React.FC = () => {
       refetch();
     } catch (err) {
       console.error(err);
-      alert("Erro ao salvar cliente.");
+      alert('Erro ao salvar cliente.');
     }
   };
 
@@ -98,11 +98,11 @@ const Clients: React.FC = () => {
           />
         </div>
         <div className="flex gap-2">
-          {["todos", "particular", "defensoria"].map((t) => (
+          {['todos', 'particular', 'defensoria'].map((t) => (
             <button
               key={t}
               onClick={() => setFilterType(t)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${filterType === t ? "bg-primary-600 text-white shadow-md" : "bg-slate-50 dark:bg-slate-800 text-slate-500"}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${filterType === t ? 'bg-primary-600 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-500'}`}
             >
               {t}
             </button>
@@ -129,7 +129,7 @@ const Clients: React.FC = () => {
                   {client.name[0]}
                 </div>
                 <span
-                  className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${client.type === "particular" ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30" : "bg-purple-100 text-purple-600 dark:bg-purple-900/30"}`}
+                  className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${client.type === 'particular' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30' : 'bg-purple-100 text-purple-600 dark:bg-purple-900/30'}`}
                 >
                   {client.type}
                 </span>
@@ -185,7 +185,7 @@ const Clients: React.FC = () => {
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveClient}
           initialData={editingClient}
-          mode={editingClient ? "edit" : "create"}
+          mode={editingClient ? 'edit' : 'create'}
         />
       )}
     </div>

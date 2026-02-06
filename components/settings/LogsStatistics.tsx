@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
-import { Award, Clock, Activity, Database, TrendingUp } from "lucide-react";
-import { AuditLog } from "../../types/audit";
+import React, { useMemo } from 'react';
+import { Award, Clock, Activity, Database, TrendingUp } from 'lucide-react';
+import { AuditLog } from '../../types/audit';
 
 interface LogsStatisticsProps {
   logs: AuditLog[];
@@ -14,8 +14,8 @@ export const LogsStatistics: React.FC<LogsStatisticsProps> = ({ logs }) => {
       return acc;
     }, {} as any);
     const topLawyer = Object.entries(byLawyer).sort(
-      (a: any, b: any) => b[1] - a[1],
-    )[0] || ["-", 0];
+      (a: any, b: any) => b[1] - a[1]
+    )[0] || ['-', 0];
     const avg = Math.round(logs.length / 30) || 1;
     return { topLawyer, avg };
   }, [logs]);
@@ -26,7 +26,7 @@ export const LogsStatistics: React.FC<LogsStatisticsProps> = ({ logs }) => {
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       <MiniStat
         label="Operador Ativo"
-        value={stats.topLawyer[0].split(" ")[0]}
+        value={stats.topLawyer[0].split(' ')[0]}
         color="text-yellow-500"
         icon={<Award />}
         sub={`${stats.topLawyer[1]} ações`}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Calendar,
   Clock,
@@ -14,19 +14,19 @@ import {
   MoreHorizontal,
   Bell,
   BellOff,
-} from "lucide-react";
-import { useDeadlines } from "../hooks/useQueries";
-import { deadlineService } from "../services/deadlineService";
-import { DeadlineWithRelations, Deadline } from "../types";
-import { calculateDaysRemaining } from "../utils/deadlineCalculations";
-import { CreateDeadlineModal } from "../components/deadlines/CreateDeadlineModal";
+} from 'lucide-react';
+import { useDeadlines } from '../hooks/useQueries';
+import { deadlineService } from '../services/deadlineService';
+import { DeadlineWithRelations, Deadline } from '../types';
+import { calculateDaysRemaining } from '../utils/deadlineCalculations';
+import { CreateDeadlineModal } from '../components/deadlines/CreateDeadlineModal';
 
 const Deadlines: React.FC = () => {
   const { data: deadlines = [], isLoading, refetch } = useDeadlines();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<
-    "todos" | "pendente" | "concluído" | "vencido"
-  >("pendente");
+    'todos' | 'pendente' | 'concluído' | 'vencido'
+  >('pendente');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredDeadlines = useMemo(() => {
@@ -35,16 +35,16 @@ const Deadlines: React.FC = () => {
         d.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         d.case?.process_number.includes(searchTerm);
       const daysRemaining = calculateDaysRemaining(d.deadline_date);
-      const isOverdue = daysRemaining < 0 && d.status !== "concluído";
+      const isOverdue = daysRemaining < 0 && d.status !== 'concluído';
 
       const deadlineStatus =
-        d.status === "concluído"
-          ? "concluído"
+        d.status === 'concluído'
+          ? 'concluído'
           : isOverdue
-            ? "vencido"
-            : "pendente";
+            ? 'vencido'
+            : 'pendente';
       const matchesStatus =
-        statusFilter === "todos" || deadlineStatus === statusFilter;
+        statusFilter === 'todos' || deadlineStatus === statusFilter;
 
       return matchesSearch && matchesStatus;
     });
@@ -52,17 +52,17 @@ const Deadlines: React.FC = () => {
     return filtered.sort(
       (a, b) =>
         new Date(a.deadline_date).getTime() -
-        new Date(b.deadline_date).getTime(),
+        new Date(b.deadline_date).getTime()
     );
   }, [deadlines, searchTerm, statusFilter]);
 
   const handleToggleStatus = async (deadline: Deadline) => {
     try {
       await deadlineService.updateDeadline(deadline.id, {
-        status: deadline.status === "concluído" ? "pendente" : "concluído",
+        status: deadline.status === 'concluído' ? 'pendente' : 'concluído',
       });
     } catch (error) {
-      console.error("Error updating deadline status:", error);
+      console.error('Error updating deadline status:', error);
     }
   };
 
@@ -129,12 +129,12 @@ const Deadlines: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredDeadlines.map((deadline) => {
           const daysRemaining = calculateDaysRemaining(deadline.deadline_date);
-          const isLate = daysRemaining < 0 && deadline.status !== "concluído";
+          const isLate = daysRemaining < 0 && deadline.status !== 'concluído';
 
           return (
             <div
               key={deadline.id}
-              className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border ${isLate ? "border-red-200 dark:border-red-900/50" : "border-slate-200 dark:border-slate-800"} shadow-sm hover:shadow-xl transition-all group overflow-hidden relative`}
+              className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border ${isLate ? 'border-red-200 dark:border-red-900/50' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-xl transition-all group overflow-hidden relative`}
             >
               {isLate && (
                 <div className="absolute top-0 right-0 p-2">
@@ -151,10 +151,10 @@ const Deadlines: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <p
-                      className={`text-sm font-black ${isLate ? "text-red-600" : "text-primary-600 uppercase tracking-widest"}`}
+                      className={`text-sm font-black ${isLate ? 'text-red-600' : 'text-primary-600 uppercase tracking-widest'}`}
                     >
                       {daysRemaining === 0
-                        ? "VENCE HOJE"
+                        ? 'VENCE HOJE'
                         : isLate
                           ? `${Math.abs(daysRemaining)} dias em atraso`
                           : `${daysRemaining} dias restantes`}
@@ -163,7 +163,7 @@ const Deadlines: React.FC = () => {
                       <Calendar size={12} className="text-slate-400" />
                       <p className="text-xs font-bold text-slate-500">
                         {new Date(deadline.deadline_date).toLocaleDateString(
-                          "pt-BR",
+                          'pt-BR'
                         )}
                       </p>
                     </div>
@@ -189,12 +189,12 @@ const Deadlines: React.FC = () => {
                     <button
                       onClick={() => handleToggleStatus(deadline)}
                       className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${
-                        deadline.status === "concluído"
-                          ? "bg-green-100 dark:bg-green-900/20 text-green-600"
-                          : "bg-primary-50 dark:bg-primary-900/10 text-primary-600 hover:bg-primary-100"
+                        deadline.status === 'concluído'
+                          ? 'bg-green-100 dark:bg-green-900/20 text-green-600'
+                          : 'bg-primary-50 dark:bg-primary-900/10 text-primary-600 hover:bg-primary-100'
                       }`}
                     >
-                      {deadline.status === "concluído" ? (
+                      {deadline.status === 'concluído' ? (
                         <>
                           <CheckCircle2 size={12} />
                           Concluído

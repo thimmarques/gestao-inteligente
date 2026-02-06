@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Edit,
   Trash2,
@@ -6,14 +6,14 @@ import {
   Loader2,
   Clock,
   Check,
-} from "lucide-react";
-import { Deadline } from "../../types";
+} from 'lucide-react';
+import { Deadline } from '../../types';
 import {
   getDeadlineStatus,
   getPriorityColor,
-} from "../../utils/deadlineCalculations";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from '../../utils/deadlineCalculations';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface DeadlineListProps {
   deadlines: Deadline[];
@@ -91,13 +91,13 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {deadlines.map((d) => {
               const { color, text } = getDeadlineStatus(d);
-              const isPendente = d.status !== "concluído";
+              const isPendente = d.status !== 'concluído';
 
               return (
                 <tr
                   key={d.id}
                   onClick={() => onRowClick(d)}
-                  className={`group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer ${!isPendente ? "opacity-60 grayscale-[0.5]" : ""}`}
+                  className={`group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer ${!isPendente ? 'opacity-60 grayscale-[0.5]' : ''}`}
                 >
                   <td
                     className="px-6 py-4"
@@ -107,7 +107,7 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
                       <button
                         onClick={(e) => handleComplete(e, d.id)}
                         disabled={completingId === d.id}
-                        className={`w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all hover:border-green-500 hover:scale-110 active:scale-95 group-hover:border-slate-400 ${completingId === d.id ? "bg-slate-50" : "bg-white dark:bg-slate-800"}`}
+                        className={`w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all hover:border-green-500 hover:scale-110 active:scale-95 group-hover:border-slate-400 ${completingId === d.id ? 'bg-slate-50' : 'bg-white dark:bg-slate-800'}`}
                         title="Finalizar"
                       >
                         {completingId === d.id ? (
@@ -150,20 +150,20 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">
-                        {d.case?.process_number || "S/ Processo"}
+                        {d.case?.process_number || 'S/ Processo'}
                       </span>
                       <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                        {d.case?.client.name || "S/ Cliente"}
+                        {d.case?.client.name || 'S/ Cliente'}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold dark:text-slate-200">
-                        {format(new Date(d.deadline_date), "dd/MM/yyyy")}
+                        {format(new Date(d.deadline_date), 'dd/MM/yyyy')}
                       </span>
                       <span className="text-[10px] text-slate-400 font-bold uppercase">
-                        {format(new Date(d.deadline_date), "EEEE", {
+                        {format(new Date(d.deadline_date), 'EEEE', {
                           locale: ptBR,
                         })}
                       </span>

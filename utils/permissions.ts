@@ -1,6 +1,6 @@
-import { Lawyer, Role } from "../types";
-import { TeamMemberPermissions } from "../types/team";
-import { logAction } from "./auditLogger";
+import { Lawyer, Role } from '../types';
+import { TeamMemberPermissions } from '../types/team';
+import { logAction } from './auditLogger';
 
 const DEFAULT_PERMISSIONS: Record<string, TeamMemberPermissions> = {
   [Role.ADMIN]: {
@@ -31,7 +31,7 @@ const DEFAULT_PERMISSIONS: Record<string, TeamMemberPermissions> = {
 
 export function checkPermission(
   user: Lawyer | null,
-  permission: keyof TeamMemberPermissions,
+  permission: keyof TeamMemberPermissions
 ): boolean {
   if (!user) return false;
   if (user.role === Role.ADMIN) return true;
@@ -42,21 +42,21 @@ export function checkPermission(
 export function requirePermission(
   user: Lawyer | null,
   permission: keyof TeamMemberPermissions,
-  actionLabel: string,
+  actionLabel: string
 ): boolean {
   const allowed = checkPermission(user, permission);
 
   if (!allowed && user) {
     logAction({
-      action: "access_denied",
-      entity_type: "system",
-      entity_id: "security_policy",
+      action: 'access_denied',
+      entity_type: 'system',
+      entity_id: 'security_policy',
       entity_description: `Tentativa de acesso negada: ${actionLabel}`,
       details: {
         required_permission: permission,
         user_role: user.role,
       },
-      criticality: "importante",
+      criticality: 'importante',
     });
   }
 

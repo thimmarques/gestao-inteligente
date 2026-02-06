@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import {
   Clock,
   Calendar as CalendarIcon,
   MapPin,
   Video,
   ChevronRight,
-} from "lucide-react";
-import { ScheduleEvent } from "../../types";
-import { getEventColor, getEventIcon } from "../../utils/eventColors";
-import { format, isToday, isTomorrow, startOfDay } from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from 'lucide-react';
+import { ScheduleEvent } from '../../types';
+import { getEventColor, getEventIcon } from '../../utils/eventColors';
+import { format, isToday, isTomorrow, startOfDay } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface UpcomingEventsBalloonProps {
   events: ScheduleEvent[];
@@ -23,12 +23,12 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
   const upcoming = events
     .filter(
       (e) =>
-        e.status === "agendado" &&
-        new Date(e.start_time) >= startOfDay(new Date()),
+        e.status === 'agendado' &&
+        new Date(e.start_time) >= startOfDay(new Date())
     )
     .sort(
       (a, b) =>
-        new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
+        new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
     )
     .slice(0, 5);
 
@@ -59,8 +59,8 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
           const Icon = getEventIcon(event.type);
 
           let dateLabel = format(startDate, "dd 'de' MMM", { locale: ptBR });
-          if (isToday(startDate)) dateLabel = "Hoje";
-          else if (isTomorrow(startDate)) dateLabel = "Amanhã";
+          if (isToday(startDate)) dateLabel = 'Hoje';
+          else if (isTomorrow(startDate)) dateLabel = 'Amanhã';
 
           return (
             <button
@@ -74,7 +74,7 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
               >
                 <Icon size={18} />
                 <span className="text-[8px] font-black uppercase mt-0.5">
-                  {format(startDate, "HH:mm")}
+                  {format(startDate, 'HH:mm')}
                 </span>
               </div>
 
@@ -98,8 +98,8 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
                   )}
                   <span className="text-[10px] text-slate-500 truncate">
                     {event.virtual_link
-                      ? "Link Virtual"
-                      : event.location || "Local não definido"}
+                      ? 'Link Virtual'
+                      : event.location || 'Local não definido'}
                   </span>
                 </div>
               </div>

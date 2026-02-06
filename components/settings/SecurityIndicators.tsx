@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   Database,
   ShieldAlert,
@@ -6,10 +6,10 @@ import {
   ShieldCheck,
   AlertTriangle,
   Loader2,
-} from "lucide-react";
-import { AuditLog } from "../../types/audit";
-import { subHours } from "date-fns";
-import { useCases, useClients } from "../../hooks/useQueries";
+} from 'lucide-react';
+import { AuditLog } from '../../types/audit';
+import { subHours } from 'date-fns';
+import { useCases, useClients } from '../../hooks/useQueries';
 
 interface SecurityIndicatorsProps {
   logs: AuditLog[];
@@ -23,7 +23,7 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({
 
   const integrityScore = useMemo(() => {
     const orphanCases = cases.filter(
-      (c: any) => !clients.find((cl: any) => cl.id === c.client_id),
+      (c: any) => !clients.find((cl: any) => cl.id === c.client_id)
     ).length;
     return { score: orphanCases === 0 ? 100 : 92, orphanCases };
   }, [cases, clients]);
@@ -32,8 +32,8 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({
     const last24h = subHours(new Date(), 24);
     const recent = logs.filter((l) => new Date(l.timestamp) >= last24h);
     return {
-      denied: recent.filter((l) => l.action === "access_denied").length,
-      deletions: recent.filter((l) => l.action === "delete").length,
+      denied: recent.filter((l) => l.action === 'access_denied').length,
+      deletions: recent.filter((l) => l.action === 'delete').length,
     };
   }, [logs]);
 
@@ -52,31 +52,31 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({
         color="text-green-500"
         items={[
           {
-            label: "Processos órfãos",
+            label: 'Processos órfãos',
             value:
               loadingCases || loadingClients
-                ? "..."
+                ? '...'
                 : integrityScore.orphanCases,
             ok: integrityScore.orphanCases === 0,
           },
-          { label: "Prazos órfãos", value: 0, ok: true },
+          { label: 'Prazos órfãos', value: 0, ok: true },
         ]}
       />
       <IndicatorCard
         title="Atividade Suspeita"
         icon={<ShieldAlert />}
-        score={suspiciousActivity.denied > 5 ? "Alta" : "Baixa"}
+        score={suspiciousActivity.denied > 5 ? 'Alta' : 'Baixa'}
         color={
-          suspiciousActivity.denied > 5 ? "text-red-500" : "text-green-500"
+          suspiciousActivity.denied > 5 ? 'text-red-500' : 'text-green-500'
         }
         items={[
           {
-            label: "Acessos negados",
+            label: 'Acessos negados',
             value: suspiciousActivity.denied,
             ok: suspiciousActivity.denied < 3,
           },
           {
-            label: "Exclusões (24h)",
+            label: 'Exclusões (24h)',
             value: suspiciousActivity.deletions,
             ok: suspiciousActivity.deletions < 5,
           },
@@ -88,8 +88,8 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({
         score="ATIVO"
         color="text-blue-500"
         items={[
-          { label: "Retenção ativa", value: "90 dias", ok: true },
-          { label: "Logs armazenados", value: logs.length, ok: true },
+          { label: 'Retenção ativa', value: '90 dias', ok: true },
+          { label: 'Logs armazenados', value: logs.length, ok: true },
         ]}
       />
     </div>

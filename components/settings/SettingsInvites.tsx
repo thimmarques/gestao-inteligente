@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { inviteService } from "../../services/inviteService";
-import { toast } from "sonner";
-import { Mail, Plus, Loader2, CheckCircle, Clock } from "lucide-react";
-import { useApp } from "../../contexts/AppContext";
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { inviteService } from '../../services/inviteService';
+import { toast } from 'sonner';
+import { Mail, Plus, Loader2, CheckCircle, Clock } from 'lucide-react';
+import { useApp } from '../../contexts/AppContext';
 
 export const SettingsInvites: React.FC = () => {
   const { lawyer: currentUser } = useApp();
   const queryClient = useQueryClient();
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("lawyer");
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('lawyer');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: invites = [], isLoading } = useQuery({
-    queryKey: ["invites"],
+    queryKey: ['invites'],
     queryFn: inviteService.listInvites,
     enabled: !!currentUser?.office_id,
   });
@@ -24,13 +24,13 @@ export const SettingsInvites: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(`Convite enviado para ${email}`);
-      setEmail("");
-      queryClient.invalidateQueries({ queryKey: ["invites"] });
+      setEmail('');
+      queryClient.invalidateQueries({ queryKey: ['invites'] });
       setIsSubmitting(false);
     },
     onError: (error: any) => {
       console.error(error);
-      toast.error(error.message || "Erro ao enviar convite");
+      toast.error(error.message || 'Erro ao enviar convite');
       setIsSubmitting(false);
     },
   });
@@ -42,7 +42,7 @@ export const SettingsInvites: React.FC = () => {
     inviteMutation.mutate();
   };
 
-  const isLawyer = currentUser?.role === "lawyer";
+  const isLawyer = currentUser?.role === 'lawyer';
 
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
@@ -141,12 +141,12 @@ export const SettingsInvites: React.FC = () => {
                 <div className="flex items-center gap-4">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      invite.status === "accepted"
-                        ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
-                        : "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+                      invite.status === 'accepted'
+                        ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                        : 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400'
                     }`}
                   >
-                    {invite.status === "accepted" ? (
+                    {invite.status === 'accepted' ? (
                       <CheckCircle size={20} />
                     ) : (
                       <Clock size={20} />
@@ -157,7 +157,7 @@ export const SettingsInvites: React.FC = () => {
                       {invite.email}
                     </p>
                     <p className="text-xs text-slate-500 capitalize">
-                      {invite.role} • Enviado em{" "}
+                      {invite.role} • Enviado em{' '}
                       {new Date(invite.created_at).toLocaleDateString()}
                     </p>
                   </div>
@@ -165,12 +165,12 @@ export const SettingsInvites: React.FC = () => {
                 <div className="flex items-center">
                   <span
                     className={`text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-                      invite.status === "accepted"
-                        ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
-                        : "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400"
+                      invite.status === 'accepted'
+                        ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                        : 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400'
                     }`}
                   >
-                    {invite.status === "accepted" ? "Aceito" : "Pendente"}
+                    {invite.status === 'accepted' ? 'Aceito' : 'Pendente'}
                   </span>
                 </div>
               </div>

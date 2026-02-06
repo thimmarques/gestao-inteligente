@@ -1,25 +1,25 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.21.0";
+import { createClient } from 'supabase';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
     const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
+          headers: { Authorization: req.headers.get('Authorization')! },
         },
-      },
+      }
     );
 
     const {
@@ -27,58 +27,58 @@ Deno.serve(async (req) => {
     } = await supabaseClient.auth.getUser();
 
     if (!user) {
-      throw new Error("User not authenticated");
+      throw new Error('User not authenticated');
     }
 
     const { email, role } = await req.json();
 
     if (!email || !role) {
-      throw new Error("Email and Role are required");
+      throw new Error('Email and Role are required');
     }
 
     // 1. Get Creator's Profile (Office & Role)
     const { data: profile, error: profileError } = await supabaseClient
-      .from("profiles")
-      .select("office_id, role, name")
-      .eq("id", user.id)
+      .from('profiles')
+      .select('office_id, role, name')
+      .eq('id', user.id)
       .single();
 
     if (profileError || !profile?.office_id) {
-      throw new Error("Profile not found or no office assigned");
+      throw new Error('Profile not found or no office assigned');
     }
 
     // 2. Permission Check
     // Admin can invite anyone. Lawyer can ONLY invite assistant/intern.
-    if (profile.role !== "admin") {
-      if (profile.role === "lawyer") {
-        if (!["assistant", "intern"].includes(role)) {
-          throw new Error("Lawyers can only invite Assistants or Interns");
+    if (profile.role !== 'admin') {
+      if (profile.role === 'lawyer') {
+        if (!['assistant', 'intern'].includes(role)) {
+          throw new Error('Lawyers can only invite Assistants or Interns');
         }
       } else {
-        throw new Error("Permission denied: You cannot send invites.");
+        throw new Error('Permission denied: You cannot send invites.');
       }
     }
 
     // 3. Upsert Invite (Prevent duplicates for pending)
     const { data: existingInvite } = await supabaseClient
-      .from("invites")
-      .select("id, status")
-      .eq("office_id", profile.office_id)
-      .eq("email", email)
-      .in("status", ["pending"])
+      .from('invites')
+      .select('id, status')
+      .eq('office_id', profile.office_id)
+      .eq('email', email)
+      .in('status', ['pending'])
       .maybeSingle();
 
     if (existingInvite) {
       return new Response(
         JSON.stringify({
-          error: "Convite já pendente para este usuário.",
-          code: "DUPLICATE_INVITE",
-          details: { invite_id: existingInvite.id }
+          error: 'Convite já pendente para este usuário.',
+          code: 'DUPLICATE_INVITE',
+          details: { invite_id: existingInvite.id },
         }),
         {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
-        },
+        }
       );
     }
 
@@ -89,12 +89,12 @@ Deno.serve(async (req) => {
 
     // Insert new invite
     const { data: newInvite, error: insertError } = await supabaseClient
-      .from("invites")
+      .from('invites')
       .insert({
         office_id: profile.office_id,
         email,
         role,
-        status: "pending",
+        status: 'pending',
         token: token,
         expires_at: expiresAt.toISOString(),
         created_by: user.id,
@@ -104,49 +104,48 @@ Deno.serve(async (req) => {
       .single();
 
     if (insertError) {
-      console.error("Insert Error:", insertError);
+      console.error('Insert Error:', insertError);
       return new Response(
         JSON.stringify({
-          error: "Falha ao registrar convite no banco de dados.",
-          code: "DB_INSERT_ERROR",
-          details: insertError
+          error: 'Falha ao registrar convite no banco de dados.',
+          code: 'DB_INSERT_ERROR',
+          details: insertError,
         }),
         {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500,
-        },
+        }
       );
     }
 
     // 4. Mock Email Sending
-    const inviteLink = `${req.headers.get("origin") || "http://localhost:5173"}/accept-invite?token=${token}`;
-    console.log(
-      `[MOCK EMAIL] To: ${email} | Subject: Convite para ${profile.office_id} | From: ${profile.name}`
-    );
-    console.log(
-      `[MOCK EMAIL] Link: ${inviteLink}`
-    );
+    const inviteLink = `${req.headers.get('origin') || 'https://gestao-inteligente-cyan.vercel.app'}/accept-invite?token=${token}`;
+
+    console.log(`[MOCK EMAIL] To: ${email}`);
+    console.log(`[MOCK EMAIL] Subject: Convite para ${profile.office_id}`);
+    console.log(`[MOCK EMAIL] From: ${profile.name}`);
+    console.log(`[MOCK EMAIL] Link: ${inviteLink}`);
 
     return new Response(
       JSON.stringify({
-        message: "Invite sent successfully",
+        message: 'Invite sent successfully',
         invite: newInvite,
         link: inviteLink, // For testing/dev purposes
       }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
-      },
+      }
     );
   } catch (error: any) {
-    console.error("Global Error:", error);
+    console.error('Global Error:', error);
     return new Response(
       JSON.stringify({
-        error: error.message || "Ocorreu um erro interno",
-        code: error.code || "INTERNAL_ERROR"
+        error: error.message || 'Ocorreu um erro interno',
+        code: error.code || 'INTERNAL_ERROR',
       }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: error.status || 400,
       }
     );

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Plus,
   Search,
@@ -12,16 +12,16 @@ import {
   Edit2,
   ChevronRight,
   ListTodo,
-} from "lucide-react";
-import { useTasks } from "../hooks/useQueries";
-import { taskService, Task } from "../services/taskService";
-import { useApp } from "../contexts/AppContext";
+} from 'lucide-react';
+import { useTasks } from '../hooks/useQueries';
+import { taskService, Task } from '../services/taskService';
+import { useApp } from '../contexts/AppContext';
 
 const Tasks: React.FC = () => {
   const { lawyer } = useApp();
   const { data: tasks = [], isLoading, refetch } = useTasks();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("todos");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('todos');
 
   const filteredTasks = useMemo(() => {
     return tasks
@@ -30,38 +30,38 @@ const Tasks: React.FC = () => {
           t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           t.description?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus =
-          statusFilter === "todos" || t.status === statusFilter;
+          statusFilter === 'todos' || t.status === statusFilter;
         return matchesSearch && matchesStatus;
       })
       .sort((a, b) => {
-        if (a.status === "concluído" && b.status !== "concluído") return 1;
-        if (a.status !== "concluído" && b.status === "concluído") return -1;
+        if (a.status === 'concluído' && b.status !== 'concluído') return 1;
+        if (a.status !== 'concluído' && b.status === 'concluído') return -1;
         return (
-          new Date(a.due_date || "").getTime() -
-          new Date(b.due_date || "").getTime()
+          new Date(a.due_date || '').getTime() -
+          new Date(b.due_date || '').getTime()
         );
       });
   }, [tasks, searchTerm, statusFilter]);
 
   const handleToggleStatus = async (task: Task) => {
-    const newStatus = task.status === "concluído" ? "pendente" : "concluído";
+    const newStatus = task.status === 'concluído' ? 'pendente' : 'concluído';
     await taskService.updateTask(task.id, {
       status: newStatus,
       completed_at:
-        newStatus === "concluído" ? new Date().toISOString() : undefined,
+        newStatus === 'concluído' ? new Date().toISOString() : undefined,
     });
     refetch();
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Excluir esta tarefa?")) {
+    if (confirm('Excluir esta tarefa?')) {
       await taskService.deleteTask(id);
       refetch();
     }
   };
 
   const [isAdding, setIsAdding] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,10 +71,10 @@ const Tasks: React.FC = () => {
       office_id: lawyer.office_id,
       lawyer_id: lawyer.id,
       title: newTaskTitle,
-      status: "pendente",
-      priority: "média",
+      status: 'pendente',
+      priority: 'média',
     });
-    setNewTaskTitle("");
+    setNewTaskTitle('');
     setIsAdding(false);
     refetch();
   };
@@ -115,11 +115,11 @@ const Tasks: React.FC = () => {
           />
         </div>
         <div className="flex gap-2">
-          {["todos", "pendente", "em_andamento", "concluído"].map((s) => (
+          {['todos', 'pendente', 'em_andamento', 'concluído'].map((s) => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${statusFilter === s ? "bg-primary-600 text-white shadow-md" : "bg-slate-50 dark:bg-slate-800 text-slate-500"}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${statusFilter === s ? 'bg-primary-600 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-500'}`}
             >
               {s}
             </button>
@@ -170,13 +170,13 @@ const Tasks: React.FC = () => {
           {filteredTasks.map((task) => (
             <div
               key={task.id}
-              className={`flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl group hover:shadow-md transition-all ${task.status === "concluído" ? "opacity-60" : ""}`}
+              className={`flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl group hover:shadow-md transition-all ${task.status === 'concluído' ? 'opacity-60' : ''}`}
             >
               <button
                 onClick={() => handleToggleStatus(task)}
-                className={`transition-colors ${task.status === "concluído" ? "text-green-500" : "text-slate-300 hover:text-primary-500"}`}
+                className={`transition-colors ${task.status === 'concluído' ? 'text-green-500' : 'text-slate-300 hover:text-primary-500'}`}
               >
-                {task.status === "concluído" ? (
+                {task.status === 'concluído' ? (
                   <CheckCircle2 size={24} />
                 ) : (
                   <Circle size={24} />
@@ -185,7 +185,7 @@ const Tasks: React.FC = () => {
 
               <div className="flex-1 min-w-0">
                 <h3
-                  className={`font-bold transition-all ${task.status === "concluído" ? "line-through text-slate-500" : "text-slate-800 dark:text-white"}`}
+                  className={`font-bold transition-all ${task.status === 'concluído' ? 'line-through text-slate-500' : 'text-slate-800 dark:text-white'}`}
                 >
                   {task.title}
                 </h3>

@@ -1,9 +1,9 @@
-import { Deadline, DeadlineFilters, DeadlineSort } from "../types";
-import { getDeadlineStatus } from "./deadlineCalculations";
+import { Deadline, DeadlineFilters, DeadlineSort } from '../types';
+import { getDeadlineStatus } from './deadlineCalculations';
 
 export function filterDeadlines(
   deadlines: Deadline[],
-  filters: DeadlineFilters,
+  filters: DeadlineFilters
 ): Deadline[] {
   let filtered = [...deadlines];
 
@@ -14,7 +14,7 @@ export function filterDeadlines(
       (d) =>
         d.title.toLowerCase().includes(term) ||
         d.case?.process_number.includes(term) ||
-        d.case?.client.name.toLowerCase().includes(term),
+        d.case?.client.name.toLowerCase().includes(term)
     );
   }
 
@@ -32,12 +32,12 @@ export function filterDeadlines(
   }
 
   // Processo específico
-  if (filters.caseId && filters.caseId !== "todos") {
+  if (filters.caseId && filters.caseId !== 'todos') {
     filtered = filtered.filter((d) => d.case_id === filters.caseId);
   }
 
   // Advogado específico
-  if (filters.lawyerId && filters.lawyerId !== "todos") {
+  if (filters.lawyerId && filters.lawyerId !== 'todos') {
     filtered = filtered.filter((d) => d.lawyer_id === filters.lawyerId);
   }
 
@@ -54,18 +54,18 @@ export function filterDeadlines(
 
 export function sortDeadlines(
   deadlines: Deadline[],
-  sort: DeadlineSort,
+  sort: DeadlineSort
 ): Deadline[] {
   const sorted = [...deadlines];
 
   sorted.sort((a, b) => {
     let comparison = 0;
 
-    if (sort.field === "deadline_date") {
+    if (sort.field === 'deadline_date') {
       comparison =
         new Date(a.deadline_date).getTime() -
         new Date(b.deadline_date).getTime();
-    } else if (sort.field === "priority") {
+    } else if (sort.field === 'priority') {
       const priorityOrder: Record<string, number> = {
         urgente: 0,
         alta: 1,
@@ -73,15 +73,15 @@ export function sortDeadlines(
         baixa: 3,
       };
       comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
-    } else if (sort.field === "process") {
-      comparison = (a.case?.process_number || "").localeCompare(
-        b.case?.process_number || "",
+    } else if (sort.field === 'process') {
+      comparison = (a.case?.process_number || '').localeCompare(
+        b.case?.process_number || ''
       );
-    } else if (sort.field === "client") {
-      comparison = (a.case?.client.name || "").localeCompare(
-        b.case?.client.name || "",
+    } else if (sort.field === 'client') {
+      comparison = (a.case?.client.name || '').localeCompare(
+        b.case?.client.name || ''
       );
-    } else if (sort.field === "status") {
+    } else if (sort.field === 'status') {
       const statusOrder: Record<string, number> = {
         vencido: 0,
         pendente: 1,
@@ -90,7 +90,7 @@ export function sortDeadlines(
       comparison = statusOrder[a.status] - statusOrder[b.status];
     }
 
-    return sort.direction === "asc" ? comparison : -comparison;
+    return sort.direction === 'asc' ? comparison : -comparison;
   });
 
   return sorted;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   RefreshCw,
   TrendingUp,
@@ -10,11 +10,11 @@ import {
   Edit,
   ExternalLink,
   Loader2,
-} from "lucide-react";
-import { FinanceRecord, Client, ForecastMonth } from "../../types";
-import { formatCurrency } from "../../utils/formatters";
-import { calculateForecast } from "../../utils/financialForecast";
-import { ForecastChart } from "./ForecastChart";
+} from 'lucide-react';
+import { FinanceRecord, Client, ForecastMonth } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
+import { calculateForecast } from '../../utils/financialForecast';
+import { ForecastChart } from './ForecastChart';
 
 interface ForecastTabProps {
   revenues: FinanceRecord[];
@@ -30,7 +30,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
 
   const forecastData = useMemo(() => {
     const clients = JSON.parse(
-      localStorage.getItem("legalflow_clients") || "[]",
+      localStorage.getItem('legalflow_clients') || '[]'
     );
     return calculateForecast(revenues, expenses, clients);
   }, [revenues, expenses, lastUpdate]);
@@ -41,7 +41,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
       expense: forecastData.reduce((sum, f) => sum + f.projected_expenses, 0),
       balance: forecastData.reduce((sum, f) => sum + f.projected_balance, 0),
     }),
-    [forecastData],
+    [forecastData]
   );
 
   const handleRefresh = () => {
@@ -77,9 +77,9 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
         >
           <RefreshCw
             size={16}
-            className={isUpdating ? "animate-spin text-primary-500" : ""}
+            className={isUpdating ? 'animate-spin text-primary-500' : ''}
           />
-          {isUpdating ? "Recalculando Projeções..." : "Atualizar Dados"}
+          {isUpdating ? 'Recalculando Projeções...' : 'Atualizar Dados'}
         </button>
       </header>
 
@@ -122,8 +122,8 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
         <div
           className={`p-8 rounded-[2.5rem] border shadow-xl transition-all ${
             totals.balance >= 0
-              ? "bg-gradient-to-br from-green-500 to-emerald-600 border-green-400 text-white shadow-green-500/20"
-              : "bg-gradient-to-br from-red-500 to-orange-600 border-red-400 text-white shadow-red-500/20"
+              ? 'bg-gradient-to-br from-green-500 to-emerald-600 border-green-400 text-white shadow-green-500/20'
+              : 'bg-gradient-to-br from-red-500 to-orange-600 border-red-400 text-white shadow-red-500/20'
           }`}
         >
           <div className="flex items-center gap-4 mb-4">
@@ -142,7 +142,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
             {formatCurrency(totals.balance)}
           </p>
           <p className="text-[10px] font-bold uppercase mt-2 tracking-widest opacity-90">
-            Saúde financeira: {totals.balance >= 0 ? "POSITIVA" : "ATENÇÃO"}
+            Saúde financeira: {totals.balance >= 0 ? 'POSITIVA' : 'ATENÇÃO'}
           </p>
         </div>
       </div>
@@ -196,7 +196,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
               {forecastData.map((f, i) => (
                 <tr
                   key={i}
-                  className={`hover:bg-slate-50/30 dark:hover:bg-slate-800/30 transition-colors ${f.projected_balance < 0 ? "bg-red-500/5" : ""}`}
+                  className={`hover:bg-slate-50/30 dark:hover:bg-slate-800/30 transition-colors ${f.projected_balance < 0 ? 'bg-red-500/5' : ''}`}
                 >
                   <td className="px-8 py-6">
                     <span className="text-sm font-bold dark:text-slate-200 capitalize">
@@ -224,7 +224,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
                         <TrendingDown size={14} className="text-red-500" />
                       )}
                       <span
-                        className={`text-base font-black tabular-nums ${f.projected_balance >= 0 ? "text-green-600" : "text-red-600"}`}
+                        className={`text-base font-black tabular-nums ${f.projected_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}
                       >
                         {formatCurrency(f.projected_balance)}
                       </span>
@@ -234,14 +234,14 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
                     <div className="group relative cursor-help">
                       <span
                         className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit border ${
-                          f.confidence === "alta"
-                            ? "bg-green-100 text-green-700 border-green-200"
-                            : f.confidence === "média"
-                              ? "bg-amber-100 text-amber-700 border-amber-200"
-                              : "bg-red-100 text-red-700 border-red-200"
+                          f.confidence === 'alta'
+                            ? 'bg-green-100 text-green-700 border-green-200'
+                            : f.confidence === 'média'
+                              ? 'bg-amber-100 text-amber-700 border-amber-200'
+                              : 'bg-red-100 text-red-700 border-red-200'
                         }`}
                       >
-                        {f.confidence === "alta" ? (
+                        {f.confidence === 'alta' ? (
                           <ShieldCheck size={10} />
                         ) : (
                           <AlertTriangle size={10} />
@@ -257,7 +257,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
                   <td className="px-8 py-6 text-right">
                     <button
                       onClick={() =>
-                        alert("Ajuste manual virá no modal AdjustForecastModal")
+                        alert('Ajuste manual virá no modal AdjustForecastModal')
                       }
                       className="p-2.5 text-slate-400 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
                     >

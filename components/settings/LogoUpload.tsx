@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { Building2, Upload, X, Check } from "lucide-react";
+import React, { useRef } from 'react';
+import { Building2, Upload, X, Check } from 'lucide-react';
 
 interface LogoUploadProps {
   currentLogoUrl?: string;
@@ -19,7 +19,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      alert("Logo muito grande. Máximo: 2MB");
+      alert('Logo muito grande. Máximo: 2MB');
       return;
     }
 
@@ -66,7 +66,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
           onClick={() => inputRef.current?.click()}
           className="flex-1 py-2 px-4 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all"
         >
-          {currentLogoUrl ? "Alterar Logo" : "Adicionar Logo"}
+          {currentLogoUrl ? 'Alterar Logo' : 'Adicionar Logo'}
         </button>
         {currentLogoUrl && (
           <button
@@ -81,4 +81,4 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
   );
 };
 
-import { Trash2 } from "lucide-react";
+import { Trash2 } from 'lucide-react';

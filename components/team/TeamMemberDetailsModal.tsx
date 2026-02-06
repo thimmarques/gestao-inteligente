@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Mail,
@@ -18,9 +18,9 @@ import {
   Linkedin,
   Copy,
   ShieldCheck,
-} from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { TeamMember } from "../../types/team";
+} from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { TeamMember } from '../../types/team';
 
 interface TeamMemberDetailsModalProps {
   member: TeamMember | null;
@@ -40,20 +40,20 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
   currentUserId,
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "perfil" | "processos" | "produtividade" | "permissoes"
-  >("perfil");
+    'perfil' | 'processos' | 'produtividade' | 'permissoes'
+  >('perfil');
 
   if (!isOpen || !member) return null;
 
   const isMe = member.id === currentUserId;
   const normalizedRole = member.role.toLowerCase();
-  const isAdmin = normalizedRole === "admin";
+  const isAdmin = normalizedRole === 'admin';
   const isAdvogado =
-    normalizedRole === "advogado" || normalizedRole === "lawyer";
+    normalizedRole === 'advogado' || normalizedRole === 'lawyer';
 
   const handleDelete = () => {
     if (isMe) {
-      alert("Você não pode excluir seu próprio perfil administrativo.");
+      alert('Você não pode excluir seu próprio perfil administrativo.');
       return;
     }
     if (confirm(`Remover permanentemente ${member.name} da equipe?`)) {
@@ -82,10 +82,10 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
             <div
               className={`absolute -bottom-2 -right-2 p-2 rounded-xl border-4 border-white dark:border-slate-900 shadow-lg ${
                 isAdmin
-                  ? "bg-purple-600"
+                  ? 'bg-purple-600'
                   : isAdvogado
-                    ? "bg-blue-600"
-                    : "bg-green-600"
+                    ? 'bg-blue-600'
+                    : 'bg-green-600'
               } text-white`}
             >
               {isAdmin ? (
@@ -112,15 +112,15 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               <span
                 className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                  member.status === "ativo"
-                    ? "bg-green-50 text-green-600 border-green-200"
-                    : "bg-slate-100 text-slate-500"
+                  member.status === 'ativo'
+                    ? 'bg-green-50 text-green-600 border-green-200'
+                    : 'bg-slate-100 text-slate-500'
                 }`}
               >
                 {member.status}
               </span>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                OAB/{member.oab || "---"}
+                OAB/{member.oab || '---'}
               </p>
             </div>
           </div>
@@ -150,24 +150,24 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
         </div>
 
         <div className="px-10 border-b border-slate-100 dark:border-slate-800 flex items-center gap-10 overflow-x-auto shrink-0 scrollbar-hide">
-          {["Perfil", "Permissões", "Estatísticas"].map((tab) => (
+          {['Perfil', 'Permissões', 'Estatísticas'].map((tab) => (
             <button
               key={tab}
               onClick={() =>
                 setActiveTab(
-                  tab === "Permissões"
-                    ? "permissoes"
-                    : tab === "Estatísticas"
-                      ? "produtividade"
-                      : "perfil",
+                  tab === 'Permissões'
+                    ? 'permissoes'
+                    : tab === 'Estatísticas'
+                      ? 'produtividade'
+                      : 'perfil'
                 )
               }
               className={`flex items-center gap-2 py-6 text-xs font-black uppercase tracking-[0.2em] border-b-4 transition-all ${
-                (activeTab === "perfil" && tab === "Perfil") ||
-                (activeTab === "permissoes" && tab === "Permissões") ||
-                (activeTab === "produtividade" && tab === "Estatísticas")
-                  ? "border-primary-600 text-primary-600"
-                  : "border-transparent text-slate-400"
+                (activeTab === 'perfil' && tab === 'Perfil') ||
+                (activeTab === 'permissoes' && tab === 'Permissões') ||
+                (activeTab === 'produtividade' && tab === 'Estatísticas')
+                  ? 'border-primary-600 text-primary-600'
+                  : 'border-transparent text-slate-400'
               }`}
             >
               {tab}
@@ -177,7 +177,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
 
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/20 dark:bg-slate-950/20">
           <div className="animate-in fade-in duration-500">
-            {activeTab === "perfil" && (
+            {activeTab === 'perfil' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <section className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -231,7 +231,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab === "permissoes" && (
+            {activeTab === 'permissoes' && (
               <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm">
                 <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">
                   Controle de Privilégios
@@ -240,10 +240,10 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
                   {Object.entries(member.permissions).map(([key, value]) => (
                     <div
                       key={key}
-                      className={`p-4 rounded-2xl border flex items-center justify-between ${value ? "bg-green-50 border-green-100 dark:bg-green-900/10 dark:border-green-800" : "bg-slate-50 border-slate-100 dark:bg-slate-800 dark:border-slate-700 opacity-50"}`}
+                      className={`p-4 rounded-2xl border flex items-center justify-between ${value ? 'bg-green-50 border-green-100 dark:bg-green-900/10 dark:border-green-800' : 'bg-slate-50 border-slate-100 dark:bg-slate-800 dark:border-slate-700 opacity-50'}`}
                     >
                       <span className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-300">
-                        {key.replace("can_", "").replace(/_/g, " ")}
+                        {key.replace('can_', '').replace(/_/g, ' ')}
                       </span>
                       {value ? (
                         <ShieldCheck size={16} className="text-green-600" />
@@ -256,7 +256,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab === "produtividade" && (
+            {activeTab === 'produtividade' && (
               <div className="py-20 text-center text-slate-400 italic">
                 <TrendingUp size={48} className="mx-auto opacity-20 mb-4" />
                 <p>

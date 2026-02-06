@@ -1,20 +1,20 @@
-import { Report } from "../types.ts";
+import { Report } from '../types.ts';
 
 interface SaveReportParams {
-  type: Report["type"];
+  type: Report['type'];
   periodStart: Date;
   periodEnd: Date;
-  format: Report["format"];
+  format: Report['format'];
   fileName: string;
 }
 
 export function saveReportToHistory(params: SaveReportParams): Report {
-  const raw = localStorage.getItem("legaltech_reports");
+  const raw = localStorage.getItem('legaltech_reports');
   const reports: Report[] = raw ? JSON.parse(raw) : [];
 
   const newReport: Report = {
     id: crypto.randomUUID(),
-    lawyer_id: "lawyer-1",
+    lawyer_id: 'lawyer-1',
     type: params.type,
     period_start: params.periodStart.toISOString(),
     period_end: params.periodEnd.toISOString(),
@@ -25,7 +25,7 @@ export function saveReportToHistory(params: SaveReportParams): Report {
   };
 
   const updated = [newReport, ...reports].slice(0, 50);
-  localStorage.setItem("legaltech_reports", JSON.stringify(updated));
+  localStorage.setItem('legaltech_reports', JSON.stringify(updated));
 
   return newReport;
 }

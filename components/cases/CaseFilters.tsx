@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Filter, X, ChevronDown } from "lucide-react";
+import React, { useState } from 'react';
+import { Filter, X, ChevronDown } from 'lucide-react';
 
 interface Filters {
   types: string[];
@@ -11,28 +11,28 @@ interface CaseFiltersProps {
 }
 
 const types = [
-  "Cível",
-  "Trabalhista",
-  "Criminal",
-  "Família",
-  "Tributário",
-  "Previdenciário",
-  "Administrativo",
+  'Cível',
+  'Trabalhista',
+  'Criminal',
+  'Família',
+  'Tributário',
+  'Previdenciário',
+  'Administrativo',
 ];
 const statusList = [
-  "Distribuído",
-  "Andamento",
-  "Sentenciado",
-  "Recurso",
-  "Arquivado",
-  "Encerrado",
+  'Distribuído',
+  'Andamento',
+  'Sentenciado',
+  'Recurso',
+  'Arquivado',
+  'Encerrado',
 ];
 
 export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
-  const [openDropdown, setOpenDropdown] = useState<"type" | "status" | null>(
-    null,
+  const [openDropdown, setOpenDropdown] = useState<'type' | 'status' | null>(
+    null
   );
 
   const toggleType = (type: string) => {
@@ -64,12 +64,12 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
       <div className="relative">
         <button
           onClick={() =>
-            setOpenDropdown(openDropdown === "type" ? null : "type")
+            setOpenDropdown(openDropdown === 'type' ? null : 'type')
           }
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
             selectedTypes.length > 0
-              ? "bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800"
-              : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+              ? 'bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
           }`}
         >
           <span>Tipo</span>
@@ -80,11 +80,11 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
           )}
           <ChevronDown
             size={14}
-            className={`transition-transform ${openDropdown === "type" ? "rotate-180" : ""}`}
+            className={`transition-transform ${openDropdown === 'type' ? 'rotate-180' : ''}`}
           />
         </button>
 
-        {openDropdown === "type" && (
+        {openDropdown === 'type' && (
           <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200">
             {types.map((t) => (
               <label
@@ -107,12 +107,12 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
       <div className="relative">
         <button
           onClick={() =>
-            setOpenDropdown(openDropdown === "status" ? null : "status")
+            setOpenDropdown(openDropdown === 'status' ? null : 'status')
           }
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
             selectedStatus.length > 0
-              ? "bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800"
-              : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+              ? 'bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
           }`}
         >
           <span>Status</span>
@@ -123,11 +123,11 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
           )}
           <ChevronDown
             size={14}
-            className={`transition-transform ${openDropdown === "status" ? "rotate-180" : ""}`}
+            className={`transition-transform ${openDropdown === 'status' ? 'rotate-180' : ''}`}
           />
         </button>
 
-        {openDropdown === "status" && (
+        {openDropdown === 'status' && (
           <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200">
             {statusList.map((s) => (
               <label

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { supabase } from "../lib/supabase";
-import { Lock, Mail, Loader2, Github } from "lucide-react";
-import { toast } from "sonner";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { supabase } from '../lib/supabase';
+import { Lock, Mail, Loader2, Github } from 'lucide-react';
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
-  email: z.string().email("E-mail inválido"),
-  password: z.string().min(1, "Senha é obrigatória"),
+  email: z.string().email('E-mail inválido'),
+  password: z.string().min(1, 'Senha é obrigatória'),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -38,16 +38,16 @@ const Login: React.FC = () => {
       });
 
       if (error) throw error;
-      toast.success("Login realizado com sucesso!");
-      navigate("/");
+      toast.success('Login realizado com sucesso!');
+      navigate('/');
     } catch (err: any) {
-      toast.error(err.message || "Erro ao fazer login");
+      toast.error(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialLogin = async (provider: "google" | "github") => {
+  const handleSocialLogin = async (provider: 'google' | 'github') => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
@@ -92,10 +92,10 @@ const Login: React.FC = () => {
                   size={18}
                 />
                 <input
-                  {...register("email")}
+                  {...register('email')}
                   type="email"
                   placeholder="seu@email.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.email && (
@@ -123,10 +123,10 @@ const Login: React.FC = () => {
                   size={18}
                 />
                 <input
-                  {...register("password")}
+                  {...register('password')}
                   type="password"
                   placeholder="••••••••"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? "border-red-500" : "border-transparent"} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.password && (
@@ -144,7 +144,7 @@ const Login: React.FC = () => {
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
               ) : (
-                "Entrar"
+                'Entrar'
               )}
             </button>
           </form>
@@ -162,7 +162,7 @@ const Login: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleSocialLogin('google')}
               className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
             >
               <img
@@ -173,7 +173,7 @@ const Login: React.FC = () => {
               Google
             </button>
             <button
-              onClick={() => handleSocialLogin("github")}
+              onClick={() => handleSocialLogin('github')}
               className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
             >
               <Github className="w-5 h-5" />
@@ -182,7 +182,7 @@ const Login: React.FC = () => {
           </div>
 
           <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-            Não tem uma conta?{" "}
+            Não tem uma conta?{' '}
             <Link
               to="/auth/signup"
               className="font-bold text-primary-600 hover:text-primary-700 transition-colors"

@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ShieldAlert,
   ShieldCheck,
@@ -10,12 +10,12 @@ import {
   AlertTriangle,
   ExternalLink,
   Loader2,
-} from "lucide-react";
-import { AuditLog } from "../../types/audit.ts";
-import { formatDistanceToNow, subDays } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { useAuditLogs } from "../../hooks/useQueries";
-import { useApp } from "../../contexts/AppContext";
+} from 'lucide-react';
+import { AuditLog } from '../../types/audit.ts';
+import { formatDistanceToNow, subDays } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { useAuditLogs } from '../../hooks/useQueries';
+import { useApp } from '../../contexts/AppContext';
 
 export const CriticalLogsWidget: React.FC = () => {
   const { lawyer } = useApp();
@@ -27,18 +27,18 @@ export const CriticalLogsWidget: React.FC = () => {
     return logs
       .filter(
         (l: any) =>
-          l.criticality === "crítico" &&
-          new Date(l.created_at || l.timestamp) >= sevenDaysAgo,
+          l.criticality === 'crítico' &&
+          new Date(l.created_at || l.timestamp) >= sevenDaysAgo
       )
       .slice(0, 8);
   }, [logs]);
 
   const getActionIcon = (action: string) => {
-    if (action === "delete")
+    if (action === 'delete')
       return <Trash2 className="text-red-500" size={16} />;
-    if (action === "permission_change")
+    if (action === 'permission_change')
       return <Lock className="text-purple-500" size={16} />;
-    if (action === "access_denied")
+    if (action === 'access_denied')
       return <ShieldAlert className="text-orange-500" size={16} />;
     return <AlertTriangle className="text-red-400" size={16} />;
   };
@@ -98,7 +98,7 @@ export const CriticalLogsWidget: React.FC = () => {
                   <p className="text-[9px] font-medium text-slate-400">
                     {formatDistanceToNow(
                       new Date(log.created_at || log.timestamp),
-                      { addSuffix: true, locale: ptBR },
+                      { addSuffix: true, locale: ptBR }
                     )}
                   </p>
                 </div>

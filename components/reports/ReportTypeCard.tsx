@@ -1,12 +1,12 @@
-import React from "react";
-import { FileText, FileSpreadsheet, ChevronRight } from "lucide-react";
+import React from 'react';
+import { FileText, FileSpreadsheet, ChevronRight } from 'lucide-react';
 
 interface ReportTypeCardProps {
-  type: "financeiro" | "produtividade" | "clientes" | "prazos";
+  type: 'financeiro' | 'produtividade' | 'clientes' | 'prazos';
   title: string;
   description: string;
   icon: React.ReactNode;
-  defaultFormat: "pdf" | "excel";
+  defaultFormat: 'pdf' | 'excel';
   iconBgColor: string;
   iconColor: string;
   onGenerate: () => void;
@@ -38,7 +38,7 @@ export const ReportTypeCard: React.FC<ReportTypeCardProps> = ({
         </p>
 
         <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500 mb-8">
-          {defaultFormat === "pdf" ? (
+          {defaultFormat === 'pdf' ? (
             <FileText size={12} />
           ) : (
             <FileSpreadsheet size={12} />

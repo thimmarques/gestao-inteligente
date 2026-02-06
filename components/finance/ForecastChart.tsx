@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   AreaChart,
   Area,
@@ -9,9 +9,9 @@ import {
   ResponsiveContainer,
   Legend,
   Line,
-} from "recharts";
-import { ForecastMonth } from "../../types";
-import { formatCurrency } from "../../utils/formatters";
+} from 'recharts';
+import { ForecastMonth } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
 
 interface ForecastChartProps {
   forecastData: ForecastMonth[];
@@ -47,28 +47,28 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({
           dataKey="month"
           axisLine={false}
           tickLine={false}
-          tick={{ fill: "#94a3b8", fontSize: 10, fontWeight: 700 }}
+          tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
           dy={10}
         />
         <YAxis
           axisLine={false}
           tickLine={false}
-          tick={{ fill: "#94a3b8", fontSize: 10, fontWeight: 700 }}
+          tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
           tickFormatter={(value) =>
-            `R$ ${value >= 1000 ? (value / 1000).toFixed(0) + "k" : value}`
+            `R$ ${value >= 1000 ? (value / 1000).toFixed(0) + 'k' : value}`
           }
         />
 
         <Tooltip
           contentStyle={{
-            backgroundColor: "#0f172a",
-            border: "none",
-            borderRadius: "1.5rem",
-            color: "#fff",
-            fontSize: "12px",
-            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+            backgroundColor: '#0f172a',
+            border: 'none',
+            borderRadius: '1.5rem',
+            color: '#fff',
+            fontSize: '12px',
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
           }}
-          itemStyle={{ padding: "4px 0" }}
+          itemStyle={{ padding: '4px 0' }}
           formatter={(value: number) => formatCurrency(value)}
         />
         <Legend
@@ -114,7 +114,7 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({
           strokeDasharray="8 8"
           fill="transparent"
           name="Saldo Projetado"
-          dot={{ r: 4, fill: "#3b82f6", strokeWidth: 2, stroke: "#fff" }}
+          dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
           activeDot={{ r: 6 }}
         />
       </AreaChart>

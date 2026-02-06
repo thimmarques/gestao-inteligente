@@ -1,13 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
-import { User as SupabaseUser } from "@supabase/supabase-js";
-import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { User as SupabaseUser } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 
 interface User {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "lawyer" | "assistant";
+  role: 'admin' | 'lawyer' | 'assistant';
   oab?: string;
   office_id: string;
   photo_url?: string;
@@ -33,9 +33,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchProfile = async (sessionUser: SupabaseUser) => {
     try {
       const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", sessionUser.id)
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
         .single();
 
       if (error) throw error;
@@ -53,8 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       }
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      toast.error("Erro ao carregar perfil do usuário");
+      console.error('Error fetching profile:', error);
+      toast.error('Erro ao carregar perfil do usuário');
     } finally {
       setIsLoading(false);
     }
@@ -118,6 +118,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };

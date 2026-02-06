@@ -1,5 +1,5 @@
 export const seedDeadlines = () => {
-  const existing = localStorage.getItem("legaltech_deadlines");
+  const existing = localStorage.getItem('legaltech_deadlines');
   if (existing) return;
-  localStorage.setItem("legaltech_deadlines", JSON.stringify([]));
+  localStorage.setItem('legaltech_deadlines', JSON.stringify([]));
 };

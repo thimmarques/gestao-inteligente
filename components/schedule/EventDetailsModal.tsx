@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   X,
   Calendar,
@@ -16,9 +16,9 @@ import {
   FileText,
   Globe,
   Loader2,
-} from "lucide-react";
-import { ScheduleEvent } from "../../types";
-import { getEventColor, getEventIcon } from "../../utils/eventColors";
+} from 'lucide-react';
+import { ScheduleEvent } from '../../types';
+import { getEventColor, getEventIcon } from '../../utils/eventColors';
 
 interface EventDetailsModalProps {
   event: ScheduleEvent | null;
@@ -28,7 +28,7 @@ interface EventDetailsModalProps {
   onDelete: (id: string) => Promise<void>;
   onStatusUpdate: (
     id: string,
-    status: ScheduleEvent["status"],
+    status: ScheduleEvent['status']
   ) => Promise<void>;
 }
 
@@ -54,20 +54,20 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     (endDate.getTime() - startDate.getTime()) / (1000 * 60);
   const durationText =
     durationMinutes >= 60
-      ? `${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60 > 0 ? (durationMinutes % 60) + "min" : ""}`
+      ? `${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60 > 0 ? (durationMinutes % 60) + 'min' : ''}`
       : `${durationMinutes} minutos`;
 
   const handleDelete = async () => {
     if (
       confirm(
-        "Tem certeza que deseja deletar este evento permanentemente? Esta ação não pode ser desfeita.",
+        'Tem certeza que deseja deletar este evento permanentemente? Esta ação não pode ser desfeita.'
       )
     ) {
       setIsDeleting(true);
       try {
         await onDelete(event.id);
       } catch (error) {
-        console.error("Erro ao deletar evento:", error);
+        console.error('Erro ao deletar evento:', error);
       } finally {
         setIsDeleting(false);
         onClose();
@@ -77,11 +77,11 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
   const handleToggleComplete = async () => {
     setIsUpdatingStatus(true);
-    const newStatus = event.status === "concluído" ? "agendado" : "concluído";
+    const newStatus = event.status === 'concluído' ? 'agendado' : 'concluído';
     try {
       await onStatusUpdate(event.id, newStatus);
     } catch (error) {
-      console.error("Erro ao atualizar status:", error);
+      console.error('Erro ao atualizar status:', error);
     } finally {
       setIsUpdatingStatus(false);
       onClose();
@@ -89,12 +89,12 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   };
 
   const handleCancel = async () => {
-    if (confirm("Deseja marcar este evento como cancelado?")) {
+    if (confirm('Deseja marcar este evento como cancelado?')) {
       setIsUpdatingStatus(true);
       try {
-        await onStatusUpdate(event.id, "cancelado");
+        await onStatusUpdate(event.id, 'cancelado');
       } catch (error) {
-        console.error("Erro ao cancelar evento:", error);
+        console.error('Erro ao cancelar evento:', error);
       } finally {
         setIsUpdatingStatus(false);
         onClose();
@@ -162,7 +162,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           <div className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/20 rounded-3xl border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <div
-                className={`w-3 h-3 rounded-full animate-pulse ${event.status === "agendado" ? "bg-blue-500" : event.status === "concluído" ? "bg-green-500" : "bg-slate-400"}`}
+                className={`w-3 h-3 rounded-full animate-pulse ${event.status === 'agendado' ? 'bg-blue-500' : event.status === 'concluído' ? 'bg-green-500' : 'bg-slate-400'}`}
               />
               <span className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-300">
                 Status: {event.status}
@@ -182,23 +182,23 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
             </div>
             <div>
               <p className="text-sm font-bold dark:text-white">
-                {startDate.toLocaleDateString("pt-BR", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
+                {startDate.toLocaleDateString('pt-BR', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
                 })}
               </p>
               <p className="text-xs font-medium text-slate-500 flex items-center gap-1">
-                <Clock size={12} />{" "}
-                {startDate.toLocaleTimeString("pt-BR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-                -{" "}
-                {endDate.toLocaleTimeString("pt-BR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
+                <Clock size={12} />{' '}
+                {startDate.toLocaleTimeString('pt-BR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}{' '}
+                -{' '}
+                {endDate.toLocaleTimeString('pt-BR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}{' '}
                 ({durationText})
               </p>
             </div>
@@ -230,7 +230,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                   </p>
                 )}
                 <p className="text-xs font-medium text-slate-500">
-                  {event.virtual_link ? "Link Virtual" : "Endereço Presencial"}
+                  {event.virtual_link ? 'Link Virtual' : 'Endereço Presencial'}
                 </p>
               </div>
             </div>
@@ -247,7 +247,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                   Processo {event.case_id}
                 </p>
                 <p className="text-xs font-medium text-slate-500">
-                  Cliente ID {event.client_id || "N/A"}
+                  Cliente ID {event.client_id || 'N/A'}
                 </p>
               </div>
             </div>
@@ -268,7 +268,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
         {/* Footer Actions */}
         <div className="px-8 py-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
-          {event.status === "agendado" ? (
+          {event.status === 'agendado' ? (
             <>
               <button
                 onClick={handleToggleComplete}
@@ -291,7 +291,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                 Cancelar Evento
               </button>
             </>
-          ) : event.status === "concluído" ? (
+          ) : event.status === 'concluído' ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-center gap-2 p-4 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-2xl border border-green-100 dark:border-green-800 font-bold uppercase tracking-widest text-xs">
                 <CheckCircle2 size={18} /> Evento Concluído com Sucesso

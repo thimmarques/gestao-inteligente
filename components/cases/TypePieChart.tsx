@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   PieChart,
   Pie,
@@ -6,11 +6,11 @@ import {
   ResponsiveContainer,
   Legend,
   Tooltip,
-} from "recharts";
+} from 'recharts';
 
 export const TypePieChart: React.FC = () => {
   const chartData = useMemo(() => {
-    const cases = JSON.parse(localStorage.getItem("legaltech_cases") || "[]");
+    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
     const counts: Record<string, number> = {};
 
     cases.forEach((c: any) => {
@@ -18,13 +18,13 @@ export const TypePieChart: React.FC = () => {
     });
 
     const COLORS = [
-      "#3b82f6",
-      "#22c55e",
-      "#ef4444",
-      "#f59e0b",
-      "#ec4899",
-      "#eab308",
-      "#8b5cf6",
+      '#3b82f6',
+      '#22c55e',
+      '#ef4444',
+      '#f59e0b',
+      '#ec4899',
+      '#eab308',
+      '#8b5cf6',
     ];
 
     return Object.entries(counts).map(([type, count], index) => ({
@@ -62,11 +62,11 @@ export const TypePieChart: React.FC = () => {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#1e293b",
-                  border: "none",
-                  borderRadius: "12px",
-                  color: "#fff",
-                  fontSize: "12px",
+                  backgroundColor: '#1e293b',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontSize: '12px',
                 }}
               />
               <Legend

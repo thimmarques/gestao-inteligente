@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Folder,
   Plus,
@@ -13,32 +13,32 @@ import {
   Tag,
   Scale,
   Edit2,
-} from "lucide-react";
-import { useCases } from "../hooks/useQueries";
-import { caseService } from "../services/caseService";
-import { CaseWithRelations, Case } from "../types";
-import { formatCurrency } from "../utils/formatters";
-import { CreateCaseModal } from "../components/cases/CreateCaseModal";
+} from 'lucide-react';
+import { useCases } from '../hooks/useQueries';
+import { caseService } from '../services/caseService';
+import { CaseWithRelations, Case } from '../types';
+import { formatCurrency } from '../utils/formatters';
+import { CreateCaseModal } from '../components/cases/CreateCaseModal';
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "distribuído":
-      return "bg-blue-100 text-blue-600 dark:bg-blue-900/30";
-    case "andamento":
-      return "bg-green-100 text-green-600 dark:bg-green-900/30";
-    case "sentenciado":
-      return "bg-purple-100 text-purple-600 dark:bg-purple-900/30";
-    case "arquivado":
-      return "bg-slate-100 text-slate-600 dark:bg-slate-800";
+    case 'distribuído':
+      return 'bg-blue-100 text-blue-600 dark:bg-blue-900/30';
+    case 'andamento':
+      return 'bg-green-100 text-green-600 dark:bg-green-900/30';
+    case 'sentenciado':
+      return 'bg-purple-100 text-purple-600 dark:bg-purple-900/30';
+    case 'arquivado':
+      return 'bg-slate-100 text-slate-600 dark:bg-slate-800';
     default:
-      return "bg-slate-100 text-slate-600";
+      return 'bg-slate-100 text-slate-600';
   }
 };
 
 const Cases: React.FC = () => {
   const { data: cases = [], isLoading, refetch } = useCases();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("todos");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('todos');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredCases = useMemo(() => {
@@ -48,7 +48,7 @@ const Cases: React.FC = () => {
         c.client?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.court.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
-        statusFilter === "todos" || c.status === statusFilter;
+        statusFilter === 'todos' || c.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [cases, searchTerm, statusFilter]);
@@ -85,16 +85,16 @@ const Cases: React.FC = () => {
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-          {["todos", "distribuído", "andamento", "sentenciado", "recurso"].map(
+          {['todos', 'distribuído', 'andamento', 'sentenciado', 'recurso'].map(
             (s) => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
-                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${statusFilter === s ? "bg-primary-600 text-white shadow-md" : "bg-slate-50 dark:bg-slate-800 text-slate-500"}`}
+                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${statusFilter === s ? 'bg-primary-600 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-500'}`}
               >
                 {s}
               </button>
-            ),
+            )
           )}
         </div>
       </div>
@@ -135,8 +135,8 @@ const Cases: React.FC = () => {
                         Cliente
                       </p>
                       <p className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                        <User size={14} className="text-primary-500" />{" "}
-                        {c.client?.name || "Não vinculado"}
+                        <User size={14} className="text-primary-500" />{' '}
+                        {c.client?.name || 'Não vinculado'}
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -160,7 +160,7 @@ const Cases: React.FC = () => {
                         Iniciado em
                       </p>
                       <p className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                        <Clock size={14} className="text-slate-400" />{" "}
+                        <Clock size={14} className="text-slate-400" />{' '}
                         {new Date(c.started_at).toLocaleDateString()}
                       </p>
                     </div>

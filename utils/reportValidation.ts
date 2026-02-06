@@ -1,8 +1,8 @@
-import { differenceInDays, isAfter, isBefore, startOfDay } from "date-fns";
+import { differenceInDays, isAfter, isBefore, startOfDay } from 'date-fns';
 
 export function validateReportPeriod(
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): {
   isValid: boolean;
   error?: string;
@@ -14,7 +14,7 @@ export function validateReportPeriod(
   if (isBefore(endDate, startDate)) {
     return {
       isValid: false,
-      error: "A data final deve ser posterior à data inicial",
+      error: 'A data final deve ser posterior à data inicial',
     };
   }
 
@@ -22,7 +22,7 @@ export function validateReportPeriod(
   if (isAfter(startDate, today)) {
     return {
       isValid: false,
-      error: "A data inicial não pode ser uma data futura",
+      error: 'A data inicial não pode ser uma data futura',
     };
   }
 
@@ -31,7 +31,7 @@ export function validateReportPeriod(
   if (daysDiff > 730) {
     return {
       isValid: false,
-      error: "O período máximo permitido para relatórios é de 2 anos",
+      error: 'O período máximo permitido para relatórios é de 2 anos',
     };
   }
 
@@ -39,7 +39,7 @@ export function validateReportPeriod(
   let warning;
   if (daysDiff < 7 && daysDiff >= 0) {
     warning =
-      "Período muito curto selecionado. O relatório pode conter poucos dados estatísticos.";
+      'Período muito curto selecionado. O relatório pode conter poucos dados estatísticos.';
   }
 
   return { isValid: true, warning };

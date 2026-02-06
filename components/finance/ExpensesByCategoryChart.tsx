@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   PieChart,
   Pie,
@@ -6,21 +6,21 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
-} from "recharts";
-import { FinanceRecord } from "../../types";
-import { formatCurrency } from "../../utils/formatters";
+} from 'recharts';
+import { FinanceRecord } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
 
 interface ExpensesByCategoryChartProps {
   expenses: FinanceRecord[];
 }
 
 const COLORS = [
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#fb923c",
-  "#dc2626",
-  "#f59e0b",
+  '#ef4444',
+  '#f97316',
+  '#eab308',
+  '#fb923c',
+  '#dc2626',
+  '#f59e0b',
 ];
 
 export const ExpensesByCategoryChart: React.FC<
@@ -28,13 +28,13 @@ export const ExpensesByCategoryChart: React.FC<
 > = ({ expenses }) => {
   const data = useMemo(() => {
     const byCategory = expenses
-      .filter((e) => e.status === "pago")
+      .filter((e) => e.status === 'pago')
       .reduce(
         (acc, e) => {
           acc[e.category] = (acc[e.category] || 0) + e.amount;
           return acc;
         },
-        {} as Record<string, number>,
+        {} as Record<string, number>
       );
 
     return Object.entries(byCategory).map(([category, amount]) => ({
@@ -69,10 +69,10 @@ export const ExpensesByCategoryChart: React.FC<
           <Tooltip
             formatter={(value: number) => formatCurrency(value)}
             contentStyle={{
-              backgroundColor: "#0f172a",
-              border: "none",
-              borderRadius: "1rem",
-              color: "#fff",
+              backgroundColor: '#0f172a',
+              border: 'none',
+              borderRadius: '1rem',
+              color: '#fff',
             }}
           />
           <Legend

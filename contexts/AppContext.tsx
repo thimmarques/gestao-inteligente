@@ -4,13 +4,13 @@ import React, {
   useState,
   useEffect,
   useCallback,
-} from "react";
-import { Lawyer, Office, UserPreferences } from "../types";
+} from 'react';
+import { Lawyer, Office, UserPreferences } from '../types';
 import {
   getCurrentLawyer,
   getOffice,
   getPreferences,
-} from "../utils/settingsPersistence";
+} from '../utils/settingsPersistence';
 
 interface AppContextType {
   lawyer: Lawyer | null;
@@ -42,13 +42,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Ouvir mudanças de outras abas
     const handleStorage = (e: StorageEvent) => {
-      if (e.key?.includes("legalflow") || e.key === "current_lawyer") {
+      if (e.key?.includes('legalflow') || e.key === 'current_lawyer') {
         refreshAll();
       }
     };
 
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, [refreshAll]);
 
   return (
@@ -69,6 +69,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) throw new Error("useApp must be used within AppProvider");
+  if (!context) throw new Error('useApp must be used within AppProvider');
   return context;
 };

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   X,
   Save,
@@ -9,10 +9,10 @@ import {
   TrendingDown,
   Calendar,
   FileText,
-} from "lucide-react";
-import { useCases, useClients } from "../../hooks/useQueries";
-import { financeService } from "../../services/financeService";
-import { useApp } from "../../contexts/AppContext";
+} from 'lucide-react';
+import { useCases, useClients } from '../../hooks/useQueries';
+import { financeService } from '../../services/financeService';
+import { useApp } from '../../contexts/AppContext';
 
 interface CreateFinanceModalProps {
   isOpen: boolean;
@@ -31,15 +31,15 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    title: "",
-    type: "receita" as "receita" | "despesa",
-    category: "honorários",
-    amount: "",
-    date: new Date().toISOString().split("T")[0],
-    status: "pendente" as "pago" | "pendente" | "atrasado",
-    client_id: "",
-    case_id: "",
-    description: "",
+    title: '',
+    type: 'receita' as 'receita' | 'despesa',
+    category: 'honorários',
+    amount: '',
+    date: new Date().toISOString().split('T')[0],
+    status: 'pendente' as 'pago' | 'pendente' | 'atrasado',
+    client_id: '',
+    case_id: '',
+    description: '',
   });
 
   if (!isOpen) return null;
@@ -70,7 +70,7 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      alert("Erro ao salvar registro financeiro.");
+      alert('Erro ao salvar registro financeiro.');
     }
   };
 
@@ -102,8 +102,8 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
-              onClick={() => setFormData({ ...formData, type: "receita" })}
-              className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.type === "receita" ? "border-green-600 bg-green-50 dark:bg-green-900/20 text-green-600" : "border-slate-50 dark:border-slate-800 text-slate-400"}`}
+              onClick={() => setFormData({ ...formData, type: 'receita' })}
+              className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.type === 'receita' ? 'border-green-600 bg-green-50 dark:bg-green-900/20 text-green-600' : 'border-slate-50 dark:border-slate-800 text-slate-400'}`}
             >
               <TrendingUp size={20} />
               <span className="text-[10px] font-black uppercase tracking-widest">
@@ -112,8 +112,8 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => setFormData({ ...formData, type: "despesa" })}
-              className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.type === "despesa" ? "border-red-600 bg-red-50 dark:bg-red-900/20 text-red-600" : "border-slate-50 dark:border-slate-800 text-slate-400"}`}
+              onClick={() => setFormData({ ...formData, type: 'despesa' })}
+              className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.type === 'despesa' ? 'border-red-600 bg-red-50 dark:bg-red-900/20 text-red-600' : 'border-slate-50 dark:border-slate-800 text-slate-400'}`}
             >
               <TrendingDown size={20} />
               <span className="text-[10px] font-black uppercase tracking-widest">

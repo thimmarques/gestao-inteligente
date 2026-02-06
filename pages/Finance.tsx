@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -16,31 +16,31 @@ import {
   FileText,
   ChevronRight,
   Clock,
-} from "lucide-react";
-import { useFinances } from "../hooks/useQueries";
-import { financeService } from "../services/financeService";
-import { FinanceRecord } from "../types";
-import { formatCurrency } from "../utils/formatters";
-import { CreateFinanceModal } from "../components/finance/CreateFinanceModal";
+} from 'lucide-react';
+import { useFinances } from '../hooks/useQueries';
+import { financeService } from '../services/financeService';
+import { FinanceRecord } from '../types';
+import { formatCurrency } from '../utils/formatters';
+import { CreateFinanceModal } from '../components/finance/CreateFinanceModal';
 
 const Finance: React.FC = () => {
   const { data: records = [], isLoading, refetch } = useFinances();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"todos" | "receita" | "despesa">(
-    "todos",
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState<'todos' | 'receita' | 'despesa'>(
+    'todos'
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const stats = useMemo(() => {
     const income = records
-      .filter((r) => r.type === "receita")
+      .filter((r) => r.type === 'receita')
       .reduce((acc, r) => acc + r.amount, 0);
     const expense = records
-      .filter((r) => r.type === "despesa")
+      .filter((r) => r.type === 'despesa')
       .reduce((acc, r) => acc + r.amount, 0);
     const balance = income - expense;
     const pending = records
-      .filter((r) => r.status === "pendente")
+      .filter((r) => r.status === 'pendente')
       .reduce((acc, r) => acc + r.amount, 0);
 
     return { income, expense, balance, pending };
@@ -51,7 +51,7 @@ const Finance: React.FC = () => {
       const matchesSearch =
         r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         r.category.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesType = typeFilter === "todos" || r.type === typeFilter;
+      const matchesType = typeFilter === 'todos' || r.type === typeFilter;
       return matchesSearch && matchesType;
     });
   }, [records, searchTerm, typeFilter]);
@@ -147,11 +147,11 @@ const Finance: React.FC = () => {
           />
         </div>
         <div className="flex bg-slate-50 dark:bg-slate-800 p-1 rounded-2xl">
-          {(["todos", "receita", "despesa"] as const).map((t) => (
+          {(['todos', 'receita', 'despesa'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTypeFilter(t)}
-              className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${typeFilter === t ? "bg-white dark:bg-slate-700 text-primary-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+              className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${typeFilter === t ? 'bg-white dark:bg-slate-700 text-primary-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
             >
               {t}
             </button>
@@ -204,9 +204,9 @@ const Finance: React.FC = () => {
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`p-2 rounded-lg ${record.type === "receita" ? "bg-green-50 dark:bg-green-900/20 text-green-600" : "bg-red-50 dark:bg-red-900/20 text-red-600"}`}
+                          className={`p-2 rounded-lg ${record.type === 'receita' ? 'bg-green-50 dark:bg-green-900/20 text-green-600' : 'bg-red-50 dark:bg-red-900/20 text-red-600'}`}
                         >
-                          {record.type === "receita" ? (
+                          {record.type === 'receita' ? (
                             <ArrowUpRight size={14} />
                           ) : (
                             <ArrowDownRight size={14} />
@@ -230,19 +230,19 @@ const Finance: React.FC = () => {
                       </span>
                     </td>
                     <td
-                      className={`px-8 py-5 text-sm font-black tabular-nums ${record.type === "receita" ? "text-green-600" : "text-red-600"}`}
+                      className={`px-8 py-5 text-sm font-black tabular-nums ${record.type === 'receita' ? 'text-green-600' : 'text-red-600'}`}
                     >
-                      {record.type === "receita" ? "+" : "-"}{" "}
+                      {record.type === 'receita' ? '+' : '-'}{' '}
                       {formatCurrency(record.amount)}
                     </td>
                     <td className="px-8 py-5">
                       <span
                         className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
-                          record.status === "pago"
-                            ? "bg-green-100 text-green-600 dark:bg-green-900/30"
-                            : record.status === "pendente"
-                              ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30"
-                              : "bg-red-100 text-red-600 dark:bg-red-900/30"
+                          record.status === 'pago'
+                            ? 'bg-green-100 text-green-600 dark:bg-green-900/30'
+                            : record.status === 'pendente'
+                              ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/30'
+                              : 'bg-red-100 text-red-600 dark:bg-red-900/30'
                         }`}
                       >
                         {record.status}
