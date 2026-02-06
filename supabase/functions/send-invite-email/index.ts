@@ -42,6 +42,11 @@ Deno.serve(async (req) => {
       );
     }
 
+    console.log(
+      '[DEBUG] Auth header received:',
+      authHeader.substring(0, 20) + '...'
+    );
+
     // Create client with SUPABASE_ANON_KEY and pass the bearer token
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
@@ -56,7 +61,8 @@ Deno.serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (authError || !user) {
-      console.error('[DEBUG] Auth validation failed:', authError);
+      console.error('[DEBUG] Auth validation failed. User:', user);
+      console.error('[DEBUG] Auth error:', authError);
       return new Response(
         JSON.stringify({
           error: 'User not authenticated',
