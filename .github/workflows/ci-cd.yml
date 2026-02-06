@@ -12,17 +12,22 @@ jobs:
     name: Continuous Integration
     runs-on: ubuntu-latest
     env:
-      VITE_SUPABASE_URL: '${{ secrets.VITE_SUPABASE_URL }}'
-      VITE_SUPABASE_ANON_KEY: '${{ secrets.VITE_SUPABASE_ANON_KEY }}'
-      GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
+      VITE_SUPABASE_URL: "${{ secrets.VITE_SUPABASE_URL }}"
+      VITE_SUPABASE_ANON_KEY: "${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+      GEMINI_API_KEY: "${{ secrets.GEMINI_API_KEY }}"
     steps:
       - uses: actions/checkout@v4
+
+      - name: Verify Environment Secrets
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ]; then echo "::error::VITE_SUPABASE_URL is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "$VITE_SUPABASE_ANON_KEY" ]; then echo "::error::VITE_SUPABASE_ANON_KEY is missing in GitHub Secrets"; exit 1; fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -65,6 +70,7 @@ jobs:
           if [ -z "$SUPABASE_PROJECT_ID" ]; then echo "::error::SUPABASE_PROJECT_ID is missing in GitHub Secrets"; exit 1; fi
           if [ -z "$SUPABASE_DB_PASSWORD" ]; then echo "::error::SUPABASE_DB_PASSWORD is missing in GitHub Secrets"; exit 1; fi
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then echo "::error::SUPABASE_ACCESS_TOKEN is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ]; then echo "::error::VITE_SUPABASE_URL is missing in GitHub Secrets"; exit 1; fi
 
       - name: Link Supabase Project
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
@@ -84,7 +90,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
 
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
