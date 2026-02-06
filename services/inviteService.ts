@@ -25,6 +25,11 @@ export const inviteService = {
       throw new Error('Você precisa estar logado para enviar convites.');
     }
 
+    console.log(
+      '[DEBUG] Invoking function with token:',
+      session.access_token.substring(0, 10) + '...'
+    );
+
     // 2. Invoke Function (Automatically passes Authorization header via supabase-js)
     const { data, error } = await supabase.functions.invoke(
       'send-invite-email',
