@@ -17,7 +17,9 @@ export const inviteService = {
   // Admin/Lawyer: Create an invite (Calls Edge Function)
   async createInvite(email: string, role: string) {
     // 1. Validate Session
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session) {
       throw new Error('Você precisa estar logado para enviar convites.');
     }
