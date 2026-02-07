@@ -11,6 +11,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme.ts';
+import { settingsConfig } from '../../utils/settingsConfig';
 
 export const PreferencesTab: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -47,22 +48,25 @@ export const PreferencesTab: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500 pb-10">
-      <section className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-10">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-xl">
-            <Monitor size={20} />
+    <div className="space-y-6 animate-in fade-in duration-500 pb-10">
+      <section className={settingsConfig.cardClass + ' space-y-8'}>
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="p-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-lg">
+            <Monitor size={18} />
           </div>
-          <h3 className="text-sm font-black dark:text-white uppercase tracking-widest">
-            Aparência do Sistema
-          </h3>
+          <div>
+            <h3 className={settingsConfig.sectionTitleClass}>
+              Aparência do Sistema
+            </h3>
+            <p className={settingsConfig.sectionDescClass}>
+              Personalize sua experiência visual
+            </p>
+          </div>
         </div>
 
-        <div className="space-y-6">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-            Tema Principal
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="space-y-4">
+          <label className={settingsConfig.labelClass}>Tema Principal</label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {themes.map((t) => {
               const Icon = t.icon;
               const isActive = theme === t.id;
@@ -70,19 +74,19 @@ export const PreferencesTab: React.FC = () => {
                 <button
                   key={t.id}
                   onClick={() => setTheme(t.id as any)}
-                  className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all group ${
+                  className={`flex items-center gap-3 p-4 rounded-xl border transition-all group ${
                     isActive
-                      ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg'
-                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                      ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-md'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isActive ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500'}`}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isActive ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500'}`}
                   >
-                    <Icon size={20} />
+                    <Icon size={16} />
                   </div>
                   <span
-                    className={`text-sm font-bold uppercase tracking-widest ${isActive ? 'text-primary-700 dark:text-primary-400' : 'text-slate-500'}`}
+                    className={`text-sm font-bold uppercase tracking-wide ${isActive ? 'text-primary-700 dark:text-primary-400' : 'text-slate-500'}`}
                   >
                     {t.label}
                   </span>
@@ -92,12 +96,12 @@ export const PreferencesTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
           <div className="flex justify-between items-center">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <label className={settingsConfig.labelClass}>
               Tamanho da Fonte
             </label>
-            <span className="text-sm font-bold dark:text-white tabular-nums">
+            <span className="text-sm font-bold dark:text-white tabular-nums bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
               {fontSize}px
             </span>
           </div>
@@ -111,22 +115,22 @@ export const PreferencesTab: React.FC = () => {
             className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary-600"
           />
         </div>
-      </section>
 
-      <div className="flex justify-end pt-6 border-t border-slate-100 dark:border-slate-800">
-        <button
-          onClick={handleSave}
-          disabled={isSaving}
-          className="flex items-center gap-3 px-12 py-5 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 active:scale-95 transition-all"
-        >
-          {isSaving ? (
-            <Loader2 size={24} className="animate-spin" />
-          ) : (
-            <Save size={24} />
-          )}
-          Salvar Preferências
-        </button>
-      </div>
+        <div className="flex justify-end pt-2">
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className={settingsConfig.buttonPrimaryClass}
+          >
+            {isSaving ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
+            Salvar Preferências
+          </button>
+        </div>
+      </section>
     </div>
   );
 };

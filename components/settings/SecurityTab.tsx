@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Loader2,
 } from 'lucide-react';
+import { settingsConfig } from '../../utils/settingsConfig';
 
 export const SecurityTab: React.FC = () => {
   const [showCurrent, setShowCurrent] = useState(false);
@@ -39,22 +40,23 @@ export const SecurityTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500 pb-10">
-      <section className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-10">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-xl">
-            <Lock size={20} />
+    <div className="space-y-6 animate-in fade-in duration-500 pb-10">
+      <section className={settingsConfig.cardClass + ' space-y-6'}>
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg">
+            <Lock size={18} />
           </div>
-          <h3 className="text-sm font-black dark:text-white uppercase tracking-widest">
-            Segurança (Campos Opcionais)
-          </h3>
+          <div>
+            <h3 className={settingsConfig.sectionTitleClass}>Segurança</h3>
+            <p className={settingsConfig.sectionDescClass}>
+              Gerencie sua senha e acesso à conta
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handlePasswordSubmit} className="max-w-md space-y-8">
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-              Senha Atual
-            </label>
+        <form onSubmit={handlePasswordSubmit} className="max-w-md space-y-5">
+          <div className="space-y-1">
+            <label className={settingsConfig.labelClass}>Senha Atual</label>
             <div className="relative">
               <input
                 type={showCurrent ? 'text' : 'password'}
@@ -62,22 +64,20 @@ export const SecurityTab: React.FC = () => {
                 onChange={(e) =>
                   setPasswords({ ...passwords, current: e.target.value })
                 }
-                className="w-full pl-6 pr-12 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
+                className={settingsConfig.inputClass + ' pr-12'}
               />
               <button
                 type="button"
                 onClick={() => setShowCurrent(!showCurrent)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary-600 transition-colors"
               >
-                {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-              Nova Senha
-            </label>
+          <div className="space-y-1">
+            <label className={settingsConfig.labelClass}>Nova Senha</label>
             <div className="relative">
               <input
                 type={showNew ? 'text' : 'password'}
@@ -85,20 +85,20 @@ export const SecurityTab: React.FC = () => {
                 onChange={(e) =>
                   setPasswords({ ...passwords, new: e.target.value })
                 }
-                className="w-full pl-6 pr-12 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
+                className={settingsConfig.inputClass + ' pr-12'}
               />
               <button
                 type="button"
                 onClick={() => setShowNew(!showNew)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary-600 transition-colors"
               >
-                {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+          <div className="space-y-1">
+            <label className={settingsConfig.labelClass}>
               Confirmar Nova Senha
             </label>
             <input
@@ -107,35 +107,40 @@ export const SecurityTab: React.FC = () => {
               onChange={(e) =>
                 setPasswords({ ...passwords, confirm: e.target.value })
               }
-              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 text-sm shadow-inner dark:text-white"
+              className={settingsConfig.inputClass}
             />
           </div>
 
           <button
             type="submit"
             disabled={isChanging}
-            className="flex items-center justify-center gap-2 px-10 py-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
+            className={
+              settingsConfig.buttonPrimaryClass + ' w-full justify-center'
+            }
           >
             {isChanging ? (
-              <Loader2 size={18} className="animate-spin" />
+              <Loader2 size={16} className="animate-spin" />
             ) : (
-              <Check size={18} />
+              <Check size={16} />
             )}
             Alterar Senha
           </button>
         </form>
       </section>
 
-      <section className="p-10 rounded-[3rem] border-2 border-red-500/20 bg-red-500/5 space-y-10">
+      <section className="p-6 rounded-2xl border border-red-200 bg-red-50 space-y-4">
         <div className="flex items-center gap-3 text-red-600">
-          <ShieldAlert size={24} />
-          <h3 className="text-sm font-black uppercase tracking-widest">
+          <ShieldAlert size={20} />
+          <h3 className="text-sm font-bold uppercase tracking-wide">
             Zona de Perigo
           </h3>
         </div>
+        <p className="text-sm text-red-600/80">
+          Ações irreversíveis. Tenha cuidado.
+        </p>
         <button
           onClick={handleDeleteAccount}
-          className="px-10 py-4 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] transition-all"
+          className="px-6 py-3 border border-red-200 text-red-600 hover:bg-red-600 hover:text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
         >
           Excluir Conta
         </button>

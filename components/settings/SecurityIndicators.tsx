@@ -10,6 +10,7 @@ import {
 import { AuditLog } from '../../types/audit';
 import { subHours } from 'date-fns';
 import { useCases, useClients } from '../../hooks/useQueries';
+import { settingsConfig } from '../../utils/settingsConfig';
 
 interface SecurityIndicatorsProps {
   logs: AuditLog[];
@@ -97,7 +98,9 @@ export const SecurityIndicators: React.FC<SecurityIndicatorsProps> = ({
 };
 
 const IndicatorCard = ({ title, icon, score, color, items }: any) => (
-  <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
+  <div
+    className={settingsConfig.cardClass + ' p-6 hover:shadow-md transition-all'}
+  >
     <div className="flex items-center justify-between mb-5">
       <div
         className={`p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 ${color}`}

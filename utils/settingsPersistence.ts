@@ -51,9 +51,12 @@ export function updateLawyer(updates: Partial<Lawyer>): void {
 
 export function getOffice(): Office {
   const data = localStorage.getItem(STORAGE_KEYS.OFFICE);
-  return data
-    ? JSON.parse(data)
-    : ({ id: 'office-1', name: 'LegalTech' } as Office);
+  if (data) {
+    const parsed = JSON.parse(data);
+    if (!parsed.logo_url) parsed.logo_url = '/logo.svg';
+    return parsed;
+  }
+  return { id: 'office-1', name: 'LegalTech', logo_url: '/logo.svg' } as Office;
 }
 
 export function updateOffice(updates: Partial<Office>): void {

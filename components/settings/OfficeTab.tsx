@@ -13,6 +13,7 @@ import { LogoUpload } from './LogoUpload';
 import { Office } from '../../types';
 import { useApp } from '../../contexts/AppContext';
 import { updateOffice } from '../../utils/settingsPersistence';
+import { settingsConfig } from '../../utils/settingsConfig';
 
 export const OfficeTab: React.FC = () => {
   const { office, refreshAll } = useApp();
@@ -49,8 +50,10 @@ export const OfficeTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
-      <section className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-12 items-center md:items-start">
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <section
+        className={`${settingsConfig.cardClass} flex flex-col md:flex-row gap-8 items-center md:items-start`}
+      >
         <LogoUpload
           currentLogoUrl={formData.logo_url}
           onLogoChange={(url) => handleChange('logo_url', url)}
@@ -58,105 +61,104 @@ export const OfficeTab: React.FC = () => {
         />
       </section>
 
-      <form onSubmit={handleSave} className="space-y-8">
-        <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-12">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-xl">
-              <Building2 size={20} />
+      <form onSubmit={handleSave} className="space-y-6">
+        <div className={settingsConfig.cardClass + ' space-y-6'}>
+          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg">
+              <Building2 size={18} />
             </div>
-            <h3 className="text-sm font-black dark:text-white uppercase tracking-widest">
-              Informações Institucionais
-            </h3>
+            <div>
+              <h3 className={settingsConfig.sectionTitleClass}>
+                Informações Institucionais
+              </h3>
+              <p className={settingsConfig.sectionDescClass}>
+                Dados do escritório para relatórios e rodapés
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+          <div className={settingsConfig.gridClass}>
+            <div className="space-y-1 md:col-span-2">
+              <label className={settingsConfig.labelClass}>
                 Nome do Escritório
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
+                className={settingsConfig.inputClass + ' font-bold text-base'}
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-                CNPJ
-              </label>
+            <div className="space-y-1">
+              <label className={settingsConfig.labelClass}>CNPJ</label>
               <input
                 type="text"
                 placeholder="00.000.000/0000-00"
                 value={formData.cnpj}
                 onChange={(e) => handleChange('cnpj', e.target.value)}
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
+                className={settingsConfig.inputClass + ' font-mono'}
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <div className="space-y-1">
+              <label className={settingsConfig.labelClass}>
                 E-mail Comercial
               </label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                className={settingsConfig.inputClass}
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-                Telefone
-              </label>
+            <div className="space-y-1">
+              <label className={settingsConfig.labelClass}>Telefone</label>
               <input
                 type="text"
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                className={settingsConfig.inputClass}
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
-                Website
-              </label>
+            <div className="space-y-1">
+              <label className={settingsConfig.labelClass}>Website</label>
               <input
                 type="url"
                 placeholder="https://..."
                 value={formData.site}
                 onChange={(e) => handleChange('site', e.target.value)}
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                className={settingsConfig.inputClass}
               />
             </div>
 
-            <div className="md:col-span-2 space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <div className="md:col-span-2 space-y-1">
+              <label className={settingsConfig.labelClass}>
                 Endereço Completo
               </label>
               <textarea
                 rows={3}
                 value={formData.address}
                 onChange={(e) => handleChange('address', e.target.value)}
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-[2rem] focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
+                className={settingsConfig.inputClass + ' resize-none'}
                 placeholder="Logradouro, nº, bairro, cidade - UF"
               />
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 px-4">
+        <div className="flex justify-end gap-3">
           <button
             type="submit"
             disabled={isSaving}
-            className="flex items-center gap-3 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 active:scale-95 transition-all"
+            className={settingsConfig.buttonPrimaryClass}
           >
             {isSaving ? (
-              <Loader2 size={20} className="animate-spin" />
+              <Loader2 size={16} className="animate-spin" />
             ) : (
-              <Save size={20} />
+              <Save size={16} />
             )}
             Salvar Escritório
           </button>

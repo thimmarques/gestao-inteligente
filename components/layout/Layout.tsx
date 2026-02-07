@@ -38,6 +38,7 @@ interface SidebarItemProps {
   badgeColor?: string;
   active?: boolean;
   isCollapsed?: boolean;
+  onClick?: () => void;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -48,9 +49,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   badgeColor = 'bg-red-500',
   active,
   isCollapsed,
+  onClick, // Added prop
 }) => (
   <Link
     to={to}
+    onClick={onClick} // Handle click
     className={`relative flex items-center ${isCollapsed ? 'justify-center px-2' : 'justify-between px-4'} py-3 my-1 rounded-xl transition-all duration-300 group ${
       active
         ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold shadow-sm'
@@ -93,7 +96,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 );
 
 export const Layout = ({ children }: { children?: React.ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed on mobile
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const location = useLocation();
@@ -151,8 +154,16 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 font-sans selection:bg-primary-500/30">
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-200"
+        />
+      )}
+
       <aside
-        className={`fixed inset-y-0 left-0 z-40 ${isCollapsed ? 'w-24' : 'w-72'} bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-all duration-300 lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed inset-y-0 left-0 z-50 ${isCollapsed ? 'w-24' : 'w-72'} bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-all duration-300 lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}
       >
         <div className="h-full flex flex-col relative">
           {/* Collapse Button */}
@@ -204,6 +215,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                 {...item}
                 active={location.pathname === item.to}
                 isCollapsed={isCollapsed}
+                onClick={() => setIsSidebarOpen(false)} // Close on click
               />
             ))}
             <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800/50">
@@ -218,6 +230,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                 label="Configurações"
                 active={location.pathname === '/settings'}
                 isCollapsed={isCollapsed}
+                onClick={() => setIsSidebarOpen(false)} // Close on click
               />
             </div>
           </nav>
