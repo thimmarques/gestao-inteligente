@@ -122,10 +122,14 @@ const Schedule: React.FC = () => {
   };
 
   const handleSaveEvent = async (formData: any) => {
+    if (!lawyer) return;
+
     const input = {
       ...formData,
-      lawyer_id: lawyer?.id || '',
-      office_id: lawyer?.office_id || '',
+      lawyer_id: lawyer.id,
+      office_id: lawyer.office_id,
+      client_id: formData.client_id || null, // Fix: convert empty string to null
+      case_id: formData.case_id || null, // Fix: convert empty string to null
       status: formData.status || 'agendado',
       reminder_sent: false,
       start_time:

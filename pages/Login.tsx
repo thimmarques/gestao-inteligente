@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { supabase } from '../lib/supabase';
-import { Lock, Mail, Loader2, Github } from 'lucide-react';
+import { Lock, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const loginSchema = z.object({
@@ -44,20 +44,6 @@ const Login: React.FC = () => {
       toast.error(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSocialLogin = async (provider: 'google' | 'github') => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: window.location.origin,
-        },
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || `Erro ao entrar com ${provider}`);
     }
   };
 
@@ -148,48 +134,6 @@ const Login: React.FC = () => {
               )}
             </button>
           </form>
-
-          <div className="relative my-8">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-slate-900 text-slate-500">
-                Ou entre com
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => handleSocialLogin('google')}
-              className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
-            >
-              <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                alt="Google"
-                className="w-5 h-5"
-              />
-              Google
-            </button>
-            <button
-              onClick={() => handleSocialLogin('github')}
-              className="flex items-center justify-center gap-2 py-3 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium dark:text-white"
-            >
-              <Github className="w-5 h-5" />
-              GitHub
-            </button>
-          </div>
-
-          <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-            Não tem uma conta?{' '}
-            <Link
-              to="/auth/signup"
-              className="font-bold text-primary-600 hover:text-primary-700 transition-colors"
-            >
-              Cadastre-se grátis
-            </Link>
-          </p>
         </div>
 
         <p className="text-center text-xs text-slate-400 mt-8">

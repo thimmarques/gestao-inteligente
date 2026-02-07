@@ -14,7 +14,9 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Deadline, Case } from '../../types';
-import { useCases } from '../../hooks/useQueries';
+import { useDeadlines, useCases } from '../../hooks/useQueries';
+import { useAuth } from '../../contexts/AuthContext';
+import { deadlineService } from '../../services/deadlineService';
 
 interface CreateDeadlineModalProps {
   isOpen: boolean;
@@ -37,6 +39,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
   initialData,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
   const { data: cases = [] } = useCases();
   const [searchTerm, setSearchTerm] = useState('');
   const [showCaseList, setShowCaseList] = useState(false);
@@ -79,16 +82,24 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
+
+    // Validate case_id as it is required by schema
+    if (!formData.case_id) {
+      alert('Selecione um processo vinculado.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       if (onSave) {
         await onSave(formData);
       } else {
-        // Default save logic could be here, but usually passed via onSave.
-        // If strict props, we should make onSave optional or inject service call here.
-        // Assuming for now that caller handles save via onSave or uses onSuccess to refetch.
-        // Let's actually call the service if onSave is missing?
-        // No, let's just respect the prop structure.
+        await deadlineService.createDeadline({
+          ...formData,
+          lawyer_id: user.id,
+          // case_id is inside formData and validated above
+        });
       }
       if (onSuccess) onSuccess();
 

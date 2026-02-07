@@ -3,7 +3,7 @@ import { X, Save, Search, Users, Loader2 } from 'lucide-react';
 import { CaseStatus, CaseType } from '../../types.ts';
 import { useClients } from '../../hooks/useQueries';
 import { caseService } from '../../services/caseService';
-import { useApp } from '../../contexts/AppContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface CreateCaseModalProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { lawyer } = useApp();
+  const { user } = useAuth();
   const { data: clients = [] } = useClients();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -66,13 +66,13 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lawyer) return;
+    if (!user) return;
 
     setIsSubmitting(true);
     try {
       await caseService.createCase({
-        office_id: lawyer.office_id,
-        lawyer_id: lawyer.id,
+        office_id: user.office_id,
+        lawyer_id: user.id,
         client_id: formData.client_id,
         process_number: formData.process_number,
         court: formData.court,

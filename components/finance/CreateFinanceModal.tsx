@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useCases, useClients } from '../../hooks/useQueries';
 import { financeService } from '../../services/financeService';
-import { useApp } from '../../contexts/AppContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface CreateFinanceModalProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { lawyer } = useApp();
+  const { user } = useAuth();
   const { data: cases = [] } = useCases();
   const { data: clients = [] } = useClients();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,13 +46,13 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lawyer) return;
+    if (!user) return;
 
     setIsSubmitting(true);
     try {
       await financeService.createRecord({
-        office_id: lawyer.office_id,
-        lawyer_id: lawyer.id,
+        office_id: user.office_id,
+        lawyer_id: user.id,
         title: formData.title,
         type: formData.type,
         category: formData.category,
