@@ -83,6 +83,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
       legal_area: 'cível',
       description: '',
     },
+    hasExistingProcess: false,
     financial_profile: {
       payment_method: 'PIX',
       honorarios_firmados: '',
@@ -627,75 +628,104 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
               )}
 
               {activeTab === 'processo' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-200">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                      Número do Processo
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.process.number}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          process: {
-                            ...formData.process,
-                            number: formatCNJ(e.target.value),
-                          },
-                        })
-                      }
-                      placeholder="0000000-00.0000.0.00.0000"
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                      Área Jurídica
-                    </label>
-                    <select
-                      value={formData.process.legal_area}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          process: {
-                            ...formData.process,
-                            legal_area: e.target.value,
-                          },
-                        })
-                      }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
-                    >
-                      {legalAreaOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-span-full space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                        Objeto / Descrição
-                      </label>
-                      <span className="text-[10px] font-bold text-slate-400">
-                        {(formData.process.description || '').length}/1000
-                      </span>
+                <div className="space-y-6 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <div>
+                      <h4 className="font-bold dark:text-white text-sm">
+                        Existe processo em andamento?
+                      </h4>
+                      <p className="text-xs text-slate-500">
+                        Marque se o cliente já possui um processo ativo.
+                      </p>
                     </div>
-                    <textarea
-                      rows={6}
-                      value={formData.process.description}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          process: {
-                            ...formData.process,
-                            description: e.target.value.substring(0, 1000),
-                          },
-                        })
-                      }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
-                    />
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={formData.hasExistingProcess}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            hasExistingProcess: e.target.checked,
+                          })
+                        }
+                      />
+                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                    </label>
                   </div>
+
+                  {formData.hasExistingProcess && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-top-4 duration-300">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                          Número do Processo
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.process.number}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              process: {
+                                ...formData.process,
+                                number: formatCNJ(e.target.value),
+                              },
+                            })
+                          }
+                          placeholder="0000000-00.0000.0.00.0000"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                          Área Jurídica
+                        </label>
+                        <select
+                          value={formData.process.legal_area}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              process: {
+                                ...formData.process,
+                                legal_area: e.target.value,
+                              },
+                            })
+                          }
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                        >
+                          {legalAreaOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-span-full space-y-1.5">
+                        <div className="flex justify-between items-center">
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                            Objeto / Descrição
+                          </label>
+                          <span className="text-[10px] font-bold text-slate-400">
+                            {(formData.process.description || '').length}/1000
+                          </span>
+                        </div>
+                        <textarea
+                          rows={6}
+                          value={formData.process.description}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              process: {
+                                ...formData.process,
+                                description: e.target.value.substring(0, 1000),
+                              },
+                            })
+                          }
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

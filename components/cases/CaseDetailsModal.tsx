@@ -116,7 +116,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   return (
     <div className="fixed inset-0 z-[110] flex items-stretch md:items-center justify-center bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-slate-50 dark:bg-slate-950 w-full max-w-6xl md:h-[90vh] md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
-        <div className="p-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
+        <div className="relative z-20 p-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl font-bold dark:text-white tracking-tight">
@@ -163,7 +163,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-8 px-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 overflow-x-auto shrink-0 scrollbar-hide">
+        <div className="relative z-10 flex items-center gap-8 px-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 overflow-x-auto shrink-0 scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.name}

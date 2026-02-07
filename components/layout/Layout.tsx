@@ -18,6 +18,8 @@ import {
   User,
   Menu,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useApp } from '../../contexts/AppContext';
@@ -35,6 +37,7 @@ interface SidebarItemProps {
   badge?: number;
   badgeColor?: string;
   active?: boolean;
+  isCollapsed?: boolean;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -44,38 +47,54 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   badge,
   badgeColor = 'bg-red-500',
   active,
+  isCollapsed,
 }) => (
   <Link
     to={to}
-    className={`relative flex items-center justify-between px-4 py-3 my-1 rounded-xl transition-all duration-300 group ${
+    className={`relative flex items-center ${isCollapsed ? 'justify-center px-2' : 'justify-between px-4'} py-3 my-1 rounded-xl transition-all duration-300 group ${
       active
         ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-bold shadow-sm'
         : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
     }`}
+    title={isCollapsed ? label : undefined}
   >
     {active && (
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary-600 rounded-r-full shadow-[0_0_12px_rgba(37,99,235,0.6)]" />
+      <div
+        className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary-600 rounded-r-full shadow-[0_0_12px_rgba(37,99,235,0.6)] ${isCollapsed ? 'left-1' : 'left-0'}`}
+      />
     )}
-    <div className="flex items-center gap-3.5 z-10">
+    <div
+      className={`flex items-center gap-3.5 z-10 ${isCollapsed ? 'justify-center w-full' : ''}`}
+    >
       <div
         className={`transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
       >
         {icon}
       </div>
-      <span className="text-sm tracking-wide">{label}</span>
+      {!isCollapsed && (
+        <span className="text-sm tracking-wide transition-opacity duration-300">
+          {label}
+        </span>
+      )}
     </div>
-    {badge !== undefined && badge > 0 && (
+    {!isCollapsed && badge !== undefined && badge > 0 && (
       <span
         className={`${badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center shadow-sm ring-2 ring-white dark:ring-slate-900`}
       >
         {badge}
       </span>
     )}
+    {isCollapsed && badge !== undefined && badge > 0 && (
+      <span
+        className={`absolute top-2 right-2 ${badgeColor} w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-900`}
+      />
+    )}
   </Link>
 );
 
 export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const location = useLocation();
   const { signOut, user } = useAuth();
@@ -133,16 +152,31 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 font-sans selection:bg-primary-500/30">
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-transform lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed inset-y-0 left-0 z-40 ${isCollapsed ? 'w-24' : 'w-72'} bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-all duration-300 lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col relative">
+          {/* Collapse Button */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="hidden lg:flex absolute -right-3 top-24 w-6 h-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full items-center justify-center text-slate-500 hover:text-primary-600 transition-colors z-50 shadow-sm"
+            title={isCollapsed ? 'Expandir menu' : 'Recolher menu'}
+          >
+            {isCollapsed ? (
+              <ChevronRight size={14} />
+            ) : (
+              <ChevronLeft size={14} />
+            )}
+          </button>
+
           <div className="p-6 border-b border-slate-100/50 dark:border-slate-800/50 flex justify-center">
             <Link
               to="/"
-              className="flex items-center justify-center gap-4 group w-full"
+              className={`flex items-center justify-center gap-4 group w-full ${isCollapsed ? 'flex-col' : ''}`}
             >
               {office.logo_url ? (
-                <div className="h-24 w-full flex items-center justify-center">
+                <div
+                  className={`${isCollapsed ? 'h-10 w-10' : 'h-24 w-full'} flex items-center justify-center transition-all duration-300`}
+                >
                   <img
                     src={office.logo_url}
                     alt={office.name}
@@ -150,11 +184,13 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                   />
                 </div>
               ) : (
-                <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-500">
+                <div
+                  className={`w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-500`}
+                >
                   L
                 </div>
               )}
-              {!office.logo_url && (
+              {!isCollapsed && !office.logo_url && (
                 <span className="text-xl font-black dark:text-white tracking-tighter group-hover:text-primary-600 transition-colors">
                   LegalTech
                 </span>
@@ -167,23 +203,29 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                 key={item.to}
                 {...item}
                 active={location.pathname === item.to}
+                isCollapsed={isCollapsed}
               />
             ))}
             <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800/50">
-              <h4 className="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                Sistema
+              <h4
+                className={`px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ${isCollapsed ? 'text-center' : ''}`}
+              >
+                {isCollapsed ? 'Sys' : 'Sistema'}
               </h4>
               <SidebarItem
                 to="/settings"
                 icon={<Settings size={20} />}
                 label="Configurações"
                 active={location.pathname === '/settings'}
+                isCollapsed={isCollapsed}
               />
             </div>
           </nav>
           <div className="p-6 border-t border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50">
-            <div className="flex items-center gap-4 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow cursor-default group">
-              <div className="w-10 h-10 rounded-full border-2 border-slate-100 dark:border-slate-600 overflow-hidden bg-slate-200 group-hover:border-primary-200 transition-colors">
+            <div
+              className={`flex items-center gap-4 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all cursor-default group ${isCollapsed ? 'justify-center' : ''}`}
+            >
+              <div className="w-10 h-10 rounded-full border-2 border-slate-100 dark:border-slate-600 overflow-hidden bg-slate-200 group-hover:border-primary-200 transition-colors shrink-0">
                 {displayUser?.photo_url ? (
                   <img
                     src={displayUser.photo_url}
@@ -193,14 +235,18 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
                   <User size={20} className="text-slate-400 m-auto mt-2" />
                 )}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold truncate dark:text-white leading-tight group-hover:text-primary-600 transition-colors">
-                  {displayUser?.name || 'Advogado'}
-                </p>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">
-                  {displayUser?.oab ? `OAB/${displayUser.oab}` : 'OAB Pendente'}
-                </p>
-              </div>
+              {!isCollapsed && (
+                <div className="flex-1 min-w-0 animate-in fade-in duration-300">
+                  <p className="text-sm font-bold truncate dark:text-white leading-tight group-hover:text-primary-600 transition-colors">
+                    {displayUser?.name || 'Advogado'}
+                  </p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">
+                    {displayUser?.oab
+                      ? `OAB/${displayUser.oab}`
+                      : 'OAB Pendente'}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

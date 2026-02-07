@@ -14,7 +14,18 @@ import {
   X,
 } from 'lucide-react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
+import {
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  addMonths,
+  subMonths,
+  addWeeks,
+  subWeeks,
+  addDays,
+  subDays,
+} from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import {
@@ -165,6 +176,36 @@ const Schedule: React.FC = () => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
+  const handleNavigate = (action: 'PREV' | 'NEXT') => {
+    let newDate = new Date(date);
+
+    switch (view) {
+      case 'month':
+        newDate = action === 'PREV' ? subMonths(date, 1) : addMonths(date, 1);
+        break;
+      case 'week':
+        newDate = action === 'PREV' ? subWeeks(date, 1) : addWeeks(date, 1);
+        break;
+      case 'day':
+        newDate = action === 'PREV' ? subDays(date, 1) : addDays(date, 1);
+        break;
+      case 'agenda':
+        newDate = action === 'PREV' ? subMonths(date, 1) : addMonths(date, 1);
+        break;
+    }
+
+    setDate(newDate);
+  };
+
+  const handleToday = () => {
+    setDate(new Date());
+  };
+
+  const currentLabel = useMemo(() => {
+    const formattedDate = format(date, 'MMMM yyyy', { locale: ptBR });
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+  }, [date]);
+
   return (
     <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -213,6 +254,33 @@ const Schedule: React.FC = () => {
                 onViewChange={(v) => setView(v)}
               />
             </div>
+
+            <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+              <button
+                onClick={handleToday}
+                className="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors"
+              >
+                Hoje
+              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => handleNavigate('PREV')}
+                  className="p-1.5 text-slate-500 hover:text-primary-600 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={() => handleNavigate('NEXT')}
+                  className="p-1.5 text-slate-500 hover:text-primary-600 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+              <span className="text-sm font-black text-slate-700 dark:text-slate-200 min-w-[120px] text-center capitalize px-2">
+                {currentLabel}
+              </span>
+            </div>
+
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsFiltersOpen(!isFiltersOpen)}
@@ -251,6 +319,7 @@ const Schedule: React.FC = () => {
               onSelectEvent={handleSelectEvent}
               onSelectSlot={handleSelectSlot}
               selectable
+              toolbar={false}
               culture="pt-BR"
               messages={{
                 next: 'Próximo',

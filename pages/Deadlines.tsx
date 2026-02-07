@@ -75,54 +75,53 @@ const Deadlines: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-bold dark:text-white">
+          <h1 className="text-3xl font-black tracking-tight">
             Prazos Processuais
           </h1>
-          <p className="text-slate-500">
+          <p className="text-slate-500 dark:text-slate-400">
             Gerencie e acompanhe todos os prazos do escritório
           </p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-bold shadow-lg shadow-primary-500/20 transition-all active:scale-95"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold shadow-lg shadow-primary-500/20 transition-all active:scale-95"
         >
           <Plus size={20} />
           Novo Prazo
         </button>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-3 flex items-center gap-4 bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="flex-1 relative">
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Buscar por título ou número do processo..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-2 bg-transparent border-none focus:ring-0 dark:text-white"
-            />
-          </div>
-          <div className="h-8 w-px bg-slate-200 dark:bg-slate-800" />
-          <div className="flex items-center gap-2 px-2">
-            <Filter size={18} className="text-slate-400" />
-            <select
-              value={statusFilter}
-              onChange={(e: any) => setStatusFilter(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-sm font-bold dark:text-white"
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="relative w-full md:w-96">
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            size={18}
+          />
+          <input
+            type="text"
+            placeholder="Buscar por título ou número do processo..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
+          />
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
+          {['todos', 'pendente', 'concluído', 'vencido'].map((s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s as any)}
+              className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${
+                statusFilter === s
+                  ? 'bg-primary-600 text-white shadow-md'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-500'
+              }`}
             >
-              <option value="todos">Todos os status</option>
-              <option value="pendente">Pendentes</option>
-              <option value="concluído">Concluídos</option>
-              <option value="vencido">Vencidos</option>
-            </select>
-          </div>
+              {s}
+            </button>
+          ))}
         </div>
       </div>
 

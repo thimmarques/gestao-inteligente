@@ -11,10 +11,12 @@ import {
   Files,
   Copy,
   Clock,
-  ArrowUpRight,
   ArrowDownRight,
   ExternalLink,
   Shield,
+  Trash2,
+  FileText,
+  Scale,
 } from 'lucide-react';
 import { Client, ClientType } from '../../types';
 import {
@@ -24,6 +26,7 @@ import {
   formatPhone,
 } from '../../utils/formatters';
 import { useCases } from '../../hooks/useQueries';
+import { clientService } from '../../services/clientService';
 
 interface ClientDetailsModalProps {
   client: Client | null;
@@ -48,6 +51,20 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   >('geral');
 
   if (!isOpen || !client) return null;
+
+  const handleDelete = async () => {
+    if (confirm(`Tem certeza que deseja excluir o cliente ${client.name}?`)) {
+      try {
+        await clientService.deleteClient(client.id);
+        onClose();
+        // Force reload or invalidate queries would be better
+        window.location.reload();
+      } catch (error) {
+        console.error('Erro ao excluir cliente:', error);
+        alert('Erro ao excluir cliente.');
+      }
+    }
+  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -108,8 +125,16 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
             <button
               onClick={() => onEdit(client)}
               className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all active:scale-95 shadow-sm"
+              title="Editar"
             >
               <Edit size={20} />
+            </button>
+            <button
+              onClick={handleDelete}
+              className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-95 shadow-sm"
+              title="Excluir"
+            >
+              <Trash2 size={20} />
             </button>
             <button
               onClick={onClose}
@@ -231,64 +256,6 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 </div>
 
                 <div className="space-y-8">
-                  <div className="bg-primary-600 p-8 rounded-[2.5rem] text-white shadow-xl shadow-primary-500/20">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-6">
-                      Perfil Estratégico
-                    </h4>
-                    {client.type === ClientType.PARTICULAR ? (
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                          <div className="p-2 bg-white/20 rounded-xl">
-                            <DollarSign size={20} />
-                          </div>
-                          <div>
-                            <p className="text-[10px] uppercase font-bold opacity-60">
-                              Ticket Médio
-                            </p>
-                            <p className="text-lg font-bold">
-                              {formatCurrency(
-                                client.financial_profile?.hourly_rate || 0
-                              )}
-                              /h
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="p-2 bg-white/20 rounded-xl">
-                            <Clock size={20} />
-                          </div>
-                          <div>
-                            <p className="text-[10px] uppercase font-bold opacity-60">
-                              Retainer
-                            </p>
-                            <p className="text-lg font-bold">
-                              {formatCurrency(
-                                client.financial_profile?.retainer_fee || 0
-                              )}
-                              /mês
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                          <div className="p-2 bg-white/20 rounded-xl">
-                            <MapPin size={20} />
-                          </div>
-                          <div>
-                            <p className="text-[10px] uppercase font-bold opacity-60">
-                              Comarca
-                            </p>
-                            <p className="text-lg font-bold">
-                              {client.financial_profile?.comarca || 'N/A'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
                   <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary-600">
                       <Briefcase size={20} />
@@ -301,7 +268,10 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                         Processos Ativos
                       </p>
                     </div>
-                    <button className="w-full py-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-[10px] font-black uppercase tracking-tighter hover:bg-primary-600 hover:text-white transition-all">
+                    <button
+                      onClick={() => onOpenCase(client.id)}
+                      className="w-full py-3 bg-primary-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20 active:scale-95"
+                    >
                       Abrir Novo Processo
                     </button>
                   </div>
@@ -386,14 +356,61 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab !== 'geral' && activeTab !== 'processos' && (
+            {activeTab === 'documentos' && (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Files size={14} /> Documentos Gerados
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                      <FileText size={32} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold dark:text-white mb-1">
+                        Procuração
+                      </h4>
+                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
+                        Gerar Documento
+                      </p>
+                    </div>
+                  </button>
+
+                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                      <Scale size={32} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold dark:text-white mb-1">
+                        Hipossuficiência
+                      </h4>
+                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
+                        Gerar Declaração
+                      </p>
+                    </div>
+                  </button>
+
+                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                      <Briefcase size={32} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold dark:text-white mb-1">
+                        Contrato de Honorários
+                      </h4>
+                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
+                        Trabalhista
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'financeiro' && (
               <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800 text-center">
                 <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6 font-bold text-xl">
-                  {activeTab === 'financeiro' ? (
-                    <DollarSign size={40} />
-                  ) : (
-                    <Files size={40} />
-                  )}
+                  <DollarSign size={40} />
                 </div>
                 <h4 className="text-xl font-bold dark:text-white mb-2">
                   Dados de {activeTab}

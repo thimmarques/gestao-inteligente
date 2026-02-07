@@ -135,11 +135,11 @@
 .dark .rbc-month-view,
 .dark .rbc-time-view,
 .dark .rbc-agenda-view {
-  @apply bg-slate-950 border-slate-800;
+  @apply bg-transparent border-slate-800;
 }
 
 .dark .rbc-header {
-  @apply border-b-slate-800 text-slate-400 py-3 font-extrabold uppercase text-[10px] tracking-widest;
+  @apply border-b-slate-800 text-slate-400 py-3 font-extrabold uppercase text-[10px] tracking-widest bg-slate-900/50;
 }
 
 .dark .rbc-day-bg + .rbc-day-bg,
@@ -157,7 +157,7 @@
 }
 
 .dark .rbc-today {
-  @apply bg-primary-600/5;
+  @apply bg-primary-900/10;
 }
 
 .dark .rbc-show-more {
