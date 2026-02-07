@@ -2,14 +2,16 @@ import { Case, CaseWithRelations } from '../types';
 import { supabase } from '../lib/supabase';
 import { logAction } from '../utils/auditLogger.ts';
 
+export interface GetCasesOptions {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+  client_id?: string;
+}
+
 export const caseService = {
-  getCases: async (options?: {
-    page?: number;
-    limit?: number;
-    search?: string;
-    status?: string;
-    client_id?: string;
-  }): Promise<CaseWithRelations[]> => {
+  getCases: async (options?: GetCasesOptions): Promise<CaseWithRelations[]> => {
     let query = supabase
       .from('cases')
       .select(

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { clientService } from '../services/clientService';
-import { caseService } from '../services/caseService';
+import { caseService, GetCasesOptions } from '../services/caseService';
 import { deadlineService } from '../services/deadlineService';
 import { financeService } from '../services/financeService';
 import { scheduleService } from '../services/scheduleService';
@@ -22,13 +22,7 @@ export const useClients = (options?: {
   });
 };
 
-export const useCases = (options?: {
-  page?: number;
-  limit?: number;
-  search?: string;
-  status?: string;
-  client_id?: string;
-}) => {
+export const useCases = (options?: GetCasesOptions) => {
   return useQuery({
     queryKey: ['cases', options],
     queryFn: () => caseService.getCases(options),

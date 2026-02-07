@@ -10,6 +10,7 @@ import {
   Files,
   History,
   Loader2,
+  Trash2,
 } from 'lucide-react';
 import { CaseStatus } from '../../types.ts';
 import { InfoTab } from './tabs/InfoTab.tsx';
@@ -61,6 +62,26 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
         status: CaseStatus.ARQUIVADO,
       });
       refetch();
+    }
+  };
+
+  const handleDelete = async () => {
+    if (
+      caseData &&
+      confirm(
+        `Tem certeza que deseja EXCLUIR PERMANENTEMENTE o processo ${caseData.process_number}? Esta ação não pode ser desfeita.`
+      )
+    ) {
+      try {
+        await caseService.deleteCase(caseData.id);
+        onClose();
+        // Optional: Force a window reload or use queryClient to invalidate 'cases' query if available in context
+        // For now, relies on React Query's refetchOnWindowFocus or manual refetch in parent
+        window.location.reload(); // Simple brute force to ensure list updates, or can rely on parent
+      } catch (error) {
+        console.error('Erro ao excluir:', error);
+        alert('Erro ao excluir processo.');
+      }
     }
   };
 
@@ -125,6 +146,13 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
             >
               <Archive size={16} />
               Arquivar
+            </button>
+            <button
+              onClick={handleDelete}
+              className="flex items-center gap-2 px-4 py-2 border border-red-200 dark:border-red-900/50 rounded-xl font-bold text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+            >
+              <Trash2 size={16} />
+              Excluir
             </button>
             <button
               onClick={onClose}

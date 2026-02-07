@@ -17,6 +17,8 @@ import { caseService } from '../services/caseService';
 import { Client } from '../types';
 import { formatPhone } from '../utils/formatters';
 import { CreateClientModal } from '../components/clients/CreateClientModal';
+import { ClientDetailsModal } from '../components/clients/ClientDetailsModal';
+import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
 import { useAuth } from '../contexts/AuthContext';
 
 const Clients: React.FC = () => {
@@ -26,6 +28,11 @@ const Clients: React.FC = () => {
   const [filterType, setFilterType] = useState('todos');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
+  const [clientDetailsOpen, setClientDetailsOpen] = useState(false);
+  const [selectedClientDetails, setSelectedClientDetails] =
+    useState<Client | null>(null);
+  const [caseDetailsOpen, setCaseDetailsOpen] = useState(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
   const filteredClients = useMemo(() => {
     return clients.filter((c) => {
@@ -132,6 +139,16 @@ const Clients: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const handleOpenClientDetails = (client: Client) => {
+    setSelectedClientDetails(client);
+    setClientDetailsOpen(true);
+  };
+
+  const handleOpenCaseDetails = (caseId: string) => {
+    setSelectedCaseId(caseId);
+    setCaseDetailsOpen(true);
+  };
+
   return (
     <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -224,13 +241,17 @@ const Clients: React.FC = () => {
 
               <div className="mt-6 flex gap-2">
                 <button
-                  onClick={() => handleEdit(client)}
-                  className="flex-1 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary-600 hover:text-white text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all"
+                  onClick={() => handleOpenClientDetails(client)}
+                  className="flex-1 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
                 >
-                  Editar Perfil
+                  <ExternalLink size={14} /> Ver Detalhes
                 </button>
-                <button className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-slate-400 transition-all">
-                  <MoreHorizontal size={16} />
+                <button
+                  onClick={() => handleEdit(client)}
+                  className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary-600 hover:text-white text-slate-400 hover:border-primary-600 transition-all rounded-xl"
+                  title="Editar"
+                >
+                  <RefreshCw size={16} />
                 </button>
               </div>
             </div>
@@ -252,6 +273,27 @@ const Clients: React.FC = () => {
           onSave={handleSaveClient}
           initialData={editingClient}
           mode={editingClient ? 'edit' : 'create'}
+        />
+      )}
+
+      {clientDetailsOpen && selectedClientDetails && (
+        <ClientDetailsModal
+          client={selectedClientDetails}
+          isOpen={clientDetailsOpen}
+          onClose={() => setClientDetailsOpen(false)}
+          onEdit={(client) => {
+            setClientDetailsOpen(false);
+            handleEdit(client);
+          }}
+          onOpenCase={handleOpenCaseDetails}
+        />
+      )}
+
+      {caseDetailsOpen && selectedCaseId && (
+        <CaseDetailsModal
+          caseId={selectedCaseId}
+          isOpen={caseDetailsOpen}
+          onClose={() => setCaseDetailsOpen(false)}
         />
       )}
     </div>
