@@ -18,7 +18,9 @@ import { useCases } from '../hooks/useQueries';
 import { caseService } from '../services/caseService';
 import { CaseWithRelations, Case } from '../types';
 import { formatCurrency } from '../utils/formatters';
-import { CreateCaseModal } from '../components/cases/CreateCaseModal';
+import { CaseFormModal } from '../components/cases/CaseFormModal';
+import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
+import { useAuth } from '../contexts/AuthContext';
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -36,10 +38,52 @@ const getStatusColor = (status: string) => {
 };
 
 const Cases: React.FC = () => {
+  const { user } = useAuth();
   const { data: cases = [], isLoading, refetch } = useCases();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Modal states
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedCase, setSelectedCase] = useState<Case | null>(null);
+
+  const handleCreate = () => {
+    setSelectedCase(null);
+    setIsFormOpen(true);
+  };
+
+  const handleEdit = (c: Case) => {
+    setSelectedCase(c);
+    setIsFormOpen(true);
+  };
+
+  const handleDetails = (c: Case) => {
+    setSelectedCase(c);
+    setIsDetailsOpen(true);
+  };
+
+  const handleSave = async (data: any) => {
+    if (!user) return;
+
+    try {
+      if (selectedCase) {
+        await caseService.updateCase(selectedCase.id, data);
+      } else {
+        await caseService.createCase({
+          ...data,
+          office_id: user.office_id,
+          lawyer_id: user.id,
+        });
+      }
+      await refetch();
+      setIsFormOpen(false);
+      setSelectedCase(null);
+    } catch (error) {
+      console.error('Error saving case:', error);
+      alert('Erro ao salvar processo. Verifique os dados.');
+    }
+  };
 
   const filteredCases = useMemo(() => {
     return cases.filter((c) => {
@@ -63,7 +107,7 @@ const Cases: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleCreate}
           className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold shadow-lg shadow-primary-500/20 transition-all active:scale-95"
         >
           <Plus size={20} /> Novo Processo
@@ -181,10 +225,18 @@ const Cases: React.FC = () => {
                 </div>
 
                 <div className="flex md:flex-col gap-2">
-                  <button className="flex-1 md:flex-none p-3 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-2xl hover:bg-primary-600 hover:text-white transition-all shadow-sm">
+                  <button
+                    onClick={() => handleEdit(c)}
+                    className="flex-1 md:flex-none p-3 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-2xl hover:bg-primary-600 hover:text-white transition-all shadow-sm"
+                    title="Editar Processo"
+                  >
                     <Edit2 size={20} />
                   </button>
-                  <button className="flex-1 md:flex-none p-3 bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                  <button
+                    onClick={() => handleDetails(c)}
+                    className="flex-1 md:flex-none p-3 bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                    title="Ver Detalhes"
+                  >
                     <MoreVertical size={20} />
                   </button>
                 </div>
@@ -201,13 +253,26 @@ const Cases: React.FC = () => {
         </div>
       )}
 
-      {isModalOpen && (
-        <CreateCaseModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSuccess={refetch}
-        />
-      )}
+      {/* Modal para Criar/Editar Processo */}
+      <CaseFormModal
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setSelectedCase(null);
+        }}
+        onSave={handleSave}
+        initialData={selectedCase}
+      />
+
+      {/* Modal de Detalhes do Processo */}
+      <CaseDetailsModal
+        isOpen={isDetailsOpen}
+        onClose={() => {
+          setIsDetailsOpen(false);
+          setSelectedCase(null);
+        }}
+        caseId={selectedCase?.id || null}
+      />
     </div>
   );
 };

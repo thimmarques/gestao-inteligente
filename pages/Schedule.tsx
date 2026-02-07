@@ -124,30 +124,41 @@ const Schedule: React.FC = () => {
   const handleSaveEvent = async (formData: any) => {
     if (!lawyer) return;
 
-    const input = {
-      ...formData,
-      lawyer_id: lawyer.id,
-      office_id: lawyer.office_id,
-      client_id: formData.client_id || null, // Fix: convert empty string to null
-      case_id: formData.case_id || null, // Fix: convert empty string to null
-      status: formData.status || 'agendado',
-      reminder_sent: false,
-      start_time:
-        formData.start_time ||
-        new Date(`${formData.date}T${formData.startTime}:00`).toISOString(),
-      end_time:
-        formData.end_time ||
-        new Date(`${formData.date}T${formData.endTime}:00`).toISOString(),
-    };
+    try {
+      const start = new Date(`${formData.date}T${formData.startTime}:00`);
+      const end = new Date(`${formData.date}T${formData.endTime}:00`);
 
-    if (selectedEvent) {
-      await scheduleService.updateSchedule(selectedEvent.id, input);
-    } else {
-      await scheduleService.createSchedule(input);
+      const input = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        lawyer_id: lawyer.id,
+        office_id: lawyer.office_id,
+        client_id: formData.client_id || null,
+        case_id: formData.case_id || null,
+        status: formData.status || 'agendado',
+        reminder_sent: false,
+        start_time: start.toISOString(),
+        end_time: end.toISOString(),
+        virtual_link:
+          formData.isVirtual && selectedEvent?.virtual_link
+            ? selectedEvent.virtual_link
+            : null,
+      };
+
+      if (selectedEvent) {
+        await scheduleService.updateSchedule(selectedEvent.id, input);
+      } else {
+        await scheduleService.createSchedule(input);
+      }
+
+      await refetch();
+      setIsCreateOpen(false);
+      setSelectedEvent(null);
+    } catch (error) {
+      console.error('Error saving event:', error);
+      alert('Erro ao salvar evento. Verifique os dados e tente novamente.');
     }
-    refetch();
-    setIsCreateOpen(false);
-    setSelectedEvent(null);
   };
 
   const handleFilterChange = (newFilters: Partial<ScheduleFilters>) => {
