@@ -14,6 +14,7 @@ jobs:
     env:
       VITE_SUPABASE_URL: '${{ secrets.VITE_SUPABASE_URL }}'
       VITE_SUPABASE_ANON_KEY: '${{ secrets.VITE_SUPABASE_ANON_KEY }}'
+      VITE_SIGNUP_SECRET: '${{ secrets.VITE_SIGNUP_SECRET }}'
       GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +23,7 @@ jobs:
         run: |
           if [ -z "$VITE_SUPABASE_URL" ]; then echo "::error::VITE_SUPABASE_URL is missing in GitHub Secrets"; exit 1; fi
           if [ -z "$VITE_SUPABASE_ANON_KEY" ]; then echo "::error::VITE_SUPABASE_ANON_KEY is missing in GitHub Secrets"; exit 1; fi
+          if [ -z "$VITE_SIGNUP_SECRET" ]; then echo "::error::VITE_SIGNUP_SECRET is missing in GitHub Secrets"; exit 1; fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
