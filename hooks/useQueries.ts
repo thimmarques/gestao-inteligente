@@ -27,6 +27,7 @@ export const useCases = (options?: {
   limit?: number;
   search?: string;
   status?: string;
+  client_id?: string;
 }) => {
   return useQuery({
     queryKey: ['cases', options],

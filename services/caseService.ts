@@ -8,6 +8,7 @@ export const caseService = {
     limit?: number;
     search?: string;
     status?: string;
+    client_id?: string;
   }): Promise<CaseWithRelations[]> => {
     let query = supabase
       .from('cases')
@@ -19,6 +20,10 @@ export const caseService = {
       `
       )
       .order('created_at', { ascending: false });
+
+    if (options?.client_id) {
+      query = query.eq('client_id', options.client_id);
+    }
 
     if (options?.status && options.status !== 'todos') {
       query = query.eq('status', options.status);

@@ -23,12 +23,14 @@ import {
   formatCPF,
   formatPhone,
 } from '../../utils/formatters';
+import { useCases } from '../../hooks/useQueries';
 
 interface ClientDetailsModalProps {
   client: Client | null;
   isOpen: boolean;
   onClose: () => void;
   onEdit: (client: Client) => void;
+  onOpenCase: (caseId: string) => void;
 }
 
 export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
@@ -36,7 +38,11 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   isOpen,
   onClose,
   onEdit,
+  onOpenCase,
 }) => {
+  const { data: cases = [], isLoading: isLoadingCases } = useCases({
+    client_id: client?.id,
+  });
   const [activeTab, setActiveTab] = useState<
     'geral' | 'processos' | 'financeiro' | 'documentos'
   >('geral');
@@ -303,12 +309,87 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab !== 'geral' && (
+            {activeTab === 'processos' && (
+              <div className="space-y-4">
+                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Briefcase size={14} /> Processos Associados ({cases.length})
+                </h3>
+                {isLoadingCases ? (
+                  <div className="py-12 text-center text-slate-400 text-sm">
+                    Carregando processos...
+                  </div>
+                ) : cases.length > 0 ? (
+                  <div className="grid gap-4">
+                    {cases.map((process) => (
+                      <div
+                        key={process.id}
+                        className="group bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
+                        onClick={() => onOpenCase(process.id)}
+                      >
+                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-primary-600">
+                          <ExternalLink size={16} />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <h4 className="font-bold dark:text-white text-lg">
+                                {process.process_number}
+                              </h4>
+                              <span
+                                className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                  process.status === 'distribuído' ||
+                                  process.status === 'andamento'
+                                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                }`}
+                              >
+                                {process.status}
+                              </span>
+                            </div>
+                            <p className="text-sm text-slate-500 mb-2 truncate max-w-md">
+                              {process.court} • {process.type}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-slate-400 flex items-center gap-1">
+                                <Clock size={12} />
+                                Criado em {formatDate(process.created_at)}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+                              Valor
+                            </p>
+                            <p className="font-bold text-slate-700 dark:text-slate-300">
+                              {process.value
+                                ? formatCurrency(process.value)
+                                : 'R$ 0,00'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="py-12 text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+                    <Briefcase
+                      size={40}
+                      className="mx-auto text-slate-300 mb-4"
+                    />
+                    <p className="text-slate-500 font-medium">
+                      Nenhum processo associado a este cliente.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab !== 'geral' && activeTab !== 'processos' && (
               <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800 text-center">
-                <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
-                  {activeTab === 'processos' ? (
-                    <Briefcase size={40} />
-                  ) : activeTab === 'financeiro' ? (
+                <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6 font-bold text-xl">
+                  {activeTab === 'financeiro' ? (
                     <DollarSign size={40} />
                   ) : (
                     <Files size={40} />
