@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { UserPlus, ChevronRight, RefreshCw, Users } from 'lucide-react';
+import {
+  Link as LinkIcon,
+  ChevronRight,
+  RefreshCw,
+  Users,
+  Copy,
+  Check,
+} from 'lucide-react'; // Changed icons
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../types';
 import { TeamMember } from '../types/team';
@@ -8,13 +15,12 @@ import { TeamMemberCard } from '../components/team/TeamMemberCard';
 import { TeamMemberTable } from '../components/team/TeamMemberTable';
 import { TeamViewToggle } from '../components/team/TeamViewToggle';
 import { TeamFilters } from '../components/team/TeamFilters';
-import { AddTeamMemberModal } from '../components/team/AddTeamMemberModal';
 import { TeamMemberDetailsModal } from '../components/team/TeamMemberDetailsModal';
 import { useAuth } from '../contexts/AuthContext';
-
 import { inviteService } from '../services/inviteService';
 import { useTeam } from '../hooks/useQueries';
 import { supabase } from '../lib/supabase';
+import { toast } from 'sonner'; // Added toast
 
 const PendingInvitesList: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -72,9 +78,10 @@ const Team: React.FC = () => {
     status: 'todos',
     sort: 'name_asc',
   });
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // Removed isAddModalOpen state
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const { data: teamMembers = [], isLoading, refetch } = useTeam();
+  const [copied, setCopied] = useState(false); // State for copy feedback
 
   const filteredMembers = useMemo(() => {
     return teamMembers
@@ -115,6 +122,37 @@ const Team: React.FC = () => {
     (currentUser?.role as any) === 'assistente' ||
     (currentUser?.role as any) === 'estagiario';
 
+  const handleCopyInviteLink = () => {
+    const secret = import.meta.env.VITE_SIGNUP_SECRET;
+    if (!secret) {
+      toast.error(
+        'Erro de configuração: VITE_SIGNUP_SECRET não definido no .env',
+        {
+          description: 'Avise o administrador para configurar a chave secreta.',
+        }
+      );
+      return;
+    }
+
+    // Construct the link
+    const link = `${window.location.origin}/auth/signup?secret=${secret}`;
+
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        setCopied(true);
+        toast.success('Link copiado!', {
+          description: 'Envie este link para o novo membro da equipe.',
+        });
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        toast.error('Erro ao copiar', {
+          description: 'Não foi possível copiar o link automaticamente.',
+        });
+      });
+  };
+
   return (
     <div className="p-4 md:p-8 lg:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -131,16 +169,21 @@ const Team: React.FC = () => {
 
         <div className="relative group">
           <button
-            onClick={() => !isStaff && setIsAddModalOpen(true)}
+            onClick={handleCopyInviteLink}
             disabled={isStaff}
-            className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 ${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-primary-600 hover:bg-primary-700'} text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            <UserPlus size={20} />
-            Adicionar Membro
+            {copied ? <Check size={20} /> : <LinkIcon size={20} />}
+            {copied ? 'Link Copiado!' : 'Copiar Link de Convite'}
           </button>
-          {isStaff && (
+
+          {isStaff ? (
             <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
               Sem permissão para convidar
+            </div>
+          ) : (
+            <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+              Clique para copiar o link de cadastro secreto
             </div>
           )}
         </div>
@@ -223,7 +266,7 @@ const Team: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-              Convites Pendentes
+              Convites Pendentes (Legado)
             </h2>
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
           </div>
@@ -232,13 +275,7 @@ const Team: React.FC = () => {
         </section>
       )}
 
-      <AddTeamMemberModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onSave={() => {
-          refetch();
-        }}
-      />
+      {/* Removed AddTeamMemberModal */}
 
       <TeamMemberDetailsModal
         isOpen={!!selectedMember}
