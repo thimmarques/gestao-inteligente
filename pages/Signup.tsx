@@ -33,6 +33,11 @@ const Signup: React.FC = () => {
     setError(null);
     setRegisteredEmail(data.email);
 
+    // Metadata from URL
+    const searchParams = new URLSearchParams(window.location.search);
+    const officeId = searchParams.get('ref');
+    const role = searchParams.get('role') || 'lawyer';
+
     try {
       const { error } = await supabase.auth.signUp({
         email: data.email,
@@ -40,6 +45,8 @@ const Signup: React.FC = () => {
         options: {
           data: {
             full_name: data.full_name,
+            role: role,
+            office_id: officeId, // Critical: passed to handle_new_user trigger
           },
         },
       });

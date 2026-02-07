@@ -122,7 +122,11 @@ const Team: React.FC = () => {
     (currentUser?.role as any) === 'assistente' ||
     (currentUser?.role as any) === 'estagiario';
 
-  const handleCopyInviteLink = () => {
+  const [inviteRole, setInviteRole] = useState<
+    'lawyer' | 'assistant' | 'intern'
+  >('lawyer');
+
+  const handleCopyInviteLink = async () => {
     const secret = import.meta.env.VITE_SIGNUP_SECRET;
     if (!secret) {
       toast.error(
@@ -134,23 +138,51 @@ const Team: React.FC = () => {
       return;
     }
 
-    // Construct the link
-    const link = `${window.location.origin}/auth/signup?secret=${secret}`;
+    // Construct the link with office_id and role
+    const officeId = currentUser?.office_id;
+    if (!officeId) {
+      toast.error('Erro: Seu usuário não está vinculado a um escritório.');
+      return;
+    }
 
-    navigator.clipboard
-      .writeText(link)
-      .then(() => {
-        setCopied(true);
-        toast.success('Link copiado!', {
-          description: 'Envie este link para o novo membro da equipe.',
-        });
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(() => {
-        toast.error('Erro ao copiar', {
-          description: 'Não foi possível copiar o link automaticamente.',
-        });
+    const link = `${window.location.origin}/auth/signup?secret=${secret}&ref=${officeId}&role=${inviteRole}`;
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(link);
+      } else {
+        // Fallback for older browsers or non-secure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = link;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+          throw new Error('Fallback copy failed');
+        }
+        document.body.removeChild(textArea);
+      }
+
+      setCopied(true);
+      toast.success('Link copiado!', {
+        description: `Link para ${inviteRole === 'lawyer' ? 'Advogado' : inviteRole === 'assistant' ? 'Assistente' : 'Estagiário'} copiado.`,
       });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Copy failed', err);
+      toast.error('Erro ao copiar', {
+        description: 'Copie manualmente: ' + link,
+        duration: 10000,
+      });
+      // Optional: Alert the link if toast fails or for immediate visibility
+      // window.prompt("Copie o link abaixo:", link);
+    }
   };
 
   return (
@@ -167,49 +199,61 @@ const Team: React.FC = () => {
           </h1>
         </div>
 
-        <div className="relative group">
-          <button
-            onClick={handleCopyInviteLink}
-            disabled={isStaff}
-            className={`w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 ${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-primary-600 hover:bg-primary-700'} text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            {copied ? <Check size={20} /> : <LinkIcon size={20} />}
-            {copied ? 'Link Copiado!' : 'Copiar Link de Convite'}
-          </button>
-
-          {isStaff ? (
-            <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-              Sem permissão para convidar
-            </div>
-          ) : (
-            <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-              Clique para copiar o link de cadastro secreto
-            </div>
+        <div className="flex items-center gap-2">
+          {!isStaff && (
+            <select
+              value={inviteRole}
+              onChange={(e) => setInviteRole(e.target.value as any)}
+              className="h-[56px] px-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="lawyer">Advogado</option>
+              <option value="assistant">Assistente</option>
+              <option value="intern">Estagiário</option>
+            </select>
           )}
+
+          <div className="relative group">
+            <button
+              onClick={handleCopyInviteLink}
+              disabled={isStaff}
+              className={`w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 ${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-primary-600 hover:bg-primary-700'} text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              {copied ? <Check size={20} /> : <LinkIcon size={20} />}
+              {copied ? 'Copiado!' : 'Copiar Link'}
+            </button>
+
+            {isStaff ? (
+              <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                Sem permissão para convidar
+              </div>
+            ) : (
+              <div className="absolute top-full right-0 mt-2 p-2 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                Clique para copiar o link de cadastro secreto
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            {['todos', 'admin', 'lawyer', 'assistant'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab as any)}
-                className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === tab
-                    ? 'bg-primary-600 text-white shadow-lg'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                {tab === 'lawyer'
-                  ? 'Advogado'
-                  : tab === 'assistant'
-                    ? 'Assistente'
-                    : tab}
-              </button>
-            ))}
-          </div>
+          {['todos', 'admin', 'lawyer', 'assistant'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
+                activeTab === tab
+                  ? 'bg-primary-600 text-white shadow-lg'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {tab === 'lawyer'
+                ? 'Advogado'
+                : tab === 'assistant'
+                  ? 'Assistente'
+                  : tab}
+            </button>
+          ))}
           <div className="hidden md:block">
             <TeamViewToggle view={viewMode} onChange={setViewMode} />
           </div>
