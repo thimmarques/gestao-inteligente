@@ -33,7 +33,8 @@ interface ClientDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onEdit: (client: Client) => void;
-  onOpenCase: (caseId: string) => void;
+  onViewCase: (caseId: string) => void;
+  onCreateCase: (clientId: string) => void;
 }
 
 export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
@@ -41,7 +42,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   isOpen,
   onClose,
   onEdit,
-  onOpenCase,
+  onViewCase,
+  onCreateCase,
 }) => {
   const { data: cases = [], isLoading: isLoadingCases } = useCases({
     client_id: client?.id,
@@ -269,7 +271,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                       </p>
                     </div>
                     <button
-                      onClick={() => onOpenCase(client.id)}
+                      onClick={() => onCreateCase(client.id)}
                       className="w-full py-3 bg-primary-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20 active:scale-95"
                     >
                       Abrir Novo Processo
@@ -294,7 +296,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                       <div
                         key={process.id}
                         className="group bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
-                        onClick={() => onOpenCase(process.id)}
+                        onClick={() => onViewCase(process.id)}
                       >
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-primary-600">
                           <ExternalLink size={16} />
@@ -390,19 +392,21 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     </div>
                   </button>
 
-                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
-                      <Briefcase size={32} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold dark:text-white mb-1">
-                        Contrato de Honorários
-                      </h4>
-                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
-                        Trabalhista
-                      </p>
-                    </div>
-                  </button>
+                  {cases.some((c) => c.type === 'trabalhista') && (
+                    <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                      <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                        <Briefcase size={32} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold dark:text-white mb-1">
+                          Contrato de Honorários
+                        </h4>
+                        <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
+                          Trabalhista
+                        </p>
+                      </div>
+                    </button>
+                  )}
                 </div>
               </div>
             )}

@@ -34,11 +34,17 @@ type LogSection = 'all' | AuditEntityType;
 
 export const LogsTab: React.FC = () => {
   const { lawyer } = useApp();
+  console.log('LogsTab: lawyer context', lawyer);
   const {
     data: logs = [],
     isLoading,
     refetch,
   } = useAuditLogs(lawyer?.office_id);
+  console.log('LogsTab: useAuditLogs result', {
+    logs,
+    isLoading,
+    officeId: lawyer?.office_id,
+  });
   const [viewMode, setViewMode] = useState<'table' | 'timeline'>('table');
   const [selectedSection, setSelectedSection] = useState<LogSection>('all');
   const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);

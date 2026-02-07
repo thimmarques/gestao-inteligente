@@ -19,6 +19,7 @@ import { formatPhone } from '../utils/formatters';
 import { CreateClientModal } from '../components/clients/CreateClientModal';
 import { ClientDetailsModal } from '../components/clients/ClientDetailsModal';
 import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
+import { CaseFormModal } from '../components/cases/CaseFormModal';
 import { useAuth } from '../contexts/AuthContext';
 
 const Clients: React.FC = () => {
@@ -33,6 +34,12 @@ const Clients: React.FC = () => {
     useState<Client | null>(null);
   const [caseDetailsOpen, setCaseDetailsOpen] = useState(false);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+
+  // Case Creation State
+  const [isCaseFormOpen, setIsCaseFormOpen] = useState(false);
+  const [preSelectedClientId, setPreSelectedClientId] = useState<string | null>(
+    null
+  );
 
   const filteredClients = useMemo(() => {
     return clients.filter((c) => {
@@ -147,6 +154,31 @@ const Clients: React.FC = () => {
   const handleOpenCaseDetails = (caseId: string) => {
     setSelectedCaseId(caseId);
     setCaseDetailsOpen(true);
+  };
+
+  const handleCreateCase = (clientId: string) => {
+    setPreSelectedClientId(clientId);
+    setIsCaseFormOpen(true);
+  };
+
+  const handleSaveCase = async (data: any) => {
+    if (!lawyer) return;
+
+    try {
+      await caseService.createCase({
+        ...data,
+        office_id: lawyer.office_id,
+        lawyer_id: lawyer.id,
+      });
+      setIsCaseFormOpen(false);
+      setPreSelectedClientId(null);
+      // Optional: Refetch clients if needed, or if case count updates
+      refetch();
+      alert('Processo criado com sucesso!');
+    } catch (error) {
+      console.error('Error saving case:', error);
+      alert('Erro ao criar processo.');
+    }
   };
 
   return (
@@ -285,7 +317,8 @@ const Clients: React.FC = () => {
             setClientDetailsOpen(false);
             handleEdit(client);
           }}
-          onOpenCase={handleOpenCaseDetails}
+          onViewCase={handleOpenCaseDetails}
+          onCreateCase={handleCreateCase}
         />
       )}
 
@@ -294,6 +327,20 @@ const Clients: React.FC = () => {
           caseId={selectedCaseId}
           isOpen={caseDetailsOpen}
           onClose={() => setCaseDetailsOpen(false)}
+        />
+      )}
+
+      {isCaseFormOpen && (
+        <CaseFormModal
+          isOpen={isCaseFormOpen}
+          onClose={() => {
+            setIsCaseFormOpen(false);
+            setPreSelectedClientId(null);
+          }}
+          onSave={handleSaveCase}
+          initialData={
+            preSelectedClientId ? { client_id: preSelectedClientId } : undefined
+          }
         />
       )}
     </div>

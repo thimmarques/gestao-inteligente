@@ -14,6 +14,26 @@
   --color-primary-900: #1e3a8a;
   --color-primary-950: #172554;
 
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* Explicitly define slate if missing or map it */
+  /* But wait, if it works in Agenda, slate must exist? */
+
+  /* Force dark mode class strategy if needed */
+  /* --animate-spin-slow: spin 3s linear infinite; ... */
+
+  /* ... */
+
   /* Animations */
   --animate-spin-slow: spin 3s linear infinite;
   --animate-fade-in: fadeIn 0.5s ease-out;
@@ -41,6 +61,9 @@
     }
   }
 }
+
+/* Force class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
 
 @layer base {
   body {
