@@ -3,6 +3,15 @@ import { supabase } from '../lib/supabase';
 export const googleAuthService = {
   connect: async (): Promise<{ success: boolean; url?: string }> => {
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      console.log('Frontend Session:', session ? 'Exists' : 'Missing');
+      console.log(
+        'Frontend Access Token:',
+        session?.access_token ? 'Present' : 'Missing'
+      );
+
       const { data, error } = await supabase.functions.invoke('google-auth', {
         method: 'GET',
       });
