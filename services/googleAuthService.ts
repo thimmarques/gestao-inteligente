@@ -19,6 +19,9 @@ export const googleAuthService = {
       return { success: false };
     } catch (error) {
       console.error('Error initiating Google connection:', error);
+      if (error instanceof Error) {
+        console.error('Error Message:', error.message);
+      }
       return { success: false };
     }
   },

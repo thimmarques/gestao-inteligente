@@ -29,10 +29,14 @@ serve(async (req: Request) => {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      console.error('Auth User Error:', userError);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized', details: userError }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     const url = new URL(req.url);
