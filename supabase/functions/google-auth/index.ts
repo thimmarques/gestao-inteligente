@@ -50,7 +50,17 @@ serve(async (req: Request) => {
     if (userError || !user) {
       console.error('Auth User Error:', userError);
       return new Response(
-        JSON.stringify({ error: 'Unauthorized', details: userError }),
+        JSON.stringify({
+          error: 'Unauthorized',
+          details: userError,
+          debug: {
+            authHeaderPresent: !!authHeader,
+            authHeaderLength: authHeader?.length,
+            receivedHeader: authHeader
+              ? `${authHeader.substring(0, 10)}...`
+              : 'null',
+          },
+        }),
         {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
