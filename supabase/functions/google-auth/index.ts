@@ -29,12 +29,32 @@ serve(async (req: Request) => {
       );
     }
 
+    const token = authHeader.replace('Bearer ', '');
+
+    // Debug token format (redacted)
+    const tokenParts = token.split('.');
+    console.log('Token parts:', tokenParts.length);
+
+    if (tokenParts.length !== 3) {
+      console.error('Invalid Token Format');
+      return new Response(
+        JSON.stringify({
+          error: 'Invalid Token Format',
+          details: 'Token is not a valid JWT',
+        }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: authHeader ?? '' },
+          headers: { Authorization: authHeader },
         },
         auth: {
           persistSession: false,
@@ -42,10 +62,11 @@ serve(async (req: Request) => {
       }
     );
 
+    // Explicitly pass token to getUser to ensure it's used
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser(token);
 
     if (userError || !user) {
       console.error('Auth User Error:', userError);
@@ -54,11 +75,8 @@ serve(async (req: Request) => {
           error: 'Unauthorized',
           details: userError,
           debug: {
-            authHeaderPresent: !!authHeader,
-            authHeaderLength: authHeader?.length,
-            receivedHeader: authHeader
-              ? `${authHeader.substring(0, 10)}...`
-              : 'null',
+            tokenParts: tokenParts.length,
+            authHeaderReceived: true,
           },
         }),
         {
