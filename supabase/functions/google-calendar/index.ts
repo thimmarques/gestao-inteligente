@@ -62,27 +62,34 @@ serve(async (req: Request) => {
   }
 
   try {
-    // Auth user
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) throw new Error('No authorization header');
-
-    const supabaseAuth = createClient(
+    const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabaseAuth.auth.getUser();
-    if (userError || !user) throw new Error('Unauthorized');
-
-    // Check if we need to set up the client without explicit type definition for `supabase` param in function above
-    // Or just use `supabaseAuth` which is typed implicitly.
-
-    const accessToken = await getAccessToken(supabaseAuth, user.id);
     const url = new URL(req.url);
+    let userId = url.searchParams.get('userId') || req.headers.get('x-user-id');
+
+    if (!userId && (req.method === 'POST' || req.method === 'PATCH')) {
+      try {
+        const body = await req.clone().json();
+        userId = body.userId;
+      } catch (e) {
+        console.error('Error parsing JSON body for userId:', e);
+      }
+    }
+
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'Missing userId parameter' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const accessToken = await getAccessToken(supabaseAdmin, userId);
 
     // List events (GET) or Create (POST)
     if (req.method === 'GET') {

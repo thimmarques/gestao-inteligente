@@ -43,13 +43,42 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
       selectedIds.includes(e.id)
     );
 
-    // Simulação de importação em massa
-    await new Promise((r) => setTimeout(r, 1500));
+    try {
+      const uId = await googleCalendarService.getUserId();
+      if (!uId) throw new Error('User session not found');
 
-    onImportComplete(eventsToImport);
-    setImporting(false);
-    onClose();
-    alert(`${eventsToImport.length} eventos importados do Google Calendar!`);
+      // Import events to local database
+      for (const event of eventsToImport) {
+        const start = encodeURIComponent(
+          event.start.dateTime || event.start.date
+        );
+        const end = encodeURIComponent(event.end.dateTime || event.end.date);
+
+        await supabase.from('schedules').insert({
+          title: event.summary || 'Sem título',
+          description: event.description || '',
+          type: 'reuniao',
+          lawyer_id: uId,
+          status: 'agendado',
+          start_time: new Date(
+            event.start.dateTime || event.start.date
+          ).toISOString(),
+          end_time: new Date(
+            event.end.dateTime || event.end.date
+          ).toISOString(),
+          google_event_id: event.id,
+        });
+      }
+
+      onImportComplete(eventsToImport);
+      alert(`${eventsToImport.length} eventos importados com sucesso!`);
+    } catch (error) {
+      console.error('Error importing events:', error);
+      alert('Erro ao importar eventos.');
+    } finally {
+      setImporting(false);
+      onClose();
+    }
   };
 
   const toggleSelectAll = () => {

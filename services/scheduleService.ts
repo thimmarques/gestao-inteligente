@@ -1,6 +1,7 @@
 import { ScheduleEvent } from '../types.ts';
 import { supabase } from '../lib/supabase';
 import { logAction } from '../utils/auditLogger.ts';
+import { googleCalendarService } from './googleCalendarService.ts';
 
 export const scheduleService = {
   getSchedules: async (): Promise<ScheduleEvent[]> => {
@@ -34,6 +35,20 @@ export const scheduleService = {
       .single();
 
     if (error) throw error;
+
+    // Sync to Google
+    try {
+      const googleEventId =
+        await googleCalendarService.createEvent(newSchedule);
+      if (googleEventId) {
+        await supabase
+          .from('schedules')
+          .update({ google_event_id: googleEventId })
+          .eq('id', newSchedule.id);
+      }
+    } catch (err) {
+      console.error('Failed to sync new event to Google:', err);
+    }
 
     await logAction({
       action: 'create',
@@ -75,13 +90,22 @@ export const scheduleService = {
   deleteSchedule: async (id: string): Promise<void> => {
     const { data: schedule } = await supabase
       .from('schedules')
-      .select('title')
+      .select('title, google_event_id')
       .eq('id', id)
       .single();
 
     const { error } = await supabase.from('schedules').delete().eq('id', id);
 
     if (error) throw error;
+
+    // Sync deletion to Google
+    if (schedule?.google_event_id) {
+      try {
+        await googleCalendarService.deleteEvent(schedule.google_event_id);
+      } catch (err) {
+        console.error('Failed to delete event from Google:', err);
+      }
+    }
 
     await logAction({
       action: 'delete',
