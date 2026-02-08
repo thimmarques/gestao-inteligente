@@ -13,80 +13,32 @@ serve(async (req: Request) => {
   }
 
   try {
-    const authHeader = req.headers.get('Authorization');
-    console.log('Received Auth Header:', authHeader ? 'Present' : 'Missing');
-
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({
-          error: 'Missing Authorization Header',
-          details: 'No Authorization header found in request',
-        }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-
-    // Debug token format (redacted)
-    const tokenParts = token.split('.');
-    console.log('Token parts:', tokenParts.length);
-
-    if (tokenParts.length !== 3) {
-      console.error('Invalid Token Format');
-      return new Response(
-        JSON.stringify({
-          error: 'Invalid Token Format',
-          details: 'Token is not a valid JWT',
-        }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    const supabase = createClient(
+    const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: authHeader },
-        },
-        auth: {
-          persistSession: false,
-        },
-      }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Explicitly pass token to getUser to ensure it's used
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser(token);
+    const url = new URL(req.url);
+    let userId = url.searchParams.get('userId');
 
-    if (userError || !user) {
-      console.error('Auth User Error:', userError);
+    if (!userId && req.method === 'POST') {
+      try {
+        const body = await req.clone().json();
+        userId = body.userId;
+      } catch (e) {
+        console.error('Error parsing JSON body for userId:', e);
+      }
+    }
+
+    if (!userId) {
       return new Response(
-        JSON.stringify({
-          error: 'Unauthorized',
-          details: userError,
-          debug: {
-            tokenParts: tokenParts.length,
-            authHeaderReceived: true,
-          },
-        }),
+        JSON.stringify({ error: 'Missing userId parameter' }),
         {
-          status: 401,
+          status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
     }
-
-    const url = new URL(req.url);
     const clientId = Deno.env.get('GOOGLE_CLIENT_ID');
     const clientSecret = Deno.env.get('GOOGLE_CLIENT_SECRET');
     const redirectUri = Deno.env.get('GOOGLE_REDIRECT_URI');
@@ -94,6 +46,7 @@ serve(async (req: Request) => {
     if (!clientId || !clientSecret || !redirectUri) {
       throw new Error('Missing Google credentials in Edge Function secrets');
     }
+    console.log('Using Redirect URI:', redirectUri);
 
     // 1. GET /url - Get Auth URL
     if (req.method === 'GET' && url.pathname.endsWith('/url')) {
@@ -102,7 +55,7 @@ serve(async (req: Request) => {
         'https://gestao-inteligente-cyan.vercel.app';
       const state = btoa(
         JSON.stringify({
-          userId: user.id,
+          userId: userId,
           redirectTo: `${origin}/settings?tab=integrations`,
         })
       );
@@ -150,10 +103,10 @@ serve(async (req: Request) => {
       const userData = await userRes.json();
 
       // Store in DB
-      const { error: dbError } = await supabase
+      const { error: dbError } = await supabaseAdmin
         .from('user_integrations')
         .upsert({
-          user_id: user.id,
+          user_id: userId,
           provider: 'google_calendar',
           access_token: tokens.access_token,
           refresh_token: tokens.refresh_token,

@@ -17,18 +17,13 @@ export const googleAuthService = {
         return { success: false };
       }
 
-      const authUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-auth`;
+      const authUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-auth/url?userId=${session?.user?.id}`;
 
-      console.log('Target URL:', authUrl);
-      console.log(
-        'Sending Authorization Header:',
-        `Bearer ${session.access_token}`
-      );
+      console.log('Target URL (Simplified):', authUrl);
 
       const response = await fetch(authUrl, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -72,13 +67,16 @@ export const googleAuthService = {
         data: { session },
       } = await supabase.auth.getSession();
 
-      const { data, error } = await supabase.functions.invoke('google-auth', {
-        method: 'POST',
-        body: { code },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'google-auth/exchange',
+        {
+          method: 'POST',
+          body: {
+            code,
+            userId: session?.user?.id,
+          },
+        }
+      );
 
       if (error) throw error;
 
