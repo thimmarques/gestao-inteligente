@@ -16,12 +16,28 @@ serve(async (req: Request) => {
     const authHeader = req.headers.get('Authorization');
     console.log('Received Auth Header:', authHeader ? 'Present' : 'Missing');
 
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({
+          error: 'Missing Authorization Header',
+          details: 'No Authorization header found in request',
+        }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: authHeader! },
+          headers: { Authorization: authHeader ?? '' },
+        },
+        auth: {
+          persistSession: false,
         },
       }
     );
