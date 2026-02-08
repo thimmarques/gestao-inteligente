@@ -1,42 +1,99 @@
+import { supabase } from '../lib/supabase';
+
 export const googleAuthService = {
-  connect: async (): Promise<{ success: boolean; email: string }> => {
-    // Simular redirect OAuth e callback
-    await new Promise((r) => setTimeout(r, 2000));
+  connect: async (): Promise<{ success: boolean; url?: string }> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('google-auth', {
+        method: 'GET',
+      });
 
-    // Simular sucesso
-    const fakeToken = {
-      access_token: 'fake_access_token_' + crypto.randomUUID(),
-      refresh_token: 'fake_refresh_token_' + crypto.randomUUID(),
-      email: 'advogado@gmail.com',
-      connected_at: new Date().toISOString(),
-    };
+      if (error) throw error;
 
-    // Salvar no localStorage
-    localStorage.setItem('google_calendar_token', JSON.stringify(fakeToken));
+      // The edge function should return { url: '...' )
+      // We will redirect the user there.
+      if (data?.url) {
+        window.location.href = data.url;
+        return { success: true };
+      }
 
-    return { success: true, email: fakeToken.email };
+      return { success: false };
+    } catch (error) {
+      console.error('Error initiating Google connection:', error);
+      return { success: false };
+    }
+  },
+
+  handleCallback: async (
+    code: string
+  ): Promise<{ success: boolean; email?: string }> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('google-auth', {
+        method: 'POST',
+        body: { code },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        return { success: true, email: data.email };
+      }
+
+      return { success: false };
+    } catch (error) {
+      console.error('Error handling callback:', error);
+      return { success: false };
+    }
   },
 
   disconnect: async (): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 500));
-    localStorage.removeItem('google_calendar_token');
+    try {
+      const { error } = await supabase
+        .from('user_integrations')
+        .delete()
+        .eq('provider', 'google_calendar');
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error disconnecting:', error);
+    }
+  },
+
+  checkConnection: async (): Promise<{
+    isConnected: boolean;
+    email?: string;
+    lastSync?: string;
+  }> => {
+    try {
+      const { data, error } = await supabase
+        .from('user_integrations')
+        .select('*')
+        .eq('provider', 'google_calendar')
+        .single();
+
+      if (error || !data) return { isConnected: false };
+
+      return {
+        isConnected: true,
+        email: data.connected_email,
+        lastSync: data.updated_at,
+      };
+    } catch (error) {
+      return { isConnected: false };
+    }
   },
 
   isConnected: (): boolean => {
-    return localStorage.getItem('google_calendar_token') !== null;
+    // This is now async, so we can't sync return.
+    // Consumers must use checkConnection() or manage state based on it.
+    // For compatibility, we might return false here and let the component fetch.
+    return false;
   },
 
   getConnectedEmail: (): string | null => {
-    const token = localStorage.getItem('google_calendar_token');
-    if (!token) return null;
-    const parsed = JSON.parse(token);
-    return parsed.email;
+    return null; // Deprecated, use checkConnection
   },
 
   getLastSync: (): string | null => {
-    const token = localStorage.getItem('google_calendar_token');
-    if (!token) return null;
-    const parsed = JSON.parse(token);
-    return parsed.connected_at;
+    return null; // Deprecated, use checkConnection
   },
 };

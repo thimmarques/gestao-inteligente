@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  FileText,
 } from 'lucide-react';
 import { googleAuthService } from '../../services/googleAuthService.ts';
 import { settingsConfig } from '../../utils/settingsConfig';
@@ -18,19 +17,55 @@ export const IntegrationsTab: React.FC = () => {
   const [lastSync, setLastSync] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsConnected(googleAuthService.isConnected());
-    setConnectedEmail(googleAuthService.getConnectedEmail());
-    setLastSync(googleAuthService.getLastSync());
+    // Check initial connection status
+    checkStatus();
+
+    // Check for callback code
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      handleCallback(code);
+      // Clean URL
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + window.location.hash
+      );
+    }
   }, []);
+
+  const checkStatus = async () => {
+    const status = await googleAuthService.checkConnection();
+    setIsConnected(status.isConnected);
+    if (status.email) setConnectedEmail(status.email);
+    if (status.lastSync) setLastSync(status.lastSync);
+  };
+
+  const handleCallback = async (code: string) => {
+    setIsConnecting(true);
+    try {
+      const result = await googleAuthService.handleCallback(code);
+      if (result.success) {
+        await checkStatus();
+        alert('Conectado com sucesso!');
+      } else {
+        alert('Falha ao conectar.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Erro na conexão.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
 
   const handleConnect = async () => {
     setIsConnecting(true);
     try {
       const result = await googleAuthService.connect();
-      if (result.success) {
-        setIsConnected(true);
-        setConnectedEmail(result.email);
-        setLastSync(new Date().toISOString());
+      if (!result.success) {
+        alert('Erro ao iniciar conexão. Verifique os logs.');
       }
     } catch (error) {
       alert('Erro ao conectar com Google. Tente novamente.');
