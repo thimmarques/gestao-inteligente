@@ -53,9 +53,19 @@ serve(async (req: Request) => {
 
     // 1. GET /url - Get Auth URL
     if (req.method === 'GET' && url.pathname.endsWith('/url')) {
+      const origin =
+        req.headers.get('origin') ||
+        'https://gestao-inteligente-cyan.vercel.app';
+      const state = btoa(
+        JSON.stringify({
+          userId: user.id,
+          redirectTo: `${origin}/settings?tab=integrations`,
+        })
+      );
+
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
         redirectUri
-      )}&response_type=code&scope=https://www.googleapis.com/auth/calendar&access_type=offline&prompt=consent`;
+      )}&response_type=code&scope=https://www.googleapis.com/auth/calendar&access_type=offline&prompt=consent&state=${state}`;
 
       return new Response(JSON.stringify({ url: authUrl }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
