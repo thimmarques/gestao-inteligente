@@ -17,17 +17,38 @@ export const googleAuthService = {
         return { success: false };
       }
 
-      const { data, error } = await supabase.functions.invoke('google-auth', {
+      const authUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-auth`;
+
+      console.log('Target URL:', authUrl);
+      console.log(
+        'Sending Authorization Header:',
+        `Bearer ${session.access_token}`
+      );
+
+      const response = await fetch(authUrl, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        let errorDetails;
+        try {
+          errorDetails = await response.json();
+        } catch (e) {
+          errorDetails = await response.text();
+        }
+        console.error('Fetch Error:', errorDetails);
+        throw new Error(
+          `Edge Function Error: ${response.status} ${response.statusText}`
+        );
+      }
 
-      // The edge function should return { url: '...' )
-      // We will redirect the user there.
+      const data = await response.json();
+      console.log('Edge Function Response:', data);
+
       if (data?.url) {
         window.location.href = data.url;
         return { success: true };
