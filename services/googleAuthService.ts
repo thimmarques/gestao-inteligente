@@ -12,8 +12,16 @@ export const googleAuthService = {
         session?.access_token ? 'Present' : 'Missing'
       );
 
+      if (!session?.access_token) {
+        console.error('No access token found in session');
+        return { success: false };
+      }
+
       const { data, error } = await supabase.functions.invoke('google-auth', {
         method: 'GET',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
 
       if (error) throw error;
@@ -39,9 +47,16 @@ export const googleAuthService = {
     code: string
   ): Promise<{ success: boolean; email?: string }> => {
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       const { data, error } = await supabase.functions.invoke('google-auth', {
         method: 'POST',
         body: { code },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
       });
 
       if (error) throw error;
