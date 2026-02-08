@@ -1,5 +1,5 @@
 create table if not exists public.user_integrations (
-  user_id uuid references auth.users not null primary key,
+  user_id uuid not null primary key,
   provider text not null,
   access_token text not null,
   refresh_token text not null,
