@@ -73,9 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        setIsLoading(true);
+        // Only show loading for actual sign-in, not token refresh
+        if (event === 'SIGNED_IN') {
+          setIsLoading(true);
+        }
         fetchProfile(session.user);
       } else {
         setUser(null);
