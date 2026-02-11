@@ -233,7 +233,8 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                   const isSelected = selectedIds.includes(event.id);
                   const startStr = event.start?.dateTime || event.start?.date;
                   const date = startStr ? new Date(startStr) : null;
-                  const isAllDay = !event.start?.dateTime && !!event.start?.date;
+                  const isAllDay =
+                    !event.start?.dateTime && !!event.start?.date;
                   return (
                     <div
                       key={event.id}
