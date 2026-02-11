@@ -11,8 +11,10 @@ import { googleAuthService } from '../../services/googleAuthService.ts';
 import { googleCalendarService } from '../../services/googleCalendarService.ts';
 import { supabase } from '../../lib/supabase';
 import { settingsConfig } from '../../utils/settingsConfig';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const IntegrationsTab: React.FC = () => {
+  const { user } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -120,11 +122,12 @@ export const IntegrationsTab: React.FC = () => {
 
         if (existing) continue;
 
-        await supabase.from('schedules').insert({
+        const { error: insertError } = await supabase.from('schedules').insert({
           title: event.summary || 'Sem título',
           description: event.description || '',
           type: 'compromisso',
           lawyer_id: userId,
+          office_id: user?.office_id,
           status: 'agendado',
           start_time: new Date(
             event.start?.dateTime || event.start?.date
@@ -134,6 +137,10 @@ export const IntegrationsTab: React.FC = () => {
           ).toISOString(),
           google_event_id: event.id,
         });
+        if (insertError) {
+          console.error('Insert error for event:', event.summary, insertError);
+          continue;
+        }
         imported++;
       }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Search, Check, Calendar, Globe, Loader2, Info } from 'lucide-react';
 import { googleCalendarService } from '../../services/googleCalendarService.ts';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ImportGoogleModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
   onClose,
   onImportComplete,
 }) => {
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -49,17 +51,14 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
       if (!uId) throw new Error('User session not found');
 
       // Import events to local database
+      let importedCount = 0;
       for (const event of eventsToImport) {
-        const start = encodeURIComponent(
-          event.start.dateTime || event.start.date
-        );
-        const end = encodeURIComponent(event.end.dateTime || event.end.date);
-
-        await supabase.from('schedules').insert({
+        const { error: insertError } = await supabase.from('schedules').insert({
           title: event.summary || 'Sem título',
           description: event.description || '',
           type: 'reuniao',
           lawyer_id: uId,
+          office_id: user?.office_id,
           status: 'agendado',
           start_time: new Date(
             event.start.dateTime || event.start.date
@@ -69,10 +68,15 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
           ).toISOString(),
           google_event_id: event.id,
         });
+        if (insertError) {
+          console.error('Import insert error:', event.summary, insertError);
+          continue;
+        }
+        importedCount++;
       }
 
-      onImportComplete(eventsToImport);
-      alert(`${eventsToImport.length} eventos importados com sucesso!`);
+      onImportComplete(eventsToImport.slice(0, importedCount));
+      alert(`${importedCount} eventos importados com sucesso!`);
     } catch (error) {
       console.error('Error importing events:', error);
       alert('Erro ao importar eventos.');
