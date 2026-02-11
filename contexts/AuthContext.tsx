@@ -75,11 +75,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        // Only show loading for actual sign-in, not token refresh
+        // Only show loading and refetch for actual sign-in
         if (event === 'SIGNED_IN') {
           setIsLoading(true);
+          fetchProfile(session.user);
         }
-        fetchProfile(session.user);
+        // For token refresh / initial session, skip if user already loaded
+        // This prevents the spinner from showing when switching browser tabs
       } else {
         setUser(null);
         setIsLoading(false);
