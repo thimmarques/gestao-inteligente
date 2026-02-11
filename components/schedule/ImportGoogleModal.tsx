@@ -52,7 +52,20 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
 
       // Import events to local database
       let importedCount = 0;
+      let skippedCount = 0;
       for (const event of eventsToImport) {
+        // Check if event already exists
+        const { data: existing } = await supabase
+          .from('schedules')
+          .select('id')
+          .eq('google_event_id', event.id)
+          .maybeSingle();
+
+        if (existing) {
+          skippedCount++;
+          continue;
+        }
+
         const { error: insertError } = await supabase.from('schedules').insert({
           title: event.summary || 'Sem título',
           description: event.description || '',
@@ -76,7 +89,10 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
       }
 
       onImportComplete(eventsToImport.slice(0, importedCount));
-      alert(`${importedCount} eventos importados com sucesso!`);
+      const msgs: string[] = [];
+      if (importedCount > 0) msgs.push(`${importedCount} eventos importados`);
+      if (skippedCount > 0) msgs.push(`${skippedCount} já existiam na agenda`);
+      alert(msgs.join(', ') || 'Nenhum evento novo para importar.');
     } catch (error) {
       console.error('Error importing events:', error);
       alert('Erro ao importar eventos.');
@@ -215,7 +231,9 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
               <div className="space-y-3">
                 {availableEvents.map((event) => {
                   const isSelected = selectedIds.includes(event.id);
-                  const date = new Date(event.start.dateTime);
+                  const startStr = event.start?.dateTime || event.start?.date;
+                  const date = startStr ? new Date(startStr) : null;
+                  const isAllDay = !event.start?.dateTime && !!event.start?.date;
                   return (
                     <div
                       key={event.id}
@@ -246,11 +264,11 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                           {event.summary}
                         </p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase">
-                          {date.toLocaleDateString('pt-BR')} às{' '}
-                          {date.toLocaleTimeString('pt-BR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
+                          {date
+                            ? isAllDay
+                              ? `${date.toLocaleDateString('pt-BR')} (dia inteiro)`
+                              : `${date.toLocaleDateString('pt-BR')} às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+                            : 'Data não disponível'}
                         </p>
                       </div>
                     </div>
