@@ -8,8 +8,15 @@ export const googleCalendarService = {
     } = await supabase.auth.getSession();
 
     const { data, error } = await supabase.functions.invoke('google-calendar', {
-      method: 'POST',
-      body: { ...event, userId: session?.user?.id },
+      body: {
+        action: 'create',
+        userId: session?.user?.id,
+        title: event.title,
+        description: event.description || '',
+        start_time: event.start_time,
+        end_time: event.end_time,
+        location: event.location || undefined,
+      },
     });
 
     if (error) {
@@ -17,16 +24,14 @@ export const googleCalendarService = {
       throw error;
     }
 
-    return data.id;
+    return data?.id || null;
   },
 
   updateEvent: async (
     googleEventId: string,
     data: Partial<ScheduleEvent>
   ): Promise<void> => {
-    console.warn(
-      'Update Google Event not fully supported in Edge Function yet, skipping.'
-    );
+    console.warn('Update Google Event not fully supported yet, skipping.');
   },
 
   deleteEvent: async (googleEventId: string): Promise<void> => {
@@ -35,10 +40,10 @@ export const googleCalendarService = {
     } = await supabase.auth.getSession();
 
     const { error } = await supabase.functions.invoke('google-calendar', {
-      method: 'DELETE',
-      headers: {
-        'x-event-id': googleEventId,
-        'x-user-id': session?.user?.id || '',
+      body: {
+        action: 'delete',
+        userId: session?.user?.id,
+        eventId: googleEventId,
       },
     });
 
@@ -54,9 +59,11 @@ export const googleCalendarService = {
     } = await supabase.auth.getSession();
 
     const { data, error } = await supabase.functions.invoke('google-calendar', {
-      method: 'GET',
-      headers: {
-        'x-user-id': session?.user?.id || '',
+      body: {
+        action: 'list',
+        userId: session?.user?.id,
+        timeMin: startDate.toISOString(),
+        timeMax: endDate.toISOString(),
       },
     });
 

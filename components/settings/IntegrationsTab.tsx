@@ -8,11 +8,14 @@ import {
   Loader2,
 } from 'lucide-react';
 import { googleAuthService } from '../../services/googleAuthService.ts';
+import { googleCalendarService } from '../../services/googleCalendarService.ts';
+import { supabase } from '../../lib/supabase';
 import { settingsConfig } from '../../utils/settingsConfig';
 
 export const IntegrationsTab: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [connectedEmail, setConnectedEmail] = useState<string | null>(null);
   const [lastSync, setLastSync] = useState<string | null>(null);
 
@@ -20,13 +23,22 @@ export const IntegrationsTab: React.FC = () => {
     // Check initial connection status
     checkStatus();
 
-    // Check for callback code
+    // Check for callback params
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
+    const connected = urlParams.get('connected');
 
     if (code) {
       handleCallback(code);
-      // Clean URL
+    }
+
+    // google-auth-callback redirects with ?connected=true
+    if (connected === 'true') {
+      checkStatus();
+    }
+
+    // Clean URL params
+    if (code || connected) {
       window.history.replaceState(
         {},
         document.title,
@@ -79,6 +91,65 @@ export const IntegrationsTab: React.FC = () => {
       await googleAuthService.disconnect();
       setIsConnected(false);
       setConnectedEmail(null);
+    }
+  };
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    try {
+      const now = new Date();
+      const past = new Date(now.getTime() - 60 * 86400000); // 60 days ago
+      const future = new Date(now.getTime() + 60 * 86400000); // 60 days ahead
+
+      const events = await googleCalendarService.listEvents(past, future);
+      const userId = await googleCalendarService.getUserId();
+
+      if (!userId) {
+        alert('Sessão expirada. Faça login novamente.');
+        return;
+      }
+
+      let imported = 0;
+      for (const event of events) {
+        // Skip events already in system
+        const { data: existing } = await supabase
+          .from('schedules')
+          .select('id')
+          .eq('google_event_id', event.id)
+          .maybeSingle();
+
+        if (existing) continue;
+
+        await supabase.from('schedules').insert({
+          title: event.summary || 'Sem título',
+          description: event.description || '',
+          type: 'compromisso',
+          lawyer_id: userId,
+          status: 'agendado',
+          start_time: new Date(
+            event.start?.dateTime || event.start?.date
+          ).toISOString(),
+          end_time: new Date(
+            event.end?.dateTime || event.end?.date
+          ).toISOString(),
+          google_event_id: event.id,
+        });
+        imported++;
+      }
+
+      // Update last sync time
+      await supabase
+        .from('user_integrations')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('provider', 'google_calendar');
+
+      setLastSync(new Date().toISOString());
+      alert(`Sincronização concluída! ${imported} novos eventos importados.`);
+    } catch (error) {
+      console.error('Sync error:', error);
+      alert('Erro ao sincronizar. Verifique a conexão com o Google.');
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -145,9 +216,16 @@ export const IntegrationsTab: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm">
-                    <RefreshCw size={14} />
-                    Sincronizar Agora
+                  <button
+                    onClick={handleSync}
+                    disabled={isSyncing}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm disabled:opacity-50"
+                  >
+                    <RefreshCw
+                      size={14}
+                      className={isSyncing ? 'animate-spin' : ''}
+                    />
+                    {isSyncing ? 'Sincronizando...' : 'Sincronizar Agora'}
                   </button>
                   <button
                     onClick={handleDisconnect}

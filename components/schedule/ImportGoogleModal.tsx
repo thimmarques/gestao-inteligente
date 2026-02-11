@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Search, Check, Calendar, Globe, Loader2, Info } from 'lucide-react';
 import { googleCalendarService } from '../../services/googleCalendarService.ts';
+import { supabase } from '../../lib/supabase';
 
 interface ImportGoogleModalProps {
   isOpen: boolean;
