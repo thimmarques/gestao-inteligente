@@ -51,10 +51,11 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl text-white font-bold text-3xl mb-4 shadow-xl shadow-primary-500/20">
-            L
-          </div>
-          <h1 className="text-3xl font-bold dark:text-white">LegalTech</h1>
+          <img
+            src="/LogoPMC.png"
+            alt="Logo do Escritório"
+            className="mx-auto h-24 w-auto mb-4 drop-shadow-xl"
+          />
           <p className="text-slate-500 dark:text-slate-400 mt-2">
             Gestão Jurídica Inteligente
           </p>
