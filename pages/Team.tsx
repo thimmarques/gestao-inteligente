@@ -281,7 +281,7 @@ const Team: React.FC = () => {
             <p className="font-bold">Nenhum membro encontrado</p>
           </div>
         ) : viewMode === 'cards' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
             {filteredMembers.map((member: any) => (
               <TeamMemberCard
                 key={member.id}
