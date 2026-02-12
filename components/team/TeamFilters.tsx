@@ -75,7 +75,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Buscar por nome, OAB ou e-mail..."
-          className="w-full pl-12 pr-10 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm focus:ring-2 focus:ring-primary-500 dark:text-white shadow-sm transition-all"
+          className="w-full pl-12 pr-10 py-3.5 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl text-sm focus:ring-2 focus:ring-primary-500 dark:text-white shadow-sm transition-all"
         />
         {searchTerm && (
           <button
@@ -97,7 +97,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             className={`flex items-center gap-2 px-5 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all shadow-sm ${
               filters.roles.length > 0
                 ? 'bg-primary-50 border-primary-200 text-primary-700'
-                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
+                : 'bg-white dark:bg-navy-800/50 border-slate-100 dark:border-white/10 text-slate-500'
             }`}
           >
             <Users size={14} />
@@ -114,11 +114,11 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
           </button>
 
           {openDropdown === 'role' && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
               {['admin', 'advogado', 'assistente'].map((r) => (
                 <label
                   key={r}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-colors group"
+                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors group"
                 >
                   <input
                     type="checkbox"
@@ -144,7 +144,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             className={`flex items-center gap-2 px-5 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all shadow-sm ${
               filters.status !== 'todos'
                 ? 'bg-green-50 border-green-200 text-green-700'
-                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500'
+                : 'bg-white dark:bg-navy-800/50 border-slate-100 dark:border-white/10 text-slate-500'
             }`}
           >
             {filters.status === 'ativo' ? (
@@ -162,7 +162,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
           </button>
 
           {openDropdown === 'status' && (
-            <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
               {['todos', 'ativo', 'inativo'].map((s) => (
                 <button
                   key={s}
@@ -186,7 +186,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
             onClick={() =>
               setOpenDropdown(openDropdown === 'sort' ? null : 'sort')
             }
-            className="flex items-center gap-2 px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 shadow-sm"
+            className="flex items-center gap-2 px-5 py-3.5 bg-white dark:bg-navy-800/50 border border-slate-100 dark:border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 shadow-sm"
           >
             <ArrowUpDown size={14} />
             Ordenar
@@ -197,7 +197,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
           </button>
 
           {openDropdown === 'sort' && (
-            <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
+            <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 p-3 animate-in zoom-in-95">
               {[
                 {
                   id: 'name_asc',
@@ -248,7 +248,7 @@ export const TeamFilters: React.FC<TeamFiltersProps> = ({
           </button>
         )}
 
-        <div className="px-4 border-l border-slate-200 dark:border-slate-800 hidden sm:block">
+        <div className="px-4 border-l border-slate-200 dark:border-white/10 hidden sm:block">
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
             {resultsCount} Membros
           </span>

@@ -18,7 +18,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
   onChange,
 }) => {
   return (
-    <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6 animate-in fade-in duration-300">
+    <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-white/10 space-y-6 animate-in fade-in duration-300">
       <h4 className="font-bold dark:text-white flex items-center gap-2">
         <CreditCard size={18} className="text-primary-500" />
         Configuração Financeira
@@ -32,7 +32,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
           <select
             value={data.payment_method || 'PIX'}
             onChange={(e) => onChange('payment_method', e.target.value)}
-            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+            className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           >
             <option value="PIX">PIX</option>
             <option value="TED">TED / Transferência</option>
@@ -51,7 +51,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
             value={data.hourly_rate || ''}
             onChange={(e) => onChange('hourly_rate', e.target.value)}
             placeholder="0,00"
-            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+            className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           />
         </div>
 
@@ -72,7 +72,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
             value={data.retainer_fee || ''}
             onChange={(e) => onChange('retainer_fee', e.target.value)}
             placeholder="0,00"
-            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+            className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           />
         </div>
 
@@ -83,7 +83,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
           <select
             value={data.billing_day || 10}
             onChange={(e) => onChange('billing_day', parseInt(e.target.value))}
-            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+            className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
           >
             {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
               <option key={day} value={day}>
@@ -108,7 +108,7 @@ export const FinancialFields: React.FC<FinancialFieldsProps> = ({
               onChange('financial_notes', e.target.value.slice(0, 200))
             }
             rows={3}
-            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
+            className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
             placeholder="Condições especiais, descontos, etc..."
           />
         </div>

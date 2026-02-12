@@ -102,9 +102,7 @@ const IndicatorCard = ({ title, icon, score, color, items }: any) => (
     className={settingsConfig.cardClass + ' p-6 hover:shadow-md transition-all'}
   >
     <div className="flex items-center justify-between mb-5">
-      <div
-        className={`p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 ${color}`}
-      >
+      <div className={`p-2.5 rounded-xl bg-slate-50 dark:bg-navy-800 ${color}`}>
         {React.cloneElement(icon, { size: 20 })}
       </div>
       <span className={`text-base font-black ${color} tracking-tight`}>

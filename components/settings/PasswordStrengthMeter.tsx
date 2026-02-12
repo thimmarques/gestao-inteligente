@@ -77,7 +77,7 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({
         </span>
       </div>
 
-      <div className="flex gap-1.5 h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+      <div className="flex gap-1.5 h-1.5 w-full bg-slate-100 dark:bg-navy-800 rounded-full overflow-hidden">
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}

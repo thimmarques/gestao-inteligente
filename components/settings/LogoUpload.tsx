@@ -34,7 +34,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
     <div className="space-y-6">
       <div
         onClick={() => inputRef.current?.click()}
-        className="w-[300px] h-[150px] bg-slate-50 dark:bg-slate-800/50 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl flex items-center justify-center cursor-pointer hover:border-primary-500 hover:bg-primary-50/10 transition-all group overflow-hidden"
+        className="w-[300px] h-[150px] bg-slate-50 dark:bg-white/5 border-2 border-dashed border-slate-200 dark:border-white/15 rounded-3xl flex items-center justify-center cursor-pointer hover:border-primary-500 hover:bg-primary-50/10 transition-all group overflow-hidden"
       >
         <input
           type="file"
@@ -64,7 +64,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
       <div className="flex gap-2">
         <button
           onClick={() => inputRef.current?.click()}
-          className="flex-1 py-2 px-4 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all"
+          className="flex-1 py-2 px-4 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all"
         >
           {currentLogoUrl ? 'Alterar Logo' : 'Adicionar Logo'}
         </button>

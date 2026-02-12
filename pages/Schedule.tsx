@@ -207,7 +207,7 @@ const Schedule: React.FC = () => {
   }, [date]);
 
   return (
-    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-navy-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
           Agenda{' '}
@@ -218,7 +218,7 @@ const Schedule: React.FC = () => {
         <div className="flex gap-3">
           <button
             onClick={() => setIsImportOpen(true)}
-            className="flex items-center px-6 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl font-bold text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 active:scale-95"
+            className="flex items-center px-6 py-4 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl font-bold text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 active:scale-95"
           >
             <Globe size={20} className="mr-2 text-blue-500" /> Google Sync
           </button>
@@ -246,7 +246,7 @@ const Schedule: React.FC = () => {
           />
         </div>
 
-        <div className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden p-6 min-h-[600px] relative">
+        <div className="lg:col-span-3 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden p-6 min-h-[600px] relative">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-2">
               <CalendarViewTabs
@@ -255,7 +255,7 @@ const Schedule: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div className="flex items-center gap-4 bg-slate-50 dark:bg-white/5 p-1.5 rounded-xl border border-slate-200 dark:border-white/10">
               <button
                 onClick={handleToday}
                 className="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors"
@@ -284,14 +284,14 @@ const Schedule: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-                className={`p-3 rounded-xl border transition-all ${isFiltersOpen ? 'bg-primary-50 border-primary-200 text-primary-600' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                className={`p-3 rounded-xl border transition-all ${isFiltersOpen ? 'bg-primary-50 border-primary-200 text-primary-600' : 'bg-white dark:bg-navy-800 border-slate-200 dark:border-white/15 text-slate-500'}`}
                 title="Filtros"
               >
                 <Filter size={20} />
               </button>
               <button
                 onClick={() => refetch()}
-                className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-primary-600 transition-all"
+                className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-xl text-slate-500 hover:text-primary-600 transition-all"
                 title="Recarregar"
               >
                 <RefreshCw

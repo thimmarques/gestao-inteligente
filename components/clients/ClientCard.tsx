@@ -36,12 +36,12 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
 
   return (
     <div
-      className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === 'inativo' ? 'opacity-60' : ''}`}
+      className={`bg-white dark:bg-navy-800/50 p-6 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center text-center ${client.status === 'inativo' ? 'opacity-60' : ''}`}
       onClick={onClick}
     >
       {/* Avatar */}
       <div className="relative w-24 h-24 mb-4">
-        <div className="w-full h-full rounded-[2rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl font-bold text-primary-600 border-4 border-white dark:border-slate-900 shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
+        <div className="w-full h-full rounded-[2rem] bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-3xl font-bold text-primary-600 border-4 border-white dark:border-slate-900 shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
           {client.photo_url ? (
             <img src={client.photo_url} alt="" />
           ) : (
@@ -72,7 +72,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
         {client.type}
       </span>
 
-      <div className="w-full h-px bg-slate-100 dark:bg-slate-800 mb-4" />
+      <div className="w-full h-px bg-slate-100 dark:bg-navy-800 mb-4" />
 
       <div className="w-full space-y-3 mb-6">
         <div className="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400">
@@ -95,7 +95,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
         </div>
       </div>
 
-      <div className="mt-auto w-full pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+      <div className="mt-auto w-full pt-4 border-t border-slate-100 dark:border-white/10 space-y-3">
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={handleProcuracao}
@@ -113,7 +113,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onClick }) => {
           </button>
         </div>
 
-        <button className="w-full py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all active:scale-95 group-hover:shadow-lg">
+        <button className="w-full py-2.5 bg-slate-50 dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all active:scale-95 group-hover:shadow-lg">
           Ver Detalhes
           <ExternalLink size={12} />
         </button>

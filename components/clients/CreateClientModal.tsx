@@ -226,8 +226,8 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[95vh]">
-        <div className="px-8 pt-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-4xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[95vh]">
+        <div className="px-8 pt-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10">
           <div>
             <h2 className="text-xl font-bold dark:text-white">
               {mode === 'edit'
@@ -240,7 +240,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-500"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-500"
           >
             <X size={24} />
           </button>
@@ -248,7 +248,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
         <div className="px-10 py-6 bg-slate-50/50 dark:bg-slate-800/20">
           <div className="flex items-center justify-between relative">
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-100 dark:bg-slate-800 -z-10" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-100 dark:bg-navy-800 -z-10" />
             <div
               className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary-600 transition-all duration-500 -z-10"
               style={{
@@ -263,7 +263,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       ? 'bg-primary-600 text-white scale-110 shadow-lg'
                       : currentStep > s.id
                         ? 'bg-primary-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+                        : 'bg-slate-100 dark:bg-navy-800 text-slate-400'
                   }`}
                 >
                   {currentStep > s.id ? <Check size={14} /> : s.id}
@@ -293,11 +293,11 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                   className={`p-8 rounded-2xl border-2 text-left transition-all hover:scale-[1.02] ${
                     formData.type === ClientType.PARTICULAR
                       ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg'
-                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50'
+                      : 'border-slate-100 dark:border-white/10 hover:border-slate-300 disabled:opacity-50'
                   }`}
                 >
                   <div
-                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.PARTICULAR ? 'bg-primary-600 text-white shadow-xl shadow-primary-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.PARTICULAR ? 'bg-primary-600 text-white shadow-xl shadow-primary-500/30' : 'bg-slate-100 dark:bg-navy-800 text-slate-500'}`}
                   >
                     <UserPlus size={40} />
                   </div>
@@ -316,11 +316,11 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                   className={`p-8 rounded-2xl border-2 text-left transition-all hover:scale-[1.02] ${
                     formData.type === ClientType.DEFENSORIA
                       ? 'border-green-600 bg-green-50/50 dark:bg-green-900/20 shadow-lg'
-                      : 'border-slate-100 dark:border-slate-800 hover:border-slate-300 disabled:opacity-50'
+                      : 'border-slate-100 dark:border-white/10 hover:border-slate-300 disabled:opacity-50'
                   }`}
                 >
                   <div
-                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.DEFENSORIA ? 'bg-green-600 text-white shadow-xl shadow-green-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-6 ${formData.type === ClientType.DEFENSORIA ? 'bg-green-600 text-white shadow-xl shadow-green-500/30' : 'bg-slate-100 dark:bg-navy-800 text-slate-500'}`}
                   >
                     <Scale size={40} />
                   </div>
@@ -337,7 +337,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
           {currentStep === 2 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-              <div className="flex border-b border-slate-100 dark:border-slate-800 mb-6">
+              <div className="flex border-b border-slate-100 dark:border-white/10 mb-6">
                 {(['pessoal', 'endereco', 'processo'] as InternalTab[]).map(
                   (tab) => (
                     <button
@@ -361,7 +361,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
                       Tipo de Contratação
                     </label>
-                    <div className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 text-sm font-bold flex items-center gap-2 cursor-not-allowed border border-slate-100 dark:border-slate-700">
+                    <div className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 rounded-xl text-slate-500 dark:text-slate-400 text-sm font-bold flex items-center gap-2 cursor-not-allowed border border-slate-100 dark:border-white/15">
                       {formData.type === ClientType.PARTICULAR ? (
                         <UserPlus size={16} className="text-primary-500" />
                       ) : (
@@ -382,7 +382,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-3 space-y-1.5">
@@ -397,7 +397,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           nationality: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     >
                       <option>Brasileiro(a)</option>
                       <option>Estrangeiro(a)</option>
@@ -416,7 +416,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           marital_status: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     >
                       <option>Solteiro(a)</option>
                       <option>Casado(a)</option>
@@ -435,7 +435,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       onChange={(e) =>
                         setFormData({ ...formData, profession: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-3 space-y-1.5">
@@ -449,7 +449,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         setFormData({ ...formData, income: e.target.value })
                       }
                       onWheel={(e) => e.currentTarget.blur()}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
                       placeholder="Valor da renda"
                     />
                   </div>
@@ -474,7 +474,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       onChange={(e) =>
                         setFormData({ ...formData, rg: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-1 space-y-1.5">
@@ -487,7 +487,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       onChange={(e) =>
                         setFormData({ ...formData, rg_issuer: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-6 space-y-1.5">
@@ -500,7 +500,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-6 space-y-1.5">
@@ -538,7 +538,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           })
                         }
                         placeholder="00000-000"
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                       />
                       {isSearchingCEP && (
                         <Loader2
@@ -564,7 +564,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           },
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-1 space-y-1.5">
@@ -583,7 +583,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           },
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-3 space-y-1.5">
@@ -602,7 +602,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           },
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="md:col-span-4 space-y-1.5">
@@ -621,7 +621,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                           },
                         })
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                 </div>
@@ -629,7 +629,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
               {activeTab === 'processo' && (
                 <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center justify-between bg-slate-50 dark:bg-navy-800 p-4 rounded-xl border border-slate-100 dark:border-white/15">
                     <div>
                       <h4 className="font-bold dark:text-white text-sm">
                         Existe processo em andamento?
@@ -673,7 +673,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                             })
                           }
                           placeholder="0000000-00.0000.0.00.0000"
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -691,7 +691,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                               },
                             })
                           }
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                         >
                           {legalAreaOptions.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -721,7 +721,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                               },
                             })
                           }
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
                         />
                       </div>
                     </div>
@@ -740,7 +740,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                   </h3>
 
                   {formData.process.legal_area === 'trabalhista' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-white/10">
                       <div className="md:col-span-2 flex items-center gap-3 mb-2">
                         <Briefcase size={20} className="text-blue-500" />
                         <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
@@ -771,7 +771,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                             placeholder="Ex: 30"
                           />
                         </div>
@@ -798,7 +798,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                             placeholder="0,00"
                           />
                         </div>
@@ -806,7 +806,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm">
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
                             Forma de Pagamento
@@ -827,7 +827,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
+                              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
                             >
                               <option value="PIX">PIX</option>
                               <option value="Cartão de Crédito">
@@ -866,7 +866,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                               placeholder="0,00"
                             />
                           </div>
@@ -897,7 +897,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                     },
                                   })
                                 }
-                                className="w-full pl-12 pr-10 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
+                                className="w-full pl-12 pr-10 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
                               >
                                 {Array.from(
                                   { length: 10 },
@@ -917,7 +917,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         )}
                       </div>
 
-                      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-6">
+                      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm space-y-6">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 rounded-xl">
@@ -927,7 +927,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                               Houve pagamento de entrada?
                             </h4>
                           </div>
-                          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-xl shadow-inner border border-slate-100 dark:border-slate-700">
+                          <div className="flex bg-white dark:bg-navy-800/50 p-1 rounded-xl shadow-inner border border-slate-100 dark:border-white/15">
                             <button
                               type="button"
                               onClick={() =>
@@ -984,7 +984,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                     },
                                   })
                                 }
-                                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
+                                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
                                 placeholder="0,00"
                               />
                             </div>
@@ -996,7 +996,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                 </div>
               ) : (
                 <div className="space-y-8 animate-in fade-in duration-500">
-                  <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 space-y-6">
+                  <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-6">
                     <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
                       <FileText size={18} className="text-green-500" />
                       Dados Processuais
@@ -1019,7 +1019,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                             })
                           }
                           placeholder="Ex: São Paulo"
-                          className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                          className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -1038,13 +1038,13 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                               },
                             })
                           }
-                          className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                          className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-10 relative">
+                  <div className="bg-slate-50/50 dark:bg-slate-800/30 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 space-y-10 relative">
                     <header className="flex items-center justify-between">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
                         Divisão de Guia (70/30)
@@ -1102,7 +1102,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                            className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                           />
                           <div className="flex gap-4">
                             <input
@@ -1123,7 +1123,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
+                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
                             />
                             <input
                               type="month"
@@ -1143,7 +1143,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                             />
                           </div>
                           <select
@@ -1163,7 +1163,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
+                            className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
                           >
                             <option>Pendente</option>
                             <option>Protocolado</option>
@@ -1197,7 +1197,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                            className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                           />
                           <div className="flex gap-4">
                             <input
@@ -1218,7 +1218,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
+                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
                             />
                             <input
                               type="month"
@@ -1238,7 +1238,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                   },
                                 })
                               }
-                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                              className="w-1/2 px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                             />
                           </div>
                           <select
@@ -1257,7 +1257,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
+                            className="w-full px-5 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-bold"
                           >
                             <option>Pendente</option>
                             <option>Protocolado</option>
@@ -1274,7 +1274,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
           {currentStep === 4 && (
             <div className="space-y-8 animate-in slide-in-from-right-4 duration-300">
-              <div className="bg-slate-50 dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
+              <div className="bg-slate-50 dark:bg-navy-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10">
                 <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-4">
                   Revisar Dados Principais
                 </h4>
@@ -1311,7 +1311,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                     })
                   }
                   rows={6}
-                  className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-[2rem] focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
+                  className="w-full px-6 py-4 bg-slate-50 dark:bg-navy-800 border-none rounded-[2rem] focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
                   placeholder="Informações adicionais relevantes..."
                 />
               </div>
@@ -1319,7 +1319,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
           )}
         </div>
 
-        <div className="px-10 py-8 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between border-t border-slate-100 dark:border-slate-800">
+        <div className="px-10 py-8 bg-slate-50 dark:bg-white/5 flex items-center justify-between border-t border-slate-100 dark:border-white/10">
           <button
             disabled={
               currentStep === 1 ||

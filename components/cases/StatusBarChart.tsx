@@ -38,7 +38,7 @@ export const StatusBarChart: React.FC = () => {
   const total = chartData.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
       <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">
         Distribuição por Status
       </h3>

@@ -22,7 +22,7 @@ export const ReportTypeCard: React.FC<ReportTypeCardProps> = ({
   onGenerate,
 }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group flex flex-col h-full">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] p-8 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group flex flex-col h-full">
       <div className="flex flex-col items-center text-center flex-1">
         <div
           className={`w-24 h-24 rounded-[2rem] ${iconBgColor} flex items-center justify-center ${iconColor} mb-8 shadow-inner group-hover:scale-110 transition-transform`}
@@ -37,7 +37,7 @@ export const ReportTypeCard: React.FC<ReportTypeCardProps> = ({
           {description}
         </p>
 
-        <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500 mb-8">
+        <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-navy-800 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500 mb-8">
           {defaultFormat === 'pdf' ? (
             <FileText size={12} />
           ) : (
@@ -47,7 +47,7 @@ export const ReportTypeCard: React.FC<ReportTypeCardProps> = ({
         </div>
       </div>
 
-      <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
+      <div className="pt-6 border-t border-slate-100 dark:border-white/10">
         <button
           onClick={onGenerate}
           className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 transition-all active:scale-95 flex items-center justify-center gap-2"

@@ -31,7 +31,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           onChange={handleChange}
           maxLength={15}
           placeholder="(00) 00000-0000"
-          className={`w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
+          className={`w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
             error ? 'ring-2 ring-red-500' : 'focus:ring-primary-500'
           }`}
         />

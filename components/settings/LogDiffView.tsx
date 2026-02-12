@@ -11,7 +11,7 @@ export const LogDiffView: React.FC<LogDiffViewProps> = ({ details }) => {
     parsed = JSON.parse(details);
   } catch (e) {
     return (
-      <pre className="text-[10px] text-slate-500 font-mono p-4 bg-slate-50 dark:bg-slate-900 rounded-xl">
+      <pre className="text-[10px] text-slate-500 font-mono p-4 bg-slate-50 dark:bg-navy-800/50 rounded-xl">
         {details}
       </pre>
     );
@@ -39,7 +39,7 @@ export const LogDiffView: React.FC<LogDiffViewProps> = ({ details }) => {
           {keys.map((key) => (
             <div
               key={key}
-              className="flex justify-between items-center text-[10px] p-2 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800"
+              className="flex justify-between items-center text-[10px] p-2 bg-slate-50 dark:bg-navy-900/50 rounded-lg border border-slate-100 dark:border-white/10"
             >
               <span className="font-bold text-slate-400">{key}:</span>
               <span
@@ -60,7 +60,7 @@ export const LogDiffView: React.FC<LogDiffViewProps> = ({ details }) => {
           {keys.map((key) => (
             <div
               key={key}
-              className="flex justify-between items-center text-[10px] p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
+              className="flex justify-between items-center text-[10px] p-2 bg-white dark:bg-navy-800 rounded-lg border border-slate-200 dark:border-white/15 shadow-sm"
             >
               <span className="font-bold text-slate-400">{key}:</span>
               <span

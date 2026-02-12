@@ -78,7 +78,7 @@ export const PeriodPresets: React.FC<PeriodPresetsProps> = ({
           className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm border ${
             selected === p.label
               ? 'bg-primary-600 border-primary-600 text-white'
-              : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500'
+              : 'bg-white dark:bg-navy-800 border-slate-100 dark:border-white/15 text-slate-500 hover:border-primary-500'
           }`}
         >
           {p.label}

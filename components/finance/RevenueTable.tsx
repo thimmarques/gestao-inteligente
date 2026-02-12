@@ -27,7 +27,7 @@ const categoryColors: Record<string, string> = {
     'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
   'Retainer Fee (Mensalidade)':
     'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  Outros: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+  Outros: 'bg-slate-100 text-slate-700 dark:bg-navy-800 dark:text-slate-400',
 };
 
 export const RevenueTable: React.FC<RevenueTableProps> = ({
@@ -37,10 +37,10 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <thead className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
             <tr>
               <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Cliente / Processo
@@ -90,7 +90,7 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                     <td className="px-8 py-5">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-black text-slate-500 border border-slate-200 dark:border-slate-700">
+                          <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-[10px] font-black text-slate-500 border border-slate-200 dark:border-white/15">
                             <User size={12} />
                           </div>
                           <span className="text-sm font-bold dark:text-white truncate max-w-[180px]">
@@ -165,13 +165,13 @@ export const RevenueTable: React.FC<RevenueTableProps> = ({
                         )}
                         <button
                           onClick={() => onEdit(r)}
-                          className="p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-primary-600 rounded-xl transition-all shadow-sm"
+                          className="p-2.5 bg-slate-50 dark:bg-navy-800 text-slate-400 hover:text-primary-600 rounded-xl transition-all shadow-sm"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => onDelete(r.id)}
-                          className="p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-red-500 rounded-xl transition-all shadow-sm"
+                          className="p-2.5 bg-slate-50 dark:bg-navy-800 text-slate-400 hover:text-red-500 rounded-xl transition-all shadow-sm"
                         >
                           <Trash2 size={16} />
                         </button>

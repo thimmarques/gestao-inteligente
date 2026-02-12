@@ -36,7 +36,7 @@ const PendingInvitesList: React.FC = () => {
 
   if (isLoading)
     return (
-      <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl" />
+      <div className="animate-pulse h-20 bg-slate-100 dark:bg-navy-800 rounded-2xl" />
     );
   if (pendingInvites.length === 0) return null;
 
@@ -45,7 +45,7 @@ const PendingInvitesList: React.FC = () => {
       {pendingInvites.map((invite) => (
         <div
           key={invite.id}
-          className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-dotted border-slate-300 dark:border-slate-700 flex items-center justify-between"
+          className="bg-white dark:bg-navy-800/50 p-6 rounded-2xl border border-dotted border-slate-300 dark:border-white/15 flex items-center justify-between"
         >
           <div className="space-y-1">
             <p className="font-bold text-sm dark:text-white">{invite.email}</p>
@@ -186,7 +186,7 @@ const Team: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 lg:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
+    <div className="p-4 md:p-8 lg:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-navy-950 animate-in fade-in duration-500 pb-24 text-slate-900 dark:text-white">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-widest">
@@ -204,7 +204,7 @@ const Team: React.FC = () => {
             <select
               value={inviteRole}
               onChange={(e) => setInviteRole(e.target.value as any)}
-              className="h-[56px] px-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500"
+              className="h-[56px] px-4 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="lawyer">Advogado</option>
               <option value="assistant">Assistente</option>
@@ -308,11 +308,11 @@ const Team: React.FC = () => {
       {!isStaff && (
         <section className="pt-10 space-y-6">
           <div className="flex items-center gap-4">
-            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+            <div className="h-px flex-1 bg-slate-200 dark:bg-navy-800" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
               Convites Pendentes (Legado)
             </h2>
-            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+            <div className="h-px flex-1 bg-slate-200 dark:bg-navy-800" />
           </div>
 
           <PendingInvitesList />

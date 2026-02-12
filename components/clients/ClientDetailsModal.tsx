@@ -75,9 +75,9 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-4xl h-[90vh] rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-4xl h-[90vh] rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
         {/* Header */}
-        <div className="p-10 flex items-start justify-between bg-slate-50/50 dark:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800">
+        <div className="p-10 flex items-start justify-between bg-slate-50/50 dark:bg-slate-800/20 border-b border-slate-100 dark:border-white/10">
           <div className="flex gap-8">
             <div className="w-24 h-24 rounded-[2rem] bg-primary-600 flex items-center justify-center text-4xl font-bold text-white shadow-2xl shadow-primary-500/20 overflow-hidden">
               {client.photo_url ? (
@@ -126,21 +126,21 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           <div className="flex gap-3">
             <button
               onClick={() => onEdit(client)}
-              className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all active:scale-95 shadow-sm"
+              className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all active:scale-95 shadow-sm"
               title="Editar"
             >
               <Edit size={20} />
             </button>
             <button
               onClick={handleDelete}
-              className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-95 shadow-sm"
+              className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-95 shadow-sm"
               title="Excluir"
             >
               <Trash2 size={20} />
             </button>
             <button
               onClick={onClose}
-              className="p-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl text-slate-500 transition-all"
+              className="p-3 bg-slate-100 dark:bg-navy-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl text-slate-500 transition-all"
             >
               <X size={24} />
             </button>
@@ -148,7 +148,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         </div>
 
         {/* Tabs Bar */}
-        <div className="px-10 border-b border-slate-100 dark:border-slate-800 flex items-center gap-8 overflow-x-auto whitespace-nowrap scrollbar-hide shrink-0">
+        <div className="px-10 border-b border-slate-100 dark:border-white/10 flex items-center gap-8 overflow-x-auto whitespace-nowrap scrollbar-hide shrink-0">
           {[
             { id: 'geral', label: 'Dados Gerais', icon: <User size={16} /> },
             {
@@ -183,12 +183,12 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         </div>
 
         {/* Modal Content */}
-        <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/30 dark:bg-slate-950/20">
+        <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/30 dark:bg-navy-950/20">
           <div className="max-w-4xl mx-auto h-full animate-in fade-in duration-500">
             {activeTab === 'geral' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
-                  <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-8">
+                  <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-8">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
                       Informações de Contato
                     </h3>
@@ -203,7 +203,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                           </p>
                           <button
                             onClick={() => copyToClipboard(client.cpf_cnpj)}
-                            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-300 hover:text-primary-500 transition-colors opacity-0 group-hover:opacity-100"
+                            className="p-1.5 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg text-slate-300 hover:text-primary-500 transition-colors opacity-0 group-hover:opacity-100"
                           >
                             <Copy size={12} />
                           </button>
@@ -244,7 +244,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+                  <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-4">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
                       Notas e Observações
                     </h3>
@@ -258,8 +258,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 </div>
 
                 <div className="space-y-8">
-                  <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary-600">
+                  <div className="bg-white dark:bg-navy-800/50 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-primary-600">
                       <Briefcase size={20} />
                     </div>
                     <div className="text-center">
@@ -295,7 +295,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     {cases.map((process) => (
                       <div
                         key={process.id}
-                        className="group bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
+                        className="group bg-slate-50 dark:bg-navy-800/50 p-6 rounded-2xl border border-slate-100 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
                         onClick={() => onViewCase(process.id)}
                       >
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-primary-600">
@@ -313,7 +313,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                                   process.status === 'distribuído' ||
                                   process.status === 'andamento'
                                     ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                    : 'bg-slate-100 text-slate-600 dark:bg-navy-800 dark:text-slate-400'
                                 }`}
                               >
                                 {process.status}
@@ -345,7 +345,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     ))}
                   </div>
                 ) : (
-                  <div className="py-12 text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+                  <div className="py-12 text-center bg-slate-50 dark:bg-navy-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-white/10">
                     <Briefcase
                       size={40}
                       className="mx-auto text-slate-300 mb-4"
@@ -364,8 +364,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                   <Files size={14} /> Documentos Gerados
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
                       <FileText size={32} />
                     </div>
                     <div>
@@ -378,8 +378,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     </div>
                   </button>
 
-                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
                       <Scale size={32} />
                     </div>
                     <div>
@@ -393,8 +393,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                   </button>
 
                   {cases.some((c) => c.type === 'trabalhista') && (
-                    <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                      <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
+                    <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
+                      <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
                         <Briefcase size={32} />
                       </div>
                       <div>
@@ -412,8 +412,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
             )}
 
             {activeTab === 'financeiro' && (
-              <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800 text-center">
-                <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6 font-bold text-xl">
+              <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-navy-800/50 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-white/10 text-center">
+                <div className="w-20 h-20 bg-slate-50 dark:bg-navy-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6 font-bold text-xl">
                   <DollarSign size={40} />
                 </div>
                 <h4 className="text-xl font-bold dark:text-white mb-2">
@@ -429,7 +429,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-10 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex justify-end gap-4 shrink-0">
+        <div className="p-10 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 flex justify-end gap-4 shrink-0">
           <button
             onClick={onClose}
             className="px-12 py-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:shadow-2xl active:scale-95"

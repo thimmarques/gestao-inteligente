@@ -28,7 +28,7 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600">
               <TrendingUp size={20} />
@@ -41,7 +41,7 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
             {formatCurrency(totalRevenue)}
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-600">
               <TrendingDown size={20} />
@@ -54,7 +54,7 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
             {formatCurrency(totalExpense)}
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600">
               <DollarSign size={20} />
@@ -71,10 +71,10 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({ caseId }) => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+            <thead className="bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
               <tr>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
                   Tipo

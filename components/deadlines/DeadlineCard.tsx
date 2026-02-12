@@ -33,11 +33,11 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
   return (
     <div
       onClick={() => onClick(deadline)}
-      className={`bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-slate-800 border-l-[8px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden ${!isPendente ? 'opacity-60 grayscale-[0.5]' : ''}`}
+      className={`bg-white dark:bg-navy-800/50 rounded-[2.5rem] p-8 border border-slate-200 dark:border-white/10 border-l-[8px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden ${!isPendente ? 'opacity-60 grayscale-[0.5]' : ''}`}
       style={{ borderLeftColor: color }}
     >
       {/* Visual Background Accent */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-slate-800/50 rounded-bl-[5rem] -mr-16 -mt-16 -z-10 group-hover:scale-110 transition-transform" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-white/5 rounded-bl-[5rem] -mr-16 -mt-16 -z-10 group-hover:scale-110 transition-transform" />
 
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
@@ -78,10 +78,10 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           </div>
         </div>
 
-        <div className="w-full h-px bg-slate-100 dark:bg-slate-800" />
+        <div className="w-full h-px bg-slate-100 dark:bg-navy-800" />
 
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 group-hover:text-primary-500 transition-colors">
+          <div className="p-3 bg-slate-50 dark:bg-navy-800 rounded-2xl text-slate-400 group-hover:text-primary-500 transition-colors">
             <Calendar size={20} />
           </div>
           <div>
@@ -124,7 +124,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -133,7 +133,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
             !isPendente
               ? 'bg-green-100 text-green-700'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-primary-600 hover:text-white'
+              : 'bg-slate-100 dark:bg-navy-800 text-slate-500 hover:bg-primary-600 hover:text-white'
           }`}
         >
           {isPendente ? (

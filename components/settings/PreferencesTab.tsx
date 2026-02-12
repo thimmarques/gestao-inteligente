@@ -50,7 +50,7 @@ export const PreferencesTab: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-10">
       <section className={settingsConfig.cardClass + ' space-y-8'}>
-        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-4">
           <div className="p-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-lg">
             <Monitor size={18} />
           </div>
@@ -77,11 +77,11 @@ export const PreferencesTab: React.FC = () => {
                   className={`flex items-center gap-3 p-4 rounded-xl border transition-all group ${
                     isActive
                       ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-md'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                      : 'border-slate-200 dark:border-white/15 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isActive ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500'}`}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isActive ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-navy-800 text-slate-400 group-hover:text-primary-500'}`}
                   >
                     <Icon size={16} />
                   </div>
@@ -96,12 +96,12 @@ export const PreferencesTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-white/10">
           <div className="flex justify-between items-center">
             <label className={settingsConfig.labelClass}>
               Tamanho da Fonte
             </label>
-            <span className="text-sm font-bold dark:text-white tabular-nums bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+            <span className="text-sm font-bold dark:text-white tabular-nums bg-slate-100 dark:bg-navy-800 px-2 py-1 rounded-md">
               {fontSize}px
             </span>
           </div>
@@ -112,7 +112,7 @@ export const PreferencesTab: React.FC = () => {
             step="1"
             value={fontSize}
             onChange={(e) => setFontSize(parseInt(e.target.value))}
-            className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary-600"
+            className="w-full h-2 bg-slate-100 dark:bg-navy-800 rounded-lg appearance-none cursor-pointer accent-primary-600"
           />
         </div>
 

@@ -42,7 +42,7 @@ export const SecurityTab: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-10">
       <section className={settingsConfig.cardClass + ' space-y-6'}>
-        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-4">
           <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg">
             <Lock size={18} />
           </div>

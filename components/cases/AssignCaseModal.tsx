@@ -58,15 +58,15 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
-        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300">
+        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-white/10">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold dark:text-white tracking-tight">
               Atribuir Processo
             </h2>
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all"
+              className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-all"
             >
               <X size={20} />
             </button>
@@ -78,7 +78,7 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
           {currentLawyer && (
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-3">
+            <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
                 {currentLawyer.photo_url ? (
                   <img
@@ -110,7 +110,7 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
               required
               value={selectedLawyerId}
               onChange={(e) => setSelectedLawyerId(e.target.value)}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             >
               <option value="">Selecione o advogado...</option>
               {lawyers.map((l) => (
@@ -152,7 +152,7 @@ export const AssignCaseModal: React.FC<AssignCaseModalProps> = ({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Ex: Favor priorizar este protocolo..."
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner"
                 />
               </div>
             )}

@@ -64,10 +64,10 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[600] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-4xl h-[90vh] rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
-        <div className="p-10 flex flex-col md:flex-row items-center gap-10 bg-slate-50/50 dark:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-4xl h-[90vh] rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
+        <div className="p-10 flex flex-col md:flex-row items-center gap-10 bg-slate-50/50 dark:bg-slate-800/20 border-b border-slate-100 dark:border-white/10">
           <div className="relative">
-            <div className="w-32 h-32 rounded-[2.5rem] bg-white dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-2xl overflow-hidden flex items-center justify-center group">
+            <div className="w-32 h-32 rounded-[2.5rem] bg-white dark:bg-navy-800 border-4 border-white dark:border-slate-900 shadow-2xl overflow-hidden flex items-center justify-center group">
               {member.photo_url ? (
                 <img
                   src={member.photo_url}
@@ -128,28 +128,28 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
           <div className="flex gap-3">
             <button
               onClick={() => onEdit(member)}
-              className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white transition-all shadow-sm"
+              className="p-4 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white transition-all shadow-sm"
             >
               <Edit size={24} />
             </button>
             {!isMe && (
               <button
                 onClick={handleDelete}
-                className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                className="p-4 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
               >
                 <Trash2 size={24} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="p-4 bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 rounded-full transition-all"
+              className="p-4 bg-slate-100 dark:bg-navy-800 text-slate-400 hover:bg-slate-200 rounded-full transition-all"
             >
               <X size={24} />
             </button>
           </div>
         </div>
 
-        <div className="px-10 border-b border-slate-100 dark:border-slate-800 flex items-center gap-10 overflow-x-auto shrink-0 scrollbar-hide">
+        <div className="px-10 border-b border-slate-100 dark:border-white/10 flex items-center gap-10 overflow-x-auto shrink-0 scrollbar-hide">
           {['Perfil', 'Permissões', 'Estatísticas'].map((tab) => (
             <button
               key={tab}
@@ -175,11 +175,11 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/20 dark:bg-slate-950/20">
+        <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/20 dark:bg-navy-950/20">
           <div className="animate-in fade-in duration-500">
             {activeTab === 'perfil' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <section className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                <section className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm space-y-6">
                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                     <User size={14} className="text-primary-600" /> Contato
                     Profissional
@@ -232,7 +232,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
             )}
 
             {activeTab === 'permissoes' && (
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm">
                 <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">
                   Controle de Privilégios
                 </h3>
@@ -240,7 +240,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
                   {Object.entries(member.permissions).map(([key, value]) => (
                     <div
                       key={key}
-                      className={`p-4 rounded-2xl border flex items-center justify-between ${value ? 'bg-green-50 border-green-100 dark:bg-green-900/10 dark:border-green-800' : 'bg-slate-50 border-slate-100 dark:bg-slate-800 dark:border-slate-700 opacity-50'}`}
+                      className={`p-4 rounded-2xl border flex items-center justify-between ${value ? 'bg-green-50 border-green-100 dark:bg-green-900/10 dark:border-green-800' : 'bg-slate-50 border-slate-100 dark:bg-navy-800 dark:border-white/15 opacity-50'}`}
                     >
                       <span className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-300">
                         {key.replace('can_', '').replace(/_/g, ' ')}
@@ -268,7 +268,7 @@ export const TeamMemberDetailsModal: React.FC<TeamMemberDetailsModalProps> = ({
           </div>
         </div>
 
-        <div className="p-10 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+        <div className="p-10 border-t border-slate-100 dark:border-white/10 flex justify-end">
           <button
             onClick={onClose}
             className="px-10 py-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl"

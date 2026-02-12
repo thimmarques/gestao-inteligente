@@ -79,7 +79,7 @@ export const ForecastAlerts: React.FC<ForecastAlertsProps> = ({
                 : 'bg-green-500/10 border-green-500/20 text-green-700'
           }`}
         >
-          <div className="shrink-0 p-3 bg-white dark:bg-slate-900 rounded-2xl shadow-sm">
+          <div className="shrink-0 p-3 bg-white dark:bg-navy-800/50 rounded-2xl shadow-sm">
             {alert.icon}
           </div>
           <div className="flex-1 space-y-2">

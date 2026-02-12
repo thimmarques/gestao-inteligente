@@ -56,7 +56,7 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
 
         return (
           <div key={date} className="space-y-8">
-            <h3 className="sticky top-0 z-10 py-1 px-4 bg-slate-50 dark:bg-slate-900/80 backdrop-blur rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 w-fit ml-4 shadow-sm border border-slate-200 dark:border-slate-800">
+            <h3 className="sticky top-0 z-10 py-1 px-4 bg-slate-50 dark:bg-navy-900/85 backdrop-blur rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 w-fit ml-4 shadow-sm border border-slate-200 dark:border-white/10">
               {dateLabel}
             </h3>
 
@@ -74,11 +74,11 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
 
                     <div
                       onClick={() => onExpand(log.id)}
-                      className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all cursor-pointer group/card"
+                      className="bg-white dark:bg-navy-800/50 p-5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer group/card"
                     >
                       <header className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                          <div className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
                             {log.lawyer_name[0]}
                           </div>
                           <span className="text-xs font-bold dark:text-white uppercase tracking-tighter">
@@ -108,7 +108,7 @@ export const LogsTimeline: React.FC<LogsTimelineProps> = ({
 
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex gap-2">
-                          <span className="px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-800 text-[8px] font-bold text-slate-400 uppercase border border-slate-100 dark:border-slate-700">
+                          <span className="px-2 py-0.5 rounded-md bg-slate-50 dark:bg-navy-800 text-[8px] font-bold text-slate-400 uppercase border border-slate-100 dark:border-white/15">
                             {log.entity_type}
                           </span>
                           <span

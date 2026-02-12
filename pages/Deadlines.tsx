@@ -75,7 +75,7 @@ const Deadlines: React.FC = () => {
   }
 
   return (
-    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-navy-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-3xl font-black tracking-tight">
@@ -94,7 +94,7 @@ const Deadlines: React.FC = () => {
         </button>
       </header>
 
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-navy-800/50 p-4 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
         <div className="relative w-full md:w-96">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -105,7 +105,7 @@ const Deadlines: React.FC = () => {
             placeholder="Buscar por título ou número do processo..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-navy-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
@@ -116,7 +116,7 @@ const Deadlines: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${
                 statusFilter === s
                   ? 'bg-primary-600 text-white shadow-md'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-500'
+                  : 'bg-slate-50 dark:bg-navy-800 text-slate-500'
               }`}
             >
               {s}
@@ -133,7 +133,7 @@ const Deadlines: React.FC = () => {
           return (
             <div
               key={deadline.id}
-              className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border ${isLate ? 'border-red-200 dark:border-red-900/50' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-xl transition-all group overflow-hidden relative`}
+              className={`bg-white dark:bg-navy-800/50 p-6 rounded-3xl border ${isLate ? 'border-red-200 dark:border-red-900/50' : 'border-slate-200 dark:border-white/10'} shadow-sm hover:shadow-xl transition-all group overflow-hidden relative`}
             >
               {isLate && (
                 <div className="absolute top-0 right-0 p-2">
@@ -145,7 +145,7 @@ const Deadlines: React.FC = () => {
 
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-2xl">
+                  <div className="bg-slate-50 dark:bg-navy-800 p-3 rounded-2xl">
                     <Scale className="text-primary-600" size={24} />
                   </div>
                   <div className="text-right">
@@ -174,7 +174,7 @@ const Deadlines: React.FC = () => {
                     {deadline.title}
                   </h3>
                   <div className="flex items-center gap-2 mt-2">
-                    <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center">
                       <User size={12} className="text-slate-400" />
                     </div>
                     <span className="text-xs font-bold text-slate-500 dark:text-slate-400 truncate">
@@ -183,7 +183,7 @@ const Deadlines: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/10">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleToggleStatus(deadline)}

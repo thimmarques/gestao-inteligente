@@ -12,7 +12,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
 }) => {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
+      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-white/10 space-y-6">
         <h4 className="font-bold dark:text-white flex items-center gap-2">
           <FileText size={18} className="text-green-500" />
           Dados Processuais
@@ -27,7 +27,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               value={data.process_number || ''}
               onChange={(e) => onChange('process_number', e.target.value)}
               placeholder="0000000-00.0000.0.00.0000"
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono"
             />
           </div>
           <div className="space-y-1.5">
@@ -39,7 +39,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               value={data.comarca || ''}
               onChange={(e) => onChange('comarca', e.target.value)}
               placeholder="Ex: São Paulo - Central"
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
           </div>
           <div className="space-y-1.5">
@@ -50,7 +50,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               type="date"
               value={data.appointment_date || ''}
               onChange={(e) => onChange('appointment_date', e.target.value)}
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
           </div>
           <div className="space-y-1.5">
@@ -60,7 +60,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
             <select
               value={data.process_type || 'cível'}
               onChange={(e) => onChange('process_type', e.target.value)}
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             >
               <option value="cível">Cível</option>
               <option value="trabalhista">Trabalhista</option>
@@ -72,13 +72,13 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
         </div>
       </div>
 
-      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
+      <div className="bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-white/10 space-y-6">
         <h4 className="font-bold dark:text-white flex items-center gap-2">
           <Users size={18} className="text-green-500" />
           Situação Socioeconômica
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="flex items-center justify-between p-3 bg-white dark:bg-slate-900 rounded-xl">
+          <div className="flex items-center justify-between p-3 bg-white dark:bg-navy-800/50 rounded-xl">
             <span className="text-sm font-medium dark:text-slate-300">
               Declaração Hipossuficiência
             </span>
@@ -103,7 +103,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
               value={data.housing_status || ''}
               onChange={(e) => onChange('housing_status', e.target.value)}
               placeholder="Ex: Aluguel, Casa Própria"
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
             />
           </div>
           <div className="col-span-full space-y-1.5">
@@ -116,7 +116,7 @@ export const DefensoriaFields: React.FC<DefensoriaFieldsProps> = ({
                 onChange('social_notes', e.target.value.slice(0, 500))
               }
               rows={4}
-              className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
+              className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none"
               placeholder="Descreva a situação do cliente..."
             />
           </div>

@@ -29,8 +29,8 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
       {/* Coluna Principal */}
       <div className="lg:col-span-2 space-y-6">
         {/* Card Dados do Processo */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center gap-2">
             <FileText size={18} className="text-primary-500" />
             <h3 className="font-bold dark:text-white">Dados Principais</h3>
           </div>
@@ -67,7 +67,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   Status Atual
                 </p>
-                <span className="inline-block px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase rounded border border-slate-200 dark:border-slate-700">
+                <span className="inline-block px-2 py-0.5 bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase rounded border border-slate-200 dark:border-white/15">
                   {caseData.status}
                 </span>
               </div>
@@ -124,8 +124,8 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
         </div>
 
         {/* Card Tags */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Tag size={18} className="text-primary-500" />
               <h3 className="font-bold dark:text-white">Tags</h3>
@@ -140,7 +140,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 caseData.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-100 dark:border-slate-700"
+                    className="px-3 py-1 bg-slate-50 dark:bg-navy-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-100 dark:border-white/15"
                   >
                     #{tag}
                   </span>
@@ -155,8 +155,8 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
         </div>
 
         {/* Card Notas */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <StickyNote size={18} className="text-primary-500" />
               <h3 className="font-bold dark:text-white">Notas do Processo</h3>
@@ -183,8 +183,8 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
 
       {/* Coluna Lateral */}
       <div className="space-y-6">
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center gap-2">
             <BarChart3 size={18} className="text-primary-500" />
             <h3 className="font-bold dark:text-white">Estatísticas</h3>
           </div>
@@ -230,7 +230,7 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
                 {formatCurrency(caseData.finances_balance || 0)}
               </span>
             </div>
-            <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500">
                   <BarChart3 size={16} />

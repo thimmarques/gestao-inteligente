@@ -45,7 +45,7 @@ export const AboutTab: React.FC = () => {
         </p>
 
         <div className="mt-6 flex justify-center gap-2">
-          <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500 border border-slate-200 dark:border-slate-700">
+          <span className="px-3 py-1 bg-slate-100 dark:bg-navy-800 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500 border border-slate-200 dark:border-white/15">
             Versão 2.4.0 (Stable)
           </span>
           <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-100">
@@ -90,7 +90,7 @@ export const AboutTab: React.FC = () => {
           <div className="space-y-3">
             <a
               href="mailto:suporte@legaltech.com.br"
-              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 transition-all group"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-navy-800 hover:bg-slate-100 transition-all group"
             >
               <span className="text-sm font-bold dark:text-white">
                 Email Corporativo
@@ -102,7 +102,7 @@ export const AboutTab: React.FC = () => {
             </a>
             <a
               href="#"
-              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 transition-all group"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-navy-800 hover:bg-slate-100 transition-all group"
             >
               <span className="text-sm font-bold dark:text-white">
                 Central de Ajuda
@@ -114,7 +114,7 @@ export const AboutTab: React.FC = () => {
             </a>
             <a
               href="#"
-              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 transition-all group"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-navy-800 hover:bg-slate-100 transition-all group"
             >
               <span className="text-sm font-bold dark:text-white">
                 Documentação API
@@ -128,7 +128,7 @@ export const AboutTab: React.FC = () => {
         </section>
       </div>
 
-      <footer className="text-center pt-6 border-t border-slate-100 dark:border-slate-800">
+      <footer className="text-center pt-6 border-t border-slate-100 dark:border-white/10">
         <p className="flex items-center justify-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-widest">
           Desenvolvido com{' '}
           <Heart size={12} className="text-red-500 fill-red-500" /> para

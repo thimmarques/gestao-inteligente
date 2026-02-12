@@ -35,7 +35,7 @@ export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
   }, [members]);
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+    <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[3rem] border border-slate-200 dark:border-white/10 shadow-sm space-y-8">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-primary-600 rounded-xl">
@@ -46,7 +46,7 @@ export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
           </h3>
         </div>
 
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shadow-inner">
+        <div className="flex bg-slate-100 dark:bg-navy-800 p-1 rounded-xl shadow-inner">
           {['Este Mês', 'Últimos 3 Meses', 'Este Ano'].map((p) => (
             <button
               key={p}
@@ -130,7 +130,7 @@ export const TeamProductivityChart: React.FC<TeamProductivityChartProps> = ({
         </ResponsiveContainer>
       </div>
 
-      <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-center gap-8">
+      <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex justify-center gap-8">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-primary-500" />
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">

@@ -249,8 +249,8 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
-        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-10">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
+        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 sticky top-0 z-10">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-black dark:text-white tracking-tight">
@@ -262,7 +262,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-400"
             >
               <X size={24} />
             </button>
@@ -290,7 +290,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                       onClick={() =>
                         setFormData({ ...formData, type: type.id as EventType })
                       }
-                      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all relative group ${isActive ? `${type.border} ${type.bg} scale-[1.02] shadow-lg` : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'}`}
+                      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all relative group ${isActive ? `${type.border} ${type.bg} scale-[1.02] shadow-lg` : 'border-slate-100 dark:border-white/10 hover:border-slate-200'}`}
                     >
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md ${type.color}`}
@@ -322,7 +322,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                 placeholder={
                   eventTypes.find((t) => t.id === formData.type)?.placeholder
                 }
-                className="w-full px-6 py-5 bg-slate-50 dark:bg-slate-800 border-none rounded-3xl focus:ring-2 focus:ring-primary-500 dark:text-white text-xl font-bold placeholder:text-slate-400 shadow-inner outline-none transition-all"
+                className="w-full px-6 py-5 bg-slate-50 dark:bg-navy-800 border-none rounded-3xl focus:ring-2 focus:ring-primary-500 dark:text-white text-xl font-bold placeholder:text-slate-400 shadow-inner outline-none transition-all"
               />
             </div>
           </section>
@@ -349,11 +349,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                     }}
                     onFocus={() => setShowProcessList(true)}
                     placeholder="Buscar processo..."
-                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
                   />
                 </div>
                 {showProcessList && filteredCases.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
                     {filteredCases.map((c: any) => (
                       <button
                         key={c.id}
@@ -363,7 +363,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                           setShowProcessList(false);
                           setSearchProcess('');
                         }}
-                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors"
+                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-white/10 last:border-0 transition-colors"
                       >
                         <p className="text-xs font-bold dark:text-white">
                           {c.process_number}
@@ -394,11 +394,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                     }}
                     onFocus={() => setShowClientList(true)}
                     placeholder="Buscar cliente..."
-                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
                   />
                 </div>
                 {showClientList && filteredClients.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
                     {filteredClients.map((c: any) => (
                       <button
                         key={c.id}
@@ -408,7 +408,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                           setShowClientList(false);
                           setSearchClient('');
                         }}
-                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors"
+                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-white/10 last:border-0 transition-colors"
                       >
                         <p className="text-xs font-bold dark:text-white">
                           {c.name}
@@ -428,7 +428,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
               Data e Hora
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-white/10">
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
                   Data
@@ -440,7 +440,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                   onChange={(e) =>
                     setFormData({ ...formData, date: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
+                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
               <div className="space-y-2">
@@ -454,7 +454,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                   onChange={(e) =>
                     setFormData({ ...formData, startTime: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
+                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
               <div className="space-y-2">
@@ -468,14 +468,14 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                   onChange={(e) =>
                     setFormData({ ...formData, endTime: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
+                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
                 />
               </div>
             </div>
           </section>
         </form>
 
-        <div className="px-10 py-8 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky bottom-0 z-20 flex items-center justify-between">
+        <div className="px-10 py-8 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 sticky bottom-0 z-20 flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}

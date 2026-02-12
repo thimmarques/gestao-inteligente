@@ -5,10 +5,10 @@ export const ReportsEmptyState: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-in fade-in duration-500">
       <div className="relative mb-8">
-        <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center text-slate-300 dark:text-slate-700">
+        <div className="w-24 h-24 bg-slate-100 dark:bg-navy-800 rounded-[2rem] flex items-center justify-center text-slate-300 dark:text-slate-700">
           <FileText size={56} />
         </div>
-        <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center shadow-lg text-slate-400">
+        <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white dark:bg-navy-800/50 border border-slate-100 dark:border-white/10 rounded-2xl flex items-center justify-center shadow-lg text-slate-400">
           <History size={20} />
         </div>
       </div>
@@ -25,7 +25,7 @@ export const ReportsEmptyState: React.FC = () => {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse"
+            className="w-2 h-2 rounded-full bg-slate-200 dark:bg-navy-800 animate-pulse"
             style={{ animationDelay: `${i * 200}ms` }}
           />
         ))}

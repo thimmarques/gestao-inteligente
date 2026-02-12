@@ -140,7 +140,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 space-y-6 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-20">
+    <div className="p-4 md:p-6 space-y-6 min-h-screen bg-slate-50 dark:bg-navy-950 animate-in fade-in duration-500 pb-20">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
@@ -176,12 +176,12 @@ const Settings: React.FC = () => {
                   onClick={() => setActiveTab(item.id as SettingsTab)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group shrink-0 lg:shrink lg:w-full whitespace-nowrap ${
                     isActive
-                      ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm'
+                      ? 'bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 shadow-sm'
                       : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   <div
-                    className={`p-1.5 rounded-lg transition-colors relative ${isActive ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-primary-500'}`}
+                    className={`p-1.5 rounded-lg transition-colors relative ${isActive ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600' : 'bg-slate-100 dark:bg-navy-800 text-slate-400 group-hover:text-primary-500'}`}
                   >
                     <Icon size={16} />
                     {item.alert && (

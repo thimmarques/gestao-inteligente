@@ -77,7 +77,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <div
-      className={`${baseClasses} ${!src || imageError ? getBackgroundClass(name) : 'bg-slate-100 dark:bg-slate-800'}`}
+      className={`${baseClasses} ${!src || imageError ? getBackgroundClass(name) : 'bg-slate-100 dark:bg-navy-800'}`}
       onClick={onClick}
     >
       {src && !imageError ? (

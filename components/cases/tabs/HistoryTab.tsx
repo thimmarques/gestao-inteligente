@@ -19,7 +19,7 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ caseId }) => {
 
       <div className="relative pl-8 space-y-10 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
         {isLoading ? (
-          <div className="py-20 text-center bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center gap-3">
+          <div className="py-20 text-center bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center gap-3">
             <Loader2 className="animate-spin text-primary-600" size={32} />
             <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
               Carregando histórico...
@@ -43,7 +43,7 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ caseId }) => {
                     {new Date(activity.created_at).toLocaleString('pt-BR')}
                   </p>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm group-hover:shadow-md transition-shadow">
+                <div className="bg-white dark:bg-navy-800/50 p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm group-hover:shadow-md transition-shadow">
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
                     {activity.entity_description}
                   </p>
@@ -52,7 +52,7 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ caseId }) => {
             </div>
           ))
         ) : (
-          <div className="py-20 text-center bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+          <div className="py-20 text-center bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10">
             <p className="text-slate-400 italic">
               Nenhuma atividade registrada para este processo.
             </p>

@@ -11,7 +11,7 @@ export const GoogleSyncBadge: React.FC<GoogleSyncBadgeProps> = ({
 
   return (
     <div
-      className="absolute top-1 right-1 w-5 h-5 bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm z-10"
+      className="absolute top-1 right-1 w-5 h-5 bg-white dark:bg-navy-800 rounded-lg flex items-center justify-center border border-slate-200 dark:border-white/15 shadow-sm z-10"
       title="Sincronizado com Google Calendar"
     >
       <img

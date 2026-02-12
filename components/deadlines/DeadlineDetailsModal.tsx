@@ -85,7 +85,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
         {/* Header Strip */}
         <div className="h-3 w-full" style={{ backgroundColor: color }} />
 
@@ -126,19 +126,19 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
           <div className="flex gap-2">
             <button
               onClick={() => onEdit(deadline)}
-              className="p-3 bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 rounded-2xl text-slate-400 hover:text-primary-600 transition-all shadow-sm"
+              className="p-3 bg-slate-50 dark:bg-navy-800 hover:bg-primary-50 rounded-2xl text-slate-400 hover:text-primary-600 transition-all shadow-sm"
             >
               <Edit size={20} />
             </button>
             <button
               onClick={handleConfirmDelete}
-              className="p-3 bg-slate-50 dark:bg-slate-800 hover:bg-red-50 rounded-2xl text-slate-400 hover:text-red-500 transition-all shadow-sm"
+              className="p-3 bg-slate-50 dark:bg-navy-800 hover:bg-red-50 rounded-2xl text-slate-400 hover:text-red-500 transition-all shadow-sm"
             >
               <Trash2 size={20} />
             </button>
             <button
               onClick={onClose}
-              className="p-3 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"
+              className="p-3 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full"
             >
               <X size={24} />
             </button>
@@ -151,7 +151,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
           <div
             className={`p-10 rounded-[2.5rem] text-center border-2 transition-all ${
               isPendente
-                ? 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800'
+                ? 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-white/10'
                 : 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30'
             }`}
           >
@@ -194,7 +194,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                   <Calendar size={20} />
                 </div>
                 <div>
@@ -215,7 +215,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                   <Briefcase size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -231,7 +231,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                   <Info size={20} />
                 </div>
                 <div>
@@ -248,7 +248,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                   <User size={20} />
                 </div>
                 <div>
@@ -264,7 +264,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
           </div>
 
           {/* Description */}
-          <div className="space-y-3 bg-slate-50/50 dark:bg-slate-800/20 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800">
+          <div className="space-y-3 bg-slate-50/50 dark:bg-slate-800/20 p-6 rounded-[2rem] border border-slate-100 dark:border-white/10">
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
               <FileText size={12} /> Descrição e Orientações
             </h4>
@@ -277,7 +277,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-10 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
+        <div className="p-10 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10">
           {isPendente ? (
             <button
               onClick={handleToggle}
@@ -295,7 +295,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
             <button
               onClick={handleToggle}
               disabled={isActionLoading}
-              className="w-full py-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-500 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-3"
+              className="w-full py-5 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/15 text-slate-500 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-3"
             >
               {isActionLoading ? (
                 <Loader2 className="animate-spin" size={24} />

@@ -343,7 +343,7 @@ const Reports: React.FC = () => {
   }, [recentReports, searchTerm]);
 
   return (
-    <div className="p-4 md:p-8 lg:p-10 space-y-10 min-h-screen bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 pb-24">
+    <div className="p-4 md:p-8 lg:p-10 space-y-10 min-h-screen bg-slate-50 dark:bg-navy-950 animate-in fade-in duration-500 pb-24">
       <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div>
           <h1 className="text-3xl md:text-4xl font-black dark:text-white tracking-tight">
@@ -363,7 +363,7 @@ const Reports: React.FC = () => {
             placeholder="Buscar histórico..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-64 pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm shadow-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            className="w-full md:w-64 pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl text-sm shadow-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all"
           />
         </div>
       </header>
@@ -379,14 +379,14 @@ const Reports: React.FC = () => {
           <h2 className="text-xl font-black dark:text-white tracking-tight">
             Histórico Recente
           </h2>
-          <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800" />
+          <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800" />
         </div>
 
-        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[250px]">
+        <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden min-h-[250px]">
           {filteredHistory.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                <thead className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
                   <tr>
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                       Modelo
@@ -446,7 +446,7 @@ const Reports: React.FC = () => {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleDownloadFromHistory(report)}
-                            className="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-primary-600 transition-all"
+                            className="p-3 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl text-primary-600 transition-all"
                           >
                             <Download size={18} />
                           </button>

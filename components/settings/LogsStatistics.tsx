@@ -64,7 +64,7 @@ export const LogsStatistics: React.FC<LogsStatisticsProps> = ({ logs }) => {
 };
 
 const MiniStat = ({ label, value, color, icon, sub }: any) => (
-  <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between h-full group hover:border-primary-500/30 transition-colors">
+  <div className="bg-white dark:bg-navy-800/50 p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-col justify-between h-full group hover:border-primary-500/30 transition-colors">
     <div className="flex items-center justify-between mb-3">
       <span className="text-[8px] font-black uppercase text-slate-400 tracking-[0.15em] leading-tight flex-1">
         {label}

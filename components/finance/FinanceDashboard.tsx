@@ -78,7 +78,7 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
           <TrendingDown size={24} />
         ),
       color: stats.balance >= 0 ? 'text-green-600' : 'text-red-600',
-      bg: 'bg-white dark:bg-slate-900',
+      bg: 'bg-white dark:bg-navy-800/50',
       sub: 'Receitas - Despesas efetivadas',
     },
     {
@@ -86,7 +86,7 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
       value: formatCurrency(stats.mrr),
       icon: <Repeat size={24} />,
       color: 'text-primary-600',
-      bg: 'bg-white dark:bg-slate-900',
+      bg: 'bg-white dark:bg-navy-800/50',
       tooltip: 'Soma dos contratos de honorários fixos mensais',
       sub: 'Base estável do escritório',
     },
@@ -95,7 +95,7 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
       value: formatCurrency(stats.avgTicket),
       icon: <Users size={24} />,
       color: 'text-purple-600',
-      bg: 'bg-white dark:bg-slate-900',
+      bg: 'bg-white dark:bg-navy-800/50',
       sub: 'Média por cliente particular',
     },
     {
@@ -108,7 +108,7 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
           : stats.defaultRate > 5
             ? 'text-amber-600'
             : 'text-green-600',
-      bg: 'bg-white dark:bg-slate-900',
+      bg: 'bg-white dark:bg-navy-800/50',
       sub: `R$ ${stats.overdueAmount.toLocaleString()} vencidos`,
     },
   ];
@@ -118,9 +118,9 @@ export const FinanceDashboard: React.FC<FinanceDashboardProps> = ({
       {cards.map((card, i) => (
         <div
           key={i}
-          className={`${card.bg} p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group`}
+          className={`${card.bg} p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm relative overflow-hidden group`}
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-slate-800/50 rounded-bl-[5rem] -mr-16 -mt-16 group-hover:scale-110 transition-transform" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-white/5 rounded-bl-[5rem] -mr-16 -mt-16 group-hover:scale-110 transition-transform" />
 
           <header className="flex items-center justify-between mb-6">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">

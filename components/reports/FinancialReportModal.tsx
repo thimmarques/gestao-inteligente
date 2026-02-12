@@ -39,8 +39,8 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
-        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
+        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-green-600">
@@ -57,7 +57,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full text-slate-400"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full text-slate-400"
             >
               <X size={24} />
             </button>
@@ -76,7 +76,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
                 onChange={(e) =>
                   setConfig({ ...config, startDate: new Date(e.target.value) })
                 }
-                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 rounded-2xl dark:text-white text-sm"
+                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 rounded-2xl dark:text-white text-sm"
               />
               <input
                 type="date"
@@ -84,7 +84,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
                 onChange={(e) =>
                   setConfig({ ...config, endDate: new Date(e.target.value) })
                 }
-                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 rounded-2xl dark:text-white text-sm"
+                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 rounded-2xl dark:text-white text-sm"
               />
             </div>
             <PeriodPresets
@@ -102,7 +102,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfig({ ...config, format: 'pdf' })}
-                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'pdf' ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20' : 'border-slate-100 dark:border-slate-800'}`}
+                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'pdf' ? 'border-primary-600 bg-primary-50/50 dark:bg-primary-900/20' : 'border-slate-100 dark:border-white/10'}`}
               >
                 <FileText
                   size={32}
@@ -119,7 +119,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfig({ ...config, format: 'excel' })}
-                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'excel' ? 'border-green-600 bg-green-50/50 dark:bg-green-900/20' : 'border-slate-100 dark:border-slate-800'}`}
+                className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-center gap-3 ${config.format === 'excel' ? 'border-green-600 bg-green-50/50 dark:bg-green-900/20' : 'border-slate-100 dark:border-white/10'}`}
               >
                 <FileSpreadsheet
                   size={32}
@@ -137,7 +137,7 @@ export const FinancialReportModal: React.FC<FinancialReportModalProps> = ({
           </section>
         </div>
 
-        <div className="px-10 py-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+        <div className="px-10 py-8 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10 flex justify-end">
           <button
             onClick={() => onGenerate(config)}
             className="flex items-center gap-3 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary-500/20 transition-all active:scale-95"

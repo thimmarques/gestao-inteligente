@@ -67,7 +67,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
         className={`relative p-12 border-2 border-dashed rounded-[2.5rem] text-center transition-all cursor-pointer ${
           isDragging
             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
-            : 'border-slate-200 dark:border-slate-800 hover:border-primary-400'
+            : 'border-slate-200 dark:border-white/10 hover:border-primary-400'
         }`}
       >
         <input
@@ -87,7 +87,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+            <div className="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-slate-400">
               <Upload size={32} />
             </div>
             <div>
@@ -106,10 +106,10 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
       <div className="space-y-6">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
           Documentos Anexados
-          <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[10px] font-bold text-slate-500">
+          <span className="px-2 py-0.5 bg-slate-100 dark:bg-navy-800 rounded-md text-[10px] font-bold text-slate-500">
             {documents.length}
           </span>
-          <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800"></div>
+          <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800"></div>
         </h4>
 
         {documents.length > 0 ? (
@@ -117,7 +117,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
             {documents.map((doc) => (
               <div
                 key={doc.id}
-                className="group relative bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all"
+                className="group relative bg-white dark:bg-navy-800/50 p-5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all"
               >
                 <div className="flex flex-col items-center text-center gap-3">
                   <div
@@ -148,7 +148,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
 
                 {/* Overlay de Ações */}
                 <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm rounded-3xl flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-3 bg-white dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-200 hover:scale-110 transition-transform shadow-xl">
+                  <button className="p-3 bg-white dark:bg-navy-800 rounded-2xl text-slate-700 dark:text-slate-200 hover:scale-110 transition-transform shadow-xl">
                     <Download size={20} />
                   </button>
                   <button
@@ -165,7 +165,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+          <div className="py-20 text-center bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10">
             <p className="text-slate-400 italic">
               Nenhum documento anexado ao processo ainda.
             </p>

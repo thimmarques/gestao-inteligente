@@ -118,9 +118,9 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header */}
-        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary-600">
@@ -137,7 +137,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-400"
             >
               <X size={24} />
             </button>
@@ -163,7 +163,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                       onChange={(e) =>
                         setDateRange({ ...dateRange, start: e.target.value })
                       }
-                      className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-6 py-4 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                   <div className="space-y-2">
@@ -176,7 +176,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                       onChange={(e) =>
                         setDateRange({ ...dateRange, end: e.target.value })
                       }
-                      className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                      className="w-full px-6 py-4 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
                     />
                   </div>
                 </div>
@@ -215,7 +215,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                     className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-all ${
                       selectedIds.length === availableEvents.length
                         ? 'bg-primary-600 border-primary-600'
-                        : 'border-slate-200 dark:border-slate-700 group-hover:border-primary-400'
+                        : 'border-slate-200 dark:border-white/15 group-hover:border-primary-400'
                     }`}
                   >
                     {selectedIds.length === availableEvents.length && (
@@ -242,14 +242,14 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
                       className={`flex items-center gap-4 p-4 rounded-3xl border transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-800'
-                          : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                          : 'bg-white dark:bg-navy-800/50 border-slate-100 dark:border-white/10 hover:border-slate-200'
                       }`}
                     >
                       <div
                         className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-all ${
                           isSelected
                             ? 'bg-primary-600 border-primary-600 shadow-sm'
-                            : 'border-slate-200 dark:border-slate-700'
+                            : 'border-slate-200 dark:border-white/15'
                         }`}
                       >
                         {isSelected && (
@@ -281,7 +281,7 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-10 py-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="px-10 py-8 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
           <button
             type="button"
             onClick={step === 1 ? onClose : () => setStep(1)}

@@ -21,7 +21,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
     );
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 soft-shadow h-[340px] flex flex-col group relative overflow-hidden">
+    <div className="glass-card rounded-3xl p-8 soft-shadow h-[340px] flex flex-col group relative overflow-hidden">
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-transparent rounded-bl-full -mr-8 -mt-8 pointer-events-none" />
 
       <header className="flex items-center justify-between mb-6 relative z-10">
@@ -40,7 +40,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
         </div>
         <Link
           to="/equipe"
-          className="p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all active:scale-95"
+          className="p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl transition-all active:scale-95"
         >
           <ExternalLink size={18} />
         </Link>
@@ -59,7 +59,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
               className="w-full flex items-center justify-between p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-2xl transition-all group/item text-left border border-transparent hover:border-slate-100 dark:hover:border-slate-800"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center border-2 border-white dark:border-slate-700 shadow-sm group-hover/item:border-primary-100 dark:group-hover/item:border-primary-900/30 transition-colors">
+                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-navy-800 overflow-hidden flex items-center justify-center border-2 border-white dark:border-white/15 shadow-sm group-hover/item:border-primary-100 dark:group-hover/item:border-primary-900/30 transition-colors">
                   {m.photo_url ? (
                     <img
                       src={m.photo_url}
@@ -93,7 +93,7 @@ export const TeamWidget: React.FC<TeamWidgetProps> = ({
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-50 dark:border-slate-800/50 flex justify-center">
+      <div className="mt-4 pt-3 border-t border-slate-50 dark:border-white/[0.06] flex justify-center">
         <Link
           to="/equipe"
           className="flex items-center gap-1 text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-widest hover:gap-2 transition-all p-2"

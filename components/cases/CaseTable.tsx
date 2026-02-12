@@ -10,7 +10,7 @@ interface CaseTableProps {
 
 const statusColorMap: Record<string, string> = {
   distribuído:
-    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+    'bg-slate-100 text-slate-700 dark:bg-navy-800 dark:text-slate-400',
   andamento: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   sentenciado:
     'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
@@ -39,10 +39,10 @@ const typeColorMap: Record<string, string> = {
 
 export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <thead className="bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
             <tr>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
                 Número
@@ -88,7 +88,7 @@ export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold dark:text-white border border-slate-200 dark:border-slate-700">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-xs font-bold dark:text-white border border-slate-200 dark:border-white/15">
                         {c.client_id.charAt(0).toUpperCase()}
                       </div>
                       <span className="font-medium text-sm dark:text-white">
@@ -98,7 +98,7 @@ export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border border-transparent ${typeColorMap[c.type.toLowerCase()] || 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border border-transparent ${typeColorMap[c.type.toLowerCase()] || 'bg-slate-100 dark:bg-navy-800 text-slate-500'}`}
                     >
                       {c.type}
                     </span>
@@ -118,7 +118,7 @@ export const CaseTable: React.FC<CaseTableProps> = ({ cases, onRowClick }) => {
                       className="flex items-center justify-end gap-2"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <button className="p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+                      <button className="p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all">
                         <MoreVertical size={18} />
                       </button>
                     </div>

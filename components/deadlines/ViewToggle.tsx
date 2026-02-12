@@ -8,7 +8,7 @@ interface ViewToggleProps {
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onChange }) => {
   return (
-    <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <div className="flex bg-white dark:bg-navy-800/50 p-1 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
       <button
         onClick={() => {
           onChange('list');

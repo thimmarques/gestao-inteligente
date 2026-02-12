@@ -100,13 +100,13 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300"
+        className="bg-white dark:bg-navy-800/50 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300"
       >
         <form
           onSubmit={handleSubmit}
           className="flex flex-col h-full overflow-hidden"
         >
-          <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+          <div className="px-8 py-6 border-b border-slate-100 dark:border-white/10 flex items-center justify-between shrink-0">
             <div>
               <h2
                 id="modal-title"
@@ -121,7 +121,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-500"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-500"
             >
               <X size={20} />
             </button>
@@ -148,7 +148,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, client_id: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all"
                   >
                     <option value="">Selecione um cliente</option>
                     {clients.map((c) => (
@@ -177,7 +177,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                         process_number: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all font-mono"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all font-mono"
                   />
                 </div>
 
@@ -196,7 +196,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, court: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-2 rounded-xl dark:text-white focus:ring-0 border-transparent focus:border-primary-500 transition-all"
                   />
                 </div>
               </div>
@@ -223,7 +223,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                         type: e.target.value as CaseType,
                       })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
                   >
                     <option value="cível">Cível</option>
                     <option value="trabalhista">Trabalhista</option>
@@ -250,7 +250,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                         status: e.target.value as CaseStatus,
                       })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
                   >
                     {Object.values(CaseStatus).map((s) => (
                       <option key={s} value={s}>
@@ -274,7 +274,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, value: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
                   />
                 </div>
               </div>
@@ -287,7 +287,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
               >
                 <Tag size={16} /> Tags (Máx 10 - Enter para adicionar)
               </label>
-              <div className="flex flex-wrap gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus-within:border-primary-500 transition-all">
+              <div className="flex flex-wrap gap-2 p-3 bg-slate-50 dark:bg-navy-800 rounded-2xl border-2 border-transparent focus-within:border-primary-500 transition-all">
                 {formData.tags.map((tag) => (
                   <span
                     key={tag}
@@ -325,13 +325,13 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, notes: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl dark:text-white resize-none focus:ring-2 ring-primary-500"
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl dark:text-white resize-none focus:ring-2 ring-primary-500"
                 placeholder="Insira detalhes relevantes sobre o andamento do processo..."
               />
             </section>
           </div>
 
-          <div className="px-8 py-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-4 shrink-0">
+          <div className="px-8 py-6 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10 flex justify-end gap-4 shrink-0">
             <button
               type="button"
               onClick={onClose}

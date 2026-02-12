@@ -38,8 +38,8 @@ const Signup = lazy(() => import('./pages/Signup.tsx'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));
 
 const PageLoader = () => (
-  <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-slate-950">
-    <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+  <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-navy-950">
+    <div className="w-10 h-10 border-4 border-electric-blue border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 

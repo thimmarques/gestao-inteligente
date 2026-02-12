@@ -43,7 +43,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   if (isLoading || !caseData) {
     return (
       <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-        <div className="bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] flex flex-col items-center gap-4">
+        <div className="bg-white dark:bg-navy-800/50 p-10 rounded-[2.5rem] flex flex-col items-center gap-4">
           <Loader2 className="animate-spin text-primary-600" size={40} />
           <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
             Carregando detalhes...
@@ -115,8 +115,8 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[110] flex items-stretch md:items-center justify-center bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-slate-50 dark:bg-slate-950 w-full max-w-6xl md:h-[90vh] md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
-        <div className="relative z-20 p-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
+      <div className="bg-slate-50 dark:bg-navy-950 w-full max-w-6xl md:h-[90vh] md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
+        <div className="relative z-20 p-8 bg-white dark:bg-navy-800/50 border-b border-slate-100 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl font-bold dark:text-white tracking-tight">
@@ -135,14 +135,14 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsEditModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+              className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-white/15 rounded-xl font-bold text-sm dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
             >
               <Edit size={16} />
               Editar
             </button>
             <button
               onClick={handleArchive}
-              className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+              className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-white/15 rounded-xl font-bold text-sm dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
             >
               <Archive size={16} />
               Arquivar
@@ -156,14 +156,14 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
             </button>
             <button
               onClick={onClose}
-              className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-all text-slate-500"
+              className="p-2 bg-slate-100 dark:bg-navy-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-all text-slate-500"
             >
               <X size={24} />
             </button>
           </div>
         </div>
 
-        <div className="relative z-10 flex items-center gap-8 px-8 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 overflow-x-auto shrink-0 scrollbar-hide">
+        <div className="relative z-10 flex items-center gap-8 px-8 bg-white dark:bg-navy-800/50 border-b border-slate-100 dark:border-white/10 overflow-x-auto shrink-0 scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.name}

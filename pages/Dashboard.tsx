@@ -51,7 +51,7 @@ const KPICard = ({
 }: any) => (
   <button
     onClick={onClick}
-    className="relative bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow text-left hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden w-full"
+    className="relative glass-card p-8 rounded-3xl soft-shadow text-left hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden w-full"
   >
     <div
       className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${colorClass} to-transparent rounded-bl-full -mr-10 -mt-10 opacity-20 group-hover:opacity-30 transition-opacity`}
@@ -60,7 +60,7 @@ const KPICard = ({
     <div className="relative z-10">
       <div className="flex items-center justify-between mb-8">
         <div
-          className={`p-3.5 rounded-2xl shadow-sm ring-1 ring-inset ${isPositive ? 'bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-900/30' : 'bg-rose-50 text-rose-600 ring-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:ring-rose-900/30'}`}
+          className={`p-3.5 rounded-2xl shadow-sm ring-1 ring-inset ${isPositive ? 'bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-neon-green/10 dark:text-neon-green dark:ring-neon-green/20' : 'bg-rose-50 text-rose-600 ring-rose-100 dark:bg-matte-red/10 dark:text-matte-red dark:ring-matte-red/20'}`}
         >
           {React.cloneElement(icon, { size: 22 })}
         </div>
@@ -68,8 +68,8 @@ const KPICard = ({
           <div
             className={`flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
               isPositive
-                ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20'
-                : 'bg-rose-50 text-rose-600 dark:bg-rose-900/20'
+                ? 'bg-emerald-50 text-emerald-600 dark:bg-neon-green/10 dark:text-neon-green'
+                : 'bg-rose-50 text-rose-600 dark:bg-matte-red/10 dark:text-matte-red'
             }`}
           >
             {isPositive ? (
@@ -206,7 +206,13 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-6 md:p-10 space-y-10 animate-in fade-in duration-500 pb-32 text-slate-800 dark:text-slate-100 max-w-[1600px] mx-auto">
+    <div
+      className="p-6 md:p-10 space-y-10 animate-in fade-in duration-500 pb-32 text-slate-800 dark:text-slate-100 max-w-[1600px] mx-auto"
+      style={{
+        background:
+          'radial-gradient(ellipse at 0% 0%, rgba(41, 121, 255, 0.06) 0%, transparent 50%)',
+      }}
+    >
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
@@ -216,7 +222,7 @@ const Dashboard: React.FC = () => {
             Aqui está o resumo estratégico do seu escritório hoje.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-white dark:bg-slate-900 px-4 py-2 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 glass-card px-4 py-2 rounded-xl shadow-sm">
           <CalendarIcon size={14} />
           {new Date().toLocaleDateString('pt-BR', {
             weekday: 'long',
@@ -233,7 +239,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
+        <div className="lg:col-span-2 glass-card p-8 rounded-3xl soft-shadow">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-bold text-lg tracking-tight flex items-center gap-3 text-slate-800 dark:text-white">
               <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-primary-600">
@@ -243,7 +249,7 @@ const Dashboard: React.FC = () => {
             </h3>
             <button
               onClick={() => navigate('/financeiro')}
-              className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-primary-600 transition-colors"
+              className="p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg text-slate-400 hover:text-primary-600 transition-colors"
             >
               <MoreHorizontal size={20} />
             </button>
@@ -302,7 +308,7 @@ const Dashboard: React.FC = () => {
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-slate-400 italic space-y-4">
-                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full">
+                <div className="p-4 bg-slate-50 dark:bg-navy-800 rounded-full">
                   <BarChart3 size={32} className="opacity-50" />
                 </div>
                 <p>Nenhum dado financeiro para exibir.</p>
@@ -318,7 +324,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
+        <div className="glass-card p-8 rounded-3xl soft-shadow">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-lg flex items-center gap-3 text-slate-800 dark:text-white">
               <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl text-indigo-600">
@@ -341,7 +347,7 @@ const Dashboard: React.FC = () => {
                   onClick={() => setSelectedEvent(task)}
                   className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30 transition-all group text-left"
                 >
-                  <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl font-bold text-xs text-slate-500 group-hover:text-indigo-600 group-hover:bg-white dark:group-hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700">
+                  <div className="p-2.5 bg-slate-50 dark:bg-navy-800 rounded-xl font-bold text-xs text-slate-500 group-hover:text-indigo-600 group-hover:bg-white dark:group-hover:bg-slate-800 transition-colors border border-slate-100 dark:border-white/15">
                     {new Date(task.start_time).toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -366,7 +372,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-100 dark:border-white/10 soft-shadow">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-lg flex items-center gap-3 text-slate-800 dark:text-white">
               <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-xl text-orange-600">
@@ -391,7 +397,7 @@ const Dashboard: React.FC = () => {
                   <button
                     key={i}
                     onClick={() => setSelectedDeadline(deadline)}
-                    className="w-full flex items-center gap-4 p-3 border border-slate-100 dark:border-slate-800 rounded-2xl hover:bg-orange-50/50 dark:hover:bg-orange-900/10 hover:border-orange-200 dark:hover:border-orange-900/30 transition-all text-left group"
+                    className="w-full flex items-center gap-4 p-3 border border-slate-100 dark:border-white/10 rounded-2xl hover:bg-orange-50/50 dark:hover:bg-orange-900/10 hover:border-orange-200 dark:hover:border-orange-900/30 transition-all text-left group"
                   >
                     <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-50 dark:bg-orange-900/20 text-orange-500 shrink-0 group-hover:scale-110 transition-transform">
                       <Clock size={18} />

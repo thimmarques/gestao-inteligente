@@ -164,7 +164,7 @@ export const IntegrationsTab: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className={settingsConfig.cardClass + ' overflow-hidden'}>
         <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-inner flex items-center justify-center shrink-0">
+          <div className="w-16 h-16 rounded-2xl bg-white dark:bg-navy-800 border border-slate-100 dark:border-white/15 shadow-inner flex items-center justify-center shrink-0">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
               className="w-8 h-8"
@@ -197,11 +197,11 @@ export const IntegrationsTab: React.FC = () => {
               </span>
             </div>
 
-            <div className="w-full h-px bg-slate-100 dark:bg-slate-800" />
+            <div className="w-full h-px bg-slate-100 dark:bg-navy-800" />
 
             {isConnected ? (
               <div className="space-y-6">
-                <div className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 border border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50 dark:bg-white/5 p-5 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 border border-slate-100 dark:border-white/10">
                   <div className="space-y-1">
                     <p className={settingsConfig.labelClass}>Conta Conectada</p>
                     <p className="text-sm font-bold dark:text-white flex items-center gap-2">
@@ -226,7 +226,7 @@ export const IntegrationsTab: React.FC = () => {
                   <button
                     onClick={handleSync}
                     disabled={isSyncing}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm disabled:opacity-50"
                   >
                     <RefreshCw
                       size={14}

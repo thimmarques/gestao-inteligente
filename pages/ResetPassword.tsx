@@ -29,7 +29,7 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl text-white font-bold text-3xl mb-4 shadow-xl shadow-primary-500/20">
@@ -43,7 +43,7 @@ const ResetPassword: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl">
           {success ? (
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -87,7 +87,7 @@ const ResetPassword: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-transparent focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none"
+                      className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border border-transparent focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none"
                     />
                   </div>
                 </div>

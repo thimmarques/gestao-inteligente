@@ -161,8 +161,8 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[600] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
-        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300">
+        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold dark:text-white">
               Exportar Auditoria
@@ -173,7 +173,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all"
+            className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-all"
           >
             <X size={24} />
           </button>
@@ -183,7 +183,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
           {isExporting ? (
             <div className="py-10 flex flex-col items-center justify-center space-y-6 animate-in fade-in duration-300">
               <div className="relative">
-                <div className="w-20 h-20 border-4 border-primary-100 dark:border-slate-800 rounded-full" />
+                <div className="w-20 h-20 border-4 border-primary-100 dark:border-white/10 rounded-full" />
                 <div className="absolute inset-0 w-20 h-20 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-xs font-black text-primary-600">
@@ -214,7 +214,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                     onChange={(e) =>
                       setDateRange({ ...dateRange, start: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-sm dark:text-white"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl text-sm dark:text-white"
                   />
                   <input
                     type="date"
@@ -222,7 +222,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                     onChange={(e) =>
                       setDateRange({ ...dateRange, end: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-sm dark:text-white"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl text-sm dark:text-white"
                   />
                 </div>
               </div>
@@ -259,7 +259,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                       className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
                         formatType === f.id
                           ? 'border-primary-600 bg-primary-50/10'
-                          : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                          : 'border-slate-100 dark:border-white/10 hover:border-slate-200'
                       }`}
                     >
                       <f.icon size={24} className={f.color} />
@@ -280,7 +280,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
 
               {/* Filtros Extras */}
               <div className="space-y-3">
-                <label className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl cursor-pointer group">
+                <label className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 rounded-2xl cursor-pointer group">
                   <input
                     type="checkbox"
                     checked={filters.onlyCritical}
@@ -299,7 +299,7 @@ export const ExportLogsModal: React.FC<ExportLogsModalProps> = ({
                   </div>
                 </label>
 
-                <label className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl cursor-pointer group">
+                <label className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 rounded-2xl cursor-pointer group">
                   <input
                     type="checkbox"
                     checked={filters.includeTechnical}

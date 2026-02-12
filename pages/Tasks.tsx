@@ -80,7 +80,7 @@ const Tasks: React.FC = () => {
   };
 
   return (
-    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-navy-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-widest">
@@ -100,7 +100,7 @@ const Tasks: React.FC = () => {
         </button>
       </header>
 
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-navy-800/50 p-4 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
         <div className="relative w-full md:w-96">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -111,7 +111,7 @@ const Tasks: React.FC = () => {
             placeholder="Buscar tarefas..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-navy-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
           />
         </div>
         <div className="flex gap-2">
@@ -119,7 +119,7 @@ const Tasks: React.FC = () => {
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${statusFilter === s ? 'bg-primary-600 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-500'}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${statusFilter === s ? 'bg-primary-600 text-white shadow-md' : 'bg-slate-50 dark:bg-navy-800 text-slate-500'}`}
             >
               {s}
             </button>
@@ -130,7 +130,7 @@ const Tasks: React.FC = () => {
       {isAdding && (
         <form
           onSubmit={handleAddTask}
-          className="bg-white dark:bg-slate-900 p-6 rounded-3xl border-2 border-primary-500 shadow-xl animate-in slide-in-from-top-4 duration-300"
+          className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border-2 border-primary-500 shadow-xl animate-in slide-in-from-top-4 duration-300"
         >
           <input
             autoFocus
@@ -138,7 +138,7 @@ const Tasks: React.FC = () => {
             placeholder="O que precisa ser feito?"
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            className="w-full bg-transparent text-xl font-bold outline-none border-b-2 border-slate-100 dark:border-slate-800 pb-2 mb-4"
+            className="w-full bg-transparent text-xl font-bold outline-none border-b-2 border-slate-100 dark:border-white/10 pb-2 mb-4"
           />
           <div className="flex justify-end gap-3">
             <button
@@ -170,7 +170,7 @@ const Tasks: React.FC = () => {
           {filteredTasks.map((task) => (
             <div
               key={task.id}
-              className={`flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl group hover:shadow-md transition-all ${task.status === 'concluído' ? 'opacity-60' : ''}`}
+              className={`flex items-center gap-4 p-4 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-3xl group hover:shadow-md transition-all ${task.status === 'concluído' ? 'opacity-60' : ''}`}
             >
               <button
                 onClick={() => handleToggleStatus(task)}
@@ -211,7 +211,7 @@ const Tasks: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed border-slate-300 dark:border-slate-800">
+        <div className="text-center py-20 bg-white dark:bg-navy-800/50 rounded-[3rem] border border-dashed border-slate-300 dark:border-white/10">
           <ListTodo size={48} className="mx-auto text-slate-200 mb-4" />
           <p className="text-slate-500 font-medium font-serif italic text-lg">
             Parece que você está em dia com tudo! 🎉

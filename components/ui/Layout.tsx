@@ -47,7 +47,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
       active
         ? 'bg-primary-600 text-white shadow-md'
-        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/5'
     }`}
   >
     <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
   ];
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-navy-950">
       {/* Mobile Sidebar Overlay */}
       {!isSidebarOpen && (
         <button
@@ -111,7 +111,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
       {/* Sidebar */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-transform lg:static lg:translate-x-0
+        fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-navy-800/50 border-r border-slate-200 dark:border-white/10 transition-transform lg:static lg:translate-x-0
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
       >
@@ -142,7 +142,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
               />
             ))}
 
-            <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+            <div className="pt-4 mt-4 border-t border-slate-200 dark:border-white/10">
               <SidebarItem
                 to="/foco"
                 icon={<Target size={20} />}
@@ -156,13 +156,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
             </div>
           </nav>
 
-          <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+          <div className="p-4 border-t border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-3 p-2">
               <Avatar
                 src={user?.photo_url || null}
                 name={user?.name || 'User'}
                 size="md"
-                className="border border-slate-200 dark:border-slate-700 hover:scale-105 transition-transform cursor-pointer"
+                className="border border-slate-200 dark:border-white/15 hover:scale-105 transition-transform cursor-pointer"
                 onClick={() => navigate('/configuracoes')}
               />
               <div className="flex-1 min-w-0">
@@ -197,7 +197,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0 z-30">
+        <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-navy-800/50 border-b border-slate-200 dark:border-white/10 shrink-0 z-30">
           <div className="flex-1 max-w-xl hidden md:block">
             <div className="relative">
               <Search
@@ -207,7 +207,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
               <input
                 type="text"
                 placeholder="Buscar processos, clientes... (Ctrl + K)"
-                className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm border-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-navy-800 rounded-lg text-sm border-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
@@ -215,12 +215,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
           <div className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
-              className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+              className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg"
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <div className="relative">
-              <button className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+              <button className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg">
                 <Bell size={20} />
                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
               </button>

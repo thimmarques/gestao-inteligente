@@ -81,7 +81,7 @@ export const DeadlineStatusFilters: React.FC<DeadlineStatusFiltersProps> = ({
     const maps: Record<string, string> = {
       slate: isActive
         ? 'bg-slate-600 text-white border-slate-600'
-        : 'text-slate-500 border-slate-200 hover:bg-slate-50 dark:border-slate-800',
+        : 'text-slate-500 border-slate-200 hover:bg-slate-50 dark:border-white/10',
       green: isActive
         ? 'bg-green-600 text-white border-green-600'
         : 'text-green-600 border-green-200 hover:bg-green-50 dark:border-green-800',
@@ -127,7 +127,7 @@ export const DeadlineStatusFilters: React.FC<DeadlineStatusFiltersProps> = ({
             </div>
             <span>{f.label}</span>
             <span
-              className={`px-1.5 py-0.5 rounded-md text-[9px] ${isActive ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-800'}`}
+              className={`px-1.5 py-0.5 rounded-md text-[9px] ${isActive ? 'bg-white/20' : 'bg-slate-100 dark:bg-navy-800'}`}
             >
               {f.count}
             </span>

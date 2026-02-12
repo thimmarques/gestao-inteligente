@@ -44,10 +44,10 @@ export const TeamMemberTable: React.FC<TeamMemberTableProps> = ({
   currentUserId,
 }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[1.5rem] md:rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <thead className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
             <tr>
               <th className="px-6 md:px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Membro
@@ -87,7 +87,7 @@ export const TeamMemberTable: React.FC<TeamMemberTableProps> = ({
                   >
                     <td className="px-6 md:px-8 py-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200 dark:border-white/15">
                           {member.photo_url ? (
                             <img
                               src={member.photo_url}

@@ -32,7 +32,7 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({
         <select
           value={currentView}
           onChange={(e) => onViewChange(e.target.value as CalendarViewType)}
-          className="w-full appearance-none bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary-500 outline-none shadow-sm"
+          className="w-full appearance-none bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary-500 outline-none shadow-sm"
         >
           {views.map((v) => (
             <option key={v.id} value={v.id}>
@@ -47,7 +47,7 @@ export const CalendarViewTabs: React.FC<CalendarViewTabsProps> = ({
 
       {/* Desktop Tabs View */}
       <div
-        className="hidden md:flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
+        className="hidden md:flex bg-white dark:bg-navy-800/50 p-1 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm"
         role="tablist"
       >
         {views.map((view) => {

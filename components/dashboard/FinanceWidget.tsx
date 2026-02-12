@@ -19,7 +19,7 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({
   const balance = revenue - expense;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-slate-800 shadow-sm h-[280px] flex flex-col relative group">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] p-8 border border-slate-200 dark:border-white/10 shadow-sm h-[280px] flex flex-col relative group">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-xl">
@@ -56,7 +56,7 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center border-t border-slate-100 dark:border-slate-800 pt-4">
+      <div className="flex-1 flex flex-col justify-center border-t border-slate-100 dark:border-white/10 pt-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase">

@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Color Palette - Extended */
+  /* === Original Palette (preserved) === */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
@@ -26,18 +26,34 @@
   --color-slate-900: #0f172a;
   --color-slate-950: #020617;
 
-  /* Explicitly define slate if missing or map it */
-  /* But wait, if it works in Agenda, slate must exist? */
+  /* === LegalTech 2026 Palette === */
+  --color-navy-950: #0a192f;
+  --color-navy-900: #0d1f3c;
+  --color-navy-800: #112240;
+  --color-navy-700: #1a365d;
+  --color-navy-600: #233554;
 
-  /* Force dark mode class strategy if needed */
-  /* --animate-spin-slow: spin 3s linear infinite; ... */
+  --color-electric-blue: #2979ff;
+  --color-electric-blue-light: #448aff;
+  --color-electric-blue-dark: #2962ff;
 
-  /* ... */
+  --color-metallic-gold: #d4af37;
+  --color-metallic-gold-light: #e0c068;
+  --color-metallic-gold-dark: #b8941f;
+
+  --color-neon-green: #00e676;
+  --color-neon-green-soft: #69f0ae;
+  --color-neon-green-dark: #00c853;
+
+  --color-matte-red: #ef5350;
+  --color-matte-red-light: #ff8a80;
+  --color-matte-red-dark: #d32f2f;
 
   /* Animations */
   --animate-spin-slow: spin 3s linear infinite;
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-glow-pulse: glowPulse 2s ease-in-out infinite;
 
   @keyframes fadeIn {
     from {
@@ -60,6 +76,17 @@
       opacity: 1;
     }
   }
+
+  @keyframes glowPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(41, 121, 255, 0.3);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(41, 121, 255, 0.6);
+    }
+  }
 }
 
 /* Force class-based dark mode */
@@ -70,7 +97,26 @@
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    @apply bg-slate-50 text-slate-900;
+  }
+
+  /* Dark mode: Deep Navy with radial gradient */
+  .dark body,
+  body:where(.dark *) {
+    background: #0a192f;
+    color: #e2e8f0;
+  }
+
+  .dark .app-bg,
+  .dark main > div {
+    background:
+      radial-gradient(
+        ellipse at 0% 0%,
+        rgba(41, 121, 255, 0.08) 0%,
+        transparent 50%
+      ),
+      #0a192f;
+    min-height: 100vh;
   }
 
   /* Form Elements Reset */
@@ -95,7 +141,7 @@
   }
 
   .dark .custom-scrollbar {
-    scrollbar-color: var(--color-slate-700) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -108,11 +154,20 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full dark:bg-slate-700;
+    @apply bg-slate-300 rounded-full;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400 dark:bg-slate-600;
+    @apply bg-slate-400;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .scrollbar-hide {
@@ -126,14 +181,122 @@
 }
 
 @layer utilities {
-  /* Glassmorphism */
+  /* === Glassmorphism Card (LegalTech 2026) === */
+  .glass-card {
+    @apply bg-white/80 border border-white/20;
+  }
+
+  .dark .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glass card with gold border for premium/highlighted items */
+  .glass-card-gold {
+    @apply bg-white/80 border border-white/20;
+  }
+
+  .dark .glass-card-gold {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+  }
+
+  /* Glass sidebar */
+  .glass-sidebar {
+    @apply bg-white/80 border-r border-white/20;
+  }
+
+  .dark .glass-sidebar {
+    background: rgba(10, 25, 47, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Glass header */
+  .glass-header {
+    @apply bg-white/60 border-b border-slate-200/50;
+  }
+
+  .dark .glass-header {
+    background: rgba(10, 25, 47, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Legacy glass panel (backward compat) */
   .glass-panel {
-    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800/50;
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  .dark .glass-panel {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* === Electric Blue Button with Glow === */
+  .btn-electric {
+    background: var(--color-electric-blue);
+    color: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 rgba(41, 121, 255, 0);
+  }
+
+  .btn-electric:hover {
+    background: var(--color-electric-blue-light);
+    box-shadow:
+      0 0 20px rgba(41, 121, 255, 0.4),
+      0 0 40px rgba(41, 121, 255, 0.15);
+    transform: translateY(-1px);
+  }
+
+  /* === Gold Sidebar Active State === */
+  .sidebar-active-gold {
+    color: var(--color-metallic-gold) !important;
+  }
+
+  .sidebar-active-gold .sidebar-icon {
+    color: var(--color-metallic-gold);
+  }
+
+  .sidebar-indicator-gold {
+    background: var(--color-metallic-gold) !important;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.6) !important;
+  }
+
+  /* === Status Colors === */
+  .status-revenue {
+    color: var(--color-neon-green);
+  }
+
+  .status-revenue-bg {
+    background: rgba(0, 230, 118, 0.1);
+    color: var(--color-neon-green);
+  }
+
+  .status-overdue {
+    color: var(--color-matte-red);
+  }
+
+  .status-overdue-bg {
+    background: rgba(239, 83, 80, 0.1);
+    color: var(--color-matte-red);
   }
 
   /* Shadows */
   .soft-shadow {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark .soft-shadow {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   }
 
   .soft-shadow-hover {
@@ -143,6 +306,10 @@
   .soft-shadow-hover:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
+  }
+
+  .dark .soft-shadow-hover:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
 
   /* Animation Utilities */
@@ -158,33 +325,37 @@
 .dark .rbc-month-view,
 .dark .rbc-time-view,
 .dark .rbc-agenda-view {
-  @apply bg-transparent border-slate-800;
+  @apply bg-transparent;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .rbc-header {
-  @apply border-b-slate-800 text-slate-400 py-3 font-extrabold uppercase text-[10px] tracking-widest bg-slate-900/50;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  @apply text-slate-400 py-3 font-extrabold uppercase text-[10px] tracking-widest;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .dark .rbc-day-bg + .rbc-day-bg,
 .dark .rbc-month-row + .rbc-month-row,
 .dark .rbc-month-row {
-  @apply border-slate-800;
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .dark .rbc-off-range-bg {
-  @apply bg-slate-900/60;
+  background: rgba(10, 25, 47, 0.6);
 }
 
 .dark .rbc-off-range {
-  @apply text-slate-700;
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .dark .rbc-today {
-  @apply bg-primary-900/10;
+  background: rgba(41, 121, 255, 0.08);
 }
 
 .dark .rbc-show-more {
-  @apply text-primary-500 font-extrabold text-[10px];
+  color: var(--color-electric-blue);
+  @apply font-extrabold text-[10px];
 }
 
 .rbc-event {
@@ -192,5 +363,9 @@
 }
 
 .rbc-day-slot .rbc-time-slot {
-  @apply border-slate-100 dark:border-slate-800;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .rbc-day-slot .rbc-time-slot {
+  border-color: rgba(255, 255, 255, 0.06);
 }

@@ -34,7 +34,7 @@ export const DeadlineSorter: React.FC<DeadlineSorterProps> = ({
       <select
         value={`${currentSort.field}|${currentSort.direction}`}
         onChange={handleSelect}
-        className="pl-11 pr-10 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 appearance-none shadow-sm outline-none"
+        className="pl-11 pr-10 py-3 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 appearance-none shadow-sm outline-none"
       >
         {options.map((opt, i) => (
           <option key={i} value={`${opt.field}|${opt.dir}`}>

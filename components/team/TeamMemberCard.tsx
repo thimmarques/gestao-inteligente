@@ -64,10 +64,10 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border transition-all cursor-pointer group hover:shadow-2xl hover:-translate-y-1 ${
+      className={`relative bg-white dark:bg-navy-800/50 rounded-[2.5rem] p-8 border transition-all cursor-pointer group hover:shadow-2xl hover:-translate-y-1 ${
         isMe
           ? 'border-2 border-yellow-500/50 shadow-xl shadow-yellow-500/5'
-          : 'border-slate-200 dark:border-slate-800'
+          : 'border-slate-200 dark:border-white/10'
       }`}
     >
       {/* Role Badge */}
@@ -107,7 +107,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
           src={member.photo_url}
           name={member.name}
           size="custom"
-          className="w-24 h-24 !rounded-[2rem] border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-105 transition-transform duration-500 text-3xl"
+          className="w-24 h-24 !rounded-[2rem] border-4 border-white dark:border-white/10 shadow-xl group-hover:scale-105 transition-transform duration-500 text-3xl"
         />
         <h3 className="text-lg font-black dark:text-white mt-4 tracking-tight group-hover:text-primary-600 transition-colors">
           {member.name}
@@ -122,11 +122,11 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
         </p>
       </div>
 
-      <div className="my-6 h-px bg-slate-100 dark:bg-slate-800" />
+      <div className="my-6 h-px bg-slate-100 dark:bg-navy-800" />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-3 bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+        <div className="p-3 bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex flex-col items-center">
           <span className="text-primary-600 font-black text-base tabular-nums">
             {member.stats?.active_cases || 0}
           </span>
@@ -134,7 +134,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
             Ativos
           </span>
         </div>
-        <div className="p-3 bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+        <div className="p-3 bg-slate-50/50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex flex-col items-center">
           <span className="text-green-600 font-black text-base tabular-nums">
             {member.stats?.success_rate || 0}%
           </span>
@@ -145,7 +145,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+      <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/10">
         <div className="flex items-center justify-between">
           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
             LegalTech Equipe

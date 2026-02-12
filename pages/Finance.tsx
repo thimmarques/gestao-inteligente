@@ -57,7 +57,7 @@ const Finance: React.FC = () => {
   }, [records, searchTerm, typeFilter]);
 
   return (
-    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
+    <div className="p-6 md:p-10 space-y-8 min-h-screen bg-slate-50 dark:bg-navy-950 text-slate-900 dark:text-white pb-24 animate-in fade-in duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-3xl font-black tracking-tight">Financeiro</h1>
@@ -74,7 +74,7 @@ const Finance: React.FC = () => {
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm group hover:scale-[1.02] transition-all">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm group hover:scale-[1.02] transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl group-hover:bg-primary-600 group-hover:text-white transition-all">
               <Landmark size={24} />
@@ -89,7 +89,7 @@ const Finance: React.FC = () => {
           </h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm group hover:scale-[1.02] transition-all">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm group hover:scale-[1.02] transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-2xl">
               <TrendingUp size={24} />
@@ -103,7 +103,7 @@ const Finance: React.FC = () => {
           </h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm group hover:scale-[1.02] transition-all">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm group hover:scale-[1.02] transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 rounded-2xl">
               <TrendingDown size={24} />
@@ -117,7 +117,7 @@ const Finance: React.FC = () => {
           </h3>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm group hover:scale-[1.02] transition-all">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm group hover:scale-[1.02] transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-2xl">
               <Clock size={24} />
@@ -132,7 +132,7 @@ const Finance: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-navy-800/50 p-4 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
         <div className="relative w-full md:w-96">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -143,10 +143,10 @@ const Finance: React.FC = () => {
             placeholder="Buscar por descrição ou categoria..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-navy-800 border-transparent rounded-xl focus:ring-2 focus:ring-primary-500 text-sm outline-none transition-all"
           />
         </div>
-        <div className="flex bg-slate-50 dark:bg-slate-800 p-1 rounded-2xl">
+        <div className="flex bg-slate-50 dark:bg-navy-800 p-1 rounded-2xl">
           {(['todos', 'receita', 'despesa'] as const).map((t) => (
             <button
               key={t}
@@ -159,11 +159,11 @@ const Finance: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-800">
+              <tr className="border-b border-slate-100 dark:border-white/10">
                 <th className="px-8 py-5 text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
                   Data
                 </th>
@@ -225,7 +225,7 @@ const Finance: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-8 py-5">
-                      <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg text-xs font-bold capitalize">
+                      <span className="px-3 py-1 bg-slate-100 dark:bg-navy-800 text-slate-500 rounded-lg text-xs font-bold capitalize">
                         {record.category}
                       </span>
                     </td>

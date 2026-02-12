@@ -46,10 +46,10 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
 
     return (
       <div
-        className={`bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md ${isHistory ? 'opacity-70' : ''}`}
+        className={`bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm transition-all hover:shadow-md ${isHistory ? 'opacity-70' : ''}`}
       >
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 items-center">
-          <div className="flex flex-col items-center justify-center border-r border-slate-100 dark:border-slate-800 sm:pr-6">
+          <div className="flex flex-col items-center justify-center border-r border-slate-100 dark:border-white/10 sm:pr-6">
             <span className="text-3xl font-bold text-primary-600 dark:text-primary-400 leading-none">
               {day}
             </span>
@@ -96,7 +96,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
             </div>
           </div>
           <div className="flex justify-end">
-            <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+            <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
               <Eye size={14} />
               Ver
             </button>
@@ -117,11 +117,11 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
       <div className="space-y-6">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
           Próximas Audiências
-          <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800"></div>
+          <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800"></div>
         </h4>
         <div className="grid grid-cols-1 gap-4">
           {isLoading ? (
-            <div className="py-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 text-center">
+            <div className="py-12 bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 text-center">
               <Loader2
                 size={32}
                 className="animate-spin text-primary-600 mx-auto mb-2"
@@ -133,7 +133,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           ) : upcoming.length > 0 ? (
             upcoming.map((s) => <ScheduleCard key={s.id} schedule={s} />)
           ) : (
-            <div className="py-12 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800 text-center text-slate-500">
+            <div className="py-12 bg-slate-50 dark:bg-navy-900/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-white/10 text-center text-slate-500">
               <p className="text-sm">Nenhuma audiência futura agendada.</p>
             </div>
           )}

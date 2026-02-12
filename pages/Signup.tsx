@@ -62,9 +62,9 @@ const Signup: React.FC = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-950 p-4 transition-colors">
         <div className="w-full max-w-md text-center">
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+          <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl">
             <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
               <Mail size={32} />
             </div>
@@ -89,7 +89,7 @@ const Signup: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl text-white font-bold text-3xl mb-4 shadow-xl shadow-primary-500/20">
@@ -101,7 +101,7 @@ const Signup: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl">
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-xl">
               {error}
@@ -122,7 +122,7 @@ const Signup: React.FC = () => {
                   {...register('full_name')}
                   type="text"
                   placeholder="Seu nome"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.full_name ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border ${errors.full_name ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.full_name && (
@@ -145,7 +145,7 @@ const Signup: React.FC = () => {
                   {...register('email')}
                   type="email"
                   placeholder="seu@email.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.email && (
@@ -168,7 +168,7 @@ const Signup: React.FC = () => {
                   {...register('password')}
                   type="password"
                   placeholder="Mínimo 6 caracteres"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.password && (

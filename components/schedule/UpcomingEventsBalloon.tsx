@@ -35,7 +35,7 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
   if (upcoming.length === 0) return null;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm p-6 space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
       <header className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600">
@@ -66,7 +66,7 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
             <button
               key={event.id}
               onClick={() => onEventClick(event)}
-              className="w-full flex items-center gap-4 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group text-left"
+              className="w-full flex items-center gap-4 p-4 rounded-3xl border border-slate-100 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group text-left"
             >
               <div
                 className="w-12 h-12 rounded-2xl shrink-0 flex flex-col items-center justify-center text-white shadow-lg"
@@ -114,7 +114,7 @@ export const UpcomingEventsBalloon: React.FC<UpcomingEventsBalloonProps> = ({
       </div>
 
       <div className="pt-2">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+        <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 text-center">
           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-tight">
             Sua agenda está sincronizada com o Google Calendar.
           </p>

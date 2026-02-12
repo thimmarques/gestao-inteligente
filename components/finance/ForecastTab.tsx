@@ -73,7 +73,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
         <button
           onClick={handleRefresh}
           disabled={isUpdating}
-          className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm"
+          className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-navy-800/50 border border-slate-200 dark:border-white/10 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm"
         >
           <RefreshCw
             size={16}
@@ -85,7 +85,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-primary-600 rounded-2xl">
               <TrendingUp size={24} />
@@ -102,7 +102,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 rounded-2xl">
               <TrendingDown size={24} />
@@ -148,7 +148,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
       </div>
 
       {/* Chart Section */}
-      <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[3rem] border border-slate-100 dark:border-white/10 shadow-sm">
         <h3 className="text-sm font-bold dark:text-white mb-8 flex items-center gap-2">
           <div className="w-1.5 h-6 bg-primary-600 rounded-full" />
           Projeção Visual de Fluxo de Caixa
@@ -159,18 +159,18 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
       </div>
 
       {/* Table Section */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+        <div className="p-8 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
           <h3 className="text-sm font-bold dark:text-white uppercase tracking-widest">
             Cronograma de Resultados Mensais
           </h3>
-          <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-bold text-slate-500">
+          <span className="px-3 py-1 bg-slate-100 dark:bg-navy-800 rounded-full text-[10px] font-bold text-slate-500">
             PROJEÇÃO ALGORÍTMICA
           </span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+            <thead className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
               <tr>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                   Período
@@ -259,7 +259,7 @@ export const ForecastTab: React.FC<ForecastTabProps> = ({
                       onClick={() =>
                         alert('Ajuste manual virá no modal AdjustForecastModal')
                       }
-                      className="p-2.5 text-slate-400 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+                      className="p-2.5 text-slate-400 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-all"
                     >
                       <Edit size={18} />
                     </button>

@@ -16,7 +16,7 @@ export const TeamViewToggle: React.FC<TeamViewToggleProps> = ({
   };
 
   return (
-    <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-inner">
+    <div className="flex bg-slate-100 dark:bg-navy-800 p-1 rounded-xl border border-slate-200 dark:border-white/15 shadow-inner">
       <button
         onClick={() => handleToggle('cards')}
         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${

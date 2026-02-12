@@ -44,7 +44,7 @@ export const CriticalLogsWidget: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 soft-shadow h-[340px] flex flex-col group overflow-hidden relative">
+    <div className="glass-card rounded-3xl soft-shadow h-[340px] flex flex-col group overflow-hidden relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/5 to-transparent rounded-bl-full -mr-8 -mt-8 pointer-events-none" />
 
       <header className="p-8 pb-4 flex items-center justify-between relative z-10">
@@ -82,7 +82,7 @@ export const CriticalLogsWidget: React.FC = () => {
                 className="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-2xl transition-all border border-transparent hover:border-slate-100 dark:hover:border-slate-800 group/item"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="shrink-0 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 group-hover/item:scale-105 transition-transform">
+                  <div className="shrink-0 p-2 bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-slate-100 dark:border-white/15 group-hover/item:scale-105 transition-transform">
                     {getActionIcon(log.action)}
                   </div>
                   <div className="min-w-0">
@@ -118,7 +118,7 @@ export const CriticalLogsWidget: React.FC = () => {
         )}
       </div>
 
-      <div className="p-3 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800/50 flex justify-center">
+      <div className="p-3 bg-slate-50/50 dark:bg-white/5 border-t border-slate-100 dark:border-white/[0.06] flex justify-center">
         <Link
           to="/settings?tab=logs"
           className="flex items-center justify-center gap-2 text-[10px] font-black text-slate-400 hover:text-red-600 uppercase tracking-widest hover:gap-3 transition-all p-2"

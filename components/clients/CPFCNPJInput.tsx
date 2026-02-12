@@ -29,7 +29,7 @@ export const CPFCNPJInput: React.FC<CPFCNPJInputProps> = ({
           onChange={handleChange}
           maxLength={18}
           placeholder="000.000.000-00"
-          className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
+          className={`w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl focus:ring-2 transition-all dark:text-white ${
             error ? 'ring-2 ring-red-500' : 'focus:ring-primary-500'
           }`}
         />

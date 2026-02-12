@@ -59,7 +59,7 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
     filters.showOnlyMine;
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm animate-in slide-in-from-top-4 duration-300 space-y-6">
+    <div className="bg-white dark:bg-navy-800/50 p-6 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm animate-in slide-in-from-top-4 duration-300 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
           <Filter size={14} /> Filtros de Visualização
@@ -93,7 +93,7 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all border ${
                     isActive
                       ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20'
-                      : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500'
+                      : 'bg-slate-50 dark:bg-navy-800 border-slate-100 dark:border-white/15 text-slate-500 hover:border-primary-500'
                   }`}
                 >
                   <Icon size={12} />
@@ -120,7 +120,7 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all border ${
                     isActive
                       ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20'
-                      : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-primary-500'
+                      : 'bg-slate-50 dark:bg-navy-800 border-slate-100 dark:border-white/15 text-slate-500 hover:border-primary-500'
                   }`}
                 >
                   {s.label}
@@ -143,7 +143,7 @@ export const ScheduleFiltersBar: React.FC<ScheduleFiltersBarProps> = ({
             className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all ${
               filters.showOnlyMine
                 ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 text-indigo-700 dark:text-indigo-400'
-                : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500'
+                : 'bg-slate-50 dark:bg-navy-800 border-slate-100 dark:border-white/15 text-slate-500'
             }`}
           >
             <div className="flex items-center gap-3">

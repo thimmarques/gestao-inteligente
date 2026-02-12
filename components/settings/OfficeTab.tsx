@@ -63,7 +63,7 @@ export const OfficeTab: React.FC = () => {
 
       <form onSubmit={handleSave} className="space-y-6">
         <div className={settingsConfig.cardClass + ' space-y-6'}>
-          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-4">
             <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg">
               <Building2 size={18} />
             </div>

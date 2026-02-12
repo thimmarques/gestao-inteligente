@@ -48,7 +48,7 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
   if (deadlines.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in">
-        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
+        <div className="w-20 h-20 bg-slate-100 dark:bg-navy-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
           <Clock size={40} />
         </div>
         <h3 className="text-xl font-bold dark:text-white">
@@ -62,10 +62,10 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-navy-800/50 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <thead className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
             <tr>
               <th className="px-6 py-4 w-12"></th>
               <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -107,7 +107,7 @@ export const DeadlineList: React.FC<DeadlineListProps> = ({
                       <button
                         onClick={(e) => handleComplete(e, d.id)}
                         disabled={completingId === d.id}
-                        className={`w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all hover:border-green-500 hover:scale-110 active:scale-95 group-hover:border-slate-400 ${completingId === d.id ? 'bg-slate-50' : 'bg-white dark:bg-slate-800'}`}
+                        className={`w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-white/15 flex items-center justify-center transition-all hover:border-green-500 hover:scale-110 active:scale-95 group-hover:border-slate-400 ${completingId === d.id ? 'bg-slate-50' : 'bg-white dark:bg-navy-800'}`}
                         title="Finalizar"
                       >
                         {completingId === d.id ? (

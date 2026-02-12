@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl">
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-xl">
               {error}
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
                   {...register('email')}
                   type="email"
                   placeholder="seu@email.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border ${errors.email ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.email && (
@@ -113,7 +113,7 @@ const Login: React.FC = () => {
                   {...register('password')}
                   type="password"
                   placeholder="••••••••"
-                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-navy-800 border ${errors.password ? 'border-red-500' : 'border-transparent'} focus:border-primary-500 rounded-xl focus:ring-4 focus:ring-primary-500/10 dark:text-white transition-all outline-none`}
                 />
               </div>
               {errors.password && (

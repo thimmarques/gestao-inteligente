@@ -104,7 +104,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header Color Strip */}
         <div className="h-2 w-full" style={{ backgroundColor: color }}></div>
 
@@ -132,14 +132,14 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           <div className="flex gap-2">
             <button
               onClick={() => onEdit(event)}
-              className="p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-slate-400 hover:text-primary-600 rounded-xl transition-all"
+              className="p-2.5 bg-slate-50 dark:bg-navy-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-slate-400 hover:text-primary-600 rounded-xl transition-all"
             >
               <Edit size={20} />
             </button>
             <button
               onClick={handleDelete}
               disabled={isDeleting}
-              className="p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded-xl transition-all"
+              className="p-2.5 bg-slate-50 dark:bg-navy-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 rounded-xl transition-all"
             >
               {isDeleting ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -149,7 +149,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
             </button>
             <button
               onClick={onClose}
-              className="p-2.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all"
+              className="p-2.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-all"
             >
               <X size={20} />
             </button>
@@ -159,7 +159,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
         {/* Content */}
         <div className="px-8 py-6 space-y-6 overflow-y-auto max-h-[60vh] custom-scrollbar">
           {/* Status Badge */}
-          <div className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/20 rounded-3xl border border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/20 rounded-3xl border border-slate-100 dark:border-white/10">
             <div className="flex items-center gap-3">
               <div
                 className={`w-3 h-3 rounded-full animate-pulse ${event.status === 'agendado' ? 'bg-blue-500' : event.status === 'concluído' ? 'bg-green-500' : 'bg-slate-400'}`}
@@ -177,7 +177,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
           {/* Time and Date */}
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-slate-400">
               <Calendar size={20} />
             </div>
             <div>
@@ -207,7 +207,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           {/* Location / Link */}
           {(event.location || event.virtual_link) && (
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                 {event.virtual_link ? (
                   <Video size={20} />
                 ) : (
@@ -239,7 +239,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           {/* Vinculação */}
           {event.case_id && (
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-slate-400">
                 <Briefcase size={20} />
               </div>
               <div>
@@ -255,7 +255,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
           {/* Description */}
           {event.description && (
-            <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-white/10">
               <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                 Descrição
               </h4>
@@ -267,7 +267,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-8 py-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
+        <div className="px-8 py-8 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10 flex flex-col gap-3">
           {event.status === 'agendado' ? (
             <>
               <button
@@ -285,7 +285,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
               <button
                 onClick={handleCancel}
                 disabled={isUpdatingStatus}
-                className="w-full py-4 bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900 text-red-600 rounded-2xl font-black uppercase tracking-[0.2em] transition-all active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-4 bg-white dark:bg-navy-800/50 border border-red-200 dark:border-red-900 text-red-600 rounded-2xl font-black uppercase tracking-[0.2em] transition-all active:scale-95 flex items-center justify-center gap-2"
               >
                 <AlertCircle size={20} />
                 Cancelar Evento

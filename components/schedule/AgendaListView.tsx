@@ -38,7 +38,7 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
   if (dates.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in">
-        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
+        <div className="w-20 h-20 bg-slate-100 dark:bg-navy-800 rounded-3xl flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6">
           <CalendarIcon size={40} />
         </div>
         <h3 className="text-xl font-bold dark:text-white">
@@ -77,10 +77,10 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
                   </span>
                 )}
               </div>
-              <div className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-black text-slate-500 border border-slate-200 dark:border-slate-700">
+              <div className="px-2 py-0.5 bg-slate-100 dark:bg-navy-800 rounded-full text-[10px] font-black text-slate-500 border border-slate-200 dark:border-white/15">
                 {eventsForDay.length} EVENTOS
               </div>
-              <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800"></div>
+              <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800"></div>
             </header>
 
             <div className="grid grid-cols-1 gap-3">
@@ -100,14 +100,14 @@ export const AgendaListView: React.FC<AgendaListViewProps> = ({
                   <button
                     key={event.id}
                     onClick={() => onEventClick(event)}
-                    className="flex items-stretch bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden hover:shadow-md transition-all active:scale-[0.99] text-left group"
+                    className="flex items-stretch bg-white dark:bg-navy-800/50 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden hover:shadow-md transition-all active:scale-[0.99] text-left group"
                   >
                     <div
                       className="w-2"
                       style={{ backgroundColor: color }}
                     ></div>
                     <div className="p-6 flex flex-1 items-center gap-6">
-                      <div className="w-16 flex flex-col items-center justify-center border-r border-slate-100 dark:border-slate-800 pr-6 shrink-0">
+                      <div className="w-16 flex flex-col items-center justify-center border-r border-slate-100 dark:border-white/10 pr-6 shrink-0">
                         <span className="text-xl font-black dark:text-white tabular-nums">
                           {startTime}
                         </span>

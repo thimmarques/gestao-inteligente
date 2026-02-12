@@ -10,7 +10,7 @@ interface CaseCardProps {
 
 const statusColorMap: Record<string, string> = {
   distribuído:
-    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+    'bg-slate-100 text-slate-700 dark:bg-navy-800 dark:text-slate-400',
   andamento: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   sentenciado:
     'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
@@ -35,7 +35,7 @@ const typeColorMap: Record<string, string> = {
 export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
   return (
     <div
-      className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer group flex flex-col h-full"
+      className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer group flex flex-col h-full"
       onClick={onClick}
     >
       <div className="flex items-start justify-between mb-4">
@@ -51,7 +51,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
 
       <div className="space-y-4 mb-6 flex-1">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold dark:text-white border border-slate-200 dark:border-slate-700">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-sm font-bold dark:text-white border border-slate-200 dark:border-white/15">
             {caseData.client_id.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
@@ -89,7 +89,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
           {caseData.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 text-slate-500 text-[10px] rounded border border-slate-100 dark:border-slate-700"
+              className="px-2 py-0.5 bg-slate-50 dark:bg-navy-800 text-slate-500 text-[10px] rounded border border-slate-100 dark:border-white/15"
             >
               {tag}
             </span>
@@ -102,7 +102,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ caseData, onClick }) => {
         </div>
       </div>
 
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between mt-auto">
+      <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between mt-auto">
         <div className="flex items-center gap-1.5 text-slate-400">
           <Calendar size={12} />
           <span className="text-[10px] font-medium uppercase">

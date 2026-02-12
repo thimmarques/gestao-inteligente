@@ -50,15 +50,15 @@ export const ClientTable: React.FC<ClientTableProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <thead className="bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/10">
             <tr>
               <th className="px-6 py-4 w-12 text-center">
                 <input
                   type="checkbox"
-                  className="rounded border-slate-300 dark:bg-slate-800 accent-primary-600"
+                  className="rounded border-slate-300 dark:bg-navy-800 accent-primary-600"
                 />
               </th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
@@ -107,12 +107,12 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                   >
                     <input
                       type="checkbox"
-                      className="rounded border-slate-300 dark:bg-slate-800 accent-primary-600"
+                      className="rounded border-slate-300 dark:bg-navy-800 accent-primary-600"
                     />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-sm font-bold dark:text-white border border-slate-200 dark:border-white/15 shadow-sm overflow-hidden">
                         {client.photo_url ? (
                           <img src={client.photo_url} alt="" />
                         ) : (
@@ -158,14 +158,14 @@ export const ClientTable: React.FC<ClientTableProps> = ({
                       className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
                         client.status === 'ativo'
                           ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
-                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800'
+                          : 'bg-slate-100 text-slate-600 dark:bg-navy-800'
                       }`}
                     >
                       {client.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-400">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-navy-800 text-[10px] font-bold text-slate-600 dark:text-slate-400">
                       {client.process_count}
                     </span>
                   </td>

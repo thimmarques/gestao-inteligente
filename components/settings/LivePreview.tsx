@@ -7,7 +7,7 @@ export const LivePreview: React.FC = () => {
 
   return (
     <div className="hidden xl:block sticky top-8 space-y-6 animate-in slide-in-from-right-4 duration-700">
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-xl">
+      <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 shadow-xl">
         <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8">
           Preview no Sistema
         </h3>
@@ -18,16 +18,16 @@ export const LivePreview: React.FC = () => {
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
               Cabeçalho
             </p>
-            <div className="h-16 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl flex items-center justify-between px-6 shadow-sm overflow-hidden">
-              <div className="w-24 h-6 bg-slate-100 dark:bg-slate-900 rounded-lg flex items-center px-3 gap-2">
+            <div className="h-16 bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-white/10 rounded-2xl flex items-center justify-between px-6 shadow-sm overflow-hidden">
+              <div className="w-24 h-6 bg-slate-100 dark:bg-navy-800/50 rounded-lg flex items-center px-3 gap-2">
                 <Search size={10} className="text-slate-400" />
-                <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                <div className="w-full h-1.5 bg-slate-200 dark:bg-navy-800 rounded-full" />
               </div>
               <div className="flex items-center gap-3">
                 <Moon size={14} className="text-slate-400" />
                 <Bell size={14} className="text-slate-400" />
-                <div className="h-8 w-px bg-slate-200 dark:bg-slate-800" />
-                <div className="flex items-center gap-2 p-1 pl-1 pr-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-full">
+                <div className="h-8 w-px bg-slate-200 dark:bg-navy-800" />
+                <div className="flex items-center gap-2 p-1 pl-1 pr-2 bg-white dark:bg-navy-800/50 border border-slate-100 dark:border-white/10 rounded-full">
                   <div className="w-6 h-6 rounded-full bg-primary-600 overflow-hidden shadow-inner flex items-center justify-center">
                     {lawyer?.photo_url ? (
                       <img
@@ -51,8 +51,8 @@ export const LivePreview: React.FC = () => {
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
               Menu Lateral
             </p>
-            <div className="w-48 h-64 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-[2rem] mx-auto p-4 flex flex-col shadow-sm">
-              <div className="pb-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-center">
+            <div className="w-48 h-64 bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-white/10 rounded-[2rem] mx-auto p-4 flex flex-col shadow-sm">
+              <div className="pb-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-center">
                 {office.logo_url ? (
                   <img
                     src={office.logo_url}
@@ -71,13 +71,13 @@ export const LivePreview: React.FC = () => {
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className={`h-6 rounded-lg ${i === 1 ? 'bg-primary-600 shadow-lg shadow-primary-500/20' : 'bg-slate-100 dark:bg-slate-900'}`}
+                    className={`h-6 rounded-lg ${i === 1 ? 'bg-primary-600 shadow-lg shadow-primary-500/20' : 'bg-slate-100 dark:bg-navy-800/50'}`}
                   />
                 ))}
               </div>
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-2 p-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm">
-                  <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center border border-slate-100 dark:border-slate-700">
+              <div className="pt-4 border-t border-slate-100 dark:border-white/10">
+                <div className="flex items-center gap-2 p-2 bg-white dark:bg-navy-800/50 border border-slate-100 dark:border-white/10 rounded-xl shadow-sm">
+                  <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-navy-800 overflow-hidden flex items-center justify-center border border-slate-100 dark:border-white/15">
                     {lawyer?.photo_url ? (
                       <img
                         src={lawyer.photo_url}
@@ -88,8 +88,8 @@ export const LivePreview: React.FC = () => {
                     )}
                   </div>
                   <div className="flex-1 space-y-1">
-                    <div className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-full" />
-                    <div className="w-2/3 h-1 bg-slate-100 dark:bg-slate-900 rounded-full" />
+                    <div className="w-full h-1 bg-slate-200 dark:bg-navy-800 rounded-full" />
+                    <div className="w-2/3 h-1 bg-slate-100 dark:bg-navy-800/50 rounded-full" />
                   </div>
                 </div>
               </div>
@@ -97,7 +97,7 @@ export const LivePreview: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-10 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 text-center">
+        <div className="mt-10 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-white/10 text-center">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
             Todas as alterações aplicadas aqui serão visíveis para toda a equipe
             do seu escritório instantaneamente.

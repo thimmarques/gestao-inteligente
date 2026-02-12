@@ -111,7 +111,7 @@ export const SettingsInvites: React.FC = () => {
       </div>
 
       <div className={settingsConfig.cardClass + ' p-0 overflow-hidden'}>
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+        <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
           <h3 className="text-sm font-bold dark:text-white">
             Convites Enviados
           </h3>
@@ -127,7 +127,7 @@ export const SettingsInvites: React.FC = () => {
           </div>
         ) : invites.length === 0 ? (
           <div className="p-10 text-center text-slate-500">
-            <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center m-auto mb-3 text-slate-400">
+            <div className="w-10 h-10 bg-slate-100 dark:bg-navy-800 rounded-full flex items-center justify-center m-auto mb-3 text-slate-400">
               <Mail size={20} />
             </div>
             <p className="text-sm">Nenhum convite enviado ainda.</p>

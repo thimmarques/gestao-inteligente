@@ -76,7 +76,7 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
 
       <div className="grid grid-cols-1 gap-4">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10">
             <Loader2 size={32} className="animate-spin text-primary-600 mb-2" />
             <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">
               Carregando prazos...
@@ -97,7 +97,7 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
               return (
                 <div
                   key={deadline.id}
-                  className={`bg-white dark:bg-slate-900 p-5 rounded-2xl border-l-4 ${info.color} border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow`}
+                  className={`bg-white dark:bg-navy-800/50 p-5 rounded-2xl border-l-4 ${info.color} border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow`}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-3 h-3 rounded-full ${info.bg}`} />
@@ -131,7 +131,7 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
               );
             })
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 text-center">
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 text-center">
             <Clock size={48} className="text-slate-300 mb-4 opacity-50" />
             <h4 className="text-lg font-bold dark:text-white mb-2">
               Nenhum prazo cadastrado

@@ -127,15 +127,15 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300">
-        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-navy-800/50 w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300">
+        <div className="px-8 pt-8 pb-4 border-b border-slate-100 dark:border-white/10">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold dark:text-white">
               {mode === 'create' ? 'Novo Prazo' : 'Editar Prazo'}
             </h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-500"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-500"
             >
               <X size={24} />
             </button>
@@ -162,7 +162,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
             />
           </div>
 
@@ -181,10 +181,10 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                 setShowCaseList(true);
               }}
               onFocus={() => setShowCaseList(true)}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
             />
             {showCaseList && searchTerm && filteredCases.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto animate-in slide-in-from-top-2">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto animate-in slide-in-from-top-2">
                 {filteredCases.map((c: any) => (
                   <button
                     key={c.id}
@@ -194,7 +194,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                       setShowCaseList(false);
                       setSearchTerm('');
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-800 last:border-0"
+                    className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-white/10 last:border-0"
                   >
                     <p className="text-sm font-bold dark:text-white font-mono">
                       {c.process_number}
@@ -219,7 +219,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, deadline_date: e.target.value })
               }
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm outline-none transition-all shadow-sm"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm outline-none transition-all shadow-sm"
             />
           </div>
 
@@ -233,7 +233,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                   key={opt.id}
                   type="button"
                   onClick={() => setFormData({ ...formData, priority: opt.id })}
-                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-slate-50 dark:border-slate-800 hover:border-slate-200'}`}
+                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${formData.priority === opt.id ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-slate-50 dark:border-white/10 hover:border-slate-200'}`}
                 >
                   <opt.icon size={20} className={opt.color} />
                   <span className="text-[10px] font-black uppercase tracking-widest">
@@ -255,12 +255,12 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner outline-none transition-all"
+              className="w-full px-5 py-4 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm resize-none shadow-inner outline-none transition-all"
             />
           </div>
         </form>
 
-        <div className="p-8 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="p-8 bg-slate-50 dark:bg-white/5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
