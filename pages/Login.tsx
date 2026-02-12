@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { supabase } from '../lib/supabase';
-import { Lock, Mail, Loader2 } from 'lucide-react';
+import { Lock, Mail, Loader2, Scale } from 'lucide-react';
 import { toast } from 'sonner';
-import logoImg from '/LogoPMC.png';
+import { getOffice } from '../utils/settingsPersistence';
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -17,8 +17,15 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [officeLogo, setOfficeLogo] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const office = getOffice();
+    if (office?.logo_url) {
+      setOfficeLogo(office.logo_url);
+    }
+  }, []);
 
   const {
     register,
@@ -30,7 +37,6 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
-    setError(null);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -52,33 +58,24 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-950 p-4 transition-colors">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <img
-            src={logoImg}
-            alt="Logo do Escritório"
-            className="mx-auto h-24 w-auto mb-4 drop-shadow-xl"
-            onError={(e) => {
-              const target = e.currentTarget;
-              target.style.display = 'none';
-              const fallback = document.createElement('div');
-              fallback.className =
-                'mx-auto h-24 w-24 mb-4 rounded-2xl bg-primary-600/20 flex items-center justify-center';
-              fallback.innerHTML =
-                '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary-400"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>';
-              target.parentNode?.insertBefore(fallback, target.nextSibling);
-            }}
-          />
+          {officeLogo ? (
+            <img
+              src={officeLogo}
+              alt="Logo do Escritório"
+              className="mx-auto h-24 w-auto mb-4 drop-shadow-xl animate-in zoom-in duration-500"
+              onError={() => setOfficeLogo(null)}
+            />
+          ) : (
+            <div className="mx-auto h-24 w-24 mb-4 rounded-2xl bg-primary-600/20 flex items-center justify-center animate-in zoom-in duration-500">
+              <Scale size={40} className="text-primary-400" />
+            </div>
+          )}
           <p className="text-slate-500 dark:text-slate-400 mt-2">
             Gestão Jurídica Inteligente
           </p>
         </div>
 
         <div className="bg-white dark:bg-navy-800/50 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl">
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-xl">
-              {error}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
