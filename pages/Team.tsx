@@ -5,7 +5,6 @@ import {
   ChevronRight,
   RefreshCw,
   Users,
-  Copy,
   Check,
 } from 'lucide-react'; // Changed icons
 import { useNavigate } from 'react-router-dom';

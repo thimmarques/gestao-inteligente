@@ -3,10 +3,8 @@ import {
   Users,
   UserPlus,
   Search,
-  Filter,
   RefreshCw,
   Loader2,
-  MoreHorizontal,
   Mail,
   Phone,
   ExternalLink,
@@ -89,7 +87,7 @@ const Clients: React.FC = () => {
       if (editingClient) {
         // Remove office_id from update if present to avoid RLS issues or unwanted changes
         // identifying fields to update
-        const { office_id, ...updateData } = cleanClientData;
+        const { office_id: _office_id, ...updateData } = cleanClientData;
         savedClient = await clientService.updateClient(
           editingClient.id,
           updateData

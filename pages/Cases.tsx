@@ -3,20 +3,17 @@ import {
   Folder,
   Plus,
   Search,
-  Filter,
   Loader2,
   MoreVertical,
-  ExternalLink,
   Clock,
   User,
   Hash,
-  Tag,
   Scale,
   Edit2,
 } from 'lucide-react';
 import { useCases } from '../hooks/useQueries';
 import { caseService } from '../services/caseService';
-import { CaseWithRelations, Case } from '../types';
+import { Case } from '../types';
 import { formatCurrency } from '../utils/formatters';
 import { CaseFormModal } from '../components/cases/CaseFormModal';
 import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';

@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
-  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
   Plus,
@@ -8,10 +7,6 @@ import {
   Globe,
   Loader2,
   RefreshCw,
-  Search,
-  LayoutGrid,
-  Settings,
-  X,
 } from 'lucide-react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
 import {
@@ -35,7 +30,6 @@ import {
 import { CreateEventModal } from '../components/schedule/CreateEventModal';
 import { EventDetailsModal } from '../components/schedule/EventDetailsModal';
 import { ImportGoogleModal } from '../components/schedule/ImportGoogleModal';
-import { GoogleSyncBadge } from '../components/schedule/GoogleSyncBadge';
 import { ScheduleFiltersBar } from '../components/schedule/ScheduleFilters';
 import { UpcomingEventsBalloon } from '../components/schedule/UpcomingEventsBalloon';
 
@@ -68,12 +62,6 @@ const Schedule: React.FC = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const [defaultSlot, setDefaultSlot] = useState<{
-    start: Date;
-    end: Date;
-  } | null>(null);
-
-  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<ScheduleFilters>({
     types: [],
     status: ['agendado'],
@@ -85,27 +73,27 @@ const Schedule: React.FC = () => {
   const calendarEvents = useMemo(() => {
     const currentLawyerId = lawyer?.id || '';
     const filtered = filterSchedules(schedules, filters, currentLawyerId);
-    const searched = filtered.filter(
-      (s) =>
-        !searchTerm ||
-        (s.title && s.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
 
-    return searched.map((s) => ({
+    return filtered.map((s) => ({
       ...s,
       start: new Date(s.start_time),
       end: new Date(s.end_time),
     }));
-  }, [schedules, filters, searchTerm, lawyer]);
+  }, [schedules, filters, lawyer]);
 
   const handleSelectEvent = (event: any) => {
     setSelectedEvent(event);
     setIsDetailsOpen(true);
   };
 
-  const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
+  const handleSelectSlot = ({
+    start: _start,
+    end: _end,
+  }: {
+    start: Date;
+    end: Date;
+  }) => {
     setSelectedEvent(null);
-    setDefaultSlot({ start, end });
     setIsCreateOpen(true);
   };
 

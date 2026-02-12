@@ -8,12 +8,7 @@ import {
   Info,
   ChevronRight,
   Settings as SettingsIcon,
-  HelpCircle,
-  ExternalLink,
-  ArrowLeft,
   FileSearch,
-  Shield,
-  Users,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { getCriticalLogsCount24h } from '../utils/auditLogger';

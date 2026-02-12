@@ -2,14 +2,11 @@ import React, { useState, useMemo } from 'react';
 import {
   Plus,
   Search,
-  Filter,
   Loader2,
   CheckCircle2,
   Circle,
   Clock,
-  AlertTriangle,
   Trash2,
-  Edit2,
   ChevronRight,
   ListTodo,
 } from 'lucide-react';

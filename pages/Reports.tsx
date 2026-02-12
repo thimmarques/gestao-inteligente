@@ -15,19 +15,11 @@ import {
   FileText,
   Download,
   Trash2,
-  Loader2,
-  Plus,
 } from 'lucide-react';
 import { isWithinInterval, format } from 'date-fns';
 import confetti from 'canvas-confetti';
 
-import {
-  Client,
-  CaseWithRelations,
-  Deadline,
-  ScheduleEvent,
-  Report,
-} from '../types';
+import { Report } from '../types';
 import { ReportTypeCard } from '../components/reports/ReportTypeCard';
 import { ReportGenerationProgress } from '../components/reports/ReportGenerationProgress';
 import { ReportsEmptyState } from '../components/reports/ReportsEmptyState';

@@ -6,6 +6,7 @@ import * as z from 'zod';
 import { supabase } from '../lib/supabase';
 import { Lock, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import logoImg from '/LogoPMC.png';
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -52,9 +53,19 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img
-            src="/LogoPMC.png"
+            src={logoImg}
             alt="Logo do Escritório"
             className="mx-auto h-24 w-auto mb-4 drop-shadow-xl"
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.style.display = 'none';
+              const fallback = document.createElement('div');
+              fallback.className =
+                'mx-auto h-24 w-24 mb-4 rounded-2xl bg-primary-600/20 flex items-center justify-center';
+              fallback.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary-400"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>';
+              target.parentNode?.insertBefore(fallback, target.nextSibling);
+            }}
           />
           <p className="text-slate-500 dark:text-slate-400 mt-2">
             Gestão Jurídica Inteligente

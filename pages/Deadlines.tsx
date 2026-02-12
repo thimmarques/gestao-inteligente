@@ -6,18 +6,15 @@ import {
   CheckCircle2,
   Search,
   Plus,
-  Filter,
   Loader2,
   ChevronRight,
   Scale,
   User,
   MoreHorizontal,
-  Bell,
-  BellOff,
 } from 'lucide-react';
 import { useDeadlines } from '../hooks/useQueries';
 import { deadlineService } from '../services/deadlineService';
-import { DeadlineWithRelations, Deadline } from '../types';
+import { Deadline } from '../types';
 import { calculateDaysRemaining } from '../utils/deadlineCalculations';
 import { CreateDeadlineModal } from '../components/deadlines/CreateDeadlineModal';
 

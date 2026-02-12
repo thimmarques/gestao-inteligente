@@ -28,8 +28,8 @@ export const googleCalendarService = {
   },
 
   updateEvent: async (
-    googleEventId: string,
-    data: Partial<ScheduleEvent>
+    _googleEventId: string,
+    _data: Partial<ScheduleEvent>
   ): Promise<void> => {
     console.warn('Update Google Event not fully supported yet, skipping.');
   },
