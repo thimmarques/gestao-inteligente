@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Edit,
@@ -73,7 +74,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
     alert('Copiado!');
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white dark:bg-navy-800/50 w-full max-w-4xl h-[90vh] rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
         {/* Header */}
@@ -438,6 +439,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

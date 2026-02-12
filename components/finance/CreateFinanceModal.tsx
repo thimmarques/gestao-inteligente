@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Save,
@@ -74,7 +75,7 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-navy-800/50 w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 animate-in zoom-in-95 duration-300">
         <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
@@ -278,6 +279,7 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   UserPlus,
@@ -224,7 +225,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
     );
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white dark:bg-navy-800/50 w-full max-w-4xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[95vh]">
         <div className="px-8 pt-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10">
@@ -247,10 +248,10 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
         </div>
 
         <div className="px-10 py-6 bg-slate-50/50 dark:bg-slate-800/20">
-          <div className="flex items-center justify-between relative">
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-100 dark:bg-navy-800 -z-10" />
+          <div className="flex items-start justify-between relative px-2">
+            <div className="absolute left-0 top-4 w-full h-0.5 bg-slate-100 dark:bg-navy-800 -z-10" />
             <div
-              className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary-600 transition-all duration-500 -z-10"
+              className="absolute left-0 top-4 h-0.5 bg-primary-600 transition-all duration-500 -z-10"
               style={{
                 width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
               }}
@@ -1360,6 +1361,7 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

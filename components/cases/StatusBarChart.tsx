@@ -9,13 +9,17 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
+import { Case } from '../../types';
 
-export const StatusBarChart: React.FC = () => {
+interface StatusBarChartProps {
+  cases: Case[];
+}
+
+export const StatusBarChart: React.FC<StatusBarChartProps> = ({ cases }) => {
   const chartData = useMemo(() => {
-    const cases = JSON.parse(localStorage.getItem('legaltech_cases') || '[]');
     const counts: Record<string, number> = {};
 
-    cases.forEach((c: any) => {
+    cases.forEach((c) => {
       counts[c.status] = (counts[c.status] || 0) + 1;
     });
 
@@ -33,12 +37,12 @@ export const StatusBarChart: React.FC = () => {
       count,
       color: colors[status.toLowerCase()] || '#94a3b8',
     }));
-  }, []);
+  }, [cases]);
 
   const total = chartData.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
-    <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
+    <div className="bg-white dark:bg-navy-900 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm glass-card">
       <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">
         Distribuição por Status
       </h3>

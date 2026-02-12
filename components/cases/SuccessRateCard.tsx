@@ -23,7 +23,7 @@ export const SuccessRateCard: React.FC<SuccessRateCardProps> = ({
       : [{ name: 'Sem dados', value: 1, color: '#e2e8f0' }];
 
   return (
-    <div className="relative overflow-hidden bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-200 group">
+    <div className="relative overflow-hidden bg-white dark:bg-navy-900 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-200 group glass-card">
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
 
       <div className="flex items-center justify-between mb-4">

@@ -69,7 +69,7 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
             selectedTypes.length > 0
               ? 'bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800'
-              : 'bg-white dark:bg-navy-800/50 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+              : 'bg-white dark:bg-navy-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300'
           }`}
         >
           <span>Tipo</span>
@@ -85,7 +85,7 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
         </button>
 
         {openDropdown === 'type' && (
-          <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-navy-800/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-navy-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200 glass-card">
             {types.map((t) => (
               <label
                 key={t}
@@ -112,7 +112,7 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
             selectedStatus.length > 0
               ? 'bg-primary-50 border-primary-200 text-primary-700 dark:bg-primary-900/20 dark:border-primary-800'
-              : 'bg-white dark:bg-navy-800/50 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+              : 'bg-white dark:bg-navy-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300'
           }`}
         >
           <span>Status</span>
@@ -128,7 +128,7 @@ export const CaseFilters: React.FC<CaseFiltersProps> = ({ onFilterChange }) => {
         </button>
 
         {openDropdown === 'status' && (
-          <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-navy-800/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-navy-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl z-20 p-2 animate-in fade-in zoom-in-95 duration-200 glass-card">
             {statusList.map((s) => (
               <label
                 key={s}

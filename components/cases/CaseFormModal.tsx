@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, Loader2, Info, AlertCircle, Tag } from 'lucide-react';
 import { CaseStatus, CaseType, Client } from '../../types';
 
@@ -21,6 +22,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
     court: '',
     type: 'cível' as CaseType,
     status: CaseStatus.DISTRIBUIDO,
+    outcome: 'em_andamento' as 'ganho' | 'perdido' | 'acordo' | 'em_andamento',
     value: '',
     started_at: new Date().toISOString().split('T')[0],
     notes: '',
@@ -36,16 +38,24 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const storedClients = JSON.parse(
-      localStorage.getItem('legaltech_clients') || '[]'
-    );
-    setClients(storedClients);
+    const fetchClients = async () => {
+      try {
+        const { clientService } = await import('../../services/clientService');
+        const data = await clientService.getClients();
+        setClients(data);
+      } catch (err) {
+        console.error('Error fetching clients:', err);
+      }
+    };
+
+    fetchClients();
 
     if (initialData) {
       setFormData((prev) => ({
         ...prev,
         ...initialData,
         client_id: initialData.client_id || prev.client_id,
+        outcome: initialData.outcome || 'em_andamento',
       }));
     }
 
@@ -90,7 +100,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
     setFormData({ ...formData, tags: formData.tags.filter((t) => t !== tag) });
   };
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
       role="dialog"
@@ -261,6 +271,30 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
                 </div>
                 <div>
                   <label
+                    htmlFor="outcome"
+                    className="text-sm font-bold dark:text-slate-300 block mb-1"
+                  >
+                    Resultado
+                  </label>
+                  <select
+                    id="outcome"
+                    value={formData.outcome}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        outcome: e.target.value as any,
+                      })
+                    }
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-navy-800 border-none rounded-xl dark:text-white focus:ring-2 ring-primary-500"
+                  >
+                    <option value="em_andamento">Em Andamento</option>
+                    <option value="ganho">Ganho / Procedente</option>
+                    <option value="perdido">Perdido / Improcedente</option>
+                    <option value="acordo">Acordo Celebrado</option>
+                  </select>
+                </div>
+                <div>
+                  <label
                     htmlFor="value"
                     className="text-sm font-bold dark:text-slate-300 block mb-1"
                   >
@@ -354,6 +388,7 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

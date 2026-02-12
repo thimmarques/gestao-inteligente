@@ -58,7 +58,7 @@ export const caseService = {
   },
 
   getCaseById: async (id: string): Promise<CaseWithRelations | null> => {
-    const { data, error } = await supabase
+    const { data: caseData, error } = await supabase
       .from('cases')
       .select(
         `
@@ -71,14 +71,35 @@ export const caseService = {
       .single();
 
     if (error) throw error;
-    if (!data) return null;
+    if (!caseData) return null;
+
+    // Fetch counts in parallel for the specific case
+    const [
+      { count: deadlinesCount },
+      { count: urgentCount },
+      { count: schedulesCount },
+    ] = await Promise.all([
+      supabase
+        .from('deadlines')
+        .select('*', { count: 'exact', head: true })
+        .eq('case_id', id),
+      supabase
+        .from('deadlines')
+        .select('*', { count: 'exact', head: true })
+        .eq('case_id', id)
+        .eq('priority', 'urgente'),
+      supabase
+        .from('schedules')
+        .select('*', { count: 'exact', head: true })
+        .eq('case_id', id),
+    ]);
 
     return {
-      ...data,
-      deadlines_count: 0,
-      urgent_deadlines_count: 0,
-      schedules_count: 0,
-      finances_balance: 0,
+      ...caseData,
+      deadlines_count: deadlinesCount || 0,
+      urgent_deadlines_count: urgentCount || 0,
+      schedules_count: schedulesCount || 0,
+      finances_balance: 0, // Logic for finance balance can be added later if needed
     } as CaseWithRelations;
   },
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Calendar,
@@ -83,7 +84,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
       })()
     : null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
         {/* Header Strip */}
@@ -310,6 +311,7 @@ export const DeadlineDetailsModal: React.FC<DeadlineDetailsModalProps> = ({
 
       {/* Overlay to close */}
       <div className="absolute inset-0 -z-10" onClick={onClose} />
-    </div>
+    </div>,
+    document.body
   );
 };

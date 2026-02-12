@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Edit,
@@ -41,7 +42,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   if (!isOpen) return null;
 
   if (isLoading || !caseData) {
-    return (
+    return createPortal(
       <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
         <div className="bg-white dark:bg-navy-800/50 p-10 rounded-[2.5rem] flex flex-col items-center gap-4">
           <Loader2 className="animate-spin text-primary-600" size={40} />
@@ -49,7 +50,8 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
             Carregando detalhes...
           </p>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
@@ -113,7 +115,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[110] flex items-stretch md:items-center justify-center bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-slate-50 dark:bg-navy-950 w-full max-w-6xl md:h-[90vh] md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in slide-in-from-bottom-8 duration-500">
         <div className="relative z-20 p-8 bg-white dark:bg-navy-800/50 border-b border-slate-100 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
@@ -195,6 +197,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
           refetch();
         }}
       />
-    </div>
+    </div>,
+    document.body
   );
 };

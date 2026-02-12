@@ -30,7 +30,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   const colorClasses = colorMap[color];
 
   return (
-    <div className="bg-white dark:bg-navy-800/50 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-200 group">
+    <div className="bg-white dark:bg-navy-900 p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-200 group glass-card">
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           {title}

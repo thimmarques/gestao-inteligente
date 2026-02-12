@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Gavel,
@@ -247,7 +248,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const selectedCase = cases.find((c: any) => c.id === formData.case_id);
   const selectedClient = clients.find((c: any) => c.id === formData.client_id);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
         <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 sticky top-0 z-10">
@@ -498,6 +499,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
