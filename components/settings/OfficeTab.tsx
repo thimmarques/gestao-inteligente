@@ -50,20 +50,10 @@ export const OfficeTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <section
-        className={`${settingsConfig.cardClass} flex flex-col md:flex-row gap-8 items-center md:items-start`}
-      >
-        <LogoUpload
-          currentLogoUrl={formData.logo_url}
-          onLogoChange={(url) => handleChange('logo_url', url)}
-          onLogoRemove={() => handleChange('logo_url', '')}
-        />
-      </section>
-
-      <form onSubmit={handleSave} className="space-y-6">
-        <div className={settingsConfig.cardClass + ' space-y-6'}>
-          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-4">
+    <div className="space-y-4 animate-in fade-in duration-500">
+      <form onSubmit={handleSave} className="space-y-4">
+        <div className={settingsConfig.cardClass + ' space-y-5'}>
+          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-3">
             <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg">
               <Building2 size={18} />
             </div>
@@ -72,80 +62,90 @@ export const OfficeTab: React.FC = () => {
                 Informações Institucionais
               </h3>
               <p className={settingsConfig.sectionDescClass}>
-                Dados do escritório para relatórios e rodapés
+                Logo, dados do escritório para relatórios e rodapés
               </p>
             </div>
           </div>
 
-          <div className={settingsConfig.gridClass}>
-            <div className="space-y-1 md:col-span-2">
-              <label className={settingsConfig.labelClass}>
-                Nome do Escritório
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                className={settingsConfig.inputClass + ' font-bold text-base'}
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            <div className="shrink-0">
+              <LogoUpload
+                currentLogoUrl={formData.logo_url}
+                onLogoChange={(url) => handleChange('logo_url', url)}
+                onLogoRemove={() => handleChange('logo_url', '')}
               />
             </div>
 
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>CNPJ</label>
-              <input
-                type="text"
-                placeholder="00.000.000/0000-00"
-                value={formData.cnpj}
-                onChange={(e) => handleChange('cnpj', e.target.value)}
-                className={settingsConfig.inputClass + ' font-mono'}
-              />
-            </div>
+            <div className={'flex-1 ' + settingsConfig.gridClass}>
+              <div className="space-y-1 md:col-span-2">
+                <label className={settingsConfig.labelClass}>
+                  Nome do Escritório
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => handleChange('name', e.target.value)}
+                  className={settingsConfig.inputClass + ' font-bold text-base'}
+                />
+              </div>
 
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>
-                E-mail Comercial
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                className={settingsConfig.inputClass}
-              />
-            </div>
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>CNPJ</label>
+                <input
+                  type="text"
+                  placeholder="00.000.000/0000-00"
+                  value={formData.cnpj}
+                  onChange={(e) => handleChange('cnpj', e.target.value)}
+                  className={settingsConfig.inputClass + ' font-mono'}
+                />
+              </div>
 
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>Telefone</label>
-              <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
-                className={settingsConfig.inputClass}
-              />
-            </div>
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>
+                  E-mail Comercial
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  className={settingsConfig.inputClass}
+                />
+              </div>
 
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>Website</label>
-              <input
-                type="url"
-                placeholder="https://..."
-                value={formData.site}
-                onChange={(e) => handleChange('site', e.target.value)}
-                className={settingsConfig.inputClass}
-              />
-            </div>
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>Telefone</label>
+                <input
+                  type="text"
+                  value={formData.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  className={settingsConfig.inputClass}
+                />
+              </div>
 
-            <div className="md:col-span-2 space-y-1">
-              <label className={settingsConfig.labelClass}>
-                Endereço Completo
-              </label>
-              <textarea
-                rows={3}
-                value={formData.address}
-                onChange={(e) => handleChange('address', e.target.value)}
-                className={settingsConfig.inputClass + ' resize-none'}
-                placeholder="Logradouro, nº, bairro, cidade - UF"
-              />
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>Website</label>
+                <input
+                  type="url"
+                  placeholder="https://..."
+                  value={formData.site}
+                  onChange={(e) => handleChange('site', e.target.value)}
+                  className={settingsConfig.inputClass}
+                />
+              </div>
             </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className={settingsConfig.labelClass}>
+              Endereço Completo
+            </label>
+            <textarea
+              rows={2}
+              value={formData.address}
+              onChange={(e) => handleChange('address', e.target.value)}
+              className={settingsConfig.inputClass + ' resize-none h-auto'}
+              placeholder="Logradouro, nº, bairro, cidade - UF"
+            />
           </div>
         </div>
 

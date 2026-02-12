@@ -99,14 +99,14 @@ export const ProfileTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-4 animate-in fade-in duration-500">
       {user?.first_login && (
-        <div className="bg-primary-600 text-white p-6 rounded-2xl shadow-lg shadow-primary-500/20 flex flex-col md:flex-row items-center gap-6 animate-bounce-subtle">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-            <Rocket size={24} />
+        <div className="bg-primary-600 text-white p-5 rounded-xl shadow-lg shadow-primary-500/20 flex flex-col md:flex-row items-center gap-4 animate-bounce-subtle">
+          <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+            <Rocket size={20} />
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h3 className="text-lg font-black tracking-tight">
+            <h3 className="text-base font-black tracking-tight">
               Seja bem-vindo(a)!
             </h3>
             <p className="text-primary-100 font-medium text-sm">
@@ -117,96 +117,102 @@ export const ProfileTab: React.FC = () => {
         </div>
       )}
 
-      <section
-        className={`${settingsConfig.cardClass} flex flex-col items-center`}
-      >
-        <h3 className={settingsConfig.labelClass + ' text-center mb-6'}>
-          Foto de Perfil
-        </h3>
-        <PhotoUpload
-          currentPhotoUrl={formData.photo_url}
-          name={formData.full_name || formData.name || ''}
-          onPhotoChange={(url) => handleChange('photo_url', url)}
-          onPhotoRemove={() => handleChange('photo_url', '')}
-        />
-      </section>
-
-      <form onSubmit={handleSave} className="space-y-6">
-        <div className={settingsConfig.cardClass + ' space-y-6'}>
-          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-4">
+      <form onSubmit={handleSave} className="space-y-4">
+        <div className={settingsConfig.cardClass + ' space-y-5'}>
+          <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/10 pb-3">
             <div className="p-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 rounded-lg">
               <User size={18} />
             </div>
             <div>
               <h3 className={settingsConfig.sectionTitleClass}>
-                Dados Profissionais
+                Identidade Profissional
               </h3>
               <p className={settingsConfig.sectionDescClass}>
-                Informações visíveis nos documentos e para a equipe
+                Foto, dados pessoais e informações visíveis à equipe
               </p>
             </div>
           </div>
 
-          <div className={settingsConfig.gridClass}>
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>Nome Completo</label>
-              <input
-                type="text"
-                value={formData.full_name || formData.name || ''}
-                onChange={(e) => handleChange('full_name', e.target.value)}
-                className={settingsConfig.inputClass}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>OAB</label>
-              <input
-                type="text"
-                placeholder="UF 000.000"
-                value={formData.oab || ''}
-                onChange={(e) => handleChange('oab', e.target.value)}
-                className={settingsConfig.inputClass + ' font-mono'}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>
-                E-mail (Login)
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            {/* Photo */}
+            <div className="flex flex-col items-center shrink-0 md:w-40">
+              <label
+                className={settingsConfig.labelClass + ' text-center mb-2'}
+              >
+                Foto de Perfil
               </label>
-              <input
-                type="email"
-                readOnly
-                value={formData.email || ''}
-                className={
-                  settingsConfig.inputClass +
-                  ' opacity-60 cursor-not-allowed bg-slate-100 dark:bg-navy-800/50'
-                }
+              <PhotoUpload
+                currentPhotoUrl={formData.photo_url}
+                name={formData.full_name || formData.name || ''}
+                onPhotoChange={(url) => handleChange('photo_url', url)}
+                onPhotoRemove={() => handleChange('photo_url', '')}
               />
             </div>
 
-            <div className="space-y-1">
-              <label className={settingsConfig.labelClass}>Telefone</label>
-              <input
-                type="text"
-                value={formData.phone || ''}
-                onChange={(e) => handleChange('phone', e.target.value)}
-                className={settingsConfig.inputClass}
-              />
-            </div>
+            {/* Fields */}
+            <div className={'flex-1 ' + settingsConfig.gridClass}>
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  value={formData.full_name || formData.name || ''}
+                  onChange={(e) => handleChange('full_name', e.target.value)}
+                  className={settingsConfig.inputClass}
+                />
+              </div>
 
-            <div className="md:col-span-2 space-y-1">
-              <label className={settingsConfig.labelClass}>
-                Bio Profissional
-              </label>
-              <textarea
-                rows={4}
-                maxLength={500}
-                placeholder="Conte um pouco sobre sua trajetória..."
-                value={formData.bio || ''}
-                onChange={(e) => handleChange('bio', e.target.value)}
-                className={settingsConfig.inputClass + ' resize-none'}
-              />
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>OAB</label>
+                <input
+                  type="text"
+                  placeholder="UF 000.000"
+                  value={formData.oab || ''}
+                  onChange={(e) => handleChange('oab', e.target.value)}
+                  className={settingsConfig.inputClass + ' font-mono'}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>
+                  E-mail (Login)
+                </label>
+                <input
+                  type="email"
+                  readOnly
+                  value={formData.email || ''}
+                  className={
+                    settingsConfig.inputClass +
+                    ' opacity-60 cursor-not-allowed bg-slate-100 dark:bg-navy-800/50'
+                  }
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className={settingsConfig.labelClass}>Telefone</label>
+                <input
+                  type="text"
+                  value={formData.phone || ''}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  className={settingsConfig.inputClass}
+                />
+              </div>
             </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className={settingsConfig.labelClass}>
+              Resumo Curricular (Bio)
+            </label>
+            <textarea
+              rows={3}
+              maxLength={500}
+              placeholder="Conte um pouco sobre sua trajetória..."
+              value={formData.bio || ''}
+              onChange={(e) => handleChange('bio', e.target.value)}
+              className={settingsConfig.inputClass + ' resize-none h-auto'}
+            />
           </div>
         </div>
 

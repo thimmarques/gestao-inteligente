@@ -1,14 +1,14 @@
 export const settingsConfig = {
   // Container principal dos formulários/seções
   cardClass:
-    'bg-white dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md',
+    'bg-white dark:bg-slate-900/50 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md',
 
   // Grids de formulário
-  gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4',
+  gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3',
 
   // Inputs e Selects
   inputClass:
-    'w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary-500/50 dark:text-white text-sm transition-all outline-none',
+    'w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary-500/50 dark:text-white text-sm transition-all outline-none h-10',
 
   // Labels
   labelClass:

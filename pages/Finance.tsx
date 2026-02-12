@@ -1,27 +1,19 @@
 import React, { useState, useMemo } from 'react';
 import {
-  DollarSign,
-  TrendingUp,
-  TrendingDown,
-  Calendar,
   Search,
-  Filter,
   Loader2,
   Plus,
   ArrowUpRight,
   ArrowDownRight,
-  Wallet,
+  TrendingUp,
+  TrendingDown,
   Landmark,
-  Receipt,
-  FileText,
-  ChevronRight,
   Clock,
 } from 'lucide-react';
 import { useFinances } from '../hooks/useQueries';
-import { financeService } from '../services/financeService';
-import { FinanceRecord } from '../types';
 import { formatCurrency } from '../utils/formatters';
 import { CreateFinanceModal } from '../components/finance/CreateFinanceModal';
+import { CashFlowProjectionChart } from '../components/finance/CashFlowProjectionChart';
 
 const Finance: React.FC = () => {
   const { data: records = [], isLoading, refetch } = useFinances();
@@ -131,6 +123,9 @@ const Finance: React.FC = () => {
           </h3>
         </div>
       </div>
+
+      {/* Cash Flow Projection Chart */}
+      <CashFlowProjectionChart records={records} />
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-navy-800/50 p-4 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
         <div className="relative w-full md:w-96">
