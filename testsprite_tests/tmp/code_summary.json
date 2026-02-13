@@ -1,0 +1,54 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "React",
+    "Vite",
+    "Tailwind CSS",
+    "Supabase",
+    "React Query",
+    "React Hook Form",
+    "Zod"
+  ],
+  "features": [
+    {
+      "name": "Auth",
+      "description": "Authentication context and functionality",
+      "files": ["contexts/AuthContext.tsx", "README_AUTH.md"]
+    },
+    {
+      "name": "Dashboard",
+      "description": "Main dashboard components",
+      "files": ["components/dashboard", "pages/Dashboard.tsx"]
+    },
+    {
+      "name": "Cases",
+      "description": "Case management components",
+      "files": ["components/cases", "pages/Cases.tsx"]
+    },
+    {
+      "name": "Clients",
+      "description": "Client management components",
+      "files": ["components/clients", "pages/Clients.tsx"]
+    },
+    {
+      "name": "Schedule",
+      "description": "Calendar and schedule components",
+      "files": ["components/schedule", "pages/Schedule.tsx"]
+    },
+    {
+      "name": "Finance",
+      "description": "Financial management components",
+      "files": ["components/finance", "pages/Finance.tsx"]
+    },
+    {
+      "name": "Team",
+      "description": "Team management components",
+      "files": ["components/team", "pages/Team.tsx"]
+    },
+    {
+      "name": "Settings",
+      "description": "Application settings components",
+      "files": ["components/settings", "pages/Settings.tsx"]
+    }
+  ]
+}

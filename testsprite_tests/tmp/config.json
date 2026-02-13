@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "thibasss@gmail.com",
+  "loginPassword": "#Gth14g0m4rqu3sG",
+  "executionArgs": {
+    "projectName": "gestao-inteligente",
+    "projectPath": "d:\\projetos\\Gestao Inteligente\\gestao-inteligente",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-qqJB6kFHLypNWfjeAH-4IhI8394diEIRATcntXDj6bRNEvnNpIG7evZRzOR_Pa0VQHpPGEgFAcaJTuc1daBcGsM2H8J17Y4xmg8675slueuWahutFDqo5LNIO8B2C4U-9TI"
+    }
+  },
+  "serverPort": 62845,
+  "proxy": "http://48fb0c69-c660-42f7-b510-6aae7f540ced:8Cu2FNJDuzrzLh5722Tz9ErcgCgjtl5g@tun.testsprite.com:8080"
+}

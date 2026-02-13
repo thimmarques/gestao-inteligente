@@ -1,0 +1,467 @@
+[
+  {
+    "id": "TC001",
+    "title": "Redirect unauthenticated user to login",
+    "description": "Verify that a user who is not authenticated is redirected to the /login page upon accessing the application.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application homepage while not authenticated"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the user is redirected to /login"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Successful login with Supabase authentication",
+    "description": "Check that a valid user can login successfully using Supabase authentication and gain access to the application dashboard.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the /login page"
+      },
+      {
+        "type": "action",
+        "description": "Enter valid credentials and submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is authenticated and redirected to the Dashboard page"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Create new client without linked process",
+    "description": "Verify that the user can create a client without linking a process, and the client appears correctly in the client list.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Clients module"
+      },
+      {
+        "type": "action",
+        "description": "Click the 'New Client' button"
+      },
+      {
+        "type": "action",
+        "description": "Fill client details without linking any process"
+      },
+      {
+        "type": "action",
+        "description": "Click 'Save'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify client is created and listed correctly with no linked processes"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Create new client with linked process",
+    "description": "Validate that creating a new client linked to an existing process succeeds and is reflected in both client and process listings.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Ensure at least one process exists"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the Clients module"
+      },
+      {
+        "type": "action",
+        "description": "Click 'New Client' button"
+      },
+      {
+        "type": "action",
+        "description": "Fill client details and select an existing process to link"
+      },
+      {
+        "type": "action",
+        "description": "Click 'Save'"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm client is created with process linked, visible in both client and process views"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Fail to create process without linked client",
+    "description": "Check that users cannot create a process without linking an existing client, and appropriate validation message is shown.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Processes module"
+      },
+      {
+        "type": "action",
+        "description": "Click 'New Process' button"
+      },
+      {
+        "type": "action",
+        "description": "Fill process details but leave client linkage empty"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to save the process"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate that an error is shown indicating client linkage is mandatory"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Validate process number format",
+    "description": "Verify that the process number input enforces correct format validation and rejects invalid formats.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Processes module and start creating a new process"
+      },
+      {
+        "type": "action",
+        "description": "Fill process number with invalid format (e.g., empty, letters, wrong pattern)"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to save the process"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that validation prevents saving and shows a relevant error message"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Create event in agenda linked to client and process",
+    "description": "Check creation of an agenda event linked to both client and process, and its visibility in calendar and list views.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the Schedule module"
+      },
+      {
+        "type": "action",
+        "description": "Click 'New Event'"
+      },
+      {
+        "type": "action",
+        "description": "Enter event details and link to an existing client and process"
+      },
+      {
+        "type": "action",
+        "description": "Save the event"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the event is displayed in calendar and agenda list with correct linkages"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Manage deadlines linked to processes",
+    "description": "Verify that users can create, view, edit, and delete deadlines linked to processes, and that lists update accordingly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to deadlines or processes deadlines list"
+      },
+      {
+        "type": "action",
+        "description": "Add a new deadline linked to a process"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify deadline appears correctly in the list"
+      },
+      {
+        "type": "action",
+        "description": "Edit the deadline details"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm updates are saved and reflected in UI"
+      },
+      {
+        "type": "action",
+        "description": "Delete the deadline"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the deadline no longer appears"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Add financial entry linked to client and process",
+    "description": "Validate creation of financial entries (income and expense) linked to clients and processes accepting simple currency format values.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Go to the Finance module"
+      },
+      {
+        "type": "action",
+        "description": "Click 'New Entry'"
+      },
+      {
+        "type": "action",
+        "description": "Complete form with entry type (income/expense), client, process, and valid amount"
+      },
+      {
+        "type": "action",
+        "description": "Save the financial entry"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the entry is saved and listed linked to the correct client and process"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Reject financial entry with invalid amount format",
+    "description": "Ensure that financial entries with malformed or invalid amount formats are rejected and trigger validation messages.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to add a financial entry with non-numeric or malformed amount"
+      },
+      {
+        "type": "action",
+        "description": "Submit the entry form"
+      },
+      {
+        "type": "assertion",
+        "description": "Check for validation error preventing save and displaying appropriate message"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Generate reports with filters without errors",
+    "description": "Verify reports can be generated with various filter combinations and data loads correctly without errors or delays.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Reports module"
+      },
+      {
+        "type": "action",
+        "description": "Apply different filter sets (date ranges, clients, process status, financial entry types)"
+      },
+      {
+        "type": "action",
+        "description": "Generate report"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the report loads correctly without errors or timeouts and displays expected filtered data"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Team member CRUD operations",
+    "description": "Check create, read, update and delete operations on team members work correctly, including listings and confirmation dialogs.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Team module"
+      },
+      {
+        "type": "action",
+        "description": "Create a new team member with required information"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new member appears in the list"
+      },
+      {
+        "type": "action",
+        "description": "Edit the member's details and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm changes are reflected in the member list"
+      },
+      {
+        "type": "action",
+        "description": "Delete the member and confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the member is removed from the list"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Persist settings changes after reload",
+    "description": "Validate that changes made in the application settings are saved and persist after reloading the application.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Go to the Settings module"
+      },
+      {
+        "type": "action",
+        "description": "Modify several settings values"
+      },
+      {
+        "type": "action",
+        "description": "Save the configuration"
+      },
+      {
+        "type": "action",
+        "description": "Reload the application page"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that the saved settings values persist after reload"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Dashboard widgets load and display data without errors",
+    "description": "Check all dashboard widgets and summaries load successfully displaying accurate data and without UI errors or timeouts.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login and navigate to Dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all widgets display relevant data and no errors or loading issues appear"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Bidirectional link between client and process",
+    "description": "Ensure linking a process to a client updates both client and process views, and vice versa, maintaining consistency.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create or select a client"
+      },
+      {
+        "type": "action",
+        "description": "Create a process linked to that client"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify client details reflect the new process linkage"
+      },
+      {
+        "type": "action",
+        "description": "From the process view, check client data and confirm linkage"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm consistency and bidirectional linkage is correct"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Buttons respond correctly for all modules",
+    "description": "Verify that all buttons such as New, Save, Cancel, Edit, Delete (with confirmation), and Back function as expected across all modules.",
+    "category": "ui",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Within each module, test the New button initiates correct form or view"
+      },
+      {
+        "type": "action",
+        "description": "Fill forms and verify Save commits changes properly"
+      },
+      {
+        "type": "action",
+        "description": "Use Cancel to discard changes and check navigation or reset"
+      },
+      {
+        "type": "action",
+        "description": "Test Edit buttons open editing mode correctly"
+      },
+      {
+        "type": "action",
+        "description": "Click Delete and confirm dialog appears, and confirm removal on acceptance"
+      },
+      {
+        "type": "action",
+        "description": "Check Back button returns to the expected previous screen"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure no unexpected errors occur when clicking these buttons"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Data persists correctly after application reload",
+    "description": "Validate that data created or updated in clients, processes, agenda, financial entries, and team members persist correctly after a full page reload.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create or update data in various modules (clients, processes, agenda, finance, team)"
+      },
+      {
+        "type": "action",
+        "description": "Reload the entire application page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all data changes are retained and displayed accurately in their respective modules"
+      }
+    ]
+  }
+]
