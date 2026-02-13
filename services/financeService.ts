@@ -9,8 +9,8 @@ export const financeService = {
       .select(
         `
         *,
-        client:clients(name),
-        case:cases(process_number)
+        client:clients(name, type, financial_profile),
+        case:cases(process_number, type)
       `
       )
       .order('due_date', { ascending: false });
@@ -25,8 +25,8 @@ export const financeService = {
       .select(
         `
         *,
-        client:clients(name),
-        case:cases(process_number)
+        client:clients(name, type, financial_profile),
+        case:cases(process_number, type)
       `
       )
       .eq('type', 'receita')
@@ -42,8 +42,8 @@ export const financeService = {
       .select(
         `
         *,
-        client:clients(name),
-        case:cases(process_number)
+        client:clients(name, type, financial_profile),
+        case:cases(process_number, type)
       `
       )
       .eq('type', 'despesa')
@@ -134,6 +134,17 @@ export const financeService = {
       .from('finance_records')
       .select('*')
       .eq('case_id', caseId)
+      .order('due_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getFinancesByClient: async (clientId: string): Promise<FinanceRecord[]> => {
+    const { data, error } = await supabase
+      .from('finance_records')
+      .select('*')
+      .eq('client_id', clientId)
       .order('due_date', { ascending: false });
 
     if (error) throw error;

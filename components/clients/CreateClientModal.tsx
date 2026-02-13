@@ -88,15 +88,17 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
     financial_profile: {
       payment_method: 'PIX',
       honorarios_firmados: '',
-      tem_entrada: false,
-      valor_entrada: '',
       num_parcelas_restante: '1',
+      data_primeiro_vencimento: '',
       billing_day: 10,
       percentual_acordado: '',
       valor_honorarios: '',
       data_pagamento_final: '',
       comarca: '',
       appointment_date: '',
+      tem_entrada: false,
+      valor_entrada: '',
+      data_entrada: '',
       tem_recurso: false,
       guia_principal: {
         protocolo: '',
@@ -875,46 +877,77 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
 
                         {formData.financial_profile.payment_method ===
                           'Cartão de Crédito' && (
-                          <div className="space-y-1.5 md:col-span-2 animate-in slide-in-from-top-2">
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                              Número de Parcelas do Restante
-                            </label>
-                            <div className="relative">
-                              <CardIcon
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                                size={16}
-                              />
-                              <select
-                                value={
-                                  formData.financial_profile
-                                    .num_parcelas_restante
-                                }
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    financial_profile: {
-                                      ...formData.financial_profile,
-                                      num_parcelas_restante: e.target.value,
-                                    },
-                                  })
-                                }
-                                className="w-full pl-12 pr-10 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
-                              >
-                                {Array.from(
-                                  { length: 10 },
-                                  (_, i) => i + 1
-                                ).map((n) => (
-                                  <option key={n} value={n}>
-                                    {n}x no cartão
-                                  </option>
-                                ))}
-                              </select>
-                              <ChevronDown
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-                                size={16}
-                              />
+                          <>
+                            <div className="space-y-1.5 animate-in slide-in-from-top-2">
+                              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                                Número de Parcelas do Restante
+                              </label>
+                              <div className="relative">
+                                <CardIcon
+                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                  size={16}
+                                />
+                                <select
+                                  value={
+                                    formData.financial_profile
+                                      .num_parcelas_restante
+                                  }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      financial_profile: {
+                                        ...formData.financial_profile,
+                                        num_parcelas_restante: e.target.value,
+                                      },
+                                    })
+                                  }
+                                  className="w-full pl-12 pr-10 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
+                                >
+                                  {Array.from(
+                                    { length: 12 },
+                                    (_, i) => i + 1
+                                  ).map((n) => (
+                                    <option key={n} value={n}>
+                                      {n}x no cartão
+                                    </option>
+                                  ))}
+                                </select>
+                                <ChevronDown
+                                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                  size={16}
+                                />
+                              </div>
                             </div>
-                          </div>
+                            <div className="space-y-1.5 animate-in slide-in-from-top-2">
+                              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                                Primeiro Vencimento (Cartão)
+                              </label>
+                              <div className="relative">
+                                <CalendarIcon
+                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                  size={16}
+                                />
+                                <input
+                                  type="date"
+                                  value={
+                                    formData.financial_profile
+                                      .data_primeiro_vencimento
+                                  }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      financial_profile: {
+                                        ...formData.financial_profile,
+                                        data_primeiro_vencimento:
+                                          e.target.value,
+                                      },
+                                    })
+                                  }
+                                  className="w-full pl-12 pr-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm"
+                                />
+                              </div>
+                            </div>
+                          </>
                         )}
                       </div>
 
@@ -964,30 +997,61 @@ export const CreateClientModal: React.FC<CreateClientModalProps> = ({
                         </div>
 
                         {formData.financial_profile.tem_entrada && (
-                          <div className="animate-in slide-in-from-top-2 duration-300">
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">
-                              Valor da Entrada (R$)
-                            </label>
-                            <div className="relative">
-                              <DollarSign
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                                size={16}
-                              />
-                              <input
-                                type="number"
-                                value={formData.financial_profile.valor_entrada}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    financial_profile: {
-                                      ...formData.financial_profile,
-                                      valor_entrada: e.target.value,
-                                    },
-                                  })
-                                }
-                                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
-                                placeholder="0,00"
-                              />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-top-2 duration-300">
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">
+                                Valor da Entrada (R$)
+                              </label>
+                              <div className="relative">
+                                <DollarSign
+                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                  size={16}
+                                />
+                                <input
+                                  type="number"
+                                  value={
+                                    formData.financial_profile.valor_entrada
+                                  }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      financial_profile: {
+                                        ...formData.financial_profile,
+                                        valor_entrada: e.target.value,
+                                      },
+                                    })
+                                  }
+                                  className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
+                                  placeholder="0,00"
+                                />
+                              </div>
+                            </div>
+                            <div className="space-y-1.5 text-left">
+                              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">
+                                Data da Entrada
+                              </label>
+                              <div className="relative">
+                                <CalendarIcon
+                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                  size={16}
+                                />
+                                <input
+                                  type="date"
+                                  value={
+                                    formData.financial_profile.data_entrada
+                                  }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      financial_profile: {
+                                        ...formData.financial_profile,
+                                        data_entrada: e.target.value,
+                                      },
+                                    })
+                                  }
+                                  className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-navy-800/50 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-base font-bold shadow-inner"
+                                />
+                              </div>
                             </div>
                           </div>
                         )}

@@ -17,7 +17,7 @@ export const useClients = (options?: {
   return useQuery({
     queryKey: ['clients', options],
     queryFn: () => clientService.getClients(options),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
     placeholderData: (previousData) => previousData, // Keep previous data while fetching new page
   });
 };
@@ -26,7 +26,7 @@ export const useCases = (options?: GetCasesOptions) => {
   return useQuery({
     queryKey: ['cases', options],
     queryFn: () => caseService.getCases(options),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
     placeholderData: (previousData) => previousData,
   });
 };
@@ -43,7 +43,7 @@ export const useDeadlines = () => {
   return useQuery({
     queryKey: ['deadlines'],
     queryFn: () => deadlineService.getDeadlines(),
-    staleTime: 1000 * 60 * 2, // 2 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 };
 
@@ -59,7 +59,7 @@ export const useFinances = () => {
   return useQuery({
     queryKey: ['finances'],
     queryFn: () => financeService.getFinances(),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 };
 
@@ -71,11 +71,19 @@ export const useFinancesByCase = (caseId: string) => {
   });
 };
 
+export const useFinancesByClient = (clientId: string) => {
+  return useQuery({
+    queryKey: ['finances', 'client', clientId],
+    queryFn: () => financeService.getFinancesByClient(clientId),
+    enabled: !!clientId,
+  });
+};
+
 export const useSchedules = () => {
   return useQuery({
     queryKey: ['schedules'],
     queryFn: () => scheduleService.getSchedules(),
-    staleTime: 1000 * 60 * 2, // 2 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 };
 

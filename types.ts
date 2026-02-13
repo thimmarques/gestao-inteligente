@@ -87,6 +87,32 @@ export interface ClientFinancialProfile {
   tem_entrada?: boolean;
   valor_entrada?: string;
   num_parcelas_restante?: number | string;
+  percentual_acordado?: string;
+  valor_honorarios?: string;
+  data_pagamento_final?: string;
+  data_entrada?: string;
+  tem_recurso?: boolean;
+  guia_principal?: {
+    protocolo?: string;
+    valor?: string;
+    data?: string;
+    status?: string;
+  };
+  guia_recurso?: {
+    protocolo?: string;
+    valor?: string;
+    data?: string;
+    status?: string;
+  };
+  entry_finance_record_id?: string;
+  installments?: {
+    number: number;
+    value: number;
+    due_date: string;
+    status: 'pending' | 'paid';
+    paid_at?: string;
+    finance_record_id?: string;
+  }[];
 }
 
 export interface Client {
@@ -171,8 +197,15 @@ export interface FinanceRecord {
   notes?: string;
   created_at: string;
   // Injected for UI
-  client?: { name: string } | null;
-  case?: { process_number: string } | null;
+  client?: {
+    name: string;
+    type: ClientType;
+    financial_profile?: { process_type?: string };
+  } | null;
+  case?: {
+    process_number: string;
+    type?: CaseType;
+  } | null;
 }
 
 export interface ForecastMonth {

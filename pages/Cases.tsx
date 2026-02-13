@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   FolderPlus,
   ChevronDown,
@@ -8,12 +9,11 @@ import {
   Search,
   Plus,
   Loader2,
-  Folder,
 } from 'lucide-react';
-import { useCases, useDeadlines } from '../hooks/useQueries';
 import { caseService } from '../services/caseService';
-import { useAuth } from '../contexts/AuthContext';
-import { formatCurrency } from '../utils/formatters';
+import { clientService } from '../services/clientService';
+import { CaseWithRelations } from '../types';
+import { seedCases } from '../utils/seedCases';
 import { KPICard } from '../components/cases/KPICard';
 import { SuccessRateCard } from '../components/cases/SuccessRateCard';
 import { StatusBarChart } from '../components/cases/StatusBarChart';
@@ -21,38 +21,47 @@ import { TypePieChart } from '../components/cases/TypePieChart';
 import { CaseTable } from '../components/cases/CaseTable';
 import { CaseCard } from '../components/cases/CaseCard';
 import { CaseFilters } from '../components/cases/CaseFilters';
-import { CaseFormModal } from '../components/cases/CaseFormModal';
+import { CreateCaseModal } from '../components/cases/CreateCaseModal';
 import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
-import { CaseWithRelations } from '../types';
+import { formatCurrency } from '../utils/formatters';
 
 const Cases: React.FC = () => {
-  const { user } = useAuth();
-  const { data: cases = [], isLoading, refetch } = useCases();
-  const { data: deadlines = [] } = useDeadlines();
-
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const queryClient = useQueryClient();
+  const [cases, setCases] = useState<CaseWithRelations[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>(() => {
+    return (localStorage.getItem('cases_view') as 'table' | 'cards') || 'table';
+  });
   const [isDashboardOpen, setIsDashboardOpen] = useState(true);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-  const [selectedCase, setSelectedCase] = useState<CaseWithRelations | null>(
-    null
-  );
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     types: [] as string[],
     status: [] as string[],
   });
 
-  const loadCases = async () => {
-    await refetch();
-  };
+  const loadCases = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await caseService.getCases();
+      setCases(data as CaseWithRelations[]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    seedCases();
+    loadCases();
+  }, [loadCases]);
 
   const filteredCases = useMemo(() => {
-    return (cases as CaseWithRelations[]).filter((c) => {
+    return cases.filter((c) => {
       const matchSearch =
         c.process_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.court.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.notes && c.notes.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (c.client?.name &&
           c.client.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -82,12 +91,21 @@ const Cases: React.FC = () => {
     ).length;
     const losses = concluded.filter((c) => c.outcome === 'perdido').length;
 
-    const today = new Date().toDateString();
-    const todayDeadlines = deadlines.filter(
-      (d: any) =>
-        d.status === 'pendente' &&
-        new Date(d.deadline_date).toDateString() === today
-    ).length;
+    // This logic relies on localStorage for deadlines as per backup,
+    // but in a real app would use useDeadlines hook. Staying faithful to backup for now.
+    const deadlinesStr = localStorage.getItem('legaltech_deadlines');
+    let deadCount = 0;
+    if (deadlinesStr) {
+      const deadlines = JSON.parse(deadlinesStr);
+      const today = new Date().toDateString();
+      deadCount = Array.isArray(deadlines)
+        ? deadlines.filter(
+            (d: any) =>
+              d.status === 'pendente' &&
+              new Date(d.deadline_date).toDateString() === today
+          ).length
+        : 0;
+    }
 
     return {
       active,
@@ -95,9 +113,9 @@ const Cases: React.FC = () => {
       wins,
       losses,
       totalConcluded: concluded.length,
-      todayDeadlines,
+      todayDeadlines: deadCount,
     };
-  }, [cases, deadlines]);
+  }, [cases]);
 
   const formattedTotalValue = useMemo(() => {
     if (stats.totalValue >= 1000000) {
@@ -109,36 +127,20 @@ const Cases: React.FC = () => {
     return formatCurrency(stats.totalValue);
   }, [stats.totalValue]);
 
-  const handleCreate = () => {
-    setSelectedCase(null);
-    setIsFormOpen(true);
-  };
-
-  const handleSave = async (data: any) => {
-    if (!user) return;
-
-    try {
-      if (selectedCase) {
-        await caseService.updateCase(selectedCase.id, data);
-      } else {
-        await caseService.createCase({
-          ...data,
-          office_id: user.office_id,
-          lawyer_id: user.id,
-        });
+  const handleSaveSuccess = async (clientId: string) => {
+    if (clientId) {
+      const clients = await clientService.getClients();
+      const clientIndex = clients.findIndex((c) => c.id === clientId);
+      if (clientIndex !== -1) {
+        const updatedClient = {
+          ...clients[clientIndex],
+          process_count: (clients[clientIndex].process_count || 0) + 1,
+        };
+        await clientService.updateClient(clientId, updatedClient);
       }
-      await loadCases();
-      setIsFormOpen(false);
-      setSelectedCase(null);
-    } catch (error) {
-      console.error('Error saving case:', error);
-      alert('Erro ao salvar processo. Verifique os dados.');
     }
-  };
-
-  const handleRowClick = (id: string) => {
-    setSelectedCaseId(id);
-    setIsDetailsOpen(true);
+    queryClient.invalidateQueries({ queryKey: ['cases'] });
+    loadCases();
   };
 
   return (
@@ -149,11 +151,11 @@ const Cases: React.FC = () => {
             Processos e Casos
           </h1>
           <p className="text-slate-500 font-medium mt-1">
-            Gerencie os {cases.length} processos judiciais do escritório.
+            Gerencie todos os processos judiciais do escritório.
           </p>
         </div>
         <button
-          onClick={handleCreate}
+          onClick={() => setIsCreateModalOpen(true)}
           className="flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary-500/30 transition-all active:scale-95 group btn-electric"
         >
           <FolderPlus
@@ -164,7 +166,6 @@ const Cases: React.FC = () => {
         </button>
       </header>
 
-      {/* Dashboard Section */}
       <div className="bg-white dark:bg-navy-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm glass-card">
         <button
           onClick={() => setIsDashboardOpen(!isDashboardOpen)}
@@ -222,7 +223,6 @@ const Cases: React.FC = () => {
         )}
       </div>
 
-      {/* List and Filters Section */}
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="relative flex-1 max-w-lg">
@@ -232,7 +232,7 @@ const Cases: React.FC = () => {
             />
             <input
               type="text"
-              placeholder="Nº processo, cliente ou tribunal..."
+              placeholder="Buscar por número, cliente, vara ou observações..."
               className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-navy-900 border border-slate-200 dark:border-white/10 rounded-2xl text-sm focus:ring-2 focus:ring-primary-500 dark:text-white shadow-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -243,14 +243,20 @@ const Cases: React.FC = () => {
             <div className="hidden sm:block h-8 w-px bg-slate-200 dark:bg-white/10 mx-2" />
             <div className="flex bg-white dark:bg-navy-900 p-1 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm">
               <button
-                onClick={() => setViewMode('table')}
+                onClick={() => {
+                  setViewMode('table');
+                  localStorage.setItem('cases_view', 'table');
+                }}
                 className={`p-2.5 rounded-xl transition-all ${viewMode === 'table' ? 'bg-primary-600 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
                 title="Lista"
               >
                 <Table2 size={20} />
               </button>
               <button
-                onClick={() => setViewMode('cards')}
+                onClick={() => {
+                  setViewMode('cards');
+                  localStorage.setItem('cases_view', 'cards');
+                }}
                 className={`p-2.5 rounded-xl transition-all ${viewMode === 'cards' ? 'bg-primary-600 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
                 title="Cards"
               >
@@ -263,7 +269,7 @@ const Cases: React.FC = () => {
         <CaseFilters onFilterChange={setFilters} />
 
         <div className="min-h-[500px]">
-          {isLoading ? (
+          {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2
                 className="animate-spin text-primary-600 mb-4"
@@ -274,20 +280,23 @@ const Cases: React.FC = () => {
               </p>
             </div>
           ) : viewMode === 'table' ? (
-            <CaseTable cases={filteredCases} onRowClick={handleRowClick} />
+            <CaseTable
+              cases={filteredCases}
+              onRowClick={(id) => setSelectedCaseId(id)}
+            />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredCases.map((c) => (
                 <CaseCard
                   key={c.id}
                   caseData={c}
-                  onClick={() => handleRowClick(c.id)}
+                  onClick={() => setSelectedCaseId(c.id)}
                 />
               ))}
               {filteredCases.length === 0 && (
-                <div className="col-span-full py-32 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center">
-                  <Folder size={48} className="text-slate-200 mb-4" />
-                  <p className="text-slate-500 italic font-medium">
+                <div className="col-span-full py-32 bg-white dark:bg-navy-900 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center text-center glass-card">
+                  <Search size={48} className="text-slate-200 mb-4" />
+                  <p className="text-slate-400 italic font-medium">
                     Nenhum processo atende aos critérios da busca.
                   </p>
                 </div>
@@ -297,24 +306,16 @@ const Cases: React.FC = () => {
         </div>
       </div>
 
-      {/* Modals */}
-      <CaseFormModal
-        isOpen={isFormOpen}
-        onClose={() => {
-          setIsFormOpen(false);
-          setSelectedCase(null);
-        }}
-        onSave={handleSave}
-        initialData={selectedCase}
+      <CreateCaseModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSaveSuccess={handleSaveSuccess}
       />
 
       <CaseDetailsModal
-        isOpen={isDetailsOpen}
-        onClose={() => {
-          setIsDetailsOpen(false);
-          setSelectedCaseId(null);
-        }}
         caseId={selectedCaseId}
+        isOpen={!!selectedCaseId}
+        onClose={() => setSelectedCaseId(null)}
       />
     </div>
   );
