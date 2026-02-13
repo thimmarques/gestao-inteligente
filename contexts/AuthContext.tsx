@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import { supabase } from '../lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { toast } from 'sonner';
@@ -29,6 +35,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const userRef = useRef(user);
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   const fetchProfile = async (sessionUser: SupabaseUser) => {
     try {
@@ -74,17 +85,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        // Only show loading and refetch for actual sign-in
-        if (event === 'SIGNED_IN') {
-          setIsLoading(true);
-          fetchProfile(session.user);
-        }
-        // For token refresh / initial session, skip if user already loaded
-        // This prevents the spinner from showing when switching browser tabs
-      } else {
+      // console.log('Auth event:', event);
+
+      if (event === 'SIGNED_OUT') {
         setUser(null);
         setIsLoading(false);
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        if (session?.user) {
+          // Only set loading if we don't have a user yet (initial load or login)
+          // If we already have a user, just update the profile in background ensuring data consistency
+          // without blocking the UI with a spinner
+          if (!userRef.current) {
+            setIsLoading(true);
+            fetchProfile(session.user);
+          } else {
+            // Optional: silently update profile if needed, but definitely don't show spinner
+            // fetchProfile(session.user);
+          }
+        }
+      } else if (event === 'INITIAL_SESSION') {
+        // Handle initial session check if not covered by getSession
+        if (session?.user) {
+          fetchProfile(session.user);
+        } else {
+          setIsLoading(false);
+        }
       }
     });
 

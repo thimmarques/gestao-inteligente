@@ -38,11 +38,14 @@ const Login = lazy(() => import('./pages/Login.tsx'));
 const Signup = lazy(() => import('./pages/Signup.tsx'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword.tsx'));
 
-const PageLoader = () => (
-  <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-navy-950">
-    <div className="w-10 h-10 border-4 border-electric-blue border-t-transparent rounded-full animate-spin"></div>
-  </div>
-);
+const PageLoader = () => {
+  console.log('PageLoader mounted');
+  return (
+    <div className="flex items-center justify-center h-screen w-full bg-slate-50 dark:bg-navy-950">
+      <div className="w-10 h-10 border-4 border-electric-blue border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+};
 
 const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
   const { user, isAuthenticated, isLoading } = useAuth();

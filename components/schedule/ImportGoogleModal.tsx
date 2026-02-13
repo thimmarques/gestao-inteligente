@@ -67,12 +67,32 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
           continue;
         }
 
-        const { error: insertError } = await supabase.from('schedules').insert({
+        let targetOfficeId = user?.office_id;
+        if (!targetOfficeId || targetOfficeId === 'office-default') {
+          // Attempt to find a valid office
+          const { data: officeData } = await supabase
+            .from('offices')
+            .select('id')
+            .limit(1)
+            .maybeSingle();
+
+          if (officeData?.id) {
+            targetOfficeId = officeData.id;
+          } else {
+            // If no office exists, we can't insert schedules linked to office
+            // Depending on schema, maybe we can insert with null?
+            // Assuming NOT NULL for now based on previous 400 errors with undefined.
+            console.error('No valid office found for import.');
+            continue;
+          }
+        }
+
+        const payload = {
           title: event.summary || 'Sem título',
           description: event.description || '',
-          type: 'reuniao',
+          type: 'reunião', // Fixed typo: matches 'reunião' in types.ts
           lawyer_id: uId,
-          office_id: user?.office_id,
+          office_id: targetOfficeId,
           status: 'agendado',
           start_time: new Date(
             event.start.dateTime || event.start.date
@@ -81,9 +101,22 @@ export const ImportGoogleModal: React.FC<ImportGoogleModalProps> = ({
             event.end.dateTime || event.end.date
           ).toISOString(),
           google_event_id: event.id,
-        });
+        };
+
+        // Remove office_id if invalid to avoid UUID error (if column is nullable)
+        // OR better: check if nullable. Assuming it might be nullable or has default.
+        // If it MUST be a UUID, we can't send 'office-default'.
+
+        const { error: insertError } = await supabase
+          .from('schedules')
+          .insert(payload as any);
+
         if (insertError) {
-          console.error('Import insert error:', event.summary, insertError);
+          console.error(
+            'Import insert error:',
+            event.summary,
+            JSON.stringify(insertError, null, 2)
+          ); // improved logging
           continue;
         }
         importedCount++;

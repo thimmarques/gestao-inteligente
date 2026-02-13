@@ -122,12 +122,26 @@ export const IntegrationsTab: React.FC = () => {
 
         if (existing) continue;
 
-        const { error: insertError } = await supabase.from('schedules').insert({
+        let targetOfficeId = user?.office_id;
+        if (!targetOfficeId || targetOfficeId === 'office-default') {
+          const { data: officeData } = await supabase
+            .from('offices')
+            .select('id')
+            .limit(1)
+            .maybeSingle();
+          if (officeData?.id) targetOfficeId = officeData.id;
+          else {
+            console.error('Skipping event sync: No valid office found.');
+            continue;
+          }
+        }
+
+        const payload = {
           title: event.summary || 'Sem título',
           description: event.description || '',
           type: 'compromisso',
           lawyer_id: userId,
-          office_id: user?.office_id,
+          office_id: targetOfficeId,
           status: 'agendado',
           start_time: new Date(
             event.start?.dateTime || event.start?.date
@@ -136,7 +150,12 @@ export const IntegrationsTab: React.FC = () => {
             event.end?.dateTime || event.end?.date
           ).toISOString(),
           google_event_id: event.id,
-        });
+        };
+
+        const { error: insertError } = await supabase
+          .from('schedules')
+          .insert(payload as any);
+
         if (insertError) {
           console.error('Insert error for event:', event.summary, insertError);
           continue;

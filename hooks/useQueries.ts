@@ -130,7 +130,7 @@ export const useAuditLogs = (officeId?: string) => {
       if (error) throw error;
       return data;
     },
-    enabled: !!officeId,
+    enabled: !!officeId && officeId !== 'office-default',
   });
 };
 
