@@ -32,10 +32,7 @@ export const caseService = {
     }
 
     if (options?.search) {
-      // Search is trickier with relations, but we can search on case fields
-      query = query.or(
-        `title.ilike.%${options.search}%,process_number.ilike.%${options.search}%`
-      );
+      query = query.ilike('process_number', `%${options.search}%`);
     }
 
     if (options?.page && options?.limit) {

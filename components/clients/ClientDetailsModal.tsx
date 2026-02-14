@@ -105,7 +105,6 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
       r.title?.toLowerCase().includes('entrada')
   );
 
-  // Identify recurring installments
   const installmentsList = sortedRecords.filter(
     (r) =>
       r.id !== entryRecord?.id &&
@@ -248,12 +247,13 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           <div className="max-w-4xl mx-auto h-full animate-in fade-in duration-500">
             {activeTab === 'geral' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-2 space-y-8">
+                <div className="md:col-span-3 space-y-8">
+                  {/* Contact Info Card */}
                   <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-8">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
                       Informações de Contato
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                       <div className="space-y-1 group">
                         <p className="text-[10px] font-bold text-slate-400 uppercase">
                           CPF/CNPJ
@@ -276,9 +276,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                         </p>
                         <a
                           href={`mailto:${client.email}`}
-                          className="text-sm font-medium text-primary-600 hover:underline flex items-center gap-2"
+                          className="text-sm font-medium text-primary-600 hover:underline flex items-center gap-2 truncate"
                         >
-                          <Mail size={14} />
                           {client.email || 'Não informado'}
                         </a>
                       </div>
@@ -286,57 +285,109 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                         <p className="text-[10px] font-bold text-slate-400 uppercase">
                           Telefone
                         </p>
-                        <a
-                          href={`tel:${client.phone}`}
-                          className="text-sm font-bold dark:text-white flex items-center gap-2"
-                        >
-                          <Phone size={14} className="text-primary-500" />
-                          {formatPhone(client.phone)}
-                        </a>
+                        <p className="text-sm font-bold dark:text-white">
+                          {formatPhone(client.phone) || '-'}
+                        </p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-[10px] font-bold text-slate-400 uppercase">
                           Cidade / Estado
                         </p>
                         <p className="text-sm font-medium dark:text-slate-300">
-                          São Paulo, SP
+                          -, -
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-4">
+                  {/* Payment Configuration Card */}
+                  <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-8">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
-                      Notas e Observações
+                      Configuração de Pagamento
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
-                      "
-                      {client.notes ||
-                        'Nenhuma nota adicional para este cliente.'}
-                      "
-                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">
+                          Forma de Pagamento
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <CreditCard size={18} className="text-primary-500" />
+                          <p className="text-sm font-bold dark:text-white">
+                            {client.financial_profile?.payment_method ||
+                              'Cartão de Crédito'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">
+                          Status de Entrada
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 size={18} className="text-green-500" />
+                          <div>
+                            <p className="text-sm font-bold text-green-600 dark:text-green-400 leading-none">
+                              Entrada de{' '}
+                              {formatCurrency(displayTotalValue * 0.1 || 1000)}
+                            </p>
+                            <p className="text-[10px] text-slate-400 mt-1">
+                              Recebida em {formatDate(client.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">
+                          Dia de Faturamento
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Clock size={18} className="text-primary-500" />
+                          <p className="text-sm font-bold dark:text-white">
+                            Todo dia{' '}
+                            {client.financial_profile?.billing_day || 13}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pt-4 border-t border-slate-100 dark:border-white/5">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">
+                        Honorários Contratados
+                      </p>
+                      <p className="text-2xl font-black dark:text-white">
+                        {formatCurrency(displayTotalValue || 10000)}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-8">
-                  <div className="bg-white dark:bg-navy-800/50 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-primary-600">
-                      <Briefcase size={20} />
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold dark:text-white">
-                        {client.process_count}
-                      </p>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                        Processos Ativos
+                  {/* Notes & Active Processes Grid */}
+                  <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm space-y-4">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
+                        Notas e Observações
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                        "{client.notes || 'Nenhuma nota adicional.'}"
                       </p>
                     </div>
-                    <button
-                      onClick={() => onCreateCase(client.id)}
-                      className="w-full py-3 bg-primary-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20 active:scale-95"
-                    >
-                      Abrir Novo Processo
-                    </button>
+
+                    <div className="bg-white dark:bg-navy-800/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-sm flex flex-col items-center justify-center gap-4 text-center">
+                      <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-primary-600">
+                        <Briefcase size={20} />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-black dark:text-white">
+                          {client.process_count}
+                        </p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                          Processos Ativos
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => onCreateCase(client.id)}
+                        className="mt-2 px-8 py-3 bg-primary-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20 active:scale-95"
+                      >
+                        Abrir Novo Processo
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -489,183 +540,130 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                      {/* 1. Total Value */}
-                      <div className="group bg-white dark:bg-navy-800/50 p-5 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:border-primary-100 dark:hover:border-primary-900/30 transition-all duration-300 flex flex-col justify-between h-36 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity">
-                          <DollarSign size={56} />
-                        </div>
-                        <div className="flex items-center gap-3 mb-2 relative z-10">
-                          <div className="p-2 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                            <DollarSign size={18} />
-                          </div>
-                          <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-green-600 transition-colors">
-                            Valor Total
-                          </span>
-                        </div>
-                        <p
-                          className="text-xl font-black dark:text-white tracking-tight relative z-10 truncate"
-                          title={formatCurrency(displayTotalValue)}
-                        >
-                          {formatCurrency(displayTotalValue)}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                      {/* 1. Total Received */}
+                      <div className="bg-[#0f172a] p-8 rounded-[2.5rem] border border-white/5 flex flex-col justify-center min-h-[160px]">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+                          Total Recebido
+                        </span>
+                        <p className="text-2xl font-black text-emerald-500 tracking-tight">
+                          {formatCurrency(totalPaidCount)}
                         </p>
                       </div>
 
-                      {/* 2. Total Paid */}
-                      <div className="group bg-white dark:bg-navy-800/50 p-5 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:border-emerald-100 dark:hover:border-emerald-900/30 transition-all duration-300 flex flex-col justify-between h-36 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity">
-                          <CheckCircle2 size={56} />
-                        </div>
-                        <div className="flex items-center gap-3 mb-2 relative z-10">
-                          <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                            <CheckCircle2 size={18} />
-                          </div>
-                          <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 transition-colors">
-                            Total Pago
-                          </span>
-                        </div>
-                        <div className="relative z-10 space-y-3">
-                          <p
-                            className="text-xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight truncate"
-                            title={formatCurrency(totalPaidCount)}
-                          >
-                            {formatCurrency(totalPaidCount)}
-                          </p>
-                          <div className="w-full bg-slate-100 dark:bg-white/5 h-1.5 rounded-full overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                              style={{
-                                width: `${Math.min(100, (totalPaidCount / (displayTotalValue || 1)) * 100)}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 3. Remaining */}
-                      <div className="group bg-white dark:bg-navy-800/50 p-5 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:border-amber-100 dark:hover:border-amber-900/30 transition-all duration-300 flex flex-col justify-between h-36 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity">
-                          <Clock size={56} />
-                        </div>
-                        <div className="flex items-center gap-3 mb-2 relative z-10">
-                          <div className="p-2 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                            <Clock size={18} />
-                          </div>
-                          <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-amber-600 transition-colors">
-                            Restante
-                          </span>
-                        </div>
-                        <p
-                          className="text-xl font-black text-slate-700 dark:text-slate-200 tracking-tight relative z-10 truncate"
-                          title={formatCurrency(remainingValue)}
-                        >
+                      {/* 2. Pending Balance */}
+                      <div className="bg-[#0f172a] p-8 rounded-[2.5rem] border border-white/5 flex flex-col justify-center min-h-[160px]">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+                          Saldo Pendente Real
+                        </span>
+                        <p className="text-2xl font-black text-orange-500 tracking-tight">
                           {formatCurrency(remainingValue)}
                         </p>
                       </div>
 
-                      {/* Combined Method & Entry */}
-                      <div className="group bg-white dark:bg-navy-800/50 p-4 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:border-blue-100 dark:hover:border-blue-900/30 transition-all duration-300 h-36 flex flex-col relative overflow-hidden">
-                        <div className="flex items-center gap-3 mb-3 shrink-0">
-                          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                            <CreditCard size={18} />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 leading-tight">
-                              Pagamento
-                            </span>
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 leading-tight">
-                              & Entrada
-                            </span>
-                          </div>
+                      {/* 3. Contract Value */}
+                      <div className="bg-primary-600 p-8 rounded-[2.5rem] flex flex-col justify-center min-h-[160px] shadow-xl shadow-primary-500/20">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-4">
+                          Valor do Contrato
+                        </span>
+                        <p className="text-2xl font-black text-white tracking-tight">
+                          {formatCurrency(displayTotalValue)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 4. Perfil de Contratação */}
+                    <div className="bg-[#0f172a] p-10 rounded-[3rem] border border-white/5 space-y-8">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
+                          Perfil de Contratação
+                        </h3>
+                        <div className="px-4 py-1.5 bg-slate-800/50 rounded-full border border-white/5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            {client.financial_profile.payment_method ||
+                              'Cartão de Crédito'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                            Entrada Real
+                          </p>
+                          <p className="text-xl font-black dark:text-white">
+                            {entryRecord
+                              ? formatCurrency(entryRecord.amount)
+                              : 'R$ 0,00'}
+                          </p>
                         </div>
 
-                        <div className="flex-1 flex flex-col justify-between gap-1 overflow-hidden">
-                          {/* Entry Section */}
-                          <div className="flex items-center justify-between group/entry">
-                            <div className="flex flex-col">
-                              <p className="text-[5px] font-bold text-slate-400 uppercase tracking-wider mb-0.1">
-                                Entrada
-                              </p>
-                              <p className="text-xs font-black dark:text-white truncate leading-none">
-                                {entryRecord
-                                  ? formatCurrency(entryRecord.amount)
-                                  : 'R$ 0,00'}
-                              </p>
-                            </div>
-                            <span
-                              className={`text-[7px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${entryRecord?.status === 'pago' ? 'bg-green-100 text-green-700 dark:bg-green-900/30' : 'bg-slate-100 text-slate-500 dark:bg-white/10'}`}
-                            >
-                              {entryRecord?.status === 'pago' ? 'PAGO' : 'PEND'}
-                            </span>
-                          </div>
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                            Parcelamento
+                          </p>
+                          <p className="text-xl font-black dark:text-white">
+                            {client.financial_profile.num_parcelas_restante
+                              ? `${client.financial_profile.num_parcelas_restante}x`
+                              : 'N/A'}
+                          </p>
+                        </div>
 
-                          {/* Divider */}
-                          <div className="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent w-full my-0.05" />
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                            Vencimento
+                          </p>
+                          <p className="text-xl font-black dark:text-white leading-tight">
+                            Todo dia{' '}
+                            {client.financial_profile.billing_day || 13}
+                          </p>
+                        </div>
 
-                          {/* Method Section */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex flex-col">
-                              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.2">
-                                Método
-                              </p>
-                              <p className="text-[10px] font-bold dark:text-white truncate leading-none">
-                                {client.financial_profile.payment_method ||
-                                  'N/A'}
-                              </p>
-                            </div>
-                            {client.financial_profile.num_parcelas_restante && (
-                              <div className="text-right">
-                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.2">
-                                  Rest.
-                                </p>
-                                <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded-md inline-block">
-                                  {
-                                    client.financial_profile
-                                      .num_parcelas_restante
-                                  }
-                                  x
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                            Status
+                          </p>
+                          <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">
+                            EM DIA
+                          </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Installments List */}
+                    {/* History and Deadlines */}
                     {client.type === 'particular' && (
-                      <div className="md:col-span-2 space-y-4">
-                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-2">
-                          <CalendarIcon size={16} /> Lançamentos Reais
+                      <div className="md:col-span-2 space-y-4 pt-8 border-t border-white/5">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
+                          <DollarSign size={16} /> Histórico e Vencimentos
                         </h4>
-                        <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-100 dark:border-white/10 overflow-hidden">
+                        <div className="bg-[#0f172a] rounded-[2.5rem] border border-white/5 overflow-hidden">
                           <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
-                              <thead className="bg-slate-50 dark:bg-navy-900/50 border-b border-slate-100 dark:border-white/5">
+                              <thead className="bg-[#1e293b]/50 border-b border-white/5">
                                 <tr>
-                                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-[10px] tracking-widest w-20">
-                                    #
+                                  <th className="px-8 py-6 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
+                                    Descrição
                                   </th>
-                                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
-                                    Valor
-                                  </th>
-                                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
+                                  <th className="px-8 py-6 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
                                     Vencimento
                                   </th>
-                                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
+                                  <th className="px-8 py-6 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
+                                    Valor
+                                  </th>
+                                  <th className="px-8 py-6 font-bold text-slate-400 uppercase text-[10px] tracking-widest">
                                     Status
                                   </th>
-                                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-[10px] tracking-widest text-right">
-                                    Categoria
+                                  <th className="px-8 py-6 font-bold text-slate-400 uppercase text-[10px] tracking-widest text-right">
+                                    Ação
                                   </th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                              <tbody className="divide-y divide-white/5">
                                 {isLoadingFinances ? (
                                   <tr>
                                     <td
                                       colSpan={5}
-                                      className="px-6 py-12 text-center text-slate-400"
+                                      className="px-8 py-12 text-center text-slate-400"
                                     >
                                       Carregando registros...
                                     </td>
@@ -674,47 +672,46 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                                   <tr>
                                     <td
                                       colSpan={5}
-                                      className="px-6 py-12 text-center text-slate-400"
+                                      className="px-8 py-12 text-center text-slate-400"
                                     >
-                                      Nenhum lançamento encontrado para este
-                                      cliente.
+                                      Nenhum lançamento encontrado.
                                     </td>
                                   </tr>
                                 ) : (
                                   sortedRecords.map((record, idx) => (
                                     <tr
                                       key={record.id}
-                                      className="group hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                                      className="group hover:bg-white/5 transition-colors"
                                     >
-                                      <td className="px-6 py-4 font-medium text-slate-500 text-xs text-center">
-                                        {record.category ===
-                                        'Entrada de Honorários' ? (
-                                          <span className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-[10px] font-bold">
-                                            E
-                                          </span>
-                                        ) : (
-                                          idx + 1
-                                        )}
+                                      <td className="px-8 py-6 font-bold dark:text-white uppercase text-xs">
+                                        {record.category || 'Receita'}
                                       </td>
-                                      <td className="px-6 py-4 font-bold dark:text-white">
-                                        {formatCurrency(record.amount)}
-                                      </td>
-                                      <td className="px-6 py-4 text-slate-500 text-xs">
+                                      <td className="px-8 py-6 text-slate-400 text-xs font-medium">
                                         {formatDate(record.due_date)}
                                       </td>
-                                      <td className="px-6 py-4">
+                                      <td className="px-8 py-6 font-black dark:text-white text-base">
+                                        {formatCurrency(record.amount)}
+                                      </td>
+                                      <td className="px-8 py-6">
                                         {record.status === 'pago' ? (
-                                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                            <CheckCircle2 size={12} /> Pago
+                                          <span className="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                            PAGO
                                           </span>
                                         ) : (
-                                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400">
-                                            <Circle size={12} /> Pendente
+                                          <span className="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                                            PENDENTE
                                           </span>
                                         )}
                                       </td>
-                                      <td className="px-6 py-4 text-right text-[10px] font-bold uppercase text-slate-400">
-                                        {record.category || 'Receita'}
+                                      <td className="px-8 py-6 text-right">
+                                        {record.status !== 'pago' ? (
+                                          <button className="p-2 bg-emerald-500/10 text-emerald-500 rounded-xl hover:bg-emerald-500 transition-colors group/btn">
+                                            <CheckCircle2
+                                              size={18}
+                                              className="group-hover/btn:text-white"
+                                            />
+                                          </button>
+                                        ) : null}
                                       </td>
                                     </tr>
                                   ))

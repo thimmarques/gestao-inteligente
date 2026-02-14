@@ -1,14 +1,21 @@
 import React from 'react';
-import { Clock, Calendar, Loader2 } from 'lucide-react';
+import { Clock, Calendar, Loader2, Plus } from 'lucide-react';
 import { formatDate } from '../../../utils/formatters.ts';
-import { useDeadlinesByCase } from '../../../hooks/useQueries';
+import { useDeadlinesByCase, useCase } from '../../../hooks/useQueries';
+import { CreateDeadlineModal } from '../../deadlines/CreateDeadlineModal.tsx';
 
 interface DeadlinesTabProps {
   caseId: string;
 }
 
 export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
-  const { data: deadlines = [], isLoading } = useDeadlinesByCase(caseId);
+  const {
+    data: deadlines = [],
+    isLoading,
+    refetch,
+  } = useDeadlinesByCase(caseId);
+  const { data: caseData } = useCase(caseId);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const getStatusInfo = (date: string, status: string) => {
     if (status === 'concluído')
@@ -58,20 +65,28 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
   };
 
   const handleAddClick = () => {
-    alert('Use o botão de novo prazo na tela principal de prazos.');
+    setIsModalOpen(true);
   };
 
   return (
     <div className="space-y-6 relative animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h3 className="text-xl font-bold dark:text-white">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <h3 className="text-2xl font-black dark:text-white tracking-tight">
             Prazos Processuais
           </h3>
-          <span className="px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-full border border-primary-200 dark:border-primary-800">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-black border border-blue-200 dark:border-blue-800">
             {deadlines.length}
-          </span>
+          </div>
         </div>
+
+        <button
+          onClick={handleAddClick}
+          className="flex items-center gap-3 px-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-primary-500/20 active:scale-95"
+        >
+          <Plus size={20} />
+          Novo Prazo
+        </button>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
@@ -131,17 +146,35 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
               );
             })
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10 text-center">
-            <Clock size={48} className="text-slate-300 mb-4 opacity-50" />
-            <h4 className="text-lg font-bold dark:text-white mb-2">
+          <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-navy-800/40 rounded-[2.5rem] border border-dashed border-slate-200 dark:border-white/10 text-center animate-in zoom-in-95 duration-500">
+            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-navy-800 flex items-center justify-center mb-6">
+              <Clock size={40} className="text-slate-300 dark:text-slate-600" />
+            </div>
+            <h4 className="text-xl font-black dark:text-white mb-2">
               Nenhum prazo cadastrado
             </h4>
-            <p className="text-slate-500 text-sm mb-6 max-w-xs">
+            <p className="text-slate-500 text-sm mb-8 max-w-[280px]">
               Mantenha seu escritório organizado adicionando prazos fatais.
             </p>
+            <button
+              onClick={handleAddClick}
+              className="text-xs font-black text-primary-600 dark:text-primary-400 uppercase tracking-[0.2em] hover:text-primary-700 transition-colors"
+            >
+              CRIAR PRIMEIRO PRAZO AGORA
+            </button>
           </div>
         )}
       </div>
+
+      <CreateDeadlineModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        defaultCaseId={caseId}
+        onSuccess={() => {
+          refetch();
+          setIsModalOpen(false);
+        }}
+      />
     </div>
   );
 };

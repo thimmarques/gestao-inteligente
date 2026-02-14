@@ -14,9 +14,13 @@ import { formatCurrency, formatDate } from '../../../utils/formatters';
 
 interface InfoTabProps {
   caseData: CaseWithRelations;
+  onClientClick?: () => void;
 }
 
-export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
+export const InfoTab: React.FC<InfoTabProps> = ({
+  caseData,
+  onClientClick,
+}) => {
   const diffInDays = (date: string) => {
     const start = new Date(date);
     const today = new Date();
@@ -30,145 +34,105 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
       <div className="lg:col-span-2 space-y-6">
         {/* Card Dados do Processo */}
         <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center gap-2">
-            <FileText size={18} className="text-primary-500" />
-            <h3 className="font-bold dark:text-white">Dados Principais</h3>
+          <div className="px-8 py-6 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
+            <FileText size={20} className="text-primary-500" />
+            <h3 className="text-lg font-bold dark:text-white">
+              Dados Principais
+            </h3>
           </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+          <div className="p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Número do Processo
                 </p>
                 <p className="font-mono text-sm font-bold text-primary-600 dark:text-primary-400">
                   {caseData.process_number}
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Tribunal / Vara
                 </p>
-                <p
-                  className="text-sm font-medium dark:text-white truncate"
-                  title={caseData.court}
-                >
+                <p className="text-sm font-bold dark:text-white leading-tight">
                   {caseData.court}
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Tipo de Ação
                 </p>
-                <span className="inline-block px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-100 dark:border-blue-800">
+                <span className="inline-flex px-2 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-[10px] font-black uppercase rounded-lg border border-primary-100 dark:border-primary-800/50">
                   {caseData.type}
                 </span>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Status Atual
                 </p>
-                <span className="inline-block px-2 py-0.5 bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase rounded border border-slate-200 dark:border-white/15">
+                <span className="inline-flex px-2 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase rounded-lg border border-slate-200 dark:border-white/10">
                   {caseData.status}
                 </span>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Valor da Causa
                 </p>
-                <p className="text-sm font-bold dark:text-white">
+                <p className="text-sm font-black dark:text-white">
                   {formatCurrency(caseData.value)}
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Data de Início
                 </p>
-                <p className="text-sm font-medium dark:text-white">
+                <p className="text-sm font-bold dark:text-white">
                   {formatDate(caseData.started_at)}
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Data de Encerramento
                 </p>
-                <p className="text-sm font-medium dark:text-white">
+                <p className="text-sm font-bold dark:text-white">
                   {caseData.ended_at
                     ? formatDate(caseData.ended_at)
                     : 'Em andamento'}
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                   Cliente
                 </p>
-                <button className="flex items-center gap-2 text-sm font-bold text-primary-600 hover:underline">
-                  <User size={14} />
-                  {caseData.client?.name || 'ID ' + caseData.client_id}
+                <button
+                  onClick={onClientClick}
+                  className="flex items-center gap-2 text-sm font-black text-primary-600 hover:text-primary-700 transition-colors group"
+                >
+                  <User
+                    size={14}
+                    className="group-hover:scale-110 transition-transform"
+                  />
+                  <span className="underline underline-offset-4 decoration-primary-200 dark:decoration-primary-900/50 group-hover:decoration-primary-500">
+                    {caseData.client?.name || 'Não informado'}
+                  </span>
                 </button>
               </div>
-              <div className="col-span-full space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  Advogado Responsável
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-primary-600">
-                    {caseData.lawyer?.name?.[0] || 'A'}
-                  </div>
-                  <p className="text-sm font-medium dark:text-white">
-                    {caseData.lawyer?.name || 'Não atribuído'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card Tags */}
-        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Tag size={18} className="text-primary-500" />
-              <h3 className="font-bold dark:text-white">Tags</h3>
-            </div>
-            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">
-              Editar
-            </button>
-          </div>
-          <div className="p-6">
-            <div className="flex flex-wrap gap-2">
-              {caseData.tags && caseData.tags.length > 0 ? (
-                caseData.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 bg-slate-50 dark:bg-navy-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-100 dark:border-white/15"
-                  >
-                    #{tag}
-                  </span>
-                ))
-              ) : (
-                <p className="text-sm text-slate-400 italic">
-                  Nenhuma tag vinculada ao processo.
-                </p>
-              )}
             </div>
           </div>
         </div>
 
         {/* Card Notas */}
         <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <StickyNote size={18} className="text-primary-500" />
-              <h3 className="font-bold dark:text-white">Notas do Processo</h3>
-            </div>
-            <button className="text-xs font-bold text-slate-400 hover:text-primary-600 uppercase tracking-widest transition-colors">
-              Editar
-            </button>
+          <div className="px-8 py-6 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
+            <StickyNote size={20} className="text-primary-500" />
+            <h3 className="text-lg font-bold dark:text-white">
+              Notas do Processo
+            </h3>
           </div>
-          <div className="p-6">
-            <div className="max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="p-8">
+            <div className="min-h-[120px]">
               {caseData.notes ? (
-                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-line italic">
                   {caseData.notes}
                 </p>
               ) : (
@@ -183,64 +147,51 @@ export const InfoTab: React.FC<InfoTabProps> = ({ caseData }) => {
 
       {/* Coluna Lateral */}
       <div className="space-y-6">
-        <div className="bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center gap-2">
-            <BarChart3 size={18} className="text-primary-500" />
-            <h3 className="font-bold dark:text-white">Estatísticas</h3>
+        {/* Tempo de Tramitação */}
+        <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 flex flex-col items-center text-center shadow-sm">
+          <div className="w-16 h-16 rounded-[1.5rem] bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600 mb-6 shadow-xl shadow-primary-500/10">
+            <Clock size={32} />
           </div>
-          <div className="p-6 space-y-6">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">
+            Tempo de Tramitação
+          </p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-black dark:text-white tracking-tighter">
+              {diffInDays(caseData.started_at)}
+            </span>
+            <span className="text-sm font-bold text-slate-500">dias</span>
+          </div>
+        </div>
+
+        {/* Snapshot */}
+        <div className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+          <div className="px-8 py-5 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
+            <BarChart3 size={18} className="text-primary-500" />
+            <h3 className="font-bold dark:text-white">Snapshot</h3>
+          </div>
+          <div className="p-8 space-y-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-500">
-                  <Clock size={16} />
-                </div>
-                <span className="text-sm font-medium text-slate-500">
-                  Prazos Pendentes
-                </span>
-              </div>
-              <span className="text-lg font-bold dark:text-white">
+              <span className="text-sm font-bold text-slate-500">
+                Prazos em aberto
+              </span>
+              <span className="text-xl font-black dark:text-white leading-none">
                 {caseData.deadlines_count || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500">
-                  <Calendar size={16} />
-                </div>
-                <span className="text-sm font-medium text-slate-500">
-                  Audiências Futuras
-                </span>
-              </div>
-              <span className="text-lg font-bold dark:text-white">
+              <span className="text-sm font-bold text-slate-500">
+                Audiências agendadas
+              </span>
+              <span className="text-xl font-black dark:text-white leading-none">
                 {caseData.schedules_count || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-500">
-                  <FileText size={16} />
-                </div>
-                <span className="text-sm font-medium text-slate-500">
-                  Saldo Financeiro
-                </span>
-              </div>
-              <span
-                className={`text-lg font-bold ${caseData.finances_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}
-              >
-                {formatCurrency(caseData.finances_balance || 0)}
+              <span className="text-sm font-bold text-slate-500">
+                Documentos
               </span>
-            </div>
-            <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500">
-                  <BarChart3 size={16} />
-                </div>
-                <span className="text-sm font-medium text-slate-500">
-                  Dias de Processo
-                </span>
-              </div>
-              <span className="text-lg font-bold dark:text-white">
-                {diffInDays(caseData.started_at)}
+              <span className="text-xl font-black dark:text-white leading-none">
+                0
               </span>
             </div>
           </div>

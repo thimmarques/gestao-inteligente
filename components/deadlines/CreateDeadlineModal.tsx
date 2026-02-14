@@ -174,6 +174,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
             <input
               type="text"
               placeholder="Buscar processo..."
+              disabled={!!defaultCaseId}
               value={
                 searchTerm || (selectedCase ? selectedCase.process_number : '')
               }
@@ -182,7 +183,7 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
                 setShowCaseList(true);
               }}
               onFocus={() => setShowCaseList(true)}
-              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
+              className={`w-full px-5 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all ${defaultCaseId ? 'opacity-60 cursor-not-allowed' : ''}`}
             />
             {showCaseList && searchTerm && filteredCases.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto animate-in slide-in-from-top-2">

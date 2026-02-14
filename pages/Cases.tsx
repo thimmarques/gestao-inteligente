@@ -128,18 +128,9 @@ const Cases: React.FC = () => {
   }, [stats.totalValue]);
 
   const handleSaveSuccess = async (clientId: string) => {
-    if (clientId) {
-      const clients = await clientService.getClients();
-      const clientIndex = clients.findIndex((c) => c.id === clientId);
-      if (clientIndex !== -1) {
-        const updatedClient = {
-          ...clients[clientIndex],
-          process_count: (clients[clientIndex].process_count || 0) + 1,
-        };
-        await clientService.updateClient(clientId, updatedClient);
-      }
-    }
+    // process_count is now handled by database trigger
     queryClient.invalidateQueries({ queryKey: ['cases'] });
+    queryClient.invalidateQueries({ queryKey: ['clients'] });
     loadCases();
   };
 

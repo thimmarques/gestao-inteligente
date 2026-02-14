@@ -19,11 +19,14 @@ import { ClientTable } from '../components/clients/ClientTable';
 import { ClientCard } from '../components/clients/ClientCard';
 import { CreateClientModal } from '../components/clients/CreateClientModal';
 import { ClientDetailsModal } from '../components/clients/ClientDetailsModal';
+import { CaseDetailsModal } from '../components/cases/CaseDetailsModal';
+import { CreateCaseModal } from '../components/cases/CreateCaseModal';
 import {
   formatCPF,
   formatPhone,
   formatDate,
   formatCurrency,
+  parseCurrency,
 } from '../utils/formatters';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -41,6 +44,11 @@ const Clients: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
+  const [viewingCaseId, setViewingCaseId] = useState<string | null>(null);
+  const [isAddingCaseOpen, setIsAddingCaseOpen] = useState(false);
+  const [addingCaseForClientId, setAddingCaseForClientId] = useState<
+    string | null
+  >(null);
 
   const [filters, setFilters] = useState<ClientFilters>({
     search: '',
@@ -164,132 +172,7 @@ const Clients: React.FC = () => {
     XLSX.writeFile(workbook, fileName);
   };
 
-  const syncClientFinances = async (
-    clientId: string,
-    data: any,
-    lawyerId: string,
-    officeId: string,
-    caseId?: string
-  ) => {
-    // 1. Buscamos registros já existentes para este cliente para limpar o que for "pendente"
-    // Isso evita duplicidade em atualizações da configuração financeira
-    const allFinances = await financeService.getFinances();
-    const clientFinances = allFinances.filter(
-      (f) => f.client_id === clientId && f.status === 'pendente'
-    );
-
-    // 2. Removemos os pendentes antigos antes de gerar a nova configuração
-    for (const record of clientFinances) {
-      await financeService.deleteRecord(record.id);
-    }
-
-    if (data.type === ClientType.DEFENSORIA && data.financial_profile) {
-      const { guia_principal, guia_recurso, tem_recurso } =
-        data.financial_profile;
-      if (guia_principal?.valor) {
-        await financeService.createRecord({
-          client_id: clientId,
-          case_id: caseId,
-          lawyer_id: lawyerId,
-          office_id: officeId,
-          type: 'receita',
-          title: `Honorários (Guia 70%) - ${data.name}`,
-          category: 'Honorários (Guia 70%)',
-          amount: parseFloat(guia_principal.valor) || 0,
-          due_date: (guia_principal.data
-            ? `${guia_principal.data}-10`
-            : new Date().toISOString()
-          ).split('T')[0],
-          status:
-            guia_principal.status === 'Pago pelo Estado' ? 'pago' : 'pendente',
-          payment_method: 'TED',
-          notes: `Voucher: ${guia_principal.protocolo}`,
-        });
-      }
-
-      if (tem_recurso && guia_recurso?.valor) {
-        await financeService.createRecord({
-          client_id: clientId,
-          case_id: caseId,
-          lawyer_id: lawyerId,
-          office_id: officeId,
-          type: 'receita',
-          title: `Honorários (Recurso 30%) - ${data.name}`,
-          category: 'Honorários (Recurso 30%)',
-          amount: parseFloat(guia_recurso.valor) || 0,
-          due_date: (guia_recurso.data
-            ? `${guia_recurso.data}-10`
-            : new Date().toISOString()
-          ).split('T')[0],
-          status:
-            guia_recurso.status === 'Pago pelo Estado' ? 'pago' : 'pendente',
-          payment_method: 'TED',
-          notes: `Voucher Recurso: ${guia_recurso.protocolo}`,
-        });
-      }
-    } else if (data.type === ClientType.PARTICULAR && data.financial_profile) {
-      const fp = data.financial_profile;
-
-      // Só cria registro de entrada se ainda não existir um registro "pago" de entrada para este cliente
-      const existingPaidEntry = allFinances.find(
-        (f) =>
-          f.client_id === clientId &&
-          f.category === 'Entrada de Honorários' &&
-          f.status === 'pago'
-      );
-
-      if (fp.tem_entrada && fp.valor_entrada && !existingPaidEntry) {
-        await financeService.createRecord({
-          client_id: clientId,
-          case_id: caseId,
-          lawyer_id: lawyerId,
-          office_id: officeId,
-          type: 'receita',
-          title: `Entrada de Honorários - ${data.name}`,
-          category: 'Entrada de Honorários',
-          amount: parseFloat(fp.valor_entrada) || 0,
-          due_date: (fp.data_entrada || new Date().toISOString()).split('T')[0],
-          status: 'pago',
-          payment_method: fp.payment_method,
-          notes: 'Entrada confirmada no cadastro.',
-        });
-      }
-
-      const honorariosTotais = parseFloat(fp.honorarios_firmados) || 0;
-      const valorEntrada = fp.tem_entrada
-        ? parseFloat(fp.valor_entrada) || 0
-        : 0;
-      const saldoAReceber = honorariosTotais - valorEntrada;
-      const numParcelas = parseInt(fp.num_parcelas_restante) || 1;
-
-      if (saldoAReceber > 0 && numParcelas > 0) {
-        const valorParcela = saldoAReceber / numParcelas;
-        const dataBaseStr =
-          fp.data_primeiro_vencimento || new Date().toISOString().split('T')[0];
-        const [y, m, d] = dataBaseStr.split('-').map(Number);
-
-        for (let i = 0; i < numParcelas; i++) {
-          const dt = new Date(y, m - 1 + i, d);
-          const isoDate = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
-
-          await financeService.createRecord({
-            client_id: clientId,
-            case_id: caseId,
-            lawyer_id: lawyerId,
-            office_id: officeId,
-            type: 'receita',
-            title: `Honorários Parcela ${i + 1}/${numParcelas} - ${data.name}`,
-            category: `Parcela ${i + 1}/${numParcelas} - Honorários`,
-            amount: valorParcela || 0,
-            due_date: isoDate,
-            status: 'pendente',
-            payment_method: fp.payment_method,
-            notes: `Parcelamento gerado via ${fp.payment_method}`,
-          });
-        }
-      }
-    }
-  };
+  // syncClientFinances moved to financeService.syncClientFinances
 
   const handleSaveClient = async (data: any) => {
     try {
@@ -314,7 +197,7 @@ const Clients: React.FC = () => {
       if (editingClient) {
         await clientService.updateClient(editingClient.id, sanitizedData);
         // Sync finances on update
-        await syncClientFinances(
+        await financeService.syncClientFinances(
           editingClient.id,
           data,
           user.id,
@@ -334,7 +217,9 @@ const Clients: React.FC = () => {
               type: data.process.legal_area || 'cível',
               status: 'andamento' as any,
               value: data.financial_profile?.valor_honorarios
-                ? parseFloat(data.financial_profile.valor_honorarios) || 0
+                ? parseCurrency(
+                    data.financial_profile.valor_honorarios.toString()
+                  )
                 : 0,
               started_at:
                 data.financial_profile?.appointment_date ||
@@ -348,7 +233,7 @@ const Clients: React.FC = () => {
           }
         }
         // Sync finances on creation
-        await syncClientFinances(
+        await financeService.syncClientFinances(
           newClient.id,
           data,
           user.id,
@@ -519,8 +404,31 @@ const Clients: React.FC = () => {
           setEditingClient(c);
           setIsCreateModalOpen(true);
         }}
-        onViewCase={(caseId) => console.log('View case', caseId)}
-        onCreateCase={(clientId) => console.log('Create case', clientId)}
+        onViewCase={(caseId) => setViewingCaseId(caseId)}
+        onCreateCase={(clientId) => {
+          setAddingCaseForClientId(clientId);
+          setIsAddingCaseOpen(true);
+        }}
+      />
+
+      <CaseDetailsModal
+        isOpen={!!viewingCaseId}
+        onClose={() => setViewingCaseId(null)}
+        caseId={viewingCaseId}
+      />
+
+      <CreateCaseModal
+        isOpen={isAddingCaseOpen}
+        onClose={() => {
+          setIsAddingCaseOpen(false);
+          setAddingCaseForClientId(null);
+        }}
+        initialClientId={addingCaseForClientId || undefined}
+        onSaveSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ['clients'] });
+          queryClient.invalidateQueries({ queryKey: ['cases'] });
+          loadClients();
+        }}
       />
     </div>
   );

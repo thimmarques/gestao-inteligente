@@ -23,6 +23,7 @@ import { HistoryTab } from './tabs/HistoryTab.tsx';
 import { caseService } from '../../services/caseService.ts';
 import { CaseFormModal } from './CaseFormModal.tsx';
 import { useCase } from '../../hooks/useQueries';
+import { ClientDetailsModal } from '../clients/ClientDetailsModal.tsx';
 
 interface CaseDetailsModalProps {
   caseId: string | null;
@@ -38,6 +39,7 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   const [activeTab, setActiveTab] = useState('Informações');
   const { data: caseData, isLoading, refetch } = useCase(caseId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -99,7 +101,12 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Informações':
-        return <InfoTab caseData={caseData} />;
+        return (
+          <InfoTab
+            caseData={caseData}
+            onClientClick={() => setIsClientModalOpen(true)}
+          />
+        );
       case 'Prazos':
         return <DeadlinesTab caseId={caseData.id} />;
       case 'Audiências':
@@ -128,7 +135,10 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
                 {caseData.status}
               </span>
             </div>
-            <p className="text-slate-500 font-medium">
+            <p
+              className="text-slate-500 font-medium cursor-pointer hover:text-primary-600 transition-colors"
+              onClick={() => setIsClientModalOpen(true)}
+            >
               Cliente {caseData.client?.name || 'ID ' + caseData.client_id} •{' '}
               {caseData.court}
             </p>
@@ -197,6 +207,19 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
           refetch();
         }}
       />
+      {isClientModalOpen && caseData.client && (
+        <ClientDetailsModal
+          isOpen={isClientModalOpen}
+          onClose={() => setIsClientModalOpen(false)}
+          client={caseData.client}
+          onEdit={() => {}} // Placeholder or implement if needed
+          onViewCase={(id) => {
+            setIsClientModalOpen(false);
+            // If viewing a different case, we'd need to change caseId in parent
+          }}
+          onCreateCase={() => {}}
+        />
+      )}
     </div>,
     document.body
   );

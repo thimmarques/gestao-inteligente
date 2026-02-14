@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { X, Lock, User, Save, DollarSign, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { X, Save, Search, User, Lock } from 'lucide-react';
-import { Client } from '../../types';
 import { clientService } from '../../services/clientService';
+import { financeService } from '../../services/financeService';
+import { caseService } from '../../services/caseService';
+import { Client } from '../../types';
+import { parseCurrency, formatCurrencyInput } from '../../utils/formatters';
 
 interface CreateCaseModalProps {
   isOpen: boolean;
@@ -10,8 +13,6 @@ interface CreateCaseModalProps {
   onSaveSuccess?: (clientId: string) => void;
   initialClientId?: string;
 }
-
-import { caseService } from '../../services/caseService';
 
 export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
   isOpen,
@@ -32,6 +33,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
     tags: '',
     notes: '',
   });
+  const [autoSync, setAutoSync] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -46,29 +49,59 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
+    setLoading(true);
     try {
       if (!user?.office_id) {
         alert('Erro: Usuário não autenticado ou sem escritório vinculado.');
         return;
       }
 
-      await caseService.createCase({
-        ...formData,
-        id: Math.random().toString(36).substr(2, 9),
-        value: Number(formData.value) || 0,
+      if (!formData.client_id) {
+        alert('Por favor, selecione um cliente.');
+        return;
+      }
+
+      const payload = {
+        client_id: formData.client_id,
+        process_number: formData.process_number,
+        court: formData.court,
+        type: formData.type,
+        status: formData.status,
+        value: parseCurrency(formData.value),
+        started_at: new Date(formData.started_at).toISOString(),
         tags: formData.tags
           .split(',')
           .map((t) => t.trim())
           .filter((t) => t !== ''),
+        notes: formData.notes,
         lawyer_id: user.id,
         office_id: user.office_id,
-      } as any);
+      };
+
+      const newCase = await caseService.createCase(payload as any);
+
+      if (autoSync) {
+        const clientData = clients.find((c) => c.id === formData.client_id);
+        if (clientData) {
+          await financeService.syncClientFinances(
+            formData.client_id,
+            clientData,
+            user.id,
+            user.office_id,
+            newCase.id
+          );
+        }
+      }
 
       if (onSaveSuccess) onSaveSuccess(formData.client_id);
       onClose();
     } catch (error) {
       console.error('Error creating case', error);
       alert('Erro ao criar caso');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,9 +153,43 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
                     <select
                       required
                       value={formData.client_id}
-                      onChange={(e) =>
-                        setFormData({ ...formData, client_id: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const clientId = e.target.value;
+                        const client = clients.find((c) => c.id === clientId);
+                        setFormData((prev) => ({
+                          ...prev,
+                          client_id: clientId,
+                          process_number:
+                            client?.financial_profile?.process_number ||
+                            prev.process_number,
+                          type:
+                            (client?.financial_profile?.process_type as any) ||
+                            prev.type,
+                          court:
+                            client?.financial_profile?.comarca || prev.court,
+                          value: (() => {
+                            const val =
+                              client?.financial_profile?.honorarios_firmados ||
+                              client?.financial_profile?.valor_honorarios;
+                            if (!val) return prev.value;
+                            // Se for número, multiplica por 100 para a formatCurrencyInput funcionar (ela divide por 100)
+                            // Ou simplesmente usa o Intl.NumberFormat
+                            const numVal =
+                              typeof val === 'string'
+                                ? parseFloat(
+                                    val.replace(/\./g, '').replace(',', '.')
+                                  )
+                                : val;
+                            return new Intl.NumberFormat('pt-BR', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }).format(numVal || 0);
+                          })(),
+                          started_at:
+                            client?.financial_profile?.appointment_date ||
+                            prev.started_at,
+                        }));
+                      }}
                       className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm appearance-none"
                     >
                       <option value="">
@@ -209,14 +276,24 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block ml-1">
                 Valor da Causa (R$)
               </label>
-              <input
-                type="number"
-                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
-                value={formData.value}
-                onChange={(e) =>
-                  setFormData({ ...formData, value: e.target.value })
-                }
-              />
+              <div className="relative">
+                <DollarSign
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="0,00"
+                  className="w-full pl-12 pr-5 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner"
+                  value={formData.value}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      value: formatCurrencyInput(e.target.value),
+                    })
+                  }
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -258,10 +335,15 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
             </button>
             <button
               type="submit"
-              className="flex items-center gap-3 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-primary-500/30 active:scale-95"
+              disabled={loading}
+              className={`flex items-center gap-3 px-12 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-primary-500/30 active:scale-95 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              <Save size={20} />
-              Salvar e Vincular
+              {loading ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                <Save size={20} />
+              )}
+              {loading ? 'Salvando...' : 'Salvar e Vincular'}
             </button>
           </div>
         </form>
