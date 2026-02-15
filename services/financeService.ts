@@ -129,23 +129,45 @@ export const financeService = {
     });
   },
 
-  getFinancesByCase: async (caseId: string): Promise<FinanceRecord[]> => {
-    const { data, error } = await supabase
-      .from('finance_records')
-      .select('*')
-      .eq('case_id', caseId)
-      .order('due_date', { ascending: false });
+  getFinancesByCase: async (
+    caseId: string,
+    clientId?: string
+  ): Promise<FinanceRecord[]> => {
+    let query = supabase.from('finance_records').select('*');
+
+    if (clientId) {
+      query = query.or(
+        `case_id.eq.${caseId},and(client_id.eq.${clientId},case_id.is.null)`
+      );
+    } else {
+      query = query.eq('case_id', caseId);
+    }
+
+    const { data, error } = await query.order('due_date', { ascending: false });
 
     if (error) throw error;
     return data || [];
   },
 
   getFinancesByClient: async (clientId: string): Promise<FinanceRecord[]> => {
-    const { data, error } = await supabase
+    // Primeiro, buscamos os IDs de todos os processos vinculados a este cliente
+    const { data: casesData } = await supabase
+      .from('cases')
+      .select('id')
+      .eq('client_id', clientId);
+
+    const caseIds = (casesData || []).map((c) => c.id);
+
+    // Agora buscamos registros que tenham o client_id OU que estejam vinculados a esses processos
+    const query = supabase
       .from('finance_records')
       .select('*')
-      .eq('client_id', clientId)
+      .or(
+        `client_id.eq.${clientId}${caseIds.length > 0 ? `,case_id.in.(${caseIds.join(',')})` : ''}`
+      )
       .order('due_date', { ascending: false });
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return data || [];

@@ -19,12 +19,16 @@ interface CreateFinanceModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  prefillCaseId?: string;
+  prefillClientId?: string;
 }
 
 export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
+  prefillCaseId,
+  prefillClientId,
 }) => {
   const { user } = useAuth();
   const { data: cases = [] } = useCases();
@@ -37,11 +41,32 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
     category: 'honorários',
     amount: '',
     date: new Date().toISOString().split('T')[0],
-    status: 'pendente' as 'pago' | 'pendente' | 'atrasado',
-    client_id: '',
-    case_id: '',
+    status: 'pendente' as 'pago' | 'pendente' | 'vencido',
+    client_id: prefillClientId || '',
+    case_id: prefillCaseId || '',
     description: '',
   });
+
+  // Update initial state when modal opens with new prefilled values
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        client_id: prefillClientId || prev.client_id,
+        case_id: prefillCaseId || prev.case_id,
+      }));
+    }
+  }, [isOpen, prefillCaseId, prefillClientId]);
+
+  // Auto-link client_id when case_id is selected
+  React.useEffect(() => {
+    if (formData.case_id) {
+      const selectedCase = cases.find((c: any) => c.id === formData.case_id);
+      if (selectedCase?.client_id && !formData.client_id) {
+        setFormData((prev) => ({ ...prev, client_id: selectedCase.client_id }));
+      }
+    }
+  }, [formData.case_id, cases]);
 
   if (!isOpen) return null;
 

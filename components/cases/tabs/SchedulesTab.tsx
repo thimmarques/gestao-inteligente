@@ -11,8 +11,10 @@ import {
 } from 'lucide-react';
 import { useSchedulesByCase, useCase } from '../../../hooks/useQueries';
 import { CreateEventModal } from '../../schedule/CreateEventModal';
+import { EventDetailsModal } from '../../schedule/EventDetailsModal';
 import { scheduleService } from '../../../services/scheduleService';
 import { useAuth } from '../../../contexts/AuthContext';
+import { ScheduleEvent } from '../../../types';
 
 interface SchedulesTabProps {
   caseId: string;
@@ -27,6 +29,10 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
   } = useSchedulesByCase(caseId);
   const { data: caseData } = useCase(caseId);
   const [isCreateOpen, setIsCreateOpen] = React.useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+  const [selectedSchedule, setSelectedSchedule] =
+    React.useState<ScheduleEvent | null>(null);
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
 
   const handleSaveEvent = async (formData: any) => {
     if (!lawyer) return;
@@ -57,6 +63,64 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
     } catch (error) {
       console.error('Error saving event:', error);
       alert('Erro ao salvar evento. Verifique os dados e tente novamente.');
+    }
+  };
+
+  const handleEdit = (schedule: ScheduleEvent) => {
+    setSelectedSchedule(schedule);
+    setIsDetailsOpen(false);
+    setIsEditOpen(true);
+  };
+
+  const handleSaveEdit = async (formData: any) => {
+    if (!selectedSchedule) return;
+
+    try {
+      const start = new Date(`${formData.date}T${formData.startTime}:00`);
+      const end = new Date(`${formData.date}T${formData.endTime}:00`);
+
+      const update = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        client_id: formData.client_id || caseData?.client_id || null,
+        status: formData.status || selectedSchedule.status,
+        start_time: start.toISOString(),
+        end_time: end.toISOString(),
+        location: formData.location || null,
+        virtual_link: formData.isVirtual ? formData.virtual_link : null,
+      };
+
+      await scheduleService.updateSchedule(selectedSchedule.id, update);
+      await refetch();
+      setIsEditOpen(false);
+      setSelectedSchedule(null);
+    } catch (error) {
+      console.error('Error updating event:', error);
+      alert('Erro ao atualizar evento.');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await scheduleService.deleteSchedule(id);
+      await refetch();
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      throw error;
+    }
+  };
+
+  const handleStatusUpdate = async (
+    id: string,
+    status: ScheduleEvent['status']
+  ) => {
+    try {
+      await scheduleService.updateSchedule(id, { status });
+      await refetch();
+    } catch (error) {
+      console.error('Error updating status:', error);
+      throw error;
     }
   };
 
@@ -139,7 +203,13 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
             </div>
           </div>
           <div className="flex justify-end">
-            <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+            <button
+              onClick={() => {
+                setSelectedSchedule(schedule);
+                setIsDetailsOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-white/15 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
+            >
               <Eye size={14} />
               Ver
             </button>
@@ -225,6 +295,26 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           case_id: caseId,
           client_id: caseData?.client_id,
         }}
+      />
+
+      <EventDetailsModal
+        isOpen={isDetailsOpen}
+        event={selectedSchedule}
+        onClose={() => setIsDetailsOpen(false)}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onStatusUpdate={handleStatusUpdate}
+      />
+
+      <CreateEventModal
+        isOpen={isEditOpen}
+        onClose={() => {
+          setIsEditOpen(false);
+          setSelectedSchedule(null);
+        }}
+        onSave={handleSaveEdit}
+        mode="edit"
+        initialData={selectedSchedule}
       />
     </div>
   );

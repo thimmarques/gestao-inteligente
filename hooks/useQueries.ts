@@ -63,10 +63,10 @@ export const useFinances = () => {
   });
 };
 
-export const useFinancesByCase = (caseId: string) => {
+export const useFinancesByCase = (caseId: string, clientId?: string) => {
   return useQuery({
-    queryKey: ['finances', 'case', caseId],
-    queryFn: () => financeService.getFinancesByCase(caseId),
+    queryKey: ['finances', 'case', caseId, clientId],
+    queryFn: () => financeService.getFinancesByCase(caseId, clientId),
     enabled: !!caseId,
   });
 };
