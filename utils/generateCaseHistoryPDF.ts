@@ -53,11 +53,15 @@ export async function generateCaseHistoryPDF(
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.text([
-    `Processo: ${caseData.process_number}`,
-    `Cliente: ${caseData.client?.name || 'Não informado'}`,
-    `Data de Emissão: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`
-  ], 15, 65);
+  doc.text(
+    [
+      `Processo: ${caseData.process_number}`,
+      `Cliente: ${caseData.client?.name || 'Não informado'}`,
+      `Data de Emissão: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`,
+    ],
+    15,
+    65
+  );
 
   // Tabela de Movimentações
   const tableData = activities.map((activity) => [
@@ -72,10 +76,10 @@ export async function generateCaseHistoryPDF(
     startY: 85,
     theme: 'striped',
     styles: { fontSize: 8, cellPadding: 4 },
-    headStyles: { 
+    headStyles: {
       fillColor: COLORS.header,
       fontSize: 9,
-      fontStyle: 'bold'
+      fontStyle: 'bold',
     },
     columnStyles: {
       0: { cellWidth: 35 },
@@ -90,7 +94,7 @@ export async function generateCaseHistoryPDF(
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-    
+
     // Linha divisória rodapé
     doc.setDrawColor(226, 232, 240);
     doc.line(15, pageHeight - 20, pageWidth - 15, pageHeight - 20);

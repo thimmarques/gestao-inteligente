@@ -27,9 +27,7 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ caseId }) => {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold dark:text-white">
-          Histórico Recente
-        </h3>
+        <h3 className="text-xl font-bold dark:text-white">Histórico Recente</h3>
         {activities.length > 0 && (
           <button
             onClick={handleExportPDF}

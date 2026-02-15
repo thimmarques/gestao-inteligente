@@ -1,5 +1,14 @@
 import React from 'react';
-import { Clock, Calendar, Loader2, Plus, Edit2, CheckCircle, Circle, Trash2 } from 'lucide-react';
+import {
+  Clock,
+  Calendar,
+  Loader2,
+  Plus,
+  Edit2,
+  CheckCircle,
+  Circle,
+  Trash2,
+} from 'lucide-react';
 import { formatDate } from '../../../utils/formatters.ts';
 import { useDeadlinesByCase, useCase } from '../../../hooks/useQueries';
 import { CreateDeadlineModal } from '../../deadlines/CreateDeadlineModal.tsx';
@@ -22,25 +31,31 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
   const [editingDeadline, setEditingDeadline] = React.useState<any>(null);
 
   const handleToggleStatus = async (deadline: any) => {
-    const newStatus = deadline.status === 'concluído' ? 'pendente' : 'concluído';
-    const description = newStatus === 'concluído' 
-      ? `Prazo concluído: ${deadline.title}`
-      : `Prazo reaberto: ${deadline.title}`;
+    const newStatus =
+      deadline.status === 'concluído' ? 'pendente' : 'concluído';
+    const description =
+      newStatus === 'concluído'
+        ? `Prazo concluído: ${deadline.title}`
+        : `Prazo reaberto: ${deadline.title}`;
 
     await deadlineService.updateDeadline(deadline.id, {
       status: newStatus,
       completed_at: newStatus === 'concluído' ? new Date().toISOString() : null,
-      customLogDescription: description
+      customLogDescription: description,
     } as any);
     refetch();
-    queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
+    queryClient.invalidateQueries({
+      queryKey: ['audit_logs', 'entity', caseId],
+    });
   };
 
   const handleDelete = async (deadline: any) => {
     if (confirm(`Excluir o prazo "${deadline.title}"?`)) {
       await deadlineService.deleteDeadline(deadline.id);
       refetch();
-      queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
+      queryClient.invalidateQueries({
+        queryKey: ['audit_logs', 'entity', caseId],
+      });
     }
   };
 
@@ -126,9 +141,16 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
           </div>
         ) : deadlines.length > 0 ? (
           deadlines
-            .sort((a, b) => new Date(a.deadline_date).getTime() - new Date(b.deadline_date).getTime())
+            .sort(
+              (a, b) =>
+                new Date(a.deadline_date).getTime() -
+                new Date(b.deadline_date).getTime()
+            )
             .map((deadline) => {
-              const info = getStatusInfo(deadline.deadline_date, deadline.status);
+              const info = getStatusInfo(
+                deadline.deadline_date,
+                deadline.status
+              );
               return (
                 <div
                   key={deadline.id}
@@ -145,12 +167,18 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
                           <Calendar size={12} />
                           {formatDate(deadline.deadline_date)}
                         </p>
-                        <span className={`text-[10px] font-bold uppercase tracking-wider ${info.labelColor}`}>
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-wider ${info.labelColor}`}
+                        >
                           {info.text}
                         </span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
-                          deadline.priority === 'urgente' ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
-                        }`}>
+                        <span
+                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
+                            deadline.priority === 'urgente'
+                              ? 'bg-red-100 text-red-600'
+                              : 'bg-slate-100 text-slate-500'
+                          }`}
+                        >
                           {deadline.priority}
                         </span>
                       </div>
@@ -160,14 +188,22 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleToggleStatus(deadline)}
-                      title={deadline.status === 'concluído' ? 'Marcar como pendente' : 'Marcar como concluído'}
+                      title={
+                        deadline.status === 'concluído'
+                          ? 'Marcar como pendente'
+                          : 'Marcar como concluído'
+                      }
                       className={`p-2 rounded-xl transition-all ${
                         deadline.status === 'concluído'
                           ? 'bg-green-100 text-green-600'
                           : 'bg-slate-50 text-slate-400 hover:text-primary-600 dark:bg-white/5'
                       }`}
                     >
-                      {deadline.status === 'concluído' ? <CheckCircle size={18} /> : <Circle size={18} />}
+                      {deadline.status === 'concluído' ? (
+                        <CheckCircle size={18} />
+                      ) : (
+                        <Circle size={18} />
+                      )}
                     </button>
                     <button
                       onClick={() => {
@@ -222,7 +258,9 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
         initialData={editingDeadline}
         onSuccess={() => {
           refetch();
-          queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
+          queryClient.invalidateQueries({
+            queryKey: ['audit_logs', 'entity', caseId],
+          });
           setIsModalOpen(false);
           setEditingDeadline(null);
         }}

@@ -427,7 +427,9 @@ const Clients: React.FC = () => {
         onSaveSuccess={(clientId) => {
           queryClient.invalidateQueries({ queryKey: ['clients'] });
           queryClient.invalidateQueries({ queryKey: ['cases'] });
-          queryClient.invalidateQueries({ queryKey: ['cases', 'client', clientId] });
+          queryClient.invalidateQueries({
+            queryKey: ['cases', 'client', clientId],
+          });
           loadClients();
         }}
       />

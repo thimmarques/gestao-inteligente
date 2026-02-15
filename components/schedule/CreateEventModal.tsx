@@ -261,33 +261,36 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               Tipo de Evento
             </label>
             <div className="grid grid-cols-4 gap-3">
-            {eventTypes.map((type) => {
-              const Icon = type.icon;
-              const isActive = formData.type === type.id;
-              return (
-                <button
-                  key={type.id}
-                  type="button"
-                  onClick={() =>
-                    setFormData({ ...formData, type: type.id as EventType })
-                  }
-                  className={`flex flex-col items-center justify-center gap-3 p-6 rounded-[1.5rem] border-2 transition-all duration-300 ${isActive ? `${type.activeBorder} bg-white/5` : `border-transparent bg-white/5 ${type.hoverColor}`}`}
-                >
-                  <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isActive ? type.activeColor : 'bg-white/5'}`}
+              {eventTypes.map((type) => {
+                const Icon = type.icon;
+                const isActive = formData.type === type.id;
+                return (
+                  <button
+                    key={type.id}
+                    type="button"
+                    onClick={() =>
+                      setFormData({ ...formData, type: type.id as EventType })
+                    }
+                    className={`flex flex-col items-center justify-center gap-3 p-6 rounded-[1.5rem] border-2 transition-all duration-300 ${isActive ? `${type.activeBorder} bg-white/5` : `border-transparent bg-white/5 ${type.hoverColor}`}`}
                   >
-                    <Icon size={24} className={isActive ? 'text-white' : type.inactiveText} />
-                  </div>
-                  <span
-                    className={`text-[9px] font-black tracking-[0.1em] ${isActive ? type.inactiveText : 'text-white/40'}`}
-                  >
-                    {type.label}
-                  </span>
-                </button>
-              );
-            })}
+                    <div
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isActive ? type.activeColor : 'bg-white/5'}`}
+                    >
+                      <Icon
+                        size={24}
+                        className={isActive ? 'text-white' : type.inactiveText}
+                      />
+                    </div>
+                    <span
+                      className={`text-[9px] font-black tracking-[0.1em] ${isActive ? type.inactiveText : 'text-white/40'}`}
+                    >
+                      {type.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
           <div className="space-y-8">
             {/* Título */}
@@ -335,7 +338,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               <input
                 type="text"
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
                 placeholder="Endereço ou Localização da Vara"
                 className="w-full px-7 py-5 bg-[#1F2937] border-none rounded-[1.5rem] focus:ring-2 focus:ring-primary-500 text-white/80 text-sm placeholder:text-white/20 outline-none transition-all"
               />
@@ -348,7 +353,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2 relative" ref={processListRef}>
-                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Processo</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    Processo
+                  </p>
                   <input
                     type="text"
                     value={searchProcess || selectedCase?.process_number || ''}
@@ -383,7 +390,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                 </div>
 
                 <div className="space-y-2 relative" ref={clientListRef}>
-                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Cliente</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    Cliente
+                  </p>
                   <input
                     type="text"
                     value={searchClient || selectedClient?.name || ''}
@@ -426,42 +435,63 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               </label>
               <div className="bg-[#1F2937]/30 p-8 rounded-[2rem] border border-white/5 grid grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Data</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    Data
+                  </label>
                   <div className="relative">
                     <input
                       type="date"
                       required
                       value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, date: e.target.value })
+                      }
                       className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none appearance-none"
                     />
-                    <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                    <Calendar
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20"
+                      size={16}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Início</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    Início
+                  </label>
                   <div className="relative">
                     <input
                       type="time"
                       required
                       value={formData.startTime}
-                      onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, startTime: e.target.value })
+                      }
                       className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none"
                     />
-                    <Clock3 className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                    <Clock3
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20"
+                      size={16}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Fim</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    Fim
+                  </label>
                   <div className="relative">
                     <input
                       type="time"
                       required
                       value={formData.endTime}
-                      onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, endTime: e.target.value })
+                      }
                       className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none"
                     />
-                    <Clock3 className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                    <Clock3
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20"
+                      size={16}
+                    />
                   </div>
                 </div>
               </div>
@@ -474,7 +504,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="Pautas da audiência, observações estratégicas..."
                 rows={4}
                 className="w-full px-7 py-5 bg-[#1F2937] border-none rounded-[1.5rem] focus:ring-2 focus:ring-primary-500 text-white/80 text-sm placeholder:text-white/20 outline-none transition-all resize-none"
@@ -497,7 +529,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             disabled={isSubmitting}
             className="px-10 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-primary-500/20 active:scale-95 disabled:opacity-50 flex items-center gap-3"
           >
-            {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+            {isSubmitting ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
             SALVAR COMPROMISSO
           </button>
         </div>

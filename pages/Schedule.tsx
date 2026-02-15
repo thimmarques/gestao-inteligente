@@ -139,8 +139,7 @@ const Schedule: React.FC = () => {
         reminder_sent: false,
         start_time: start.toISOString(),
         end_time: end.toISOString(),
-        virtual_link:
-          formData.isVirtual ? formData.virtual_link : null,
+        virtual_link: formData.isVirtual ? formData.virtual_link : null,
         location: formData.location || null,
       };
 

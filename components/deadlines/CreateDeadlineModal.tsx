@@ -99,17 +99,24 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
         // Log specific changes
         const changes: string[] = [];
         if (formData.title !== initialData.title)
-          changes.push(`título alterado de "${initialData.title}" para "${formData.title}"`);
+          changes.push(
+            `título alterado de "${initialData.title}" para "${formData.title}"`
+          );
         if (formData.deadline_date !== initialData.deadline_date.split('T')[0])
-          changes.push(`data alterada de ${initialData.deadline_date.split('T')[0]} para ${formData.deadline_date}`);
+          changes.push(
+            `data alterada de ${initialData.deadline_date.split('T')[0]} para ${formData.deadline_date}`
+          );
         if (formData.priority !== initialData.priority)
-          changes.push(`prioridade alterada de ${initialData.priority} para ${formData.priority}`);
+          changes.push(
+            `prioridade alterada de ${initialData.priority} para ${formData.priority}`
+          );
         if (formData.description !== initialData.description)
           changes.push(`descrição atualizada`);
 
-        const customLogDescription = changes.length > 0
-          ? `Prazo atualizado: ${formData.title} (${changes.join(', ')})`
-          : `Prazo atualizado: ${formData.title}`;
+        const customLogDescription =
+          changes.length > 0
+            ? `Prazo atualizado: ${formData.title} (${changes.join(', ')})`
+            : `Prazo atualizado: ${formData.title}`;
 
         await deadlineService.updateDeadline(initialData.id, {
           ...formData,

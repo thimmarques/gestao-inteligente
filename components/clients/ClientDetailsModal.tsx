@@ -66,9 +66,9 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   });
   const { data: records = [], isLoading: isLoadingFinances } =
     useFinancesByClient(client?.id || '');
-  const [activeTab, setActiveTab] = useState<'geral' | 'processos' | 'financeiro'>(
-    'geral'
-  );
+  const [activeTab, setActiveTab] = useState<
+    'geral' | 'processos' | 'financeiro'
+  >('geral');
 
   // Calculate Financial Totals based on ACTUAL records
   const financial = client?.financial_profile || {};
@@ -144,7 +144,7 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
       await financeService.updateRecord(record.id, {
         status: newStatus,
       });
-      
+
       // Invalidate relevant queries to refresh data without reloading page
       await queryClient.invalidateQueries({
         queryKey: ['finances', 'client', client?.id],
@@ -417,7 +417,8 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                    <Briefcase size={14} /> Histórico Processual ({cases.length})
+                    <Briefcase size={14} /> Histórico Processual ({cases.length}
+                    )
                   </h3>
                   <button
                     onClick={() => onCreateCase(client.id)}
@@ -497,7 +498,6 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 )}
               </div>
             )}
-
 
             {activeTab === 'financeiro' && (
               <div className="space-y-8 animate-in fade-in duration-500">

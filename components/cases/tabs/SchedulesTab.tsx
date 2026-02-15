@@ -20,7 +20,11 @@ interface SchedulesTabProps {
 
 export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
   const { user: lawyer } = useAuth();
-  const { data: schedules = [], isLoading, refetch } = useSchedulesByCase(caseId);
+  const {
+    data: schedules = [],
+    isLoading,
+    refetch,
+  } = useSchedulesByCase(caseId);
   const { data: caseData } = useCase(caseId);
   const [isCreateOpen, setIsCreateOpen] = React.useState(false);
 
@@ -155,7 +159,10 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           onClick={() => setIsCreateOpen(true)}
           className="flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-black text-sm shadow-lg shadow-primary-900/20 transition-all active:scale-95 group"
         >
-          <Plus size={18} className="mr-2 group-hover:rotate-90 transition-transform" />
+          <Plus
+            size={18}
+            className="mr-2 group-hover:rotate-90 transition-transform"
+          />
           Agendar Audiência
         </button>
       </div>
@@ -165,7 +172,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           Próximas Atividades
           <div className="flex-1 h-px bg-white/5"></div>
         </h4>
-        
+
         <div className="grid grid-cols-1 gap-4">
           {isLoading ? (
             <div className="py-12 bg-white dark:bg-navy-800/50 rounded-3xl border border-white/5 text-center">
@@ -181,8 +188,10 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
             upcoming.map((s) => <ScheduleCard key={s.id} schedule={s} />)
           ) : (
             <div className="py-20 bg-transparent rounded-[2.5rem] border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center">
-              <p className="text-slate-500 text-sm mb-4">Nenhuma audiência futura agendada.</p>
-              <button 
+              <p className="text-slate-500 text-sm mb-4">
+                Nenhuma audiência futura agendada.
+              </p>
+              <button
                 onClick={() => setIsCreateOpen(true)}
                 className="text-primary-500 text-[10px] font-black uppercase tracking-widest hover:text-primary-400 transition-colors"
               >
@@ -200,7 +209,9 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
             <div className="flex-1 h-px bg-white/5"></div>
           </h4>
           <div className="grid grid-cols-1 gap-4">
-            {history.map((s) => <ScheduleCard key={s.id} schedule={s} isHistory />)}
+            {history.map((s) => (
+              <ScheduleCard key={s.id} schedule={s} isHistory />
+            ))}
           </div>
         </div>
       )}
@@ -212,7 +223,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
         mode="create"
         initialData={{
           case_id: caseId,
-          client_id: caseData?.client_id
+          client_id: caseData?.client_id,
         }}
       />
     </div>

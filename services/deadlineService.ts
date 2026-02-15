@@ -82,7 +82,9 @@ export const deadlineService = {
       action: 'update',
       entity_type: 'deadline',
       entity_id: updatedDeadline.case_id,
-      entity_description: data.customLogDescription || `Prazo atualizado: ${updatedDeadline.title}`,
+      entity_description:
+        data.customLogDescription ||
+        `Prazo atualizado: ${updatedDeadline.title}`,
       details: { after: updatedDeadline },
       criticality: 'normal',
     });
