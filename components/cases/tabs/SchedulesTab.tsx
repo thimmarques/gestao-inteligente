@@ -7,15 +7,54 @@ import {
   CheckCircle2,
   Clock,
   Loader2,
+  Plus,
 } from 'lucide-react';
-import { useSchedulesByCase } from '../../../hooks/useQueries';
+import { useSchedulesByCase, useCase } from '../../../hooks/useQueries';
+import { CreateEventModal } from '../../schedule/CreateEventModal';
+import { scheduleService } from '../../../services/scheduleService';
+import { useAuth } from '../../../contexts/AuthContext';
 
 interface SchedulesTabProps {
   caseId: string;
 }
 
 export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
-  const { data: schedules = [], isLoading } = useSchedulesByCase(caseId);
+  const { user: lawyer } = useAuth();
+  const { data: schedules = [], isLoading, refetch } = useSchedulesByCase(caseId);
+  const { data: caseData } = useCase(caseId);
+  const [isCreateOpen, setIsCreateOpen] = React.useState(false);
+
+  const handleSaveEvent = async (formData: any) => {
+    if (!lawyer) return;
+
+    try {
+      const start = new Date(`${formData.date}T${formData.startTime}:00`);
+      const end = new Date(`${formData.date}T${formData.endTime}:00`);
+
+      const input = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        lawyer_id: lawyer.id,
+        office_id: lawyer.office_id,
+        client_id: formData.client_id || caseData?.client_id || null,
+        case_id: caseId,
+        status: formData.status || 'agendado',
+        reminder_sent: false,
+        start_time: start.toISOString(),
+        end_time: end.toISOString(),
+        location: formData.location || null,
+        virtual_link: formData.isVirtual ? formData.virtual_link : null,
+      };
+
+      await scheduleService.createSchedule(input);
+      await refetch();
+      setIsCreateOpen(false);
+    } catch (error) {
+      console.error('Error saving event:', error);
+      alert('Erro ao salvar evento. Verifique os dados e tente novamente.');
+    }
+  };
 
   const upcoming = schedules
     .filter((s) => new Date(s.start_time) >= new Date())
@@ -109,19 +148,27 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h3 className="text-xl font-bold dark:text-white">
+        <h3 className="text-2xl font-black dark:text-white tracking-tight">
           Audiências e Compromissos
         </h3>
+        <button
+          onClick={() => setIsCreateOpen(true)}
+          className="flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-black text-sm shadow-lg shadow-primary-900/20 transition-all active:scale-95 group"
+        >
+          <Plus size={18} className="mr-2 group-hover:rotate-90 transition-transform" />
+          Agendar Audiência
+        </button>
       </div>
 
-      <div className="space-y-6">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-          Próximas Audiências
-          <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800"></div>
+      <div className="space-y-8">
+        <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] flex items-center gap-4">
+          Próximas Atividades
+          <div className="flex-1 h-px bg-white/5"></div>
         </h4>
+        
         <div className="grid grid-cols-1 gap-4">
           {isLoading ? (
-            <div className="py-12 bg-white dark:bg-navy-800/50 rounded-3xl border border-slate-200 dark:border-white/10 text-center">
+            <div className="py-12 bg-white dark:bg-navy-800/50 rounded-3xl border border-white/5 text-center">
               <Loader2
                 size={32}
                 className="animate-spin text-primary-600 mx-auto mb-2"
@@ -133,12 +180,41 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
           ) : upcoming.length > 0 ? (
             upcoming.map((s) => <ScheduleCard key={s.id} schedule={s} />)
           ) : (
-            <div className="py-12 bg-slate-50 dark:bg-navy-900/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-white/10 text-center text-slate-500">
-              <p className="text-sm">Nenhuma audiência futura agendada.</p>
+            <div className="py-20 bg-transparent rounded-[2.5rem] border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center">
+              <p className="text-slate-500 text-sm mb-4">Nenhuma audiência futura agendada.</p>
+              <button 
+                onClick={() => setIsCreateOpen(true)}
+                className="text-primary-500 text-[10px] font-black uppercase tracking-widest hover:text-primary-400 transition-colors"
+              >
+                AGENDAR AGORA
+              </button>
             </div>
           )}
         </div>
       </div>
+
+      {history.length > 0 && (
+        <div className="space-y-8 pt-6">
+          <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] flex items-center gap-4">
+            Histórico de Atividades
+            <div className="flex-1 h-px bg-white/5"></div>
+          </h4>
+          <div className="grid grid-cols-1 gap-4">
+            {history.map((s) => <ScheduleCard key={s.id} schedule={s} isHistory />)}
+          </div>
+        </div>
+      )}
+
+      <CreateEventModal
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        onSave={handleSaveEvent}
+        mode="create"
+        initialData={{
+          case_id: caseId,
+          client_id: caseData?.client_id
+        }}
+      />
     </div>
   );
 };

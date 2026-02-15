@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { createPortal } from 'react-dom';
 import {
   X,
@@ -23,6 +24,9 @@ import {
   Calendar as CalendarIcon,
   CheckCircle2,
   Circle,
+  Check,
+  CheckCheck,
+  Plus,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Client, ClientType } from '../../types';
@@ -56,14 +60,15 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   onClientUpdate,
 }) => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const { data: cases = [], isLoading: isLoadingCases } = useCases({
     client_id: client?.id,
   });
   const { data: records = [], isLoading: isLoadingFinances } =
     useFinancesByClient(client?.id || '');
-  const [activeTab, setActiveTab] = useState<
-    'geral' | 'processos' | 'financeiro' | 'documentos'
-  >('geral');
+  const [activeTab, setActiveTab] = useState<'geral' | 'processos' | 'financeiro'>(
+    'geral'
+  );
 
   // Calculate Financial Totals based on ACTUAL records
   const financial = client?.financial_profile || {};
@@ -131,6 +136,26 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     alert('Copiado!');
+  };
+
+  const handleTogglePaid = async (record: any) => {
+    try {
+      const newStatus = record.status === 'pago' ? 'pendente' : 'pago';
+      await financeService.updateRecord(record.id, {
+        status: newStatus,
+      });
+      
+      // Invalidate relevant queries to refresh data without reloading page
+      await queryClient.invalidateQueries({
+        queryKey: ['finances', 'client', client?.id],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['finances'],
+      });
+    } catch (error) {
+      console.error('Error updating payment status:', error);
+      alert('Erro ao atualizar status do pagamento.');
+    }
   };
 
   return createPortal(
@@ -220,11 +245,6 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               id: 'financeiro',
               label: 'Financeiro',
               icon: <DollarSign size={16} />,
-            },
-            {
-              id: 'documentos',
-              label: 'Documentos',
-              icon: <Files size={16} />,
             },
           ].map((tab) => (
             <button
@@ -394,10 +414,18 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
             )}
 
             {activeTab === 'processos' && (
-              <div className="space-y-4">
-                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <Briefcase size={14} /> Processos Associados ({cases.length})
-                </h3>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
+                    <Briefcase size={14} /> Histórico Processual ({cases.length})
+                  </h3>
+                  <button
+                    onClick={() => onCreateCase(client.id)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20 active:scale-95"
+                  >
+                    <Plus size={16} strokeWidth={3} /> Novo Vínculo
+                  </button>
+                </div>
                 {isLoadingCases ? (
                   <div className="py-12 text-center text-slate-400 text-sm">
                     Carregando processos...
@@ -470,58 +498,6 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               </div>
             )}
 
-            {activeTab === 'documentos' && (
-              <div className="space-y-6 animate-in fade-in duration-500">
-                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <Files size={14} /> Documentos Gerados
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
-                      <FileText size={32} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold dark:text-white mb-1">
-                        Procuração
-                      </h4>
-                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
-                        Gerar Documento
-                      </p>
-                    </div>
-                  </button>
-
-                  <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
-                      <Scale size={32} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold dark:text-white mb-1">
-                        Hipossuficiência
-                      </h4>
-                      <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
-                        Gerar Declaração
-                      </p>
-                    </div>
-                  </button>
-
-                  {cases.some((c) => c.type === 'trabalhista') && (
-                    <button className="group flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-xl hover:shadow-primary-500/5 transition-all text-center">
-                      <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-navy-800 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-600 transition-colors">
-                        <Briefcase size={32} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold dark:text-white mb-1">
-                          Contrato de Honorários
-                        </h4>
-                        <p className="text-xs text-slate-500 group-hover:text-primary-600 transition-colors font-medium">
-                          Trabalhista
-                        </p>
-                      </div>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
 
             {activeTab === 'financeiro' && (
               <div className="space-y-8 animate-in fade-in duration-500">
@@ -703,15 +679,28 @@ export const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                                           </span>
                                         )}
                                       </td>
-                                      <td className="px-8 py-6 text-right">
-                                        {record.status !== 'pago' ? (
-                                          <button className="p-2 bg-emerald-500/10 text-emerald-500 rounded-xl hover:bg-emerald-500 transition-colors group/btn">
-                                            <CheckCircle2
-                                              size={18}
-                                              className="group-hover/btn:text-white"
-                                            />
-                                          </button>
-                                        ) : null}
+                                      <td className="px-8 py-6 text-right text-slate-400">
+                                        <button
+                                          onClick={() =>
+                                            handleTogglePaid(record)
+                                          }
+                                          className={`p-2 rounded-xl transition-all duration-300 group/btn ${
+                                            record.status === 'pago'
+                                              ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                              : 'hover:bg-slate-800'
+                                          }`}
+                                          title={
+                                            record.status === 'pago'
+                                              ? 'Marcar como Pendente'
+                                              : 'Marcar como Pago'
+                                          }
+                                        >
+                                          {record.status === 'pago' ? (
+                                            <CheckCheck size={18} />
+                                          ) : (
+                                            <Check size={18} />
+                                          )}
+                                        </button>
                                       </td>
                                     </tr>
                                   ))

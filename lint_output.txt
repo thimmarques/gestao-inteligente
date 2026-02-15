@@ -11,19 +11,22 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\AssignCaseMod
   6:3  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
   9:3  warning  'Shield' is defined but never used         @typescript-eslint/no-unused-vars
 
+D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\CaseDetailsModal.tsx
+  216:24  warning  'id' is defined but never used  @typescript-eslint/no-unused-vars
+
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\CaseFilters.tsx
   2:10  warning  'Filter' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\CaseFormModal.tsx
-   2:34  warning  'AlertCircle' is defined but never used        @typescript-eslint/no-unused-vars
-  33:10  warning  'errors' is assigned a value but never used    @typescript-eslint/no-unused-vars
-  59:9   warning  'validate' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   3:34  warning  'AlertCircle' is defined but never used        @typescript-eslint/no-unused-vars
+  35:10  warning  'errors' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  69:9   warning  'validate' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\CreateCaseModal.tsx
-  2:27  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+  37:20  warning  'setAutoSync' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\tabs\DeadlinesTab.tsx
-  60:9  warning  'handleAddClick' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  19:17  warning  'caseData' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\tabs\DocumentsTab.tsx
    8:3   warning  'X' is defined but never used       @typescript-eslint/no-unused-vars
@@ -33,16 +36,27 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\tabs\HistoryT
   2:10  warning  'History' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\tabs\InfoTab.tsx
-  8:3  warning  'Gavel' is defined but never used  @typescript-eslint/no-unused-vars
+  4:3  warning  'Tag' is defined but never used       @typescript-eslint/no-unused-vars
+  8:3  warning  'Gavel' is defined but never used     @typescript-eslint/no-unused-vars
+  9:3  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\cases\tabs\SchedulesTab.tsx
-   3:3  warning  'Calendar' is defined but never used          @typescript-eslint/no-unused-vars
-  26:9  warning  'history' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  3:3  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\clients\ClientDetailsModal.tsx
-  14:3  warning  'ArrowUpRight' is defined but never used    @typescript-eslint/no-unused-vars
-  15:3  warning  'ArrowDownRight' is defined but never used  @typescript-eslint/no-unused-vars
-  16:3  warning  'ExternalLink' is defined but never used    @typescript-eslint/no-unused-vars
+    8:3   warning  'Mail' is defined but never used                       @typescript-eslint/no-unused-vars
+    9:3   warning  'Phone' is defined but never used                      @typescript-eslint/no-unused-vars
+   10:3   warning  'MapPin' is defined but never used                     @typescript-eslint/no-unused-vars
+   13:3   warning  'Files' is defined but never used                      @typescript-eslint/no-unused-vars
+   16:3   warning  'ArrowDownRight' is defined but never used             @typescript-eslint/no-unused-vars
+   20:3   warning  'FileText' is defined but never used                   @typescript-eslint/no-unused-vars
+   23:3   warning  'HandCoins' is defined but never used                  @typescript-eslint/no-unused-vars
+   24:15  warning  'CalendarIcon' is defined but never used               @typescript-eslint/no-unused-vars
+   26:3   warning  'Circle' is defined but never used                     @typescript-eslint/no-unused-vars
+   60:3   warning  'onClientUpdate' is defined but never used             @typescript-eslint/no-unused-vars
+   62:11  warning  'user' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  113:9   warning  'installmentsList' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  657:62  warning  'idx' is defined but never used                        @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\clients\ClientFilters.tsx
   31:6  warning  React Hook useEffect has a missing dependency: 'onFilterChange'. Either include it or remove the dependency array. If 'onFilterChange' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
@@ -54,15 +68,14 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\clients\ClientTable
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\clients\CreateClientModal.tsx
     1:47  warning  'useRef' is defined but never used                                                                                                                                                                                              @typescript-eslint/no-unused-vars
-   11:3   warning  'Smartphone' is defined but never used                                                                                                                                                                                          @typescript-eslint/no-unused-vars
-   12:3   warning  'Building2' is defined but never used                                                                                                                                                                                           @typescript-eslint/no-unused-vars
-   15:3   warning  'Banknote' is defined but never used                                                                                                                                                                                            @typescript-eslint/no-unused-vars
-   16:3   warning  'Info' is defined but never used                                                                                                                                                                                                @typescript-eslint/no-unused-vars
-   17:3   warning  'MapPin' is defined but never used                                                                                                                                                                                              @typescript-eslint/no-unused-vars
-   23:3   warning  'AlertCircle' is defined but never used                                                                                                                                                                                         @typescript-eslint/no-unused-vars
-   25:15  warning  'CalendarIcon' is defined but never used                                                                                                                                                                                        @typescript-eslint/no-unused-vars
-  126:6   warning  React Hook useEffect has a missing dependency: 'formData'. Either include it or remove the dependency array. You can also do a functional update 'setFormData(f => ...)' if you only need 'formData' in the 'setFormData' call  react-hooks/exhaustive-deps
-  146:9   warning  'isStepValid' is assigned a value but never used                                                                                                                                                                                @typescript-eslint/no-unused-vars
+   12:3   warning  'Smartphone' is defined but never used                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   13:3   warning  'Building2' is defined but never used                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   16:3   warning  'Banknote' is defined but never used                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   17:3   warning  'Info' is defined but never used                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+   18:3   warning  'MapPin' is defined but never used                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   24:3   warning  'AlertCircle' is defined but never used                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  130:6   warning  React Hook useEffect has a missing dependency: 'formData'. Either include it or remove the dependency array. You can also do a functional update 'setFormData(f => ...)' if you only need 'formData' in the 'setFormData' call  react-hooks/exhaustive-deps
+  150:9   warning  'isStepValid' is assigned a value but never used                                                                                                                                                                                @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\clients\DefensoriaFields.tsx
   2:10  warning  'Shield' is defined but never used    @typescript-eslint/no-unused-vars
@@ -82,25 +95,26 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\dashboard\CriticalL
   14:10  warning  'AuditLog' is defined but never used      @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\deadlines\CreateDeadlineModal.tsx
-   1:38  warning  'useMemo' is defined but never used     @typescript-eslint/no-unused-vars
-   6:3   warning  'Calendar' is defined but never used    @typescript-eslint/no-unused-vars
-  11:3   warning  'Briefcase' is defined but never used   @typescript-eslint/no-unused-vars
-  12:3   warning  'Info' is defined but never used        @typescript-eslint/no-unused-vars
-  13:3   warning  'Check' is defined but never used       @typescript-eslint/no-unused-vars
-  14:3   warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
-  16:20  warning  'Case' is defined but never used        @typescript-eslint/no-unused-vars
+   1:38  warning  'useMemo' is defined but never used       @typescript-eslint/no-unused-vars
+   7:3   warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+  12:3   warning  'Briefcase' is defined but never used     @typescript-eslint/no-unused-vars
+  13:3   warning  'Info' is defined but never used          @typescript-eslint/no-unused-vars
+  14:3   warning  'Check' is defined but never used         @typescript-eslint/no-unused-vars
+  15:3   warning  'ArrowRight' is defined but never used    @typescript-eslint/no-unused-vars
+  17:20  warning  'Case' is defined but never used          @typescript-eslint/no-unused-vars
+  18:10  warning  'useDeadlines' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\deadlines\DeadlineCard.tsx
   29:18  warning  'text' is assigned a value but never used    @typescript-eslint/no-unused-vars
   29:24  warning  'status' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\deadlines\DeadlineDetailsModal.tsx
-   5:3   warning  'Clock' is defined but never used                  @typescript-eslint/no-unused-vars
-  15:3   warning  'ChevronRight' is defined but never used           @typescript-eslint/no-unused-vars
-  16:3   warning  'ArrowUpRight' is defined but never used           @typescript-eslint/no-unused-vars
-  17:3   warning  'ArrowDownRight' is defined but never used         @typescript-eslint/no-unused-vars
-  18:3   warning  'UserCheck' is defined but never used              @typescript-eslint/no-unused-vars
-  52:32  warning  'visualStatus' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   6:3   warning  'Clock' is defined but never used                  @typescript-eslint/no-unused-vars
+  16:3   warning  'ChevronRight' is defined but never used           @typescript-eslint/no-unused-vars
+  17:3   warning  'ArrowUpRight' is defined but never used           @typescript-eslint/no-unused-vars
+  18:3   warning  'ArrowDownRight' is defined but never used         @typescript-eslint/no-unused-vars
+  19:3   warning  'UserCheck' is defined but never used              @typescript-eslint/no-unused-vars
+  53:32  warning  'visualStatus' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\deadlines\DeadlineFilters.tsx
    5:3  warning  'Filter' is defined but never used                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
@@ -109,11 +123,14 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\deadlines\DeadlineF
    9:3  warning  'User' is defined but never used                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
   36:6  warning  React Hook useEffect has a missing dependency: 'onFilterChange'. Either include it or remove the dependency array. If 'onFilterChange' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
 
+D:\projetos\Gestao Inteligente\gestao-inteligente\components\finance\CashFlowProjectionChart.tsx
+  10:3  warning  'Legend' is defined but never used  @typescript-eslint/no-unused-vars
+
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\finance\CreateFinanceModal.tsx
    1:27  warning  'useMemo' is defined but never used           @typescript-eslint/no-unused-vars
-   5:3   warning  'Search' is defined but never used            @typescript-eslint/no-unused-vars
-  11:3   warning  'FileText' is defined but never used          @typescript-eslint/no-unused-vars
-  30:17  warning  'clients' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   6:3   warning  'Search' is defined but never used            @typescript-eslint/no-unused-vars
+  12:3   warning  'FileText' is defined but never used          @typescript-eslint/no-unused-vars
+  31:17  warning  'clients' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\finance\ForecastChart.tsx
   11:3  warning  'Line' is defined but never used  @typescript-eslint/no-unused-vars
@@ -133,7 +150,7 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\finance\RevenueTabl
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\layout\Layout.tsx
    17:3  warning  'ListTodo' is defined but never used               @typescript-eslint/no-unused-vars
-  111:9  warning  'pendingTasks' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  132:9  warning  'pendingTasks' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\reports\FinancialReportModal.tsx
    5:3  warning  'Check' is defined but never used    @typescript-eslint/no-unused-vars
@@ -148,27 +165,25 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\schedule\AgendaList
   88:23  warning  'Icon' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\schedule\CreateEventModal.tsx
-   8:3  warning  'Check' is defined but never used        @typescript-eslint/no-unused-vars
-  10:3  warning  'ChevronDown' is defined but never used  @typescript-eslint/no-unused-vars
-  13:3  warning  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
-  14:3  warning  'Clock3' is defined but never used       @typescript-eslint/no-unused-vars
-  15:3  warning  'Video' is defined but never used        @typescript-eslint/no-unused-vars
-  16:3  warning  'MapPin' is defined but never used       @typescript-eslint/no-unused-vars
-  17:3  warning  'Paperclip' is defined but never used    @typescript-eslint/no-unused-vars
-  18:3  warning  'Mail' is defined but never used         @typescript-eslint/no-unused-vars
-  19:3  warning  'Bell' is defined but never used         @typescript-eslint/no-unused-vars
-  20:3  warning  'Plus' is defined but never used         @typescript-eslint/no-unused-vars
-  21:3  warning  'Trash2' is defined but never used       @typescript-eslint/no-unused-vars
-  22:3  warning  'Globe' is defined but never used        @typescript-eslint/no-unused-vars
-  23:3  warning  'FileText' is defined but never used     @typescript-eslint/no-unused-vars
-  24:3  warning  'Briefcase' is defined but never used    @typescript-eslint/no-unused-vars
-  25:3  warning  'User' is defined but never used         @typescript-eslint/no-unused-vars
-  48:3  warning  'eventId' is defined but never used      @typescript-eslint/no-unused-vars
+   9:3  warning  'Check' is defined but never used        @typescript-eslint/no-unused-vars
+  10:3  warning  'Search' is defined but never used       @typescript-eslint/no-unused-vars
+  11:3  warning  'ChevronDown' is defined but never used  @typescript-eslint/no-unused-vars
+  14:3  warning  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  18:3  warning  'Paperclip' is defined but never used    @typescript-eslint/no-unused-vars
+  19:3  warning  'Mail' is defined but never used         @typescript-eslint/no-unused-vars
+  20:3  warning  'Bell' is defined but never used         @typescript-eslint/no-unused-vars
+  21:3  warning  'Plus' is defined but never used         @typescript-eslint/no-unused-vars
+  22:3  warning  'Trash2' is defined but never used       @typescript-eslint/no-unused-vars
+  23:3  warning  'Globe' is defined but never used        @typescript-eslint/no-unused-vars
+  24:3  warning  'FileText' is defined but never used     @typescript-eslint/no-unused-vars
+  25:3  warning  'Briefcase' is defined but never used    @typescript-eslint/no-unused-vars
+  26:3  warning  'User' is defined but never used         @typescript-eslint/no-unused-vars
+  49:3  warning  'eventId' is defined but never used      @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\schedule\EventDetailsModal.tsx
-  13:3  warning  'Shield' is defined but never used    @typescript-eslint/no-unused-vars
-  14:3  warning  'User' is defined but never used      @typescript-eslint/no-unused-vars
-  16:3  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+  14:3  warning  'Shield' is defined but never used    @typescript-eslint/no-unused-vars
+  15:3  warning  'User' is defined but never used      @typescript-eslint/no-unused-vars
+  17:3  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\schedule\UpcomingEventsBalloon.tsx
   3:3  warning  'Clock' is defined but never used  @typescript-eslint/no-unused-vars
@@ -183,7 +198,7 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\ExportLogs
   15:10  warning  'logAction' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\IntegrationsTab.tsx
-  9:3  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+  50:6  warning  React Hook useEffect has a missing dependency: 'handleCallback'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\LogoUpload.tsx
   2:10  warning  'Building2' is defined but never used  @typescript-eslint/no-unused-vars
@@ -199,10 +214,10 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\LogsTab.ts
   18:48  warning  'subHours' is defined but never used                       @typescript-eslint/no-unused-vars
   21:10  warning  'ExportLogsModal' is defined but never used                @typescript-eslint/no-unused-vars
   27:3   warning  'SecurityAlert' is defined but never used                  @typescript-eslint/no-unused-vars
-  46:10  warning  'isExportModalOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
-  46:29  warning  'setIsExportModalOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
-  49:18  warning  'setPeriod' is assigned a value but never used             @typescript-eslint/no-unused-vars
-  51:9   warning  'securityAlerts' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  53:10  warning  'isExportModalOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  53:29  warning  'setIsExportModalOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  56:18  warning  'setPeriod' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  58:9   warning  'securityAlerts' is assigned a value but never used        @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\LogsTimeline.tsx
   6:3  warning  'Eye' is defined but never used   @typescript-eslint/no-unused-vars
@@ -224,7 +239,7 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\Preference
    7:3  warning  'Globe' is defined but never used                        @typescript-eslint/no-unused-vars
    8:3  warning  'Calendar' is defined but never used                     @typescript-eslint/no-unused-vars
    9:3  warning  'Clock' is defined but never used                        @typescript-eslint/no-unused-vars
-  39:9  warning  'toggleNotification' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  40:9  warning  'toggleNotification' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\components\settings\SecurityTab.tsx
    1:27  warning  'useMemo' is defined but never used      @typescript-eslint/no-unused-vars
@@ -266,72 +281,23 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\contexts\AppContext.tsx
   70:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\contexts\AuthContext.tsx
-  119:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  150:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Cases.tsx
-   6:3   warning  'Filter' is defined but never used             @typescript-eslint/no-unused-vars
-   9:3   warning  'ExternalLink' is defined but never used       @typescript-eslint/no-unused-vars
-  13:3   warning  'Tag' is defined but never used                @typescript-eslint/no-unused-vars
-  18:10  warning  'caseService' is defined but never used        @typescript-eslint/no-unused-vars
-  19:10  warning  'CaseWithRelations' is defined but never used  @typescript-eslint/no-unused-vars
-  19:29  warning  'Case' is defined but never used               @typescript-eslint/no-unused-vars
+   14:10  warning  'clientService' is defined but never used  @typescript-eslint/no-unused-vars
+  130:36  warning  'clientId' is defined but never used       @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Clients.tsx
-   6:3  warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
-   7:3  warning  'RefreshCw' is defined but never used     @typescript-eslint/no-unused-vars
-  12:3  warning  'ExternalLink' is defined but never used  @typescript-eslint/no-unused-vars
-
-D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Deadlines.tsx
-  15:3   warning  'Bell' is defined but never used                   @typescript-eslint/no-unused-vars
-  16:3   warning  'BellOff' is defined but never used                @typescript-eslint/no-unused-vars
-  20:10  warning  'DeadlineWithRelations' is defined but never used  @typescript-eslint/no-unused-vars
-
-D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Finance.tsx
-   3:3   warning  'DollarSign' is defined but never used      @typescript-eslint/no-unused-vars
-   6:3   warning  'Calendar' is defined but never used        @typescript-eslint/no-unused-vars
-   8:3   warning  'Filter' is defined but never used          @typescript-eslint/no-unused-vars
-  13:3   warning  'Wallet' is defined but never used          @typescript-eslint/no-unused-vars
-  15:3   warning  'Receipt' is defined but never used         @typescript-eslint/no-unused-vars
-  16:3   warning  'FileText' is defined but never used        @typescript-eslint/no-unused-vars
-  17:3   warning  'ChevronRight' is defined but never used    @typescript-eslint/no-unused-vars
-  21:10  warning  'financeService' is defined but never used  @typescript-eslint/no-unused-vars
-  22:10  warning  'FinanceRecord' is defined but never used   @typescript-eslint/no-unused-vars
-
-D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Reports.tsx
-  18:3  warning  'Loader2' is defined but never used            @typescript-eslint/no-unused-vars
-  19:3  warning  'Plus' is defined but never used               @typescript-eslint/no-unused-vars
-  25:3  warning  'Client' is defined but never used             @typescript-eslint/no-unused-vars
-  26:3  warning  'CaseWithRelations' is defined but never used  @typescript-eslint/no-unused-vars
-  27:3  warning  'Deadline' is defined but never used           @typescript-eslint/no-unused-vars
-  28:3  warning  'ScheduleEvent' is defined but never used      @typescript-eslint/no-unused-vars
+  28:3  warning  'formatCurrency' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Schedule.tsx
-   1:36  warning  'useCallback' is defined but never used             @typescript-eslint/no-unused-vars
-   3:15  warning  'CalendarIcon' is defined but never used            @typescript-eslint/no-unused-vars
-   4:3   warning  'ChevronLeft' is defined but never used             @typescript-eslint/no-unused-vars
-   5:3   warning  'ChevronRight' is defined but never used            @typescript-eslint/no-unused-vars
-  11:3   warning  'Search' is defined but never used                  @typescript-eslint/no-unused-vars
-  12:3   warning  'LayoutGrid' is defined but never used              @typescript-eslint/no-unused-vars
-  13:3   warning  'Settings' is defined but never used                @typescript-eslint/no-unused-vars
-  14:3   warning  'X' is defined but never used                       @typescript-eslint/no-unused-vars
-  27:10  warning  'GoogleSyncBadge' is defined but never used         @typescript-eslint/no-unused-vars
-  60:10  warning  'defaultSlot' is assigned a value but never used    @typescript-eslint/no-unused-vars
-  65:22  warning  'setSearchTerm' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Settings.tsx
-  11:3  warning  'HelpCircle' is defined but never used    @typescript-eslint/no-unused-vars
-  12:3  warning  'ExternalLink' is defined but never used  @typescript-eslint/no-unused-vars
-  13:3  warning  'ArrowLeft' is defined but never used     @typescript-eslint/no-unused-vars
-  15:3  warning  'Shield' is defined but never used        @typescript-eslint/no-unused-vars
-  16:3  warning  'Users' is defined but never used         @typescript-eslint/no-unused-vars
-
-D:\projetos\Gestao Inteligente\gestao-inteligente\pages\Tasks.tsx
-   5:3  warning  'Filter' is defined but never used         @typescript-eslint/no-unused-vars
-  10:3  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
-  12:3  warning  'Edit2' is defined but never used          @typescript-eslint/no-unused-vars
+  90:12  warning  '_start' is defined but never used  @typescript-eslint/no-unused-vars
+  91:10  warning  '_end' is defined but never used    @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\services\deadlineService.ts
-  70:19  warning  '_' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  70:17  warning  '_id' is assigned a value but never used                   @typescript-eslint/no-unused-vars
+  70:28  warning  '_' is assigned a value but never used                     @typescript-eslint/no-unused-vars
+  70:31  warning  'customLogDescription' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\services\financeService.ts
   59:21  warning  '_' is assigned a value but never used       @typescript-eslint/no-unused-vars
@@ -340,15 +306,23 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\services\financeService.ts
   85:27  warning  '_' is assigned a value but never used       @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\services\googleCalendarService.ts
-   8:23  warning  'event' is defined but never used          @typescript-eslint/no-unused-vars
-  14:5   warning  'googleEventId' is defined but never used  @typescript-eslint/no-unused-vars
-  15:5   warning  'data' is defined but never used           @typescript-eslint/no-unused-vars
-  20:23  warning  'googleEventId' is defined but never used  @typescript-eslint/no-unused-vars
-  24:22  warning  'startDate' is defined but never used      @typescript-eslint/no-unused-vars
-  24:39  warning  'endDate' is defined but never used        @typescript-eslint/no-unused-vars
+  31:5  warning  '_googleEventId' is defined but never used  @typescript-eslint/no-unused-vars
+  32:5  warning  '_data' is defined but never used           @typescript-eslint/no-unused-vars
+
+D:\projetos\Gestao Inteligente\gestao-inteligente\src\test_repro_tc002.test.tsx
+  1:32  warning  'beforeAll' is defined but never used      @typescript-eslint/no-unused-vars
+  2:10  warning  'render' is defined but never used         @typescript-eslint/no-unused-vars
+  2:18  warning  'screen' is defined but never used         @typescript-eslint/no-unused-vars
+  2:26  warning  'fireEvent' is defined but never used      @typescript-eslint/no-unused-vars
+  2:37  warning  'waitFor' is defined but never used        @typescript-eslint/no-unused-vars
+  3:8   warning  'React' is defined but never used          @typescript-eslint/no-unused-vars
+  4:10  warning  'BrowserRouter' is defined but never used  @typescript-eslint/no-unused-vars
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\utils\generateAuditReportPDF.ts
   38:17  warning  Empty block statement  no-empty
+
+D:\projetos\Gestao Inteligente\gestao-inteligente\utils\generateCaseHistoryPDF.ts
+  30:17  warning  Empty block statement  no-empty
 
 D:\projetos\Gestao Inteligente\gestao-inteligente\utils\generateClientsReportPDF.ts
   26:17  warning  Empty block statement                 no-empty
@@ -369,5 +343,5 @@ D:\projetos\Gestao Inteligente\gestao-inteligente\utils\generateLegalDocuments.t
 D:\projetos\Gestao Inteligente\gestao-inteligente\utils\generateProductivityReportPDF.ts
   26:17  warning  Empty block statement  no-empty
 
-Ô£û 232 problems (0 errors, 232 warnings)
+Ô£û 208 problems (0 errors, 208 warnings)
 

@@ -424,9 +424,10 @@ const Clients: React.FC = () => {
           setAddingCaseForClientId(null);
         }}
         initialClientId={addingCaseForClientId || undefined}
-        onSaveSuccess={() => {
+        onSaveSuccess={(clientId) => {
           queryClient.invalidateQueries({ queryKey: ['clients'] });
           queryClient.invalidateQueries({ queryKey: ['cases'] });
+          queryClient.invalidateQueries({ queryKey: ['cases', 'client', clientId] });
           loadClients();
         }}
       />

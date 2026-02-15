@@ -21,20 +21,20 @@ export const TypePieChart: React.FC<TypePieChartProps> = ({ cases }) => {
       counts[c.type] = (counts[c.type] || 0) + 1;
     });
 
-    const COLORS = [
-      '#3b82f6',
-      '#22c55e',
-      '#ef4444',
-      '#f59e0b',
-      '#ec4899',
-      '#eab308',
-      '#8b5cf6',
-    ];
+    const TYPE_COLORS: Record<string, string> = {
+      cível: '#3b82f6',
+      trabalhista: '#22c55e',
+      criminal: '#ef4444',
+      família: '#f59e0b',
+      tributário: '#ec4899',
+      administrativo: '#eab308',
+      previdenciário: '#8b5cf6',
+    };
 
-    return Object.entries(counts).map(([type, count], index) => ({
+    return Object.entries(counts).map(([type, count]) => ({
       type: type.charAt(0).toUpperCase() + type.slice(1),
       count,
-      color: COLORS[index % COLORS.length],
+      color: TYPE_COLORS[type.toLowerCase()] || '#94a3b8',
     }));
   }, [cases]);
 

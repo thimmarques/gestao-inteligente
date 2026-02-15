@@ -6,24 +6,11 @@ import {
   Users,
   Clock,
   Calendar,
-  Check,
-  Search,
-  ChevronDown,
   Save,
   Loader2,
-  AlertCircle,
   Clock3,
   Video,
   MapPin,
-  Paperclip,
-  Mail,
-  Bell,
-  Plus,
-  Trash2,
-  Globe,
-  FileText,
-  Briefcase,
-  User,
 } from 'lucide-react';
 import { useCases, useClients } from '../../hooks/useQueries';
 
@@ -33,7 +20,6 @@ interface CreateEventModalProps {
   defaultDate?: Date;
   defaultCaseId?: string;
   mode?: 'create' | 'edit';
-  eventId?: string;
   onSave?: (event: any) => void;
   initialData?: any;
 }
@@ -46,7 +32,6 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   defaultDate,
   defaultCaseId,
   mode = 'create',
-  eventId,
   onSave,
   initialData,
 }) => {
@@ -68,10 +53,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
     case_id: '',
     client_id: '',
     date: '',
-    startTime: '15:00',
-    endTime: '16:00',
+    startTime: '11:00',
+    endTime: '12:00',
     description: '',
     isVirtual: false,
+    location: '',
     syncGoogle: false,
     reminders: {
       oneDayBefore: true,
@@ -123,6 +109,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           }),
           description: initialData.description || '',
           isVirtual: !!initialData.virtual_link,
+          location: initialData.location || '',
           syncGoogle: !!initialData.google_event_id,
           reminders: {
             oneDayBefore: true,
@@ -135,21 +122,17 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
         const initialDateStr = defaultDate
           ? defaultDate.toISOString().split('T')[0]
           : new Date().toISOString().split('T')[0];
-        const now = new Date();
-        const currentHour = now.getHours();
-        const nextHour = (currentHour + 1).toString().padStart(2, '0') + ':00';
-        const endHour = (currentHour + 2).toString().padStart(2, '0') + ':00';
-
         setFormData({
           type: 'audiência',
           title: '',
           case_id: defaultCaseId || '',
           client_id: '',
           date: initialDateStr,
-          startTime: nextHour,
-          endTime: endHour,
+          startTime: '11:00',
+          endTime: '12:00',
           description: '',
           isVirtual: false,
+          location: '',
           syncGoogle: false,
           reminders: {
             oneDayBefore: true,
@@ -165,42 +148,46 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const eventTypes = [
     {
       id: 'audiência',
-      label: 'Audiência',
+      label: 'AUDIÊNCIA',
       icon: Gavel,
-      color: 'bg-red-500',
-      bg: 'bg-red-50 dark:bg-red-900/20',
-      border: 'border-red-200 dark:border-red-800',
-      text: 'text-red-600',
+      activeColor: 'bg-[#C22E2E]',
+      hoverColor: 'hover:bg-[#C22E2E]/10',
+      activeBorder: 'border-[#C22E2E]',
+      activeText: 'text-white',
+      inactiveText: 'text-[#C22E2E]',
       placeholder: 'Ex: Audiência de Instrução',
     },
     {
       id: 'reunião',
-      label: 'Reunião',
+      label: 'REUNIÃO',
       icon: Users,
-      color: 'bg-blue-500',
-      bg: 'bg-blue-50 dark:bg-blue-900/20',
-      border: 'border-blue-200 dark:border-blue-800',
-      text: 'text-blue-600',
+      activeColor: 'bg-[#2E5BC2]',
+      hoverColor: 'hover:bg-[#2E5BC2]/10',
+      activeBorder: 'border-[#2E5BC2]',
+      activeText: 'text-white',
+      inactiveText: 'text-[#2E5BC2]',
       placeholder: 'Ex: Reunião com cliente',
     },
     {
       id: 'prazo',
-      label: 'Prazo',
+      label: 'PRAZO',
       icon: Clock,
-      color: 'bg-amber-500',
-      bg: 'bg-amber-50 dark:bg-amber-900/20',
-      border: 'border-amber-200 dark:border-amber-800',
-      text: 'text-amber-600',
+      activeColor: 'bg-[#C28C2E]',
+      hoverColor: 'hover:bg-[#C28C2E]/10',
+      activeBorder: 'border-[#C28C2E]',
+      activeText: 'text-white',
+      inactiveText: 'text-[#C28C2E]',
       placeholder: 'Ex: Prazo para contestação',
     },
     {
       id: 'compromisso',
-      label: 'Compromisso',
+      label: 'COMPROMISSO',
       icon: Calendar,
-      color: 'bg-purple-500',
-      bg: 'bg-purple-50 dark:bg-purple-900/20',
-      border: 'border-purple-200 dark:border-purple-800',
-      text: 'text-purple-600',
+      activeColor: 'bg-[#822EC2]',
+      hoverColor: 'hover:bg-[#822EC2]/10',
+      activeBorder: 'border-[#822EC2]',
+      activeText: 'text-white',
+      inactiveText: 'text-[#822EC2]',
       placeholder: 'Ex: Compromisso pessoal',
     },
   ];
@@ -249,69 +236,64 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const selectedClient = clients.find((c: any) => c.id === formData.client_id);
 
   return createPortal(
-    <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-navy-800/50 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
-        <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 sticky top-0 z-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-black dark:text-white tracking-tight">
-                {mode === 'create' ? 'Novo Evento' : 'Editar Evento'}
-              </h2>
-              <p className="text-sm font-medium text-slate-500 mt-1">
-                Configure o compromisso.
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors text-slate-400"
-            >
-              <X size={24} />
-            </button>
-          </div>
+    <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-[#0B0F1A]/95 backdrop-blur-xl animate-in fade-in duration-300">
+      <div className="bg-[#111827] w-full max-w-2xl rounded-[2rem] shadow-2xl overflow-hidden border border-white/5 flex flex-col animate-in slide-in-from-bottom-8 duration-500 max-h-[95vh]">
+        <div className="px-8 py-4 border-b border-white/5 bg-[#111827] flex items-center justify-between">
+          <h2 className="text-sm font-black text-white/40 uppercase tracking-[0.3em]">
+            {mode === 'create' ? 'Novo Evento' : 'Editar Evento'}
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/30"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         <form
           id="create-event-form"
           onSubmit={handleSubmit}
-          className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar pb-32"
+          className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar pb-10"
         >
-          <section className="space-y-8">
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                Tipo de Compromisso
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {eventTypes.map((type) => {
-                  const Icon = type.icon;
-                  const isActive = formData.type === type.id;
-                  return (
-                    <button
-                      key={type.id}
-                      type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, type: type.id as EventType })
-                      }
-                      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all relative group ${isActive ? `${type.border} ${type.bg} scale-[1.02] shadow-lg` : 'border-slate-100 dark:border-white/10 hover:border-slate-200'}`}
-                    >
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md ${type.color}`}
-                      >
-                        <Icon size={20} />
-                      </div>
-                      <span
-                        className={`text-[10px] font-black uppercase tracking-wider ${isActive ? type.text : 'text-slate-400'}`}
-                      >
-                        {type.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+          {/* Header/Event Types */}
+          <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+              Tipo de Evento
+            </label>
+            <div className="grid grid-cols-4 gap-3">
+            {eventTypes.map((type) => {
+              const Icon = type.icon;
+              const isActive = formData.type === type.id;
+              return (
+                <button
+                  key={type.id}
+                  type="button"
+                  onClick={() =>
+                    setFormData({ ...formData, type: type.id as EventType })
+                  }
+                  className={`flex flex-col items-center justify-center gap-3 p-6 rounded-[1.5rem] border-2 transition-all duration-300 ${isActive ? `${type.activeBorder} bg-white/5` : `border-transparent bg-white/5 ${type.hoverColor}`}`}
+                >
+                  <div
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isActive ? type.activeColor : 'bg-white/5'}`}
+                  >
+                    <Icon size={24} className={isActive ? 'text-white' : type.inactiveText} />
+                  </div>
+                  <span
+                    className={`text-[9px] font-black tracking-[0.1em] ${isActive ? type.inactiveText : 'text-white/40'}`}
+                  >
+                    {type.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                Título do Evento
+          <div className="space-y-8">
+            {/* Título */}
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                Título do Evento*
               </label>
               <input
                 type="text"
@@ -323,24 +305,50 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                 placeholder={
                   eventTypes.find((t) => t.id === formData.type)?.placeholder
                 }
-                className="w-full px-6 py-5 bg-slate-50 dark:bg-navy-800 border-none rounded-3xl focus:ring-2 focus:ring-primary-500 dark:text-white text-xl font-bold placeholder:text-slate-400 shadow-inner outline-none transition-all"
+                className="w-full px-7 py-5 bg-[#1F2937] border-none rounded-[1.5rem] focus:ring-2 focus:ring-primary-500 text-white text-xl font-bold placeholder:text-white/20 outline-none transition-all"
               />
             </div>
-          </section>
 
-          <section className="space-y-6">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              Vínculos
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2 relative" ref={processListRef}>
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                  Processo
-                </label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                    <Search size={16} />
-                  </div>
+            {/* Estilo e Endereço */}
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                Estilo da Audiência / Reunião
+              </label>
+              <div className="p-1 px-1 bg-[#1F2937] rounded-[1.2rem] flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isVirtual: false })}
+                  className={`flex-1 py-3.5 rounded-[1rem] flex items-center justify-center gap-2 text-[10px] font-black tracking-widest transition-all ${!formData.isVirtual ? 'bg-white/10 text-primary-400' : 'text-white/40 hover:text-white/60'}`}
+                >
+                  <MapPin size={14} />
+                  PRESENCIAL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isVirtual: true })}
+                  className={`flex-1 py-3.5 rounded-[1rem] flex items-center justify-center gap-2 text-[10px] font-black tracking-widest transition-all ${formData.isVirtual ? 'bg-white/10 text-primary-400' : 'text-white/40 hover:text-white/60'}`}
+                >
+                  <Video size={14} />
+                  ONLINE (VIRTUAL)
+                </button>
+              </div>
+              <input
+                type="text"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                placeholder="Endereço ou Localização da Vara"
+                className="w-full px-7 py-5 bg-[#1F2937] border-none rounded-[1.5rem] focus:ring-2 focus:ring-primary-500 text-white/80 text-sm placeholder:text-white/20 outline-none transition-all"
+              />
+            </div>
+
+            {/* Vínculos */}
+            <div className="space-y-4">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                Vínculos
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 relative" ref={processListRef}>
+                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Processo</p>
                   <input
                     type="text"
                     value={searchProcess || selectedCase?.process_number || ''}
@@ -350,42 +358,32 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                     }}
                     onFocus={() => setShowProcessList(true)}
                     placeholder="Buscar processo..."
-                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm font-mono shadow-inner outline-none transition-all"
+                    className="w-full px-6 py-4 bg-[#1F2937] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm placeholder:text-white/20 shadow-inner outline-none transition-all h-[56px]"
                   />
+                  {showProcessList && filteredCases.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-[#1F2937] border border-white/5 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                      {filteredCases.map((c: any) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, case_id: c.id });
+                            setShowProcessList(false);
+                            setSearchProcess('');
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-white/5 border-b border-white/5 last:border-0 transition-colors"
+                        >
+                          <p className="text-xs font-bold text-white">
+                            {c.process_number}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {showProcessList && filteredCases.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
-                    {filteredCases.map((c: any) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => {
-                          setFormData({ ...formData, case_id: c.id });
-                          setShowProcessList(false);
-                          setSearchProcess('');
-                        }}
-                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-white/10 last:border-0 transition-colors"
-                      >
-                        <p className="text-xs font-bold dark:text-white">
-                          {c.process_number}
-                        </p>
-                        <p className="text-[9px] text-slate-400 uppercase tracking-widest">
-                          {c.court}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              <div className="space-y-2 relative" ref={clientListRef}>
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                  Cliente
-                </label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                    <Users size={16} />
-                  </div>
+                <div className="space-y-2 relative" ref={clientListRef}>
+                  <p className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Cliente</p>
                   <input
                     type="text"
                     value={searchClient || selectedClient?.name || ''}
@@ -395,92 +393,101 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
                     }}
                     onFocus={() => setShowClientList(true)}
                     placeholder="Buscar cliente..."
-                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-navy-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-inner outline-none transition-all"
+                    className="w-full px-6 py-4 bg-[#1F2937] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm placeholder:text-white/20 shadow-inner outline-none transition-all h-[56px]"
                   />
+                  {showClientList && filteredClients.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-[#1F2937] border border-white/5 rounded-2xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                      {filteredClients.map((c: any) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, client_id: c.id });
+                            setShowClientList(false);
+                            setSearchClient('');
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-white/5 border-b border-white/5 last:border-0 transition-colors"
+                        >
+                          <p className="text-xs font-bold text-white">
+                            {c.name}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {showClientList && filteredClients.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/15 rounded-2xl shadow-xl z-50 overflow-hidden max-h-48 overflow-y-auto">
-                    {filteredClients.map((c: any) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => {
-                          setFormData({ ...formData, client_id: c.id });
-                          setShowClientList(false);
-                          setSearchClient('');
-                        }}
-                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-white/10 last:border-0 transition-colors"
-                      >
-                        <p className="text-xs font-bold dark:text-white">
-                          {c.name}
-                        </p>
-                        <p className="text-[9px] text-slate-400 tracking-widest">
-                          {c.cpf_cnpj}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
-          </section>
 
-          <section className="space-y-6">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              Data e Hora
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-50/50 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-white/10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                  Data
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={formData.date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                  Início
-                </label>
-                <input
-                  type="time"
-                  required
-                  value={formData.startTime}
-                  onChange={(e) =>
-                    setFormData({ ...formData, startTime: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">
-                  Fim
-                </label>
-                <input
-                  type="time"
-                  required
-                  value={formData.endTime}
-                  onChange={(e) =>
-                    setFormData({ ...formData, endTime: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-white dark:bg-navy-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm shadow-sm outline-none"
-                />
+            {/* Data e Hora */}
+            <div className="space-y-4">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                Data e Hora
+              </label>
+              <div className="bg-[#1F2937]/30 p-8 rounded-[2rem] border border-white/5 grid grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Data</label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      required
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none appearance-none"
+                    />
+                    <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Início</label>
+                  <div className="relative">
+                    <input
+                      type="time"
+                      required
+                      value={formData.startTime}
+                      onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                      className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none"
+                    />
+                    <Clock3 className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.1em] text-white/20">Fim</label>
+                  <div className="relative">
+                    <input
+                      type="time"
+                      required
+                      value={formData.endTime}
+                      onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                      className="w-full px-5 py-4 bg-[#0B0F1A] border-none rounded-[1.2rem] focus:ring-2 focus:ring-primary-500 text-white text-sm outline-none"
+                    />
+                    <Clock3 className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  </div>
+                </div>
               </div>
             </div>
-          </section>
+
+            {/* Notas */}
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                Notas Adicionais
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Pautas da audiência, observações estratégicas..."
+                rows={4}
+                className="w-full px-7 py-5 bg-[#1F2937] border-none rounded-[1.5rem] focus:ring-2 focus:ring-primary-500 text-white/80 text-sm placeholder:text-white/20 outline-none transition-all resize-none"
+              />
+            </div>
+          </div>
         </form>
 
-        <div className="px-10 py-8 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-navy-800/50 sticky bottom-0 z-20 flex items-center justify-between">
+        <div className="px-8 py-6 border-t border-white/5 bg-[#111827] flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-3 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest"
+            className="text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest px-4 py-2"
           >
             Cancelar
           </button>
@@ -488,14 +495,10 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
             form="create-event-form"
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-3 px-12 py-4 rounded-[1.5rem] font-black uppercase tracking-[0.2em] transition-all shadow-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white shadow-primary-500/30 active:scale-95 disabled:opacity-50"
+            className="px-10 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-primary-500/20 active:scale-95 disabled:opacity-50 flex items-center gap-3"
           >
-            {isSubmitting ? (
-              <Loader2 className="animate-spin" size={20} />
-            ) : (
-              <Save size={20} />
-            )}
-            Salvar Evento
+            {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+            SALVAR COMPROMISSO
           </button>
         </div>
       </div>

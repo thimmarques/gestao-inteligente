@@ -22,7 +22,8 @@ export type Criticality = 'normal' | 'importante' | 'crítico';
 
 export interface AuditLog {
   id: string;
-  timestamp: string;
+  created_at: string;
+  timestamp?: string; // Compatibilidade com componentes legados
   lawyer_id: string;
   lawyer_name: string;
   action: AuditAction;

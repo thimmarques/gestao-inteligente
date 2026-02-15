@@ -54,9 +54,9 @@ export const deadlineService = {
     await logAction({
       action: 'create',
       entity_type: 'deadline',
-      entity_id: newDeadline.id,
-      entity_description: `Novo prazo processual: ${newDeadline.title}`,
-      details: { deadline_date: newDeadline.deadline_date },
+      entity_id: newDeadline.case_id,
+      entity_description: `Prazo criado: ${newDeadline.title}`,
+      details: { deadline: newDeadline },
       criticality: 'normal',
     });
 
@@ -67,7 +67,7 @@ export const deadlineService = {
     id: string,
     data: Partial<Deadline>
   ): Promise<Deadline> => {
-    const { case: _, ...pureData } = data as any;
+    const { id: _id, case: _, customLogDescription, ...pureData } = data as any;
 
     const { data: updatedDeadline, error } = await supabase
       .from('deadlines')
@@ -81,8 +81,8 @@ export const deadlineService = {
     await logAction({
       action: 'update',
       entity_type: 'deadline',
-      entity_id: id,
-      entity_description: `Prazo atualizado: ${updatedDeadline.title}`,
+      entity_id: updatedDeadline.case_id,
+      entity_description: data.customLogDescription || `Prazo atualizado: ${updatedDeadline.title}`,
       details: { after: updatedDeadline },
       criticality: 'normal',
     });
@@ -93,7 +93,7 @@ export const deadlineService = {
   deleteDeadline: async (id: string): Promise<void> => {
     const { data: deadline } = await supabase
       .from('deadlines')
-      .select('title')
+      .select('title, case_id')
       .eq('id', id)
       .single();
 
@@ -101,13 +101,15 @@ export const deadlineService = {
 
     if (error) throw error;
 
-    await logAction({
-      action: 'delete',
-      entity_type: 'deadline',
-      entity_id: id,
-      entity_description: `Prazo removido: ${deadline?.title || 'ID ' + id}`,
-      criticality: 'importante',
-    });
+    if (deadline?.case_id) {
+      await logAction({
+        action: 'delete',
+        entity_type: 'deadline',
+        entity_id: deadline.case_id,
+        entity_description: `Prazo removido: ${deadline.title}`,
+        criticality: 'importante',
+      });
+    }
   },
 
   getDeadlinesByCase: async (caseId: string): Promise<Deadline[]> => {

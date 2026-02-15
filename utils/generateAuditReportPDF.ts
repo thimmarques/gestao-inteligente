@@ -76,7 +76,7 @@ export async function generateAuditReportPDF(
   );
 
   const detailedData = logs.map((l) => [
-    format(new Date(l.timestamp), 'dd/MM/yy HH:mm'),
+    format(new Date(l.created_at), 'dd/MM/yy HH:mm'),
     l.lawyer_name.split(' ')[0],
     l.entity_type.toUpperCase(),
     l.action.toUpperCase(),

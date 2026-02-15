@@ -95,11 +95,30 @@ export const CreateDeadlineModal: React.FC<CreateDeadlineModalProps> = ({
     try {
       if (onSave) {
         await onSave(formData);
+      } else if (mode === 'edit' && initialData) {
+        // Log specific changes
+        const changes: string[] = [];
+        if (formData.title !== initialData.title)
+          changes.push(`título alterado de "${initialData.title}" para "${formData.title}"`);
+        if (formData.deadline_date !== initialData.deadline_date.split('T')[0])
+          changes.push(`data alterada de ${initialData.deadline_date.split('T')[0]} para ${formData.deadline_date}`);
+        if (formData.priority !== initialData.priority)
+          changes.push(`prioridade alterada de ${initialData.priority} para ${formData.priority}`);
+        if (formData.description !== initialData.description)
+          changes.push(`descrição atualizada`);
+
+        const customLogDescription = changes.length > 0
+          ? `Prazo atualizado: ${formData.title} (${changes.join(', ')})`
+          : `Prazo atualizado: ${formData.title}`;
+
+        await deadlineService.updateDeadline(initialData.id, {
+          ...formData,
+          customLogDescription,
+        });
       } else {
         await deadlineService.createDeadline({
           ...formData,
           lawyer_id: user.id,
-          // case_id is inside formData and validated above
         });
       }
       if (onSuccess) onSuccess();

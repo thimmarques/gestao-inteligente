@@ -178,6 +178,13 @@ export interface ScheduleEvent {
   reminder_sent: boolean;
   status: 'agendado' | 'concluído' | 'cancelado';
   created_at: string;
+  // Relationships
+  case_details?: {
+    process_number: string;
+  } | null;
+  client_details?: {
+    name: string;
+  } | null;
 }
 
 export interface FinanceRecord {
@@ -233,6 +240,7 @@ export interface Deadline {
   status: 'pendente' | 'concluído' | 'vencido';
   completed_at?: string | null;
   created_at: string;
+  customLogDescription?: string; // Temporário para log de auditoria
   case?: {
     process_number: string;
     client: {

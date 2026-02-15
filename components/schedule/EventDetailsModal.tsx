@@ -11,10 +11,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ExternalLink,
-  Shield,
-  User,
   Briefcase,
-  FileText,
   Globe,
   Loader2,
 } from 'lucide-react';
@@ -221,18 +218,20 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                     href={event.virtual_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-bold text-primary-600 hover:underline flex items-center gap-1.5 truncate"
+                    className="text-sm font-bold text-primary-600 hover:underline flex items-center gap-1.5"
                   >
-                    Entrar na Reunião <ExternalLink size={14} />
+                    Online <ExternalLink size={14} />
                   </a>
                 ) : (
-                  <p className="text-sm font-bold dark:text-white truncate">
+                  <p className="text-sm font-bold dark:text-white">
+                    Presencial
+                  </p>
+                )}
+                {!event.virtual_link && event.location && (
+                  <p className="text-xs font-medium text-slate-500 truncate">
                     {event.location}
                   </p>
                 )}
-                <p className="text-xs font-medium text-slate-500">
-                  {event.virtual_link ? 'Link Virtual' : 'Endereço Presencial'}
-                </p>
               </div>
             </div>
           )}
@@ -245,10 +244,10 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
               </div>
               <div>
                 <p className="text-sm font-bold dark:text-white">
-                  Processo {event.case_id}
+                  Processo {event.case_details?.process_number || event.case_id}
                 </p>
                 <p className="text-xs font-medium text-slate-500">
-                  Cliente ID {event.client_id || 'N/A'}
+                  Cliente {event.client_details?.name || 'Não vinculado'}
                 </p>
               </div>
             </div>

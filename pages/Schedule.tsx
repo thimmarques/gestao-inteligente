@@ -140,9 +140,8 @@ const Schedule: React.FC = () => {
         start_time: start.toISOString(),
         end_time: end.toISOString(),
         virtual_link:
-          formData.isVirtual && selectedEvent?.virtual_link
-            ? selectedEvent.virtual_link
-            : null,
+          formData.isVirtual ? formData.virtual_link : null,
+        location: formData.location || null,
       };
 
       if (selectedEvent) {

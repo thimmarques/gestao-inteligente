@@ -1,8 +1,10 @@
 import React from 'react';
-import { Clock, Calendar, Loader2, Plus } from 'lucide-react';
+import { Clock, Calendar, Loader2, Plus, Edit2, CheckCircle, Circle, Trash2 } from 'lucide-react';
 import { formatDate } from '../../../utils/formatters.ts';
 import { useDeadlinesByCase, useCase } from '../../../hooks/useQueries';
 import { CreateDeadlineModal } from '../../deadlines/CreateDeadlineModal.tsx';
+import { deadlineService } from '../../../services/deadlineService.ts';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface DeadlinesTabProps {
   caseId: string;
@@ -15,7 +17,32 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
     refetch,
   } = useDeadlinesByCase(caseId);
   const { data: caseData } = useCase(caseId);
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editingDeadline, setEditingDeadline] = React.useState<any>(null);
+
+  const handleToggleStatus = async (deadline: any) => {
+    const newStatus = deadline.status === 'concluído' ? 'pendente' : 'concluído';
+    const description = newStatus === 'concluído' 
+      ? `Prazo concluído: ${deadline.title}`
+      : `Prazo reaberto: ${deadline.title}`;
+
+    await deadlineService.updateDeadline(deadline.id, {
+      status: newStatus,
+      completed_at: newStatus === 'concluído' ? new Date().toISOString() : null,
+      customLogDescription: description
+    } as any);
+    refetch();
+    queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
+  };
+
+  const handleDelete = async (deadline: any) => {
+    if (confirm(`Excluir o prazo "${deadline.title}"?`)) {
+      await deadlineService.deleteDeadline(deadline.id);
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
+    }
+  };
 
   const getStatusInfo = (date: string, status: string) => {
     if (status === 'concluído')
@@ -99,16 +126,9 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
           </div>
         ) : deadlines.length > 0 ? (
           deadlines
-            .sort(
-              (a, b) =>
-                new Date(a.deadline_date).getTime() -
-                new Date(b.deadline_date).getTime()
-            )
+            .sort((a, b) => new Date(a.deadline_date).getTime() - new Date(b.deadline_date).getTime())
             .map((deadline) => {
-              const info = getStatusInfo(
-                deadline.deadline_date,
-                deadline.status
-              );
+              const info = getStatusInfo(deadline.deadline_date, deadline.status);
               return (
                 <div
                   key={deadline.id}
@@ -125,22 +145,47 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
                           <Calendar size={12} />
                           {formatDate(deadline.deadline_date)}
                         </p>
-                        <span
-                          className={`text-[10px] font-bold uppercase tracking-wider ${info.labelColor}`}
-                        >
+                        <span className={`text-[10px] font-bold uppercase tracking-wider ${info.labelColor}`}>
                           {info.text}
                         </span>
-                        <span
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
-                            deadline.priority === 'urgente'
-                              ? 'bg-red-100 text-red-600'
-                              : 'bg-slate-100 text-slate-500'
-                          }`}
-                        >
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
+                          deadline.priority === 'urgente' ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
+                        }`}>
                           {deadline.priority}
                         </span>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleToggleStatus(deadline)}
+                      title={deadline.status === 'concluído' ? 'Marcar como pendente' : 'Marcar como concluído'}
+                      className={`p-2 rounded-xl transition-all ${
+                        deadline.status === 'concluído'
+                          ? 'bg-green-100 text-green-600'
+                          : 'bg-slate-50 text-slate-400 hover:text-primary-600 dark:bg-white/5'
+                      }`}
+                    >
+                      {deadline.status === 'concluído' ? <CheckCircle size={18} /> : <Circle size={18} />}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingDeadline(deadline);
+                        setIsModalOpen(true);
+                      }}
+                      title="Editar prazo"
+                      className="p-2 bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-blue-600 rounded-xl transition-all"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(deadline)}
+                      title="Excluir prazo"
+                      className="p-2 bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-red-600 rounded-xl transition-all"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
               );
@@ -168,11 +213,18 @@ export const DeadlinesTab: React.FC<DeadlinesTabProps> = ({ caseId }) => {
 
       <CreateDeadlineModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingDeadline(null);
+        }}
         defaultCaseId={caseId}
+        mode={editingDeadline ? 'edit' : 'create'}
+        initialData={editingDeadline}
         onSuccess={() => {
           refetch();
+          queryClient.invalidateQueries({ queryKey: ['audit_logs', 'entity', caseId] });
           setIsModalOpen(false);
+          setEditingDeadline(null);
         }}
       />
     </div>

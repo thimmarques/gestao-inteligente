@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Lock, User, Save, DollarSign, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { clientService } from '../../services/clientService';
@@ -105,8 +106,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
         <div className="px-10 pt-10 pb-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div>
@@ -348,7 +349,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

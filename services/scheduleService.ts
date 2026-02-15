@@ -7,7 +7,7 @@ export const scheduleService = {
   getSchedules: async (): Promise<ScheduleEvent[]> => {
     const { data, error } = await supabase
       .from('schedules')
-      .select('*')
+      .select('*, case_details:case_id(process_number), client_details:client_id(name)')
       .order('start_time', { ascending: true });
 
     if (error) throw error;
@@ -17,7 +17,7 @@ export const scheduleService = {
   getSchedule: async (id: string): Promise<ScheduleEvent | null> => {
     const { data, error } = await supabase
       .from('schedules')
-      .select('*')
+      .select('*, case_details:case_id(process_number), client_details:client_id(name)')
       .eq('id', id)
       .single();
 
@@ -119,7 +119,7 @@ export const scheduleService = {
   getSchedulesByCase: async (caseId: string): Promise<ScheduleEvent[]> => {
     const { data, error } = await supabase
       .from('schedules')
-      .select('*')
+      .select('*, case_details:case_id(process_number), client_details:client_id(name)')
       .eq('case_id', caseId)
       .order('start_time', { ascending: true });
 
