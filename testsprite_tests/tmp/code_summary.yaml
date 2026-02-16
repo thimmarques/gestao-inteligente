@@ -1,0 +1,59 @@
+version: '2'
+type: frontend
+tech_stack:
+  - React
+  - TypeScript
+  - Vite
+  - Tailwind CSS
+  - Supabase
+  - React Query
+features:
+  - name: Authentication
+    description: User login, signup and password reset flow using Supabase Auth.
+    files:
+      - pages/Login.tsx
+      - pages/Signup.tsx
+      - pages/ResetPassword.tsx
+      - contexts/AuthContext.tsx
+
+  - name: Dashboard
+    description: Main dashboard displaying KPIs (Processos, Clientes, Financeiro, Agenda) and charts.
+    files:
+      - pages/Dashboard.tsx
+      - components/dashboard/TeamWidget.tsx
+      - components/dashboard/CriticalLogsWidget.tsx
+
+  - name: Client Management
+    description: List of clients with filtering and search. Create, edit, and delete client functionality.
+    files:
+      - pages/Clients.tsx
+      - components/clients/CreateClientModal.tsx
+      - components/clients/ClientDetailsModal.tsx
+      - services/clientService.ts
+
+  - name: Case Management
+    description: List of legal cases. Create new case modal. Case details modal with tabs for Info, Deadlines, Schedules, Finance, and Documents.
+    files:
+      - pages/Cases.tsx
+      - components/cases/CreateCaseModal.tsx
+      - components/cases/CaseDetailsModal.tsx
+      - services/caseService.ts
+
+  - name: Finance Management
+    description: Financial records listing, creation of revenue/expense entries, and status updates.
+    files:
+      - pages/Finance.tsx
+      - components/finance/CreateFinanceModal.tsx
+      - services/financeService.ts
+
+  - name: Schedule Management
+    description: Calendar view for scheduling events and hearings. Integration with Google Calendar.
+    files:
+      - pages/Schedule.tsx
+      - components/schedule/CreateEventModal.tsx
+      - services/scheduleService.ts
+
+known_limitations:
+  - issue: Google Drive integration mock
+    location: services/googleDriveService.ts
+    impact: Folders and files are mocked, upload not functional

@@ -9,6 +9,7 @@ import {
   Loader2,
   Plus,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useSchedulesByCase, useCase } from '../../../hooks/useQueries';
 import { CreateEventModal } from '../../schedule/CreateEventModal';
 import { EventDetailsModal } from '../../schedule/EventDetailsModal';
@@ -59,10 +60,13 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
 
       await scheduleService.createSchedule(input);
       await refetch();
+      toast.success('Evento agendado com sucesso!');
       setIsCreateOpen(false);
     } catch (error) {
       console.error('Error saving event:', error);
-      alert('Erro ao salvar evento. Verifique os dados e tente novamente.');
+      toast.error(
+        'Erro ao salvar evento. Verifique os dados e tente novamente.'
+      );
     }
   };
 
@@ -93,11 +97,12 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
 
       await scheduleService.updateSchedule(selectedSchedule.id, update);
       await refetch();
+      toast.success('Evento atualizado com sucesso!');
       setIsEditOpen(false);
       setSelectedSchedule(null);
     } catch (error) {
       console.error('Error updating event:', error);
-      alert('Erro ao atualizar evento.');
+      toast.error('Erro ao atualizar evento.');
     }
   };
 
@@ -105,6 +110,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
     try {
       await scheduleService.deleteSchedule(id);
       await refetch();
+      toast.success('Evento removido com sucesso!');
     } catch (error) {
       console.error('Error deleting event:', error);
       throw error;
@@ -118,6 +124,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ caseId }) => {
     try {
       await scheduleService.updateSchedule(id, { status });
       await refetch();
+      toast.success('Status do evento atualizado!');
     } catch (error) {
       console.error('Error updating status:', error);
       throw error;

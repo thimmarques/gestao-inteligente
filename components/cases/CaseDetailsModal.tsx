@@ -13,6 +13,8 @@ import {
   Loader2,
   Trash2,
 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { CaseStatus } from '../../types.ts';
 import { InfoTab } from './tabs/InfoTab.tsx';
 import { DeadlinesTab } from './tabs/DeadlinesTab.tsx';
@@ -29,13 +31,18 @@ interface CaseDetailsModalProps {
   caseId: string | null;
   isOpen: boolean;
   onClose: () => void;
+  onDeleteSuccess?: () => void;
+  onUpdateSuccess?: () => void;
 }
 
 export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
   caseId,
   isOpen,
   onClose,
+  onDeleteSuccess,
+  onUpdateSuccess,
 }) => {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('Informações');
   const { data: caseData, isLoading, refetch } = useCase(caseId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -65,7 +72,10 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
       await caseService.updateCase(caseData.id, {
         status: CaseStatus.ARQUIVADO,
       });
+      toast.success('Processo arquivado com sucesso!');
       refetch();
+      queryClient.invalidateQueries({ queryKey: ['cases'] });
+      onUpdateSuccess?.();
     }
   };
 
@@ -78,13 +88,16 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
     ) {
       try {
         await caseService.deleteCase(caseData.id);
+        toast.success('Processo excluído com sucesso!');
+
+        // Invalidate queries to update Dashboard and other lists
+        queryClient.invalidateQueries({ queryKey: ['cases'] });
+
+        onDeleteSuccess?.();
         onClose();
-        // Optional: Force a window reload or use queryClient to invalidate 'cases' query if available in context
-        // For now, relies on React Query's refetchOnWindowFocus or manual refetch in parent
-        window.location.reload(); // Simple brute force to ensure list updates, or can rely on parent
       } catch (error) {
         console.error('Erro ao excluir:', error);
-        alert('Erro ao excluir processo.');
+        toast.error('Erro ao excluir processo.');
       }
     }
   };
@@ -205,6 +218,8 @@ export const CaseDetailsModal: React.FC<CaseDetailsModalProps> = ({
           await caseService.updateCase((caseData as any).id, data);
           setIsEditModalOpen(false);
           refetch();
+          queryClient.invalidateQueries({ queryKey: ['cases'] });
+          onUpdateSuccess?.();
         }}
       />
       {isClientModalOpen && caseData.client && (

@@ -5,18 +5,107 @@ import {
   Image as ImageIcon,
   Download,
   Trash2,
-  X,
+  Printer,
+  FileSignature,
+  Scale,
+  Shield,
   Loader2,
+  HardDrive,
+  FolderPlus,
+  Eye,
 } from 'lucide-react';
+import { useCase } from '../../../hooks/useQueries';
+import { useApp } from '../../../contexts/AppContext';
+import {
+  generateProcuracaoPDF,
+  generateDeclaracaoHipossuficienciaPDF,
+} from '../../../utils/generateLegalDocuments';
+import { googleDriveService } from '../../../services/googleDriveService';
+import { toast } from 'sonner';
 
 interface DocumentsTabProps {
   caseId: string;
 }
 
 export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
+  const { data: caseData } = useCase(caseId);
+  const { office } = useApp();
+
   const [isDragging, setIsDragging] = useState(false);
   const [documents, setDocuments] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState<string | null>(null);
+  const [driveFolderId, setDriveFolderId] = useState<string | null>(null);
+
+  const handleGeneratePDF = async (
+    type: 'procuracao' | 'hipossuficiencia' | 'contrato',
+    action: 'download' | 'print'
+  ) => {
+    if (!caseData?.client || !office) {
+      toast.error('Dados do cliente ou escritório incompletos.');
+      return;
+    }
+
+    setIsGenerating(`${type}-${action}`);
+
+    try {
+      const params = {
+        client: caseData.client,
+        lawyer: caseData.lawyer || null,
+        office: office,
+      };
+
+      let doc;
+      if (type === 'procuracao') {
+        doc = await generateProcuracaoPDF(params);
+      } else if (type === 'hipossuficiencia') {
+        doc = await generateDeclaracaoHipossuficienciaPDF(params);
+      } else if (type === 'contrato') {
+        // Use existing Procuracao generator as placeholder for generic structure
+        // In a real scenario, this would be a dedicated generator
+        doc = await generateProcuracaoPDF(params);
+      }
+
+      if (doc) {
+        if (action === 'download') {
+          const filename = `${type}_${caseData.client.name.replace(/\s+/g, '_')}.pdf`;
+          doc.save(filename);
+          toast.success('Documento gerado com sucesso!');
+        } else {
+          doc.autoPrint();
+          const blob = doc.output('bloburl');
+          window.open(blob);
+          toast.success('Abriu janela de impressão.');
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao gerar documento:', error);
+      toast.error('Erro ao gerar documento.');
+    } finally {
+      setIsGenerating(null);
+    }
+  };
+
+  const handleCreateDriveFolder = async () => {
+    if (!caseData?.client) return;
+
+    toast.promise(
+      async () => {
+        const folderName = `${caseData.process_number} - ${caseData.client?.name}`;
+        const id = await googleDriveService.createFolder(folderName);
+        if (id) {
+          setDriveFolderId(id);
+          return id;
+        }
+        throw new Error('Falha ao criar pasta');
+      },
+      {
+        loading: 'Criando pasta no Google Drive...',
+        success: 'Pasta criada com sucesso!',
+        error: 'Erro ao criar pasta no Drive.',
+      }
+    );
+  };
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -36,11 +125,12 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
         id: Math.random().toString(36).substr(2, 9),
         name: f.name,
         size: (f.size / (1024 * 1024)).toFixed(2) + ' MB',
-        type: f.name.split('.').pop()?.toLowerCase(),
+        type: f.name.split('.').pop()?.toLowerCase() || 'unknown',
         uploaded_at: new Date().toISOString(),
       }));
       setDocuments((prev) => [...prev, ...newDocs]);
       setIsUploading(false);
+      toast.success('Documentos anexados com sucesso!');
     }, 1500);
   };
 
@@ -54,124 +144,300 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({ caseId }) => {
 
   const removeDoc = (id: string) => {
     setDocuments((prev) => prev.filter((d) => d.id !== id));
+    toast.success('Documento removido.');
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Área de Upload */}
-      <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => document.getElementById('file-upload')?.click()}
-        className={`relative p-12 border-2 border-dashed rounded-[2.5rem] text-center transition-all cursor-pointer ${
-          isDragging
-            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
-            : 'border-slate-200 dark:border-white/10 hover:border-primary-400'
-        }`}
-      >
-        <input
-          id="file-upload"
-          type="file"
-          multiple
-          accept=".pdf,.docx,.jpg,.png"
-          className="hidden"
-          onChange={(e) => e.target.files && handleFiles(e.target.files)}
-        />
-        {isUploading ? (
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="w-12 h-12 text-primary-500 animate-spin" />
-            <p className="text-sm font-bold text-primary-600">
-              Enviando arquivos...
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
+      {/* Seção de Documentos Jurídicos (Gerador) */}
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+            <FileSignature className="text-primary-600" size={24} />
+            Documentação do Processo
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card Procuração */}
+          <div className="bg-white dark:bg-navy-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-white/5 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <FileSignature size={24} />
+            </div>
+            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
+              Procuração
+            </h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+              Instrumento de mandato para representação processual.
             </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => handleGeneratePDF('procuracao', 'download')}
+                disabled={!!isGenerating}
+                className="flex-1 h-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isGenerating?.startsWith('procuracao-download') ? (
+                  <Loader2 className="animate-spin" size={14} />
+                ) : (
+                  <Download size={14} />
+                )}
+                Baixar
+              </button>
+              <button
+                onClick={() => handleGeneratePDF('procuracao', 'print')}
+                disabled={!!isGenerating}
+                className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center disabled:opacity-50"
+                title="Imprimir"
+              >
+                {isGenerating?.startsWith('procuracao-print') ? (
+                  <Loader2 className="animate-spin" size={14} />
+                ) : (
+                  <Printer size={16} />
+                )}
+              </button>
+            </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-navy-800 flex items-center justify-center text-slate-400">
-              <Upload size={32} />
+
+          {/* Card Hipossuficiência */}
+          <div className="bg-white dark:bg-navy-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-white/5 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Scale size={24} />
+            </div>
+            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
+              Hipossuficiência
+            </h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+              Declaração de pobreza para fins de justiça gratuita.
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() =>
+                  handleGeneratePDF('hipossuficiencia', 'download')
+                }
+                disabled={!!isGenerating}
+                className="flex-1 h-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isGenerating?.startsWith('hipossuficiencia-download') ? (
+                  <Loader2 className="animate-spin" size={14} />
+                ) : (
+                  <Download size={14} />
+                )}
+                Baixar
+              </button>
+              <button
+                onClick={() => handleGeneratePDF('hipossuficiencia', 'print')}
+                disabled={!!isGenerating}
+                className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center disabled:opacity-50"
+                title="Imprimir"
+              >
+                {isGenerating?.startsWith('hipossuficiencia-print') ? (
+                  <Loader2 className="animate-spin" size={14} />
+                ) : (
+                  <Printer size={16} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Card Condicional: Contrato ou Placeholder */}
+          {caseData?.type?.toLowerCase() === 'trabalhista' ? (
+            <div className="bg-white dark:bg-navy-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-white/5 hover:shadow-md transition-all group">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <FileText size={24} />
+              </div>
+              <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
+                Contrato Honorários
+              </h4>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                Contrato de prestação de serviços advocatícios trabalhistas.
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleGeneratePDF('contrato', 'download')}
+                  disabled={!!isGenerating}
+                  className="flex-1 h-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isGenerating?.startsWith('contrato-download') ? (
+                    <Loader2 className="animate-spin" size={14} />
+                  ) : (
+                    <Download size={14} />
+                  )}
+                  Baixar
+                </button>
+                <button
+                  onClick={() => handleGeneratePDF('contrato', 'print')}
+                  disabled={!!isGenerating}
+                  className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center disabled:opacity-50"
+                  title="Imprimir"
+                >
+                  {isGenerating?.startsWith('contrato-print') ? (
+                    <Loader2 className="animate-spin" size={14} />
+                  ) : (
+                    <Printer size={16} />
+                  )}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-slate-50 dark:bg-navy-900/50 p-6 rounded-[2rem] border border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center text-center opacity-75">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-400 flex items-center justify-center mb-4">
+                <Shield size={24} />
+              </div>
+              <h4 className="text-lg font-bold text-slate-500 dark:text-slate-400 mb-1">
+                Novos Modelos
+              </h4>
+              <span className="text-xs font-bold uppercase tracking-widest text-primary-500 bg-primary-50 dark:bg-primary-900/20 px-3 py-1 rounded-full">
+                Em breve
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <div className="w-full h-px bg-slate-100 dark:bg-white/10" />
+
+      {/* ÁREA DE ANEXOS */}
+      <section className="bg-white dark:bg-navy-800/50 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600">
+              <HardDrive size={20} />
             </div>
             <div>
-              <h4 className="text-lg font-bold dark:text-white">
-                Arraste arquivos ou clique para selecionar
-              </h4>
-              <p className="text-sm text-slate-500 mt-1">
-                Formatos aceitos: PDF, DOCX, JPG, PNG • Máximo 10MB por arquivo
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white">
+                Anexos e Drive
+              </h3>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
+                Gerencie os arquivos do processo
               </p>
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Grid de Documentos */}
-      <div className="space-y-6">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-          Documentos Anexados
-          <span className="px-2 py-0.5 bg-slate-100 dark:bg-navy-800 rounded-md text-[10px] font-bold text-slate-500">
-            {documents.length}
-          </span>
-          <div className="flex-1 h-px bg-slate-100 dark:bg-navy-800"></div>
-        </h4>
+          <button
+            onClick={handleCreateDriveFolder}
+            className="px-4 py-2 bg-slate-800 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-2"
+          >
+            <FolderPlus size={16} />
+            Criar Pasta no Drive
+          </button>
+        </div>
 
-        {documents.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {documents.map((doc) => (
+        {/* Compact Upload Area */}
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={() => document.getElementById('file-upload')?.click()}
+          className={`relative h-32 border-2 border-dashed rounded-3xl transition-all cursor-pointer mb-8 group flex items-center justify-center gap-4 ${
+            isDragging
+              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
+              : 'border-slate-200 dark:border-white/10 hover:border-primary-400 hover:bg-slate-50 dark:hover:bg-white/5'
+          }`}
+        >
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            accept=".pdf,.docx,.jpg,.png"
+            className="hidden"
+            onChange={(e) => e.target.files && handleFiles(e.target.files)}
+          />
+          {isUploading ? (
+            <div className="flex items-center gap-3">
+              <Loader2 className="animate-spin text-primary-500" />
+              <span className="text-sm font-bold text-slate-600">
+                Enviando...
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-400 group-hover:scale-110 transition-transform">
+                <Upload size={18} />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-slate-600 dark:text-slate-300">
+                  Clique ou arraste arquivos
+                </p>
+                <p className="text-xs text-slate-400">
+                  PDF, DOCX, Imagens (Max 10MB)
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Lista Compacta de Documentos */}
+        <div className="space-y-3">
+          {documents.length > 0 ? (
+            documents.map((doc) => (
               <div
                 key={doc.id}
-                className="group relative bg-white dark:bg-navy-800/50 p-5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all"
+                className="group flex items-center justify-between p-4 bg-slate-50 dark:bg-navy-900/50 rounded-2xl hover:bg-white dark:hover:bg-navy-800 border border-transparent hover:border-slate-200 dark:hover:border-white/10 transition-all"
               >
-                <div className="flex flex-col items-center text-center gap-3">
+                <div className="flex items-center gap-4">
                   <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                       doc.type === 'pdf'
-                        ? 'bg-red-50 text-red-500'
-                        : 'bg-blue-50 text-blue-500'
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400'
+                        : ['jpg', 'png'].includes(doc.type)
+                          ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                          : 'bg-slate-200 text-slate-600 dark:bg-white/10 dark:text-slate-400'
                     }`}
                   >
                     {['jpg', 'png'].includes(doc.type) ? (
-                      <ImageIcon size={24} />
+                      <ImageIcon size={20} />
                     ) : (
-                      <FileText size={24} />
+                      <FileText size={20} />
                     )}
                   </div>
-                  <div className="w-full">
-                    <p
-                      className="text-sm font-bold dark:text-white truncate px-2"
-                      title={doc.name}
-                    >
+                  <div>
+                    <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
                       {doc.name}
                     </p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
-                      {doc.size}
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {doc.size} •{' '}
+                      {new Date(doc.uploaded_at).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
 
-                {/* Overlay de Ações */}
-                <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm rounded-3xl flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-3 bg-white dark:bg-navy-800 rounded-2xl text-slate-700 dark:text-slate-200 hover:scale-110 transition-transform shadow-xl">
-                    <Download size={20} />
+                <div className="flex items-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                  <button
+                    className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-slate-600 dark:text-slate-400 transition-colors"
+                    title="Visualizar"
+                  >
+                    <Eye size={16} />
                   </button>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeDoc(doc.id);
-                    }}
-                    className="p-3 bg-red-500 rounded-2xl text-white hover:scale-110 transition-transform shadow-xl"
+                    className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-slate-600 dark:text-slate-400 transition-colors"
+                    title="Baixar"
                   >
-                    <Trash2 size={20} />
+                    <Download size={16} />
+                  </button>
+                  <button
+                    className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-slate-600 dark:text-slate-400 transition-colors"
+                    title="Imprimir"
+                  >
+                    <Printer size={16} />
+                  </button>
+                  <div className="w-px h-4 bg-slate-300 dark:bg-white/10 mx-1" />
+                  <button
+                    onClick={() => removeDoc(doc.id)}
+                    className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 transition-colors"
+                    title="Excluir"
+                  >
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="py-20 text-center bg-white dark:bg-navy-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-white/10">
-            <p className="text-slate-400 italic">
-              Nenhum documento anexado ao processo ainda.
+            ))
+          ) : (
+            <p className="text-center text-sm text-slate-400 italic py-4">
+              Nenhum anexo encontrado.
             </p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };

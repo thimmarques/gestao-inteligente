@@ -25,6 +25,7 @@ import {
   Minus,
   Edit,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import { financeService } from '../services/financeService';
 import { clientService } from '../services/clientService';
@@ -166,6 +167,7 @@ const Finance: React.FC = () => {
       status: nextStatus as any,
       paid_date: nextStatus === 'pago' ? new Date().toISOString() : null,
     });
+    toast.success('Status atualizado com sucesso!');
     queryClient.invalidateQueries({ queryKey: ['finances'] });
     loadData();
   };
@@ -174,6 +176,7 @@ const Finance: React.FC = () => {
     e.stopPropagation();
     if (confirm('Remover este lançamento permanentemente?')) {
       await financeService.deleteRecord(id);
+      toast.success('Lançamento removido com sucesso!');
       queryClient.invalidateQueries({ queryKey: ['finances'] });
       loadData();
     }
@@ -669,7 +672,7 @@ const Finance: React.FC = () => {
             await financeService.updateRecord(editingRecord.id, data);
           } else {
             if (!user?.office_id) {
-              alert(
+              toast.error(
                 'Erro: Usuário não autenticado ou sem escritório vinculado.'
               );
               return;
@@ -680,6 +683,7 @@ const Finance: React.FC = () => {
               office_id: user.office_id,
               created_at: new Date().toISOString(),
             });
+            toast.success('Novo registro criado com sucesso!');
           }
           loadData();
           setIsModalOpen(false);

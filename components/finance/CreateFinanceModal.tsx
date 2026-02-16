@@ -11,6 +11,7 @@ import {
   Calendar,
   FileText,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useCases, useClients } from '../../hooks/useQueries';
 import { financeService } from '../../services/financeService';
 import { useAuth } from '../../contexts/AuthContext';
@@ -90,13 +91,14 @@ export const CreateFinanceModal: React.FC<CreateFinanceModalProps> = ({
         notes: formData.description,
       });
 
+      toast.success('Registro salvo com sucesso!');
       setIsSubmitting(false);
       onSuccess?.();
       onClose();
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      alert('Erro ao salvar registro financeiro.');
+      toast.error('Erro ao salvar registro financeiro.');
     }
   };
 

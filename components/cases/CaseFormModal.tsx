@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Save, Loader2, Info, AlertCircle, Tag } from 'lucide-react';
+import { toast } from 'sonner';
 import { CaseStatus, CaseType, Client } from '../../types';
 
 interface CaseFormModalProps {
@@ -77,8 +78,14 @@ export const CaseFormModal: React.FC<CaseFormModalProps> = ({
     setIsSubmitting(true);
     try {
       await onSave(formData);
+      toast.success(
+        initialData?.id
+          ? 'Processo atualizado com sucesso!'
+          : 'Processo criado com sucesso!'
+      );
     } catch (err) {
-      // Error handling
+      console.error(err);
+      toast.error('Erro ao salvar processo. Verifique os dados.');
     } finally {
       setIsSubmitting(false);
     }

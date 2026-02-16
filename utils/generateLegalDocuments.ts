@@ -207,14 +207,14 @@ export const generateProcuracaoPDF = async ({
   );
 
   setupFooter(doc, client.name, client.address?.city || 'Sertãozinho');
-  doc.save(`Procuracao_${client.name.replace(/\s+/g, '_')}.pdf`);
+  return doc;
 };
 
 export const generateDeclaracaoHipossuficienciaPDF = async ({
   client,
   lawyer,
   office,
-}: DocumentParams) => {
+}: DocumentParams): Promise<jsPDF> => {
   const doc = new jsPDF();
   setupHeader(doc, office, lawyer);
 
@@ -261,7 +261,5 @@ export const generateDeclaracaoHipossuficienciaPDF = async ({
   );
 
   setupFooter(doc, client.name, client.address?.city || 'Sertãozinho');
-  doc.save(
-    `Declaracao_Hipossuficiencia_${client.name.replace(/\s+/g, '_')}.pdf`
-  );
+  return doc;
 };

@@ -307,6 +307,16 @@ const Cases: React.FC = () => {
         caseId={selectedCaseId}
         isOpen={!!selectedCaseId}
         onClose={() => setSelectedCaseId(null)}
+        onDeleteSuccess={() => {
+          loadCases();
+          queryClient.invalidateQueries({ queryKey: ['cases'] });
+          queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+        }}
+        onUpdateSuccess={() => {
+          loadCases();
+          queryClient.invalidateQueries({ queryKey: ['cases'] });
+          queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+        }}
       />
     </div>
   );
